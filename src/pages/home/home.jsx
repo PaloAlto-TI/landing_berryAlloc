@@ -1,6 +1,7 @@
 import React from 'react'
 import Footer from '../../components/footer/footer'
 import Header from '../../components/header/header'
+import ProductoList from '../../components/productos/productoList/productoList';
 import './home.css';
 
 
@@ -9,7 +10,7 @@ const Home = () => {
         <>
             <Header/>
             <main>
-                BIENVENIDO A PRODUCTOS
+                <ProductoList/>
             </main>
             <Footer/>
         </>
