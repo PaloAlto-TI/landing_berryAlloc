@@ -1,11 +1,17 @@
-import React from 'react'
+import React from "react";
+import { PageHeader } from "antd";
 
 const Header = () => {
-    return (
-        <div>
-            HEADER
-        </div>
-    )
-}
+  return (
+    <header>
+      <PageHeader
+        className="site-page-header"
+        onBack={() => null}
+        title="Title"
+        subTitle="This is a subtitle"
+      />
+    </header>
+  );
+};
 
-export default Header
+export default Header;
