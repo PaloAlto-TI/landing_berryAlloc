@@ -49,7 +49,7 @@ const SelectOpciones = (props) => {
       style={{ width: 200 }}
       placeholder="Seleccione un proveedor"
       optionFilterProp="children"
-      onChange={onChange}
+      onChange={handleChange}
       onFocus={onFocus}
       onBlur={onBlur}
       value={value}
