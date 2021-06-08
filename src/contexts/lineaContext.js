@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import { LineaService } from "../services/lineaService";
+import { LineaService } from '../services/lineaService';
 
 export const LineaContext = createContext();
 
@@ -12,7 +12,7 @@ const LineaContextProvider = (props) => {
     const [editLinea, setEditLinea] = useState(null);
 
     useEffect (() => {
-        lineaService.getLineas().then((data) => setLineas(data));
+        lineaService.getAll().then((data) => setLineas(data));
     }, []);
 
     const createLinea = (linea) => {
