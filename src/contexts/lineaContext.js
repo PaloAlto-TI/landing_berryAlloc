@@ -39,7 +39,7 @@ const LineaContextProvider = (props) => {
 
     const softDeleteLinea = (id) => {
        lineaService
-         .delete(id)
+         .softDelete(id)
          .then(() => setLineas(lineas.filter((l) => l._id !== id)));
      };
 
