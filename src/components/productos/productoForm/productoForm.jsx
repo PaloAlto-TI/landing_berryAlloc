@@ -1,7 +1,6 @@
 import React from "react";
 import { Form, Input, Button, Checkbox, InputNumber } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
-import ProveedorContextProvider from "../../../contexts/proveedorContext";
 
 const FormProducto = () => {
 
@@ -30,7 +29,7 @@ const FormProducto = () => {
   return (
     <Form
       {...layout}
-      name="basic"
+      name="customized_form_controls"
       initialValues={{
         en_sistema_externo: false,
         en_web: false,
@@ -61,9 +60,7 @@ const FormProducto = () => {
           },
         ]}
       >
-      <ProveedorContextProvider>
         <SelectOpciones tipo="lineas"/>
-      </ProveedorContextProvider>
       </Form.Item>
 
 

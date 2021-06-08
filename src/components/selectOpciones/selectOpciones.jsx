@@ -4,8 +4,8 @@ import { ProveedorService } from "../../services/proveedorService";
 const { Option } = Select;
 const SelectOpciones = (props) => {
 
-    const { tipo } = props;
-
+  console.log(props)
+    const {tipo, onChange, value} = props;
     const [opciones, setOpciones] = useState([])
     const proveedorService = new ProveedorService();
 
@@ -18,8 +18,8 @@ const SelectOpciones = (props) => {
     }, [])
   
 
-    function onChange(value) {
-        console.log(`selected ${value}`);
+    function handleChange(value) {
+        onChange(value);
       }
       
       function onBlur() {
@@ -52,6 +52,7 @@ const SelectOpciones = (props) => {
       onChange={onChange}
       onFocus={onFocus}
       onBlur={onBlur}
+      value={value}
       onSearch={onSearch}
       notFoundContent="No hay coincidencias"
       filterOption={(input, option) =>
