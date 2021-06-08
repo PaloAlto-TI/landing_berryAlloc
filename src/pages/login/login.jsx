@@ -6,6 +6,7 @@ import {usuarios} from "../../utils/Usuarios";
 
 
 import "./login.css";
+import { useHistory } from "react-router";
 
 
 
@@ -14,6 +15,11 @@ import "./login.css";
 
 
 const Login = () => {
+  let history = useHistory();
+
+  function handleClick() {
+    history.push("/home");
+  }
 
     const responseGoogle = (response) => {
       let usuarioCheck=  usuarios.find((u) => u.correo === response.profileObj.email);
@@ -21,6 +27,7 @@ const Login = () => {
       if(usuarioCheck)
       {
         console.log(response.profileObj.email);
+        handleClick();
       }
       else{
         console.log("no encontro");   
@@ -37,11 +44,6 @@ return(<div>
                 onFailure={responseGoogle}
                 cookiePolicy={"single_host_origin"}
               />
-
-              
-
-
-
 
 </div>);
 }
