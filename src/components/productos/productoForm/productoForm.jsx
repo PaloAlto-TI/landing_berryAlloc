@@ -51,8 +51,8 @@ const FormProducto = () => {
       </Form.Item>
 
       <Form.Item
-        label="Línea"
-        name="linea"
+        label="Proveedor"
+        name="proveedor"
         rules={[
           {
             required: true,
@@ -60,7 +60,20 @@ const FormProducto = () => {
           },
         ]}
       >
-        <SelectOpciones tipo="lineas"/>
+        <SelectOpciones tipo="proveedor"/>
+      </Form.Item>
+
+      <Form.Item
+        label="Subgrupo"
+        name="subgrupo"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, seleccione un subgrupo!",
+          },
+        ]}
+      >
+        <SelectOpciones tipo="subgrupo"/>
       </Form.Item>
 
 

@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Select } from 'antd';
 import { ProveedorService } from "../../services/proveedorService";
+import { SubgrupoService } from "../../services/subgrupoService";
 const { Option } = Select;
 const SelectOpciones = (props) => {
 
   console.log(props)
     const {tipo, onChange, value} = props;
     const [opciones, setOpciones] = useState([])
-    const proveedorService = new ProveedorService();
-
+    
     useEffect(() => {
-
-      if (tipo === 'lineas'){
+      
+      if (tipo === 'proveedor'){
+        const proveedorService = new ProveedorService();
         proveedorService.getProveedores().then((data) => setOpciones(data));
+      }else{
+        const subgrupoService = new SubgrupoService();
+        subgrupoService.getSubgrupos().then((data) => setOpciones(data));
       }
       
     }, [])
@@ -47,7 +51,7 @@ const SelectOpciones = (props) => {
     <Select
       showSearch
       style={{ width: 200 }}
-      placeholder="Seleccione un proveedor"
+      placeholder={"Seleccione un "+tipo}
       optionFilterProp="children"
       onChange={handleChange}
       onFocus={onFocus}
