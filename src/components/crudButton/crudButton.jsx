@@ -10,7 +10,7 @@ const CrudButton = () => {
   let history = useHistory();
 
   function handleClick() {
-    history.push("/about");
+    history.push("/producto");
   }
 
   const menu = (

@@ -2,8 +2,14 @@ import React from "react";
 import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
 import ProductoList from "../../components/productos/productoList/productoList";
+import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
 import "./home.css";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 const Home = () => {
   return (
@@ -11,7 +17,16 @@ const Home = () => {
       <Header />
       <main>
         <ProductoContextProvider>
-          <ProductoList />
+          <Router>
+            <Switch>
+              <Route exact path="/">
+                <ProductoList />
+              </Route>
+              <Route path="/producto">
+                <ProductoForm/>
+              </Route>
+            </Switch>
+          </Router>
         </ProductoContextProvider>
       </main>
       <Footer />
