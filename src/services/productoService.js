@@ -9,7 +9,7 @@ export class ProductoService {
         return axios.get(baseUrl+"productos").then(res => res.data.data);
     }
     getProducto(producto){
-        return axios.get(baseUrl+"producto"+producto._id).then(res => res.data.data);
+        return axios.get(baseUrl+"producto/"+producto._id).then(res => res.data.data);
     }
 
     createProducto(producto){
@@ -17,7 +17,7 @@ export class ProductoService {
     }
 
 
-    updateProducot(producto){
+    updateProducto(producto){
         return axios.put(baseUrl+"producto/"+producto._id, producto).then(res => res.data);
     }
 

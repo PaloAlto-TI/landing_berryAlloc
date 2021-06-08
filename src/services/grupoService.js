@@ -4,12 +4,17 @@ export class GrupoService {
 
    
 
-    create(grupo){
-        return axios.post(baseUrl+"grupo/", grupo).then(res => res.data);
+   
+    getGrupos(){
+        return axios.get(baseUrl+"grupos").then(res => res.data.data);
     }
 
-    getAll(){
-        return axios.get(baseUrl+"empresas").then(res => res.data.data);
+    getGrupo(grupo){
+        return axios.get(baseUrl+"grupo/"+grupo._id).then(res => res.data.data);
+    }
+
+    createGrupo(grupo){
+        return axios.post(baseUrl+"grupo/", grupo).then(res => res.data);
     }
 
     update(grupo){
