@@ -4,10 +4,8 @@ import { ProductoService } from "../services/productoService";
 export const ProductoContext = createContext();
 
 const ProductoContextProvider = (props) => {
-  
-  
   const productoService = new ProductoService();
-  
+
   const [productos, setProductos] = useState([]);
 
   const [editProducto, setEditProducto] = useState(null);
@@ -21,11 +19,11 @@ const ProductoContextProvider = (props) => {
       .then((data) => setProductos([...productos, data]));
   };
 
-  // const deleteProducto = (id) => {
-  //   productoService
-  //     .delete(id)
-  //     .then(() => setProductos(productos.filter((p) => p._id !== id)));
-  // };
+  const softDeleteProducto = (id) => {
+    productoService
+      .softDeleteProducto(id)
+      .then(() => setProductos(productos.filter((p) => p._id !== id)));
+  };
 
   const findProducto = (id) => {
     const producto = productos.find((p) => p._id === id);
@@ -51,6 +49,7 @@ const ProductoContextProvider = (props) => {
         createProducto,
         findProducto,
         updateProducto,
+        softDeleteProducto,
         editProducto,
         productos,
       }}
