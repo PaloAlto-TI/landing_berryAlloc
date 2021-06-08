@@ -4,6 +4,7 @@ import SelectOpciones from "../../selectOpciones/selectOpciones";
 import ProveedorContextProvider from "../../../contexts/proveedorContext";
 
 const FormProducto = () => {
+
   const layout = {
     labelCol: {
       span: 8,
@@ -61,7 +62,7 @@ const FormProducto = () => {
         ]}
       >
       <ProveedorContextProvider>
-        <SelectOpciones/>
+        <SelectOpciones tipo="lineas"/>
       </ProveedorContextProvider>
       </Form.Item>
 

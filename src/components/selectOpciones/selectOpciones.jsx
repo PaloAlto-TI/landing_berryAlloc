@@ -1,10 +1,21 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Select } from 'antd';
-import { ProveedorContext } from "../../contexts/proveedorContext";
+import { ProveedorService } from "../../services/proveedorService";
 const { Option } = Select;
-const SelectOpciones = () => {
+const SelectOpciones = (props) => {
 
-    const { proveedores } = useContext(ProveedorContext);
+    const { tipo } = props;
+
+    const [opciones, setOpciones] = useState([])
+    const proveedorService = new ProveedorService();
+
+    useEffect(() => {
+
+      if (tipo === 'lineas'){
+        proveedorService.getProveedores().then((data) => setOpciones(data));
+      }
+      
+    }, [])
   
 
     function onChange(value) {
@@ -23,11 +34,11 @@ const SelectOpciones = () => {
         console.log('search:', val);
       }
 
-      var proveedoresList = proveedores.map(function (proveedor) {
+      var opcionesList = opciones.map(function (opcion) {
     
         return (
     
-          <Option value={proveedor.id}>{proveedor.nombre.toUpperCase()}</Option>
+          <Option key={opcion.id} value={opcion.id}>{opcion.nombre.toUpperCase()}</Option>
 
         );
       });
@@ -49,7 +60,7 @@ const SelectOpciones = () => {
     >
 
 
-     {proveedoresList}
+     {opcionesList}
     </Select>
   );
 };
