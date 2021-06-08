@@ -1,38 +1,37 @@
-import React from 'react'
-import Footer from '../../components/footer/footer'
-import Header from '../../components/header/header'
-// import ProductoList from '../../components/productos/productoList/productoList';
-import LineaList from '../../components/lineas/lineaList';
-// import LineaContextProvider from '../../contexts/lineaContext';
+import React from "react";
+import Footer from "../../components/footer/footer";
+import Header from "../../components/header/header";
+import ProductoList from "../../components/productos/productoList/productoList";
+import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
-
-import './home.css';
+import "./home.css";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from "react-router-dom";
 
 const Home = () => {
-    return (
-        <>
-            <Header/>
-            <main>
-                
-                    <span>HHH222H</span>
-                
-                    
-            </main>
-            <Footer/>
-        </>
-    )
-}
+  return (
+    <>
+      <Header />
+      <main>
+        <ProductoContextProvider>
+          <Router>
+            <Switch>
+              <Route exact path="/">
+                <ProductoList />
+              </Route>
+              <Route path="/producto">
+                <ProductoForm/>
+              </Route>
+            </Switch>
+          </Router>
+        </ProductoContextProvider>
+      </main>
+      <Footer />
+    </>
+  );
+};
 
-/* const Home = () => {
-    return (
-        <>
-            <Header/>
-            <main>
-                <ProductoList/> 
-            </main>
-            <Footer/>
-        </>
-    )
-}*/
-
-export default Home
+export default Home;

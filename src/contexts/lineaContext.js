@@ -44,7 +44,7 @@ const LineaContextProvider = (props) => {
      };
 
     return (
-        <LineaContextProvider value={{
+        <LineaContext.Provider value={{
             createLinea,
             findLinea,
             updateLinea,
@@ -53,7 +53,7 @@ const LineaContextProvider = (props) => {
             lineas
         }}>
             {props.children}
-        </LineaContextProvider>
+        </LineaContext.Provider>
     );
 
 };

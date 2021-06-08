@@ -2,6 +2,7 @@ import axios from "axios";
 import {baseUrl} from "../utils/constantes";
 export class ProductoService {
 
+   
     getProductos(){
         return axios.get(baseUrl+"productos").then(res => res.data.data);
     }
@@ -14,7 +15,7 @@ export class ProductoService {
     }
 
 
-    updateProducot(producto){
+    updateProducto(producto){
         return axios.put(baseUrl+"producto/"+producto._id, producto).then(res => res.data);
     }
 

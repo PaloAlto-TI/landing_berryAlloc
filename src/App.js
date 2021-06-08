@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import Home from "./pages/home/home";
+// import Crud from "./pages/lineas_test/crud";
 // import ProductoContextProvider from "./contexts/productoContext";
 // import LineaContextProvider from './contexts/lineaContext';
 
@@ -13,7 +14,9 @@ function App() {
     </div> 
 */
     <div className="App">
-        <Home />
+ 
+            <Home />
+     
     </div>
   );
 }
