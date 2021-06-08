@@ -13,7 +13,7 @@ const ProductoContextProvider = (props) => {
   const [editProducto, setEditProducto] = useState(null);
 
   useEffect(() => {
-    productoService.getAll().then((data) => setProductos(data));
+    productoService.getProductos().then((data) => setProductos(data));
   }, []);
   const createProducto = (producto) => {
     productoService
