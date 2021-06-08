@@ -1,19 +1,26 @@
 import axios from "axios";
+import {baseUrl} from "../utils/constantes";
 export class ProductoService {
 
-    baseUrl = "http://localhost:5050/productos/";
-
-    create(producto){
-        return axios.post(this.baseUrl+"producto/", producto).then(res => res.data);
+   
+    getProductos(){
+        return axios.get(baseUrl+"productos").then(res => res.data.data);
+    }
+    getProducto(producto){
+        return axios.get(baseUrl+"producto"+producto._id).then(res => res.data.data);
     }
 
-    getAll(){
-        return axios.get(this.baseUrl).then(res => res.data.data);
+    createProducto(producto){
+        return axios.post(baseUrl+"producto/", producto).then(res => res.data);
     }
 
-    update(producto){
-        return axios.put(this.baseUrl+"producto/"+producto._id, producto).then(res => res.data);
+
+    updateProducto(producto){
+        return axios.put(baseUrl+"producto/"+producto._id, producto).then(res => res.data);
     }
 
+    softDeleteProducto(producto){
+        return axios.put(baseUrl+"delete-producto/"+producto._id, producto).then(res => res.data);
+    }
     
 }
