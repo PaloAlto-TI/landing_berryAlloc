@@ -1,9 +1,13 @@
-import React from "react";
-import { Form, Input, Button, Checkbox, InputNumber } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 
 const FormProducto = () => {
+  const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
+  const [selectedLineaId, setSelectedLineaId] = useState(undefined);
+  const [tipoInventario, setTipoInventario] = useState(undefined);
 
+  const [form] = Form.useForm();
   const layout = {
     labelCol: {
       span: 8,
@@ -26,9 +30,28 @@ const FormProducto = () => {
     console.log("Failed:", errorInfo);
   };
 
+  const handleFormValuesChange = (changedValues) => {
+    const formFieldName = Object.keys(changedValues)[0];
+    if (formFieldName === "fk_marca_id") {
+      setSelectedMarcaId(changedValues[formFieldName]);
+      form.setFieldsValue({ fk_linea_id: undefined });
+      form.setFieldsValue({ fk_grupo_id: undefined }); //reset product selection
+      //reset product selection
+    }
+    if (formFieldName === "fk_linea_id") {
+      setSelectedLineaId(changedValues[formFieldName]);
+      form.setFieldsValue({ fk_grupo_id: undefined }); //reset product selection
+    }
+  };
+
+  const onChange = e => {
+    setTipoInventario(e.target.value);
+  };
+
   return (
     <Form
       {...layout}
+      form={form}
       name="customized_form_controls"
       initialValues={{
         en_sistema_externo: false,
@@ -36,6 +59,7 @@ const FormProducto = () => {
       }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
+      onValuesChange={handleFormValuesChange}
     >
       <Form.Item
         label="Nombre"
@@ -50,9 +74,23 @@ const FormProducto = () => {
         <Input />
       </Form.Item>
 
+
+      <Form.Item
+        label="Procedencia"
+        name="procedencia"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, ingrese la procedencia!",
+          },
+        ]}
+      >
+        <SelectOpciones tipo="procedencia" />
+      </Form.Item>
+
       <Form.Item
         label="Proveedor"
-        name="proveedor"
+        name="fk_proveedor_id"
         rules={[
           {
             required: true,
@@ -60,23 +98,47 @@ const FormProducto = () => {
           },
         ]}
       >
-        <SelectOpciones tipo="proveedor"/>
-      </Form.Item>
+        <SelectOpciones tipo="proveedor" />
+      </Form.Item> 
 
       <Form.Item
-        label="Subgrupo"
-        name="subgrupo"
+        label="Marca"
+        name="fk_marca_id"
         rules={[
           {
             required: true,
-            message: "Por favor, seleccione un subgrupo!",
+            message: "Por favor, seleccione una marca!",
           },
         ]}
       >
-        <SelectOpciones tipo="subgrupo"/>
+        <SelectOpciones tipo="marca" />
       </Form.Item>
 
+      <Form.Item
+        label="Línea"
+        name="fk_linea_id"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, seleccione una linea!",
+          },
+        ]}
+      >
+        <SelectOpciones tipo="línea" filter={selectedMarcaId} />
+      </Form.Item>
 
+      <Form.Item
+        label="Grupo"
+        name="fk_grupo_id"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, seleccione un grupo!",
+          },
+        ]}
+      >
+        <SelectOpciones tipo="grupo" filter={selectedLineaId} />
+      </Form.Item>
       <Form.Item
         label="Descripción"
         name="descripcion"
@@ -90,6 +152,47 @@ const FormProducto = () => {
         <Input />
       </Form.Item>
 
+      <Form.Item
+        label="Tipo de Inventario"
+        name="tipo_inventario"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, seleccione el tipo de inventario!",
+          },
+        ]}
+      >
+        <Radio.Group onChange={onChange} value={tipoInventario}>
+          <Radio value={"PERMANENTE"}>PERMANENTE</Radio>
+          <Radio value={"BAJO PEDIDO"}>BAJO PEDIDO</Radio>
+        </Radio.Group>
+      </Form.Item>
+
+      <Form.Item
+        label="Unidad de Medida"
+        name="fk_unidad_medida_id"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, seleccione una unidad de medida!",
+          },
+        ]}
+      >
+        <SelectOpciones tipo="unidad de medida" />
+      </Form.Item>
+
+      <Form.Item
+        label="Unidad de Venta"
+        name="fk_unidad_venta_id"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, seleccione una unidad de venta!",
+          },
+        ]}
+      >
+        <SelectOpciones tipo="unidad de venta" />
+      </Form.Item> 
 
       <Form.Item
         label="Costo"
@@ -103,7 +206,6 @@ const FormProducto = () => {
       >
         <InputNumber />
       </Form.Item>
-
 
       <Form.Item
         label="Precio"
@@ -133,7 +235,7 @@ const FormProducto = () => {
 
       <Form.Item
         label="Límite Descuento 1"
-        name="limite_descuento_1"
+        name="limite_descuento1"
         rules={[
           {
             required: true,
@@ -146,7 +248,7 @@ const FormProducto = () => {
 
       <Form.Item
         label="Límite Descuento 2"
-        name="limite_descuento_2"
+        name="limite_descuento2"
         rules={[
           {
             required: true,
@@ -159,7 +261,7 @@ const FormProducto = () => {
 
       <Form.Item
         label="Límite Descuento 3"
-        name="limite_descuento_3"
+        name="limite_descuento3"
         rules={[
           {
             required: true,
@@ -172,7 +274,7 @@ const FormProducto = () => {
 
       <Form.Item
         label="Límite Descuento 4"
-        name="limite_descuento_4"
+        name="limite_descuento4"
         rules={[
           {
             required: true,
@@ -185,7 +287,7 @@ const FormProducto = () => {
 
       <Form.Item
         label="Límite Descuento 5"
-        name="limite_descuento_5"
+        name="limite_descuento5"
         rules={[
           {
             required: true,
@@ -209,7 +311,11 @@ const FormProducto = () => {
         <InputNumber />
       </Form.Item>
 
-      <Form.Item {...tailLayout} name="en_sistema_externo" valuePropName="checked">
+      <Form.Item
+        {...tailLayout}
+        name="en_sistema_externo"
+        valuePropName="checked"
+      >
         <Checkbox>En Sistema Externo</Checkbox>
       </Form.Item>
 
