@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
+import { ProductoContext } from "../../../contexts/productoContext";
 
 const FormProducto = () => {
+
+  const { createProducto } = useContext(ProductoContext);
+
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [tipoInventario, setTipoInventario] = useState(undefined);
+  const [tipoProducto, setTipoProducto] = useState(undefined);
+
 
   const [form] = Form.useForm();
   const layout = {
@@ -24,6 +30,8 @@ const FormProducto = () => {
   };
   const onFinish = (values) => {
     console.log("Success:", values);
+    createProducto(values);
+
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -44,9 +52,16 @@ const FormProducto = () => {
     }
   };
 
-  const onChange = e => {
+  const onChangeTipoInventario = (e) => {
     setTipoInventario(e.target.value);
   };
+
+  const onChangeTipoProducto = (e) => {
+    setTipoProducto(e.target.value);
+  };
+
+  
+
 
   return (
     <Form
@@ -62,6 +77,19 @@ const FormProducto = () => {
       onValuesChange={handleFormValuesChange}
     >
       <Form.Item
+        label="Código Interno"
+        name="codigo_interno"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, ingrese el código interno!",
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
         label="Nombre"
         name="nombre"
         rules={[
@@ -73,7 +101,6 @@ const FormProducto = () => {
       >
         <Input />
       </Form.Item>
-
 
       <Form.Item
         label="Procedencia"
@@ -99,7 +126,7 @@ const FormProducto = () => {
         ]}
       >
         <SelectOpciones tipo="proveedor" />
-      </Form.Item> 
+      </Form.Item>
 
       <Form.Item
         label="Marca"
@@ -153,6 +180,22 @@ const FormProducto = () => {
       </Form.Item>
 
       <Form.Item
+        label="Tipo"
+        name="tipo"
+        rules={[
+          {
+            required: true,
+            message: "Por favor, seleccione el tipo de producto!",
+          },
+        ]}
+      >
+        <Radio.Group onChange={onChangeTipoProducto} value={tipoProducto}>
+          <Radio value={"BIENES"}>BIENES</Radio>
+          <Radio value={"SERVICIOS"}>SERVICIOS</Radio>
+        </Radio.Group>
+      </Form.Item>
+
+      <Form.Item
         label="Tipo de Inventario"
         name="tipo_inventario"
         rules={[
@@ -162,7 +205,7 @@ const FormProducto = () => {
           },
         ]}
       >
-        <Radio.Group onChange={onChange} value={tipoInventario}>
+        <Radio.Group onChange={onChangeTipoInventario} value={tipoInventario}>
           <Radio value={"PERMANENTE"}>PERMANENTE</Radio>
           <Radio value={"BAJO PEDIDO"}>BAJO PEDIDO</Radio>
         </Radio.Group>
@@ -192,7 +235,7 @@ const FormProducto = () => {
         ]}
       >
         <SelectOpciones tipo="unidad de venta" />
-      </Form.Item> 
+      </Form.Item>
 
       <Form.Item
         label="Costo"
