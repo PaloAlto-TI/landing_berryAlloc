@@ -2,17 +2,22 @@ import React, { useContext, useState } from "react";
 import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { ProductoContext } from "../../../contexts/productoContext";
+import { useHistory } from "react-router";
+import { useLocation } from "react-router-dom";
 
-const FormProducto = () => {
+const FormProducto = (props) => {
+  // console.log(props);
+  const location = useLocation();
 
+  // console.log(props);
   const { createProducto } = useContext(ProductoContext);
 
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
-
-
+  
+ 
   const [form] = Form.useForm();
   const layout = {
     labelCol: {
@@ -28,14 +33,32 @@ const FormProducto = () => {
       span: 16,
     },
   };
+
+  let initialValues = {
+    en_sistema_externo: false,
+    en_web: false,
+  };
+
+  if (location.state) {
+    console.log(location.state)
+    initialValues = location.state;
+
+    if (!selectedMarcaId && !selectedLineaId ) {
+      setSelectedMarcaId(location.state.fk_marca_id)
+      setSelectedLineaId(location.state.fk_linea_id)
+    }
+  }
+
   const onFinish = (values) => {
     console.log("Success:", values);
     createProducto(values);
-
   };
+
+  let history = useHistory();
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    history.push("/");
   };
 
   const handleFormValuesChange = (changedValues) => {
@@ -60,18 +83,14 @@ const FormProducto = () => {
     setTipoProducto(e.target.value);
   };
 
-  
-
-
   return (
+
+  
     <Form
       {...layout}
       form={form}
       name="customized_form_controls"
-      initialValues={{
-        en_sistema_externo: false,
-        en_web: false,
-      }}
+      initialValues={initialValues}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       onValuesChange={handleFormValuesChange}
@@ -371,7 +390,7 @@ const FormProducto = () => {
           GUARDAR
         </Button>
       </Form.Item>
-    </Form>
+    </Form> 
   );
 };
 

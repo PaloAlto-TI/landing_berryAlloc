@@ -26,6 +26,7 @@ const ProductoContextProvider = (props) => {
   };
 
   const findProducto = (id) => {
+    console.log(id);
     const producto = productos.find((p) => p.id === id);
 
     setEditProducto(producto);

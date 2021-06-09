@@ -2,7 +2,10 @@ import React from "react";
 import { Menu, Dropdown } from "antd";
 import { useHistory } from "react-router-dom";
 
-const CrudButton = () => {
+const CrudButton = (props) => {
+
+  const { record } = props;
+  
   function handleMenuClick(e) {
     console.log("click", e);
   }
@@ -10,7 +13,7 @@ const CrudButton = () => {
   let history = useHistory();
 
   function handleClick() {
-    history.push("/producto");
+    history.push("/producto", record );
   }
 
   const menu = (

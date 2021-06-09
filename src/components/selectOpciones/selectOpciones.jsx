@@ -10,11 +10,11 @@ import { paises } from "../../utils/paises";
 const { Option } = Select;
 const SelectOpciones = (props) => {
 
-  console.log(props)
+  // console.log(props)
     const {tipo, onChange, value, filter} = props;
     const [opciones, setOpciones] = useState([])
     
-    console.log(filter);
+    // console.log(filter);
     useEffect(() => {
       
       if (tipo === 'marca'){
