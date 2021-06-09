@@ -1,62 +1,63 @@
 import React, { createContext, useState, useEffect } from "react";
-import { LineaService } from "../services/lineaService";
+
+import { LineaService } from '../services/lineaService';
 
 export const LineaContext = createContext();
 
 const LineaContextProvider = (props) => {
-  const lineaService = new LineaService();
 
-  const [lineas, setLineas] = useState([]);
 
-  const [editLinea, setEditLinea] = useState(null);
+    const lineaService = new LineaService();
+    
+    const [lineas, setLineas] = useState([]);
+    
+    const [editLinea, setEditLinea] = useState(null);
 
-  useEffect(() => {
-    lineaService.getAll().then((data) => setLineas(data));
-  }, []);
-  const createLinea = (linea) => {
-    lineaService
-      .create(linea)
-      .then((data) => setLineas([...lineas, data]));
-  };
+    useEffect (() => {
+        lineaService.getAll().then((data) => setLineas(data));
+    }, []);
 
-  const softDeleteLinea = (id) => {
-    lineaService
-      .softDelete(id)
-      .then(() => setLineas(lineas.filter((p) => p.id !== id)));
-  };
+    const createLinea = (linea) => {
+       lineaService
+       .create(linea)
+       .then((data) => setLineas([...lineas, data]));
+     };
 
-  const findLinea = (id) => {
-    const linea = lineas.find((p) => p.id === id);
+    const findLinea = (id) => {
+      const linea = lineas.find((l) => l._id === id);
+      setEditLinea(linea);
+    };
 
-    setEditLinea(linea);
-  };
+    const updateLinea = (linea) => {
+        lineaService
+          .update(linea)
+          .then((data) =>
+            setLineas(
+              lineas.map((l) => (l._id === linea._id ? data : linea))
+            )
+          );
+        setEditLinea(null);
+    };
 
-  const updateLinea = (linea) => {
-    lineaService
-      .update(linea)
-      .then((data) =>
-        setLineas(
-          lineas.map((p) => (p.id === linea.id ? data : linea))
-        )
-      );
+    const softDeleteLinea = (id) => {
+       lineaService
+         .softDelete(id)
+         .then(() => setLineas(lineas.filter((l) => l._id !== id)));
+     };
 
-    setEditLinea(null);
-  };
+    return (
+        <LineaContext.Provider value={{
+            createLinea,
+            findLinea,
+            updateLinea,
+            softDeleteLinea,
+            editLinea,
+            lineas
+        }}>
+            {props.children}
+        </LineaContext.Provider>
+    );
 
-  return (
-    <LineaContext.Provider
-      value={{
-        createLinea,
-        findLinea,
-        updateLinea,
-        softDeleteLinea,
-        editLinea,
-        lineas,
-      }}
-    >
-      {props.children}
-    </LineaContext.Provider>
-  );
 };
 
 export default LineaContextProvider;

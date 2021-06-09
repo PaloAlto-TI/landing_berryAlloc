@@ -4,13 +4,12 @@ export class ProductoService {
 
    
 
+  
     getProductos(){
         return axios.get(baseUrl+"productos").then(res => res.data.data);
     }
     getProducto(producto){
-
-        return axios.get(baseUrl+"producto"+producto._id).then(res => res.data);
-
+        return axios.get(baseUrl+"producto/"+producto._id).then(res => res.data.data);
     }
 
     createProducto(producto){
