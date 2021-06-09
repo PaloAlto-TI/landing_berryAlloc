@@ -3,23 +3,23 @@ import {baseUrl} from "../utils/constantes";
 export class ProveedorService {
 
    
-    getProveedores(){
+    getAll(){
         return axios.get(baseUrl+"proveedores").then(res => res.data.data);
     }
-    getProveedor(proveedor){
+    getOne(proveedor){
         return axios.get(baseUrl+"proveedor"+proveedor._id).then(res => res.data.data);
     }
 
-    createProveedor(proveedor){
+    create(proveedor){
         return axios.post(baseUrl+"proveedor/", proveedor).then(res => res.data);
     }
 
 
-    updateProveedor(proveedor){
+    update(proveedor){
         return axios.put(baseUrl+"proveedor/"+proveedor._id, proveedor).then(res => res.data);
     }
 
-    softDeleteProveedor(proveedor){
+    softDelete(proveedor){
         return axios.put(baseUrl+"delete-proveedor/"+proveedor._id, proveedor).then(res => res.data);
     }
     

@@ -1,25 +1,70 @@
 import React, { useEffect, useState } from "react";
 import { Select } from 'antd';
+import { MarcaService } from "../../services/marcaService";
+import { LineaMarcaService } from "../../services/lineaMarcaService";
+import { GrupoService } from "../../services/grupoService";
 import { ProveedorService } from "../../services/proveedorService";
+import { MedidaService } from "../../services/medidaService";
+import { paises } from "../../utils/paises";
+
 const { Option } = Select;
 const SelectOpciones = (props) => {
 
-    const { tipo } = props;
-
+  console.log(props)
+    const {tipo, onChange, value, filter} = props;
     const [opciones, setOpciones] = useState([])
-    const proveedorService = new ProveedorService();
-
+    
+    console.log(filter);
     useEffect(() => {
-
-      if (tipo === 'lineas'){
-        proveedorService.getProveedores().then((data) => setOpciones(data));
+      
+      if (tipo === 'marca'){
+        const marcaService = new MarcaService();
+        marcaService.getAll().then((data) => setOpciones(data));
       }
       
-    }, [])
+      if (tipo === 'línea'){
+        const lineaMarcaService= new LineaMarcaService();
+        lineaMarcaService.getAll().then((data) => setOpciones(data.filter((p) => p.marca_id === filter)));
+      }else{
+        setOpciones([]);
+      }
+
+      if (tipo === 'grupo'){
+        const grupoService= new GrupoService();
+        grupoService.getAll().then((data) => setOpciones(data.filter((p) => p.fk_linea_id === filter)));
+      }else{
+        setOpciones([]);
+      }
+
+      if (tipo === 'proveedor'){
+        const proveedorService= new ProveedorService();
+        proveedorService.getProveedores().then((data) => setOpciones(data));
+      }else{
+        setOpciones([]);
+      }
+
+      if (tipo === 'unidad de medida' || tipo === 'unidad de venta'){
+        const medidaService= new MedidaService();
+        if (tipo === 'unidad de medida'){
+          medidaService.getAll().then((data) => setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "MEDIDA" )));
+        }else{
+          medidaService.getAll().then((data) => setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "VENTA")));
+        }
+      }else{
+        setOpciones([]);
+      }
+
+      if (tipo === 'procedencia'){
+        setOpciones(paises);
+
+      }
+
+
+    }, [filter])
   
 
-    function onChange(value) {
-        console.log(`selected ${value}`);
+    function handleChange(value) {
+        onChange(value);
       }
       
       function onBlur() {
@@ -47,11 +92,12 @@ const SelectOpciones = (props) => {
     <Select
       showSearch
       style={{ width: 200 }}
-      placeholder="Seleccione un proveedor"
+      placeholder={"Seleccione un "+tipo}
       optionFilterProp="children"
-      onChange={onChange}
+      onChange={handleChange}
       onFocus={onFocus}
       onBlur={onBlur}
+      value={value}
       onSearch={onSearch}
       notFoundContent="No hay coincidencias"
       filterOption={(input, option) =>

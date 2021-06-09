@@ -22,11 +22,11 @@ const ProductoContextProvider = (props) => {
   const softDeleteProducto = (id) => {
     productoService
       .softDeleteProducto(id)
-      .then(() => setProductos(productos.filter((p) => p._id !== id)));
+      .then(() => setProductos(productos.filter((p) => p.id !== id)));
   };
 
   const findProducto = (id) => {
-    const producto = productos.find((p) => p._id === id);
+    const producto = productos.find((p) => p.id === id);
 
     setEditProducto(producto);
   };
@@ -36,7 +36,7 @@ const ProductoContextProvider = (props) => {
       .updateProducto(producto)
       .then((data) =>
         setProductos(
-          productos.map((p) => (p._id === producto._id ? data : producto))
+          productos.map((p) => (p.id === producto.id ? data : producto))
         )
       );
 
