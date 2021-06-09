@@ -1,3 +1,14 @@
 .main-footer {
     background-color: rgb(0, 0, 0);
+    position:sticky;
+    height: 60px;
+    padding: 20px;
+}
+
+.icons-footer {
+    color: rgb(255, 255, 255);
+}
+
+.labels-footer {
+    color: rgb(255, 255, 255);
 }
