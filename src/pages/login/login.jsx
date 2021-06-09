@@ -27,6 +27,7 @@ const Login = () => {
       if(usuarioCheck)
       {
         console.log(response.profileObj.email);
+        localStorage.setItem('user', JSON.stringify(usuarioCheck));
         handleClick();
       }
       else{

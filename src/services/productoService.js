@@ -10,7 +10,7 @@ export class ProductoService {
     getProducto(producto){
 
         return axios.get(baseUrl+"producto"+producto._id).then(res => res.data);
->>>>>>> master
+
     }
 
     createProducto(producto){

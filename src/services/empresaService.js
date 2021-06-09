@@ -3,23 +3,23 @@ import {baseUrl} from "../utils/constantes";
 export class EmpresaService {
 
 
-    getEmpresas(){
+    getAll(){
         return axios.get(baseUrl+"empresas").then(res => res.data.data);
     }
 
-    getEmpresa(empresa){
+    getOne(empresa){
         return axios.get(baseUrl+"empresa/"+empresa._id).then(res => res.data.data);
     }
     
-    createEmpresa(empresa){
+    create(empresa){
         return axios.post(baseUrl+"empresa/", empresa).then(res => res.data);
     }
 
-    updateEmpresa(empresa){
+    update(empresa){
         return axios.put(baseUrl+"empresa/"+empresa._id, empresa).then(res => res.data);
     }
 
-    softDeleteEmpresa(empresa){
+    softDelete(empresa){
         return axios.put(baseUrl+"delete-empresa/"+empresa._id, empresa).then(res => res.data);
     }
     

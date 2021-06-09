@@ -5,23 +5,23 @@ export class GlosarioService {
    
 
 
-    getGlosarios(){
+    getAll(){
         return axios.get(baseUrl+"glosarios").then(res => res.data.data);
     }
 
-    getGlosario(glosario){
+    getOne(glosario){
         return axios.get(baseUrl+"glosario/"+glosario._id).then(res => res.data.data);
     }
 
-    createGlosario(glosario){
+    create(glosario){
         return axios.post(baseUrl+"glosario/", glosario).then(res => res.data);
     }
     
-    updateGlosario(glosario){
+    update(glosario){
         return axios.put(baseUrl+"glosario/"+glosario._id, glosario).then(res => res.data);
     }
 
-    softDeleteGlosario(glosario){
+    softDelete(glosario){
         return axios.put(baseUrl+"delete-glosario/"+glosario._id, glosario).then(res => res.data);
     }
     
