@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import Home from "./pages/home/home";
+// import Crud from "./pages/lineas_test/crud";
 
 import Login from "./pages/login/login";
 import {

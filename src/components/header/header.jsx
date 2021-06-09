@@ -4,9 +4,11 @@ import { PageHeader, Button } from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import "./header.css";
 
-const jsUSer = {
-  "userName": "Ing. Vergara"
-}
+const userName = JSON.parse(localStorage.getItem("user"));
+
+console.log('LOCAL STOR:' + localStorage)
+
+// const jsUSer = {  "userName": "Ing. Vergara"}
 const Header = () => {
 
   return (
@@ -20,7 +22,7 @@ const Header = () => {
           // <Button key="3">Op2</Button>,
           // <Button key="2">Op1</Button>,
           <Button key="1" icon={<UserOutlined />}>
-            {jsUSer.userName}
+            {userName.nombre}
           </Button>,
         ]}
       />

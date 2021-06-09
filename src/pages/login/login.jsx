@@ -2,7 +2,7 @@ import React from "react";
 import { GoogleLogin } from 'react-google-login';
 //import UsuarioService from '../../services/Usuarios/UsuariosService';
 // import { useState } from 'react';
-import { usuarios } from "../../utils/Usuarios";
+import {usuarios} from "../../utils/Usuarios";
 
 
 import "./login.css";

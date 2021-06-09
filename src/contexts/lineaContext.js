@@ -1,11 +1,9 @@
 import React, { createContext, useState, useEffect } from "react";
-
 import { LineaService } from '../services/lineaService';
 
 export const LineaContext = createContext();
 
 const LineaContextProvider = (props) => {
-
 
     const lineaService = new LineaService();
     

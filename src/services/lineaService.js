@@ -1,15 +1,14 @@
-  
 import axios from "axios"
 import {baseUrl} from "../utils/constantes";
 
 export class LineaService {
 
     getAll(){
-        return axios.get( baseUrl + "lineas" ).then( res => res.data.data );
+        return axios.get( baseUrl + "lineas" ).then( res => res.data );
     }
 
     getOne(linea){
-      return axios.get( baseUrl + "linea/" + linea._id, linea).then( res => res.data);
+      return axios.get( baseUrl + "linea/" + linea._id, linea).then( res => res.data.data);
     }
 
     create(linea){
