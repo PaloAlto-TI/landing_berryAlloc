@@ -19,7 +19,7 @@ const Header = () => {
         extra={[
           // <Button key="3">Op2</Button>,
           // <Button key="2">Op1</Button>,
-          <Button key="1" type="primary" icon={<UserOutlined />}>
+          <Button key="1" icon={<UserOutlined />}>
             {jsUSer.userName}
           </Button>,
         ]}
