@@ -18,10 +18,10 @@ const Login = () => {
 
   const responseGoogle = (response) => {
     let usuarioCheck = usuarios.find((u) => u.correo === response.profileObj.email);
-
+    localStorage.setItem('user', JSON.stringify(usuarioCheck));
     if (usuarioCheck) {
-      console.log(response.profileObj.email);
-      localStorage.setItem('user', JSON.stringify(usuarioCheck));
+     
+      //localStorage.setItem('user', JSON.stringify(usuarioCheck));
       handleClick();
     }
     else {

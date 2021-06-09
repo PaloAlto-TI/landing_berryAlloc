@@ -4,12 +4,13 @@ import { PageHeader, Button } from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import "./header.css";
 
-const userName = JSON.parse(localStorage.getItem("user"));
 
-console.log('LOCAL STOR:' + localStorage)
+
 
 // const jsUSer = {  "userName": "Ing. Vergara"}
 const Header = () => {
+  const userName = JSON.parse(localStorage.getItem("user"));
+  console.log('LOCAL STOR:' + localStorage)
 
   return (
     <header>
