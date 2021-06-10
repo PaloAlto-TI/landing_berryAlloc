@@ -1,10 +1,23 @@
 .site-page-header {
     border: 1px solid rgb(235, 237, 240);
-  }
-
+ }
 .main-header {
-    background-color: rgb(0, 0, 0);
-  }
+  background-color: rgb(0, 0, 0);
+  align-items: center;
+  padding: 20px 20px;
+  height: 70px;
+  position: fixed;
+  width: 100%;
+}
+.icons-header {
+    color: rgb(255, 255, 255);
+}
+
+.labels-header {
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    text-align: left;
+}
 
 .ant-page-header-heading-title {
   color: rgb(255, 255, 255);
