@@ -99,7 +99,7 @@ const ProductoList = () => {
     <Button type="primary"  icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
     
       {productos.length > 0 ? (
-        <Table columns={columns} dataSource={productos} rowKey='id' onChange={handleChange} searchableProps={{
+        <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={productos} rowKey='id' onChange={handleChange} searchableProps={{
         // dataSource,
         // setDataSource: setSearchDataSource,
         inputProps: {
