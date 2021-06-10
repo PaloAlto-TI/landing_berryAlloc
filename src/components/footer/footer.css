@@ -1,8 +1,7 @@
 .main-footer {
     background-color: rgb(0, 0, 0);
-    position:absolute;
-    height: 8.5vh;
-    min-height: 8.5vh;
+    position: fixed;
+    height: 60px;
     width: 100%;
     bottom: 0;
     padding: 20px;
