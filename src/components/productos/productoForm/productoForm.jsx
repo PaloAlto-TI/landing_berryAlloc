@@ -6,6 +6,7 @@ import { ProductoContext } from "../../../contexts/productoContext";
 import { useHistory } from "react-router";
 import { useLocation } from "react-router-dom";
 import "./productoForm.css";
+import { SaveOutlined } from "@ant-design/icons";
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
@@ -402,7 +403,7 @@ const FormProducto = (props) => {
       <Col span={12} offset={7}>
       {permiso ? (
         <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit">
+          <Button  icon={<SaveOutlined />}type="primary" htmlType="submit">
             GUARDAR
           </Button>
         </Form.Item>
