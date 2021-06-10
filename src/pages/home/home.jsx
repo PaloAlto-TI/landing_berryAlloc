@@ -4,12 +4,16 @@ import Header from "../../components/header/header";
 import ProductoList from "../../components/productos/productoList/productoList";
 import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
+import Login from "../../pages/login/login";
+
 import "./home.css";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
 } from "react-router-dom";
+
+
 
 const Home = () => {
   return (
@@ -24,6 +28,9 @@ const Home = () => {
               </Route>
               <Route path="/producto">
                 <ProductoForm/>
+              </Route>
+              <Route path="/login">
+                <Login/>
               </Route>
             </Switch>
           </Router>
