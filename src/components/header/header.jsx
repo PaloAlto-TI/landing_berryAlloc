@@ -5,6 +5,7 @@ import { UserOutlined } from '@ant-design/icons';
 import "./header.css";
 import { Row, Col } from 'antd';
 import { useHistory } from "react-router";
+import {  message } from 'antd';
 
 // const jsUSer = {  "userName": "Ing. Vergara"}
 const Header = () => {
@@ -27,6 +28,7 @@ const Header = () => {
   );
   
   function logOut() {
+    message.success('Log Out');
     localStorage.clear();
     history.push("/login");
   }
