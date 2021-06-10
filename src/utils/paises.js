@@ -1,18 +1,18 @@
 export const paises= [
     {
-        "id":1,
+        "id":"EEUU",
         "nombre":"EEUU"
     },
     {
-        "id":2,
+        "id":"BÉLGICA",
         "nombre":"BÉLGICA"
     },
     {
-        "id":3,
+        "id":"INGLATERRA",
         "nombre":"INGLATERRA"
     },
     {
-        "id":4,
+        "id":"CHINA",
         "nombre":"CHINA"
     },
 ]

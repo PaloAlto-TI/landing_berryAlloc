@@ -12,6 +12,7 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import Login from "../login/login";
 
 const { Content } = Layout;
 
@@ -24,12 +25,14 @@ const Home = () => {
         <ProductoContextProvider>
           <Router>
             <Switch>
-              {/* <Route exact path="/">
+               <Route  path="/productos">
+               <ProductoContextProvider>
                 <ProductoList />
+                </ProductoContextProvider>
+              </Route> 
+              {/* <Route path="/productos">
+                <ProductoList/>
               </Route> */}
-              <Route path="/producto">
-                <ProductoForm/>
-              </Route>
               {/* <Route path="/login">
                 <Login/>
               </Route> */}

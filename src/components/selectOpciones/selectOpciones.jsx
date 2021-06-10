@@ -10,13 +10,12 @@ import { paises } from "../../utils/paises";
 const { Option } = Select;
 const SelectOpciones = (props) => {
 
-  console.log(props)
-    const {tipo, onChange, value, filter} = props;
+  // console.log(props)
+    const {tipo, onChange, value, filter, readOnly} = props;
     const [opciones, setOpciones] = useState([])
     
-    console.log(filter);
+    // console.log(filter);
     useEffect(() => {
-      
       if (tipo === 'marca'){
         const marcaService = new MarcaService();
         marcaService.getAll().then((data) => setOpciones(data));
@@ -91,13 +90,14 @@ const SelectOpciones = (props) => {
   return (
     <Select
       showSearch
+      disabled={readOnly}
       style={{ width: 200 }}
-      placeholder={"Seleccione un "+tipo}
+      placeholder={"Seleccione "+tipo}
       optionFilterProp="children"
       onChange={handleChange}
       onFocus={onFocus}
       onBlur={onBlur}
-      value={value}
+      value={opcionesList.length > 0 ? value : null}
       onSearch={onSearch}
       notFoundContent="No hay coincidencias"
       filterOption={(input, option) =>
