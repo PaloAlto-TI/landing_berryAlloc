@@ -9,7 +9,7 @@ const Header = () => {
         className="site-page-header"
         onBack={() => null}
         title="Palo Alto"
-        subTitle="This is a subtitle"
+        subTitle="Especialista en Pisos"
       />
     </header>
   );

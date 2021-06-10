@@ -62,7 +62,7 @@ const FormProducto = (props) => {
     } else {
       createProducto(values);
     }
-    history.push("/");
+    history.push("/productos");
     setPermiso(false);
   };
 

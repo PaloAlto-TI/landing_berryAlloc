@@ -19,7 +19,7 @@ const Home = () => {
         <ProductoContextProvider>
           <Router>
             <Switch>
-              <Route exact path="/">
+              <Route exact path="/productos">
                 <ProductoList />
               </Route>
               <Route path="/producto">
