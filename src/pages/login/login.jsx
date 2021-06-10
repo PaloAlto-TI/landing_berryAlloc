@@ -3,10 +3,15 @@ import { GoogleLogin } from 'react-google-login';
 //import UsuarioService from '../../services/Usuarios/UsuariosService';
 // import { useState } from 'react';
 import {usuarios} from "../../utils/Usuarios";
-
-
 import "./login.css";
 import { useHistory } from "react-router";
+import { Row, Col, Divider } from 'antd';
+const DemoBox = props => <p className={`height-${props.value}`}>{props.children}</p>;
+
+
+
+
+
 
 const Login = () => {
   let history = useHistory();
@@ -18,10 +23,9 @@ const Login = () => {
 
   const responseGoogle = (response) => {
     let usuarioCheck = usuarios.find((u) => u.correo === response.profileObj.email);
-    localStorage.setItem('user', JSON.stringify(usuarioCheck));
+    
     if (usuarioCheck) {
-     
-      //localStorage.setItem('user', JSON.stringify(usuarioCheck));
+      localStorage.setItem('user', JSON.stringify(usuarioCheck));
       handleClick();
     }
     else {
@@ -33,18 +37,26 @@ const Login = () => {
   return (<div>
     {
       localStorage.getItem("user")===null ?
-        <GoogleLogin
+  
+      <GoogleLogin
           clientId="610747110294-o2cruk32qs9j2mi3o9ob1b7dpu4ib35u.apps.googleusercontent.com"
           buttonText="Google"
           onSuccess={responseGoogle}
 
           onFailure={responseGoogle}
           cookiePolicy={"single_host_origin"}
-        />: handleClick()
+        />
+      
+
+
+  
+    
+  : handleClick()
+        
     }
 
   </div>);
 }
-//"holaaa"
+
 export default Login;
 
