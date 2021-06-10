@@ -92,7 +92,7 @@ const SelectOpciones = (props) => {
       showSearch
       disabled={readOnly}
       style={{ width: 200 }}
-      placeholder={"Seleccione un "+tipo}
+      placeholder={"Seleccione "+tipo}
       optionFilterProp="children"
       onChange={handleChange}
       onFocus={onFocus}
