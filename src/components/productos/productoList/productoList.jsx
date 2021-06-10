@@ -79,7 +79,7 @@ const ProductoList = () => {
     },
 
     {
-      title: "ACCION",
+      title: "ACCIONES",
       dataIndex: "",
       key: "x",
       render: (_, record) => <CrudButton record={record} />,

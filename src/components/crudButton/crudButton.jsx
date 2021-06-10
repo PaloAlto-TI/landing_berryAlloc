@@ -32,6 +32,7 @@ const CrudButton = (props) => {
   let history = useHistory();
 
   function ver() {
+    localStorage.setItem("permiso", false)
     history.push("/producto", record);
   }
 
@@ -58,7 +59,7 @@ const CrudButton = (props) => {
   return (
     <>
       <Dropdown.Button overlay={menu}></Dropdown.Button>
-      <Modal title="Eliminar Producto" okType="danger" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <Modal title="Eliminar Producto" okType="danger" okText="Eliminar" cancelText="Cancelar" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <p>¿Está seguro que desea eliminar {record.nombre}?</p>
       </Modal>
     </>
