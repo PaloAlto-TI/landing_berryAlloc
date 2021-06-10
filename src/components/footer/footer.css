@@ -4,7 +4,7 @@
     height: 60px;
     width: 100%;
     bottom: 0;
-    padding: 20px;
+    padding-top: 10px;
 }
 
 .icons-footer {
@@ -13,4 +13,5 @@
 
 .labels-footer {
     color: rgb(255, 255, 255);
+    font-size: 16px;
 }
