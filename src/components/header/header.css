@@ -6,16 +6,20 @@
   align-items: center;
   padding: 20px 20px;
   height: 70px;
-  position: fixed;
+  position: sticky;
   width: 100%;
 }
 .icons-header {
     color: rgb(255, 255, 255);
 }
+.icons-end-header {
+  color: rgb(255, 255, 255);
+  text-align: end;
+}
 
 .labels-header {
     color: rgb(255, 255, 255);
-    font-size: 14px;
+    font-size: 18px;
     text-align: left;
 }
 
