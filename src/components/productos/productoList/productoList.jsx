@@ -33,7 +33,6 @@ const ProductoList = () => {
       key: "codigo_interno",
       sorter: {
         compare: (a, b) => a.codigo_interno.localeCompare(b.codigo_interno),
-        multiple: 3,
       },
       showSorterTooltip: false
     },
@@ -43,7 +42,6 @@ const ProductoList = () => {
       key: "nombre",
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
-        multiple: 1,
       },
       showSorterTooltip: false
      
@@ -54,7 +52,6 @@ const ProductoList = () => {
       key: "tipo_inventario",
       sorter: {
         compare: (a, b) => a.tipo_inventario.localeCompare(b.tipo_inventario),
-        multiple: 4,
       },
       filters: [
         { text: 'PERMANENTE', value: 'PERMANENTE' },
@@ -72,7 +69,6 @@ const ProductoList = () => {
       key: "precio",
       sorter: {
         compare: (a, b) => a.precio - b.precio,
-        multiple: 2,
       },
       showSorterTooltip: false
 
