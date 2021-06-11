@@ -11,15 +11,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useRouteMatch,
+  useRouteMatch
 } from "react-router-dom";
-import Login from "../login/login";
-
-const { Content } = Layout;
 
 const Home = () => {
+  
   let { path, url } = useRouteMatch();
-
+  
   return (
     <>
       <Header />
@@ -34,30 +32,9 @@ const Home = () => {
               <Route exact path={`${path}/productos/producto`}>
                 <ProductoForm />
               </Route>
-              {/* <Route path="/productos">
-                <ProductoList/>
-              </Route> */}
-              {/* <Route path="/login">
-                <Login/>
-              </Route> */}
-              {/* <Route path="/home">
-              <SideMenu />
-              </Route> */}
               <Route exact path={`${path}`}>
-                <Layout
-                  style={{
-                    height: "60vh",
-                    backgroundColor: "white",
-                    justifyContent: "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      color: "black",
-                      fontSize: "45px",
-                      fontWeight: "bold",
-                    }}
-                  >
+                <Layout style={{ height: "62vh", backgroundColor: "white", justifyContent: "center",}}>
+                  <span style={{ color: "black", fontSize: "45px", fontWeight: "bold", }}>
                     PRODUCTOS - PALO ALTO
                   </span>
                 </Layout>
@@ -66,7 +43,6 @@ const Home = () => {
           </ProductoContextProvider>
         </Router>
       </main>
-
       <Footer />
     </>
   );
