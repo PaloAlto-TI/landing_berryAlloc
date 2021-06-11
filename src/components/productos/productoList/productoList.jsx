@@ -7,9 +7,11 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { ProductoContext } from "../../../contexts/productoContext";
 import CrudButton from "../../crudButton/crudButton";
 import { useHistory } from "react-router";
+import { useRouteMatch } from "react-router-dom";
 
 const ProductoList = () => {
   const { productos, setPermiso } = useContext(ProductoContext);
+  let { path, url } = useRouteMatch();
 
   const [filteredInfo, setFilteredInfo] = useState([])
 
@@ -89,7 +91,7 @@ const ProductoList = () => {
       "permiso" : true,
       "nuevo" : true
     };
-    history.push("/producto", record);
+    history.push(`${path}/producto`, record);
   }
 
   

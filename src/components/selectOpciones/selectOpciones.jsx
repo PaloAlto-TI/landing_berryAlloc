@@ -37,7 +37,7 @@ const SelectOpciones = (props) => {
 
       if (tipo === 'proveedor'){
         const proveedorService= new ProveedorService();
-        proveedorService.getProveedores().then((data) => setOpciones(data));
+        proveedorService.getAll().then((data) => setOpciones(data));
       }else{
         setOpciones([]);
       }
