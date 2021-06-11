@@ -4,13 +4,15 @@ import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { ProductoContext } from "../../../contexts/productoContext";
 import { useHistory } from "react-router";
-import { useLocation } from "react-router-dom";
+import { useLocation, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
 import { SaveOutlined } from "@ant-design/icons";
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
-  
+  let { path, url } = useRouteMatch();
+
+  console.log(path);
   // console.log(props);
   const { createProducto, updateProducto, setPermiso } =
     useContext(ProductoContext);
@@ -67,7 +69,7 @@ const FormProducto = (props) => {
     } else {
       createProducto(values);
     }
-    history.push("/productos");
+    history.goBack();
     setPermiso(false);
   };
 
