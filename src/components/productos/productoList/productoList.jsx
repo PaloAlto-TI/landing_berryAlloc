@@ -11,7 +11,6 @@ import { useHistory } from "react-router";
 const ProductoList = () => {
   const { productos, setPermiso } = useContext(ProductoContext);
 
- 
   const [filteredInfo, setFilteredInfo] = useState([])
 
   const handleChange = (pagination, filters, sorter) => {
@@ -64,7 +63,7 @@ const ProductoList = () => {
 
     },
     {
-      title: "PRECIO",
+      title: "PRECIO ($)",
       dataIndex: "precio",
       key: "precio",
       sorter: {
@@ -86,7 +85,11 @@ const ProductoList = () => {
 
   function handleClick() {
     setPermiso(true);
-    history.push("/producto");
+    let record = {
+      "permiso" : true,
+      "nuevo" : true
+    };
+    history.push("/producto", record);
   }
 
   
