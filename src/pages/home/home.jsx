@@ -16,7 +16,7 @@ import {
 
 const Home = () => {
   
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
   
   return (
     <>

@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Row, Col, Divider } from "antd";
+import { message, Row, Col, Divider } from "antd";
 import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { ProductoContext } from "../../../contexts/productoContext";
@@ -10,7 +10,7 @@ import { SaveOutlined } from "@ant-design/icons";
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
-  let { path, url } = useRouteMatch();
+  let { path} = useRouteMatch();
 
   console.log(path);
   // console.log(props);
@@ -71,12 +71,15 @@ const FormProducto = (props) => {
     }
     history.goBack();
     setPermiso(false);
+    message.info('Producto guardado con éxito!');
   };
 
   let history = useHistory();
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    message.warning('Error al guardar producto...');
+
   };
 
   const handleFormValuesChange = (changedValues) => {

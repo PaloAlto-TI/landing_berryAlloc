@@ -11,7 +11,7 @@ import { useRouteMatch } from "react-router-dom";
 
 const ProductoList = () => {
   const { productos, setPermiso } = useContext(ProductoContext);
-  let { path, url } = useRouteMatch();
+  let { path} = useRouteMatch();
 
   console.log("path")
   const [filteredInfo, setFilteredInfo] = useState([])

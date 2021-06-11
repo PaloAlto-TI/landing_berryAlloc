@@ -1,7 +1,6 @@
 import React from "react";
 import { Menu, Button, Dropdown, Row, Col} from "antd";
 import { UserOutlined } from '@ant-design/icons';
-import SideMenu from "../../components/menu/sidemenu";
 import "./header.css";
 import { useHistory } from "react-router";
 import {  message } from 'antd';

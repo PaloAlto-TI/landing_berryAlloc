@@ -9,7 +9,7 @@ import { useRouteMatch } from 'react-router-dom';
 const { SubMenu } = Menu;
 const SideMenu = () => {
 
-  let { path, url } = useRouteMatch();
+  let { path} = useRouteMatch();
   let history = useHistory();
 
   const [visible, setVisible] = useState(false);

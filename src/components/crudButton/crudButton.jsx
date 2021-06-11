@@ -9,7 +9,7 @@ const CrudButton = (props) => {
 
 
   const { record } = props;
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
 
   console.log("path2", path);
 

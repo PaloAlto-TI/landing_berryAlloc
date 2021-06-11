@@ -8,8 +8,6 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import ProductoList from "./components/productos/productoList/productoList";
-import ProductoContextProvider from "./contexts/productoContext";
 
 function App() {
   return (
