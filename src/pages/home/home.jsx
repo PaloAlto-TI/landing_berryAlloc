@@ -5,7 +5,7 @@ import SideMenu from "../../components/menu/sidemenu";
 import ProductoList from "../../components/productos/productoList/productoList";
 import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
-import { Layout } from 'antd';
+import { Layout } from "antd";
 import "./home.css";
 import {
   BrowserRouter as Router,
@@ -13,44 +13,52 @@ import {
   Route,
   useRouteMatch
 } from "react-router-dom";
+import Login from "../login/login";
 
 const { Content } = Layout;
 
 const Home = () => {
   
   let { path, url } = useRouteMatch();
-  console.log('EL PATJ VAR: ' + path)
+  
   return (
     <>
       <Header />
       <main>
-      <SideMenu />
-        <ProductoContextProvider>
-          <Router>
+        <SideMenu />
+        <Router>
+          <ProductoContextProvider Provider>
             <Switch>
-              {/* <Route exact path="/">
-                <ProductoList />
-              </Route> */}
               <Route exact path={`${path}/productos`}>
-                <ProductoList/>
+                <ProductoList />
               </Route>
               <Route exact path={`${path}/productos/producto`}>
                 <ProductoForm />
               </Route>
-              {/* <Route path="/login">
-                <Login/>
-              </Route> */}
-              {/* <Route path="/home">
-              <SideMenu />
-              </Route> */}
+              <Route exact path={`${path}`}>
+                <Layout
+                  style={{
+                    height: "62vh",
+                    backgroundColor: "white",
+                    justifyContent: "center",
+                  }}
+                >
+                  <span
+                    style={{
+                      color: "black",
+                      fontSize: "45px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    PRODUCTOS - PALO ALTO
+                  </span>
+                </Layout>
+              </Route>
             </Switch>
-          </Router>
-        </ProductoContextProvider>
-        <Layout style={{ height: '60vh', backgroundColor: 'white', justifyContent: 'center'}}>
-           <span style={{ color: 'black', fontSize: '45px', fontWeight: 'bold'}}>PRODUCTOS - PALO ALTO</span>
-        </Layout>
+          </ProductoContextProvider>
+        </Router>
       </main>
-      
+
       <Footer />
     </>
   );

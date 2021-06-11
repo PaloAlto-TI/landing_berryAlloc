@@ -4,6 +4,7 @@ import { UserOutlined } from '@ant-design/icons';
 import SideMenu from "../../components/menu/sidemenu";
 import "./header.css";
 import { useHistory } from "react-router";
+import {  message } from 'antd';
 
 const Header = () => {
   let history = useHistory();
@@ -24,6 +25,7 @@ const Header = () => {
   );
   
   function logOut() {
+    message.success('Log Out');
     localStorage.clear();
     history.push("/login");
   }
