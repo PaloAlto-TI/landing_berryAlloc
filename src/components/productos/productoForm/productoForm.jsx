@@ -12,7 +12,7 @@ const FormProducto = (props) => {
   const location = useLocation();
 
   // console.log(props);
-  const { createProducto, updateProducto, setPermiso, permiso } =
+  const { createProducto, updateProducto, setPermiso } =
     useContext(ProductoContext);
 
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
@@ -42,18 +42,23 @@ const FormProducto = (props) => {
     en_web: false,
   };
 
-  if (location.state) {
-    console.log(location.state);
-    initialValues = location.state;
 
-    if (!selectedMarcaId && !selectedLineaId) {
-      setSelectedMarcaId(location.state.fk_marca_id);
-      setSelectedLineaId(location.state.fk_linea_id);
-      setId(location.state.id);
+  if (location.state) {
+    if (!location.state.nuevo) {
+      console.log(location.state.permiso);
+      initialValues = location.state;
+
+      if (!selectedMarcaId && !selectedLineaId) {
+        setSelectedMarcaId(location.state.fk_marca_id);
+        setSelectedLineaId(location.state.fk_linea_id);
+        setId(location.state.id);
+      }
+
     }
   }
 
   const onFinish = (values) => {
+    delete values.permiso;
     console.log("Success:", values);
     if (id) {
       values["id"] = id;
@@ -119,7 +124,7 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <Input className="input-type" readOnly={!permiso} />
+            <Input className="input-type" readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
           <Form.Item
             label="Nombre"
@@ -131,7 +136,7 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <Input className="input-type" readOnly={!permiso} />
+            <Input className="input-type" readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
           <Form.Item
             label="Procedencia"
@@ -143,7 +148,7 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="procedencia" readOnly={!permiso} />
+            <SelectOpciones tipo="procedencia" readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
           <Form.Item
             label="Proveedor"
@@ -155,7 +160,7 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="proveedor" readOnly={!permiso} />
+            <SelectOpciones tipo="proveedor" readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
           <Form.Item
             label="Marca"
@@ -167,7 +172,7 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="marca" readOnly={!permiso} />
+            <SelectOpciones tipo="marca" readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
           <Form.Item
             label="Línea"
@@ -182,7 +187,7 @@ const FormProducto = (props) => {
             <SelectOpciones
               tipo="línea"
               filter={selectedMarcaId}
-              readOnly={!permiso}
+              readOnly={location.state ? !location.state.permiso : false}
             />
           </Form.Item>
           <Form.Item
@@ -198,7 +203,7 @@ const FormProducto = (props) => {
             <SelectOpciones
               tipo="grupo"
               filter={selectedLineaId}
-              readOnly={!permiso}
+              readOnly={location.state ? !location.state.permiso : false}
             />
           </Form.Item>
           <Form.Item
@@ -211,7 +216,7 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <Input className="input-type" readOnly={!permiso} />
+            <Input className="input-type" readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
           <Form.Item
             label="Tipo"
@@ -226,7 +231,7 @@ const FormProducto = (props) => {
             <Radio.Group
               onChange={onChangeTipoProducto}
               value={tipoProducto}
-              disabled={!permiso}
+              disabled={location.state ? !location.state.permiso : false}
             >
               <Radio value={"BIENES"}>BIENES</Radio>
               <Radio value={"SERVICIOS"}>SERVICIOS</Radio>
@@ -245,7 +250,7 @@ const FormProducto = (props) => {
             <Radio.Group
               onChange={onChangeTipoInventario}
               value={tipoInventario}
-              disabled={!permiso}
+              disabled={location.state ? !location.state.permiso : false}
             >
               <Radio value={"PERMANENTE"}>PERMANENTE</Radio>
               <Radio value={"BAJO PEDIDO"}>BAJO PEDIDO</Radio>
@@ -261,7 +266,7 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="unidad de medida" readOnly={!permiso} />
+            <SelectOpciones tipo="unidad de medida" readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
 
           <Form.Item
@@ -274,7 +279,7 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="unidad de venta" readOnly={!permiso} />
+            <SelectOpciones tipo="unidad de venta" readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -288,7 +293,8 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false} formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+      parser={value => value.replace(/\$\s?|(,*)/g, '')}/>
           </Form.Item>
           <Form.Item
             label="Precio"
@@ -300,7 +306,8 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+      parser={value => value.replace(/\$\s?|(,*)/g, '')} />
           </Form.Item>
           <Form.Item
             label="IVA"
@@ -312,7 +319,8 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
+            parser={value => value.replace('%', '')} />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 1"
@@ -324,7 +332,8 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
+            parser={value => value.replace('%', '')}/>
           </Form.Item>
           <Form.Item
             label="Límite Descuento 2"
@@ -335,8 +344,10 @@ const FormProducto = (props) => {
                 message: "Por favor, ingrese el limite de descuento 2!",
               },
             ]}
+           
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
+            parser={value => value.replace('%', '')} />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 3"
@@ -348,7 +359,8 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
+            parser={value => value.replace('%', '')} />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 4"
@@ -360,7 +372,8 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
+            parser={value => value.replace('%', '')} />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 5"
@@ -372,7 +385,8 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false} formatter={value => `${value}%`}
+            parser={value => value.replace('%', '')} />
           </Form.Item>
           <Form.Item
             label="Dimensión de Unidad de Venta"
@@ -384,32 +398,32 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber readOnly={!permiso} />
+            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false} />
           </Form.Item>
           <Form.Item
             {...tailLayout}
             name="en_sistema_externo"
             valuePropName="checked"
           >
-            <Checkbox disabled={!permiso}>En Sistema Externo</Checkbox>
+            <Checkbox disabled={location.state ? !location.state.permiso : false}>En Sistema Externo</Checkbox>
           </Form.Item>
           <Form.Item {...tailLayout} name="en_web" valuePropName="checked">
-            <Checkbox disabled={!permiso}>En Página Web</Checkbox>
+            <Checkbox disabled={location.state ? !location.state.permiso : false}>En Página Web</Checkbox>
           </Form.Item>
         </Col>
       </Row>
-      <br/>
+      <br />
       <Row>
-      <Col span={12} offset={7}>
-      {permiso ? (
-        <Form.Item {...tailLayout}>
-          <Button  icon={<SaveOutlined />}type="primary" htmlType="submit">
-            GUARDAR
+        <Col span={12} offset={7}>
+          {location.state.permiso ? (
+            <Form.Item {...tailLayout}>
+              <Button icon={<SaveOutlined />} type="primary" htmlType="submit">
+                GUARDAR
           </Button>
-        </Form.Item>
-      ) : null}
-      </Col>
-      
+            </Form.Item>
+          ) : null}
+        </Col>
+
       </Row>
     </Form>
   );

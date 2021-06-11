@@ -33,11 +33,13 @@ const CrudButton = (props) => {
   let history = useHistory();
 
   function ver() {
+    record["permiso"] = false;
     history.push("/producto", record);
   }
 
   function editar() {
     setPermiso(true);
+    record["permiso"] = true;
     history.push("/producto", record);
   }
 
