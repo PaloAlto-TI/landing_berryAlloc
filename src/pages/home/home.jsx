@@ -13,9 +13,6 @@ import {
   Route,
   useRouteMatch
 } from "react-router-dom";
-import Login from "../login/login";
-
-const { Content } = Layout;
 
 const Home = () => {
   
