@@ -27,44 +27,44 @@ const Home = () => {
       <main>
         <SideMenu />
         <Router>
-          <Switch>
-            <ProductoContextProvider>
+          <ProductoContextProvider>
+            <Switch>
               <Route path={`${path}/productos`}>
                 <ProductoList />
               </Route>
               <Route path={`${path}/productos/producto`}>
                 <ProductoForm />
               </Route>
-            </ProductoContextProvider>
-            {/* <Route path="/productos">
+              {/* <Route path="/productos">
                 <ProductoList/>
               </Route> */}
-            {/* <Route path="/login">
+              {/* <Route path="/login">
                 <Login/>
               </Route> */}
-            {/* <Route path="/home">
+              {/* <Route path="/home">
               <SideMenu />
               </Route> */}
-            <Route path={`${path}`}>
-              <Layout
-                style={{
-                  height: "60vh",
-                  backgroundColor: "white",
-                  justifyContent: "center",
-                }}
-              >
-                <span
+              <Route path={`${path}`}>
+                <Layout
                   style={{
-                    color: "black",
-                    fontSize: "45px",
-                    fontWeight: "bold",
+                    height: "60vh",
+                    backgroundColor: "white",
+                    justifyContent: "center",
                   }}
                 >
-                  PRODUCTOS - PALO ALTO
-                </span>
-              </Layout>
-            </Route>
-          </Switch>
+                  <span
+                    style={{
+                      color: "black",
+                      fontSize: "45px",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    PRODUCTOS - PALO ALTO
+                  </span>
+                </Layout>
+              </Route>
+            </Switch>
+          </ProductoContextProvider>
         </Router>
       </main>
 
