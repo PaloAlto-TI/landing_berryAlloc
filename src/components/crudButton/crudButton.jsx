@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Menu, Dropdown } from "antd";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import { Modal } from 'antd';
 import { ProductoContext } from "../../contexts/productoContext";
 import { DeleteFilled, EditFilled, EyeFilled } from "@ant-design/icons";
@@ -9,6 +9,9 @@ const CrudButton = (props) => {
 
 
   const { record } = props;
+  let { path, url } = useRouteMatch();
+
+  console.log("path2", path);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const { softDeleteProducto, setPermiso } = useContext(ProductoContext);
@@ -34,13 +37,13 @@ const CrudButton = (props) => {
 
   function ver() {
     record["permiso"] = false;
-    history.push("/producto", record);
+    history.push(`${path}/producto`, record);
   }
 
   function editar() {
     setPermiso(true);
     record["permiso"] = true;
-    history.push("/producto", record);
+    history.push(`${path}/producto`, record);
   }
 
 

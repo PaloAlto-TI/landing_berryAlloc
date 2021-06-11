@@ -20,19 +20,18 @@ const { Content } = Layout;
 const Home = () => {
   let { path, url } = useRouteMatch();
 
-  console.log(path);
   return (
     <>
       <Header />
       <main>
         <SideMenu />
         <Router>
-          <ProductoContextProvider>
+          <ProductoContextProvider Provider>
             <Switch>
-              <Route path={`${path}/productos`}>
+              <Route exact path={`${path}/productos`}>
                 <ProductoList />
               </Route>
-              <Route path={`${path}/productos/producto`}>
+              <Route exact path={`${path}/productos/producto`}>
                 <ProductoForm />
               </Route>
               {/* <Route path="/productos">
@@ -44,7 +43,7 @@ const Home = () => {
               {/* <Route path="/home">
               <SideMenu />
               </Route> */}
-              <Route path={`${path}`}>
+              <Route exact path={`${path}`}>
                 <Layout
                   style={{
                     height: "60vh",

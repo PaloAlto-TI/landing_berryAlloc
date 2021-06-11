@@ -4,6 +4,7 @@ import { Menu } from 'antd';
 import { AppstoreOutlined, DollarCircleOutlined,  MenuOutlined, HighlightOutlined, HomeOutlined, LineChartOutlined, FundOutlined, WechatOutlined, BarcodeOutlined } from '@ant-design/icons';
 import { useHistory } from "react-router";
 import { Row, Col, Drawer } from 'antd';
+import { useRouteMatch } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 /*class Sider extends React.Component {
@@ -13,6 +14,9 @@ const { SubMenu } = Menu;
 
 const SideMenu = () => {
 
+  let { path, url } = useRouteMatch();
+
+  console.log("path2", path);
   let history = useHistory();
   
   const showAlert = () => {
@@ -52,7 +56,7 @@ const SideMenu = () => {
           <Menu.Item key="3" icon={<FundOutlined />}>MARCAS</Menu.Item>
           <Menu.Item key="4" icon={<WechatOutlined />}>GRUPOS</Menu.Item>
           <Menu.Item key="5" icon={<DollarCircleOutlined />}>PROVEEDORES</Menu.Item>
-          <Menu.Item key="6" icon={<BarcodeOutlined />} onClick={e => { history.push("/productos");   }}>PRODUCTOS</Menu.Item>
+          <Menu.Item key="6" icon={<BarcodeOutlined />} onClick={e => { history.push(`${path}/productos`);   }}>PRODUCTOS</Menu.Item>
           <SubMenu key="sub1" icon={<LineChartOutlined />} title="REPORTES">
             <Menu.Item key="7">VENTAS</Menu.Item>
             <Menu.Item key="8">STOCKS</Menu.Item>

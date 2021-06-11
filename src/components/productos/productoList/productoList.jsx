@@ -13,7 +13,7 @@ const ProductoList = () => {
   const { productos, setPermiso } = useContext(ProductoContext);
   let { path, url } = useRouteMatch();
 
-  console.log("path", path)
+  console.log("path")
   const [filteredInfo, setFilteredInfo] = useState([])
 
   const handleChange = (pagination, filters, sorter) => {

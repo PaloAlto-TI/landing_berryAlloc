@@ -10,7 +10,7 @@ import { SaveOutlined } from "@ant-design/icons";
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
-
+  
   // console.log(props);
   const { createProducto, updateProducto, setPermiso } =
     useContext(ProductoContext);
