@@ -25,6 +25,11 @@ function App() {
               <Route path="/login">
                 <Login/>
               </Route>
+              <Route  path="/productos">
+               <ProductoContextProvider>
+                <ProductoList />
+                </ProductoContextProvider>
+              </Route> 
 
               {/* <Route  path="/productos">
                 <ProductoContextProvider>
