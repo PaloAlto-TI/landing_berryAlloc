@@ -36,20 +36,8 @@ const Home = () => {
                 <ProductoForm />
               </Route>
               <Route exact path={`${path}`}>
-                <Layout
-                  style={{
-                    height: "62vh",
-                    backgroundColor: "white",
-                    justifyContent: "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      color: "black",
-                      fontSize: "45px",
-                      fontWeight: "bold",
-                    }}
-                  >
+                <Layout style={{ height: "62vh", backgroundColor: "white", justifyContent: "center",}}>
+                  <span style={{ color: "black", fontSize: "45px", fontWeight: "bold", }}>
                     PRODUCTOS - PALO ALTO
                   </span>
                 </Layout>
@@ -58,7 +46,6 @@ const Home = () => {
           </ProductoContextProvider>
         </Router>
       </main>
-
       <Footer />
     </>
   );
