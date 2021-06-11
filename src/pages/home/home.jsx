@@ -11,11 +11,15 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  useRouteMatch
 } from "react-router-dom";
 
 const { Content } = Layout;
 
 const Home = () => {
+  
+  let { path, url } = useRouteMatch();
+  console.log('EL PATJ VAR: ' + path)
   return (
     <>
       <Header />
@@ -27,8 +31,11 @@ const Home = () => {
               {/* <Route exact path="/">
                 <ProductoList />
               </Route> */}
-              <Route path="/producto">
-                <ProductoForm/>
+              <Route exact path={`${path}/productos`}>
+                <ProductoList/>
+              </Route>
+              <Route exact path={`${path}/productos/producto`}>
+                <ProductoForm />
               </Route>
               {/* <Route path="/login">
                 <Login/>
