@@ -416,7 +416,7 @@ const FormProducto = (props) => {
       </Row>
       <br />
       <Row>
-        <Col span={12} offset={7}>
+        <Col span={12} offset={4}>
           {location.state.permiso ? (
             <Form.Item {...tailLayout}>
               <Button icon={<SaveOutlined />} type="primary" htmlType="submit">
