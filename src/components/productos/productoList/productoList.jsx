@@ -63,7 +63,7 @@ const ProductoList = () => {
 
     },
     {
-      title: "PRECIO",
+      title: "PRECIO ($)",
       dataIndex: "precio",
       key: "precio",
       sorter: {
