@@ -1,18 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Spin } from "antd";
 import { Button} from 'antd';
-import { Table } from "ant-table-extensions";
-import { PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Table } from "antd";
+import { PlusOutlined } from '@ant-design/icons';
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProductoContext } from "../../../contexts/productoContext";
 import CrudButton from "../../crudButton/crudButton";
 import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
+import Search from "antd/lib/input/Search";
 
 const ProductoList = () => {
   const { productos, setPermiso } = useContext(ProductoContext);
-  let { path} = useRouteMatch();
-
+  let { path } = useRouteMatch();
+  const [value, setValue] = useState(null);
+  const [dataSource, setDataSource] = useState([]);
+ 
   console.log("path")
   const [filteredInfo, setFilteredInfo] = useState([])
 
@@ -24,6 +27,9 @@ const ProductoList = () => {
 
   useEffect(() => {
     setPermiso(false);
+    if (!value){
+      setDataSource(productos)
+    }
   })
   
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -99,21 +105,21 @@ const ProductoList = () => {
   return (
     <div>
     <Button type="primary"  icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
-    
+    <Search
+      placeholder="Buscar producto..."
+      value={value}
+      onChange={e => {
+        const currValue = e.target.value;
+        setValue(currValue);
+        const filteredData = productos.filter(entry => 
+          entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.tipo_inventario.toLowerCase().includes(currValue.toLowerCase()) || entry.precio.toString().includes(currValue)
+        );
+        setDataSource(filteredData);
+      }}
+      style={{ width: 200 }} 
+    />
       {productos.length > 0 ? (
-        <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={productos} rowKey='id' onChange={handleChange} searchableProps={{
-        // dataSource,
-        // setDataSource: setSearchDataSource,
-        inputProps: {
-          placeholder: "Buscar producto...",
-          prefix: <SearchOutlined />,
-          style: {
-            width:"25%",
-            marginLeft: "75vw"
-          }
-
-        },
-      }}/>
+        <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={dataSource} rowKey='id' onChange={handleChange} />
       ) : (
         <Spin indicator={antIcon} />
       )}

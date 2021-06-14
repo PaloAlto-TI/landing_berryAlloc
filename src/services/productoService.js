@@ -11,12 +11,12 @@ export class ProductoService {
     }
 
     createProducto(producto){
-        return axios.post(baseUrl+"producto/", producto).then(res => res.data);
+        return axios.post(baseUrl+"producto/", producto).then(res => res.data).catch(error => error.response.data);
     }
 
 
     updateProducto(producto){
-        return axios.put(baseUrl+"producto/"+producto.id, producto).then(res => res.data);
+        return axios.put(baseUrl+"producto/"+producto.id, producto).then(res => res.data).catch(error => error.response.data);;
     }
 
     softDeleteProducto(producto){

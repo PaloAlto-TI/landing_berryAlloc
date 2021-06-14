@@ -45,7 +45,7 @@ const SideMenu = () => {
           <Menu.Item key="3" icon={<FundOutlined />}>MARCAS</Menu.Item>
           <Menu.Item key="4" icon={<WechatOutlined />}>GRUPOS</Menu.Item>
           <Menu.Item key="5" icon={<DollarCircleOutlined />}>PROVEEDORES</Menu.Item>
-          <Menu.Item key="6" icon={<BarcodeOutlined />} onClick={e => { history.push(`${path}/productos`); window.location.reload(); }}>PRODUCTOS</Menu.Item>
+          <Menu.Item key="6" icon={<BarcodeOutlined />} onClick={e => { history.push(`${path}/productos`); window.location.reload() }}>PRODUCTOS</Menu.Item>
           <SubMenu key="sub1" icon={<LineChartOutlined />} title="REPORTES">
             <Menu.Item key="7">VENTAS</Menu.Item>
             <Menu.Item key="8">STOCKS</Menu.Item>

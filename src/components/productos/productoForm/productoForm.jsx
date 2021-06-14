@@ -10,7 +10,7 @@ import { SaveOutlined } from "@ant-design/icons";
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
-  let { path} = useRouteMatch();
+  let { path } = useRouteMatch();
 
   console.log(path);
   // console.log(props);
@@ -44,7 +44,6 @@ const FormProducto = (props) => {
     en_web: false,
   };
 
-
   if (location.state) {
     if (!location.state.nuevo) {
       console.log(location.state.permiso);
@@ -55,31 +54,36 @@ const FormProducto = (props) => {
         setSelectedLineaId(location.state.fk_linea_id);
         setId(location.state.id);
       }
-
     }
   }
+  let history = useHistory();
 
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
+
+    let data = null;
+
     delete values.permiso;
     console.log("Success:", values);
     if (id) {
       values["id"] = id;
       console.log("values", values);
-      updateProducto(values);
+      data = await updateProducto(values);
     } else {
-      createProducto(values);
+      data = await createProducto(values);
+    };
+    
+    if (data.includes('OK')) {
+      console.log(data);
+      history.goBack();
+      setPermiso(false);
+      message.info(data);
+    }else{
+      message.warning(data);
     }
-    history.goBack();
-    setPermiso(false);
-    message.info('Producto guardado con éxito!');
-  };
-
-  let history = useHistory();
-
+  }
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
-    message.warning('Error al guardar producto...');
-
+    message.warning("Error al guardar producto...");
   };
 
   const handleFormValuesChange = (changedValues) => {
@@ -129,7 +133,10 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <Input className="input-type" readOnly={location.state ? !location.state.permiso : false} />
+            <Input
+              className="input-type"
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
           <Form.Item
             label="Nombre"
@@ -141,7 +148,10 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <Input className="input-type" readOnly={location.state ? !location.state.permiso : false} />
+            <Input
+              className="input-type"
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
           <Form.Item
             label="Procedencia"
@@ -153,7 +163,10 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="procedencia" readOnly={location.state ? !location.state.permiso : false} />
+            <SelectOpciones
+              tipo="procedencia"
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
           <Form.Item
             label="Proveedor"
@@ -165,7 +178,10 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="proveedor" readOnly={location.state ? !location.state.permiso : false} />
+            <SelectOpciones
+              tipo="proveedor"
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
           <Form.Item
             label="Marca"
@@ -177,7 +193,10 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="marca" readOnly={location.state ? !location.state.permiso : false} />
+            <SelectOpciones
+              tipo="marca"
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
           <Form.Item
             label="Línea"
@@ -221,7 +240,10 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <Input className="input-type" readOnly={location.state ? !location.state.permiso : false} />
+            <Input
+              className="input-type"
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
           <Form.Item
             label="Tipo"
@@ -271,7 +293,10 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="unidad de medida" readOnly={location.state ? !location.state.permiso : false} />
+            <SelectOpciones
+              tipo="unidad de medida"
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
 
           <Form.Item
@@ -284,7 +309,10 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <SelectOpciones tipo="unidad de venta" readOnly={location.state ? !location.state.permiso : false} />
+            <SelectOpciones
+              tipo="unidad de venta"
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -298,8 +326,14 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false} formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-      parser={value => value.replace(/\$\s?|(,*)/g, '')}/>
+            <InputNumber
+              min={0}
+              readOnly={location.state ? !location.state.permiso : false}
+              formatter={(value) =>
+                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            />
           </Form.Item>
           <Form.Item
             label="Precio"
@@ -311,8 +345,14 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-      parser={value => value.replace(/\$\s?|(,*)/g, '')} />
+            <InputNumber
+              min={0}
+              readOnly={location.state ? !location.state.permiso : false}
+              formatter={(value) =>
+                `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            />
           </Form.Item>
           <Form.Item
             label="IVA"
@@ -324,8 +364,13 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
-            parser={value => value.replace('%', '')} />
+            <InputNumber
+              min={0}
+              defaultValue={12}
+              readOnly={location.state ? !location.state.permiso : false}
+              formatter={(value) => `${value}%`}
+              parser={(value) => value.replace("%", "")}
+            />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 1"
@@ -337,8 +382,13 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
-            parser={value => value.replace('%', '')}/>
+            <InputNumber
+              min={0}
+              defaultValue={0}
+              readOnly={location.state ? !location.state.permiso : false}
+              formatter={(value) => `${value}%`}
+              parser={(value) => value.replace("%", "")}
+            />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 2"
@@ -349,10 +399,14 @@ const FormProducto = (props) => {
                 message: "Por favor, ingrese el limite de descuento 2!",
               },
             ]}
-           
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
-            parser={value => value.replace('%', '')} />
+            <InputNumber
+              min={0}
+              defaultValue={0}
+              readOnly={location.state ? !location.state.permiso : false}
+              formatter={(value) => `${value}%`}
+              parser={(value) => value.replace("%", "")}
+            />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 3"
@@ -364,8 +418,13 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
-            parser={value => value.replace('%', '')} />
+            <InputNumber
+              min={0}
+              defaultValue={0}
+              readOnly={location.state ? !location.state.permiso : false}
+              formatter={(value) => `${value}%`}
+              parser={(value) => value.replace("%", "")}
+            />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 4"
@@ -377,8 +436,13 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false}  formatter={value => `${value}%`}
-            parser={value => value.replace('%', '')} />
+            <InputNumber
+              min={0}
+              defaultValue={0}
+              readOnly={location.state ? !location.state.permiso : false}
+              formatter={(value) => `${value}%`}
+              parser={(value) => value.replace("%", "")}
+            />
           </Form.Item>
           <Form.Item
             label="Límite Descuento 5"
@@ -390,8 +454,13 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false} formatter={value => `${value}%`}
-            parser={value => value.replace('%', '')} />
+            <InputNumber
+              min={0}
+              defaultValue={0}
+              readOnly={location.state ? !location.state.permiso : false}
+              formatter={(value) => `${value}%`}
+              parser={(value) => value.replace("%", "")}
+            />
           </Form.Item>
           <Form.Item
             label="Dimensión de Unidad de Venta"
@@ -403,17 +472,28 @@ const FormProducto = (props) => {
               },
             ]}
           >
-            <InputNumber min={0} readOnly={location.state ? !location.state.permiso : false} />
+            <InputNumber
+              min={0}
+              readOnly={location.state ? !location.state.permiso : false}
+            />
           </Form.Item>
           <Form.Item
             {...tailLayout}
             name="en_sistema_externo"
             valuePropName="checked"
           >
-            <Checkbox disabled={location.state ? !location.state.permiso : false}>En Sistema Externo</Checkbox>
+            <Checkbox
+              disabled={location.state ? !location.state.permiso : false}
+            >
+              En Sistema Externo
+            </Checkbox>
           </Form.Item>
           <Form.Item {...tailLayout} name="en_web" valuePropName="checked">
-            <Checkbox disabled={location.state ? !location.state.permiso : false}>En Página Web</Checkbox>
+            <Checkbox
+              disabled={location.state ? !location.state.permiso : false}
+            >
+              En Página Web
+            </Checkbox>
           </Form.Item>
         </Col>
       </Row>
@@ -424,11 +504,10 @@ const FormProducto = (props) => {
             <Form.Item {...tailLayout}>
               <Button icon={<SaveOutlined />} type="primary" htmlType="submit">
                 GUARDAR
-          </Button>
+              </Button>
             </Form.Item>
           ) : null}
         </Col>
-
       </Row>
     </Form>
   );
