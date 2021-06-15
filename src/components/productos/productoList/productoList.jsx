@@ -9,6 +9,7 @@ import CrudButton from "../../crudButton/crudButton";
 import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
+import './productoList.css'
 
 const ProductoList = () => {
   const { productos, setPermiso } = useContext(ProductoContext);
@@ -104,7 +105,7 @@ const ProductoList = () => {
   
   return (
     <div>
-    <Button type="primary"  icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+    <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
     <Search
       placeholder="Buscar producto..."
       value={value}
