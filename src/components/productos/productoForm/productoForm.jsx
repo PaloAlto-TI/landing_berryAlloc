@@ -22,7 +22,7 @@ const FormProducto = (props) => {
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
   const [id, setId] = useState(null);
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(location.state.permiso);
 
   const [form] = Form.useForm();
   const layout = {
@@ -43,9 +43,16 @@ const FormProducto = (props) => {
   let initialValues = {
     en_sistema_externo: false,
     en_web: false,
+    iva: 12,
+    limite_descuento1 :0,
+    limite_descuento2 :0,
+    limite_descuento3 :0,
+    limite_descuento4 :0,
+    limite_descuento5 :0,
   };
 
   if (location.state) {
+    console.log(location.state)
     if (!location.state.nuevo) {
       console.log(location.state.permiso);
       initialValues = location.state;
@@ -56,9 +63,11 @@ const FormProducto = (props) => {
         setId(location.state.id);
       }
     }
+
   }
   let history = useHistory();
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
 
   const onFinish = async (values) => {
     let data = null;
@@ -166,15 +175,20 @@ const FormProducto = (props) => {
                 },
               ]}
             >
+             { location.state.permiso ?
               <SelectOpciones
                 tipo="procedencia"
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
               />
+            }
             </Form.Item>
             <Form.Item
               label="Proveedor"
-              name="fk_proveedor_id"
+              name={location.state.permiso ? "fk_proveedor_id" : "proveedor"}
               rules={[
                 {
                   required: true,
@@ -182,11 +196,16 @@ const FormProducto = (props) => {
                 },
               ]}
             >
+             { location.state.permiso ?
               <SelectOpciones
                 tipo="proveedor"
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
               />
+            }
             </Form.Item>
             <Form.Item
               label="Marca"
@@ -212,7 +231,7 @@ const FormProducto = (props) => {
             </Form.Item>
             <Form.Item
               label="Línea"
-              name="fk_linea_id"
+              name={location.state.permiso ? "fk_linea_id" : "linea"}
               rules={[
                 {
                   required: true,
@@ -220,16 +239,21 @@ const FormProducto = (props) => {
                 },
               ]}
             >
+            { location.state.permiso ?
               <SelectOpciones
                 tipo="línea"
                 filter={selectedMarcaId}
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
               />
+            }
             </Form.Item>
             <Form.Item
               label="Grupo"
-              name="fk_grupo_id"
+              name={location.state.permiso ? "fk_grupo_id" : "grupo"}
               rules={[
                 {
                   required: true,
@@ -237,12 +261,17 @@ const FormProducto = (props) => {
                 },
               ]}
             >
+            { location.state.permiso ?
               <SelectOpciones
                 tipo="grupo"
                 filter={selectedLineaId}
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
               />
+            }
             </Form.Item>
             <Form.Item
               label="Descripción"
@@ -269,6 +298,7 @@ const FormProducto = (props) => {
                 },
               ]}
             >
+            { location.state.permiso ?
               <Radio.Group
                 onChange={onChangeTipoProducto}
                 value={tipoProducto}
@@ -276,7 +306,10 @@ const FormProducto = (props) => {
               >
                 <Radio value={"BIENES"}>BIENES</Radio>
                 <Radio value={"SERVICIOS"}>SERVICIOS</Radio>
-              </Radio.Group>
+              </Radio.Group>: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
+              />}
             </Form.Item>
             <Form.Item
               label="Tipo de Inventario"
@@ -288,6 +321,7 @@ const FormProducto = (props) => {
                 },
               ]}
             >
+             { location.state.permiso ?
               <Radio.Group
                 onChange={onChangeTipoInventario}
                 value={tipoInventario}
@@ -295,11 +329,14 @@ const FormProducto = (props) => {
               >
                 <Radio value={"PERMANENTE"}>PERMANENTE</Radio>
                 <Radio value={"BAJO PEDIDO"}>BAJO PEDIDO</Radio>
-              </Radio.Group>
+              </Radio.Group>: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
+              />}
             </Form.Item>
             <Form.Item
               label="Unidad de Medida"
-              name="fk_unidad_medida_id"
+              name={location.state.permiso ? "fk_unidad_medida_id" : "unidad_medida"}
               rules={[
                 {
                   required: true,
@@ -307,16 +344,21 @@ const FormProducto = (props) => {
                 },
               ]}
             >
+             { location.state.permiso ?
               <SelectOpciones
                 tipo="unidad de medida"
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
               />
+            }
             </Form.Item>
 
             <Form.Item
               label="Unidad de Venta"
-              name="fk_unidad_venta_id"
+              name={location.state.permiso ? "fk_unidad_venta_id" : "unidad_venta"}
               rules={[
                 {
                   required: true,
@@ -324,11 +366,16 @@ const FormProducto = (props) => {
                 },
               ]}
             >
+             { location.state.permiso ?
               <SelectOpciones
                 tipo="unidad de venta"
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
               />
+            }
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -382,7 +429,6 @@ const FormProducto = (props) => {
             >
               <InputNumber
                 min={0}
-                defaultValue={12}
                 readOnly={location.state ? !location.state.permiso : false}
                 formatter={(value) => `${value}%`}
                 parser={(value) => value.replace("%", "")}
@@ -400,7 +446,6 @@ const FormProducto = (props) => {
             >
               <InputNumber
                 min={0}
-                defaultValue={0}
                 readOnly={location.state ? !location.state.permiso : false}
                 formatter={(value) => `${value}%`}
                 parser={(value) => value.replace("%", "")}
@@ -418,7 +463,6 @@ const FormProducto = (props) => {
             >
               <InputNumber
                 min={0}
-                defaultValue={0}
                 readOnly={location.state ? !location.state.permiso : false}
                 formatter={(value) => `${value}%`}
                 parser={(value) => value.replace("%", "")}
@@ -436,7 +480,6 @@ const FormProducto = (props) => {
             >
               <InputNumber
                 min={0}
-                defaultValue={0}
                 readOnly={location.state ? !location.state.permiso : false}
                 formatter={(value) => `${value}%`}
                 parser={(value) => value.replace("%", "")}
@@ -454,7 +497,6 @@ const FormProducto = (props) => {
             >
               <InputNumber
                 min={0}
-                defaultValue={0}
                 readOnly={location.state ? !location.state.permiso : false}
                 formatter={(value) => `${value}%`}
                 parser={(value) => value.replace("%", "")}
@@ -472,7 +514,6 @@ const FormProducto = (props) => {
             >
               <InputNumber
                 min={0}
-                defaultValue={0}
                 readOnly={location.state ? !location.state.permiso : false}
                 formatter={(value) => `${value}%`}
                 parser={(value) => value.replace("%", "")}

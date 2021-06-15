@@ -23,6 +23,9 @@ function App() {
               <Route path="/login">
                 <Login/>
               </Route>
+              <Route path="*">
+                <p>404 NOT FOUND</p>
+              </Route>
             </Switch>
           </Router>
     </div>

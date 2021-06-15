@@ -16,6 +16,7 @@ const SelectOpciones = (props) => {
     console.log(props);
     // console.log(filter);
     useEffect(async () => {
+
       if (tipo === 'marca'){
         const marcaService = new MarcaService();
         marcaService.getAll().then((data) => setOpciones(data));
@@ -58,6 +59,7 @@ const SelectOpciones = (props) => {
         setOpciones(paises);
 
       }
+
 
 
     }, [filter])
