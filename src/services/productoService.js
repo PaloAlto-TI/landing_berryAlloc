@@ -4,7 +4,7 @@ export class ProductoService {
 
    
     getProductos(){
-        return axios.get(baseUrl+"productos").then(res => res.data.data);
+        return axios.get(baseUrl+"vista").then(res => res.data.data);
     }
     getProducto(producto){
         return axios.get(baseUrl+"producto/"+producto.id).then(res => res.data.data);
