@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
-import { message, Row, Col, Divider } from "antd";
+import { message, Row, Col, Divider, Spin } from "antd";
 import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { ProductoContext } from "../../../contexts/productoContext";
 import { useHistory } from "react-router";
 import { useLocation, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
-import { SaveOutlined } from "@ant-design/icons";
+import { LoadingOutlined, SaveOutlined } from "@ant-design/icons";
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
@@ -22,6 +22,7 @@ const FormProducto = (props) => {
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
   const [id, setId] = useState(null);
+  const [show, setShow] = useState(true);
 
   const [form] = Form.useForm();
   const layout = {
@@ -57,7 +58,8 @@ const FormProducto = (props) => {
     }
   }
   let history = useHistory();
-
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+ 
   const onFinish = async (values) => {
 
     let data = null;
@@ -110,6 +112,8 @@ const FormProducto = (props) => {
   };
 
   return (
+
+    <>
     <Form
       {...layout}
       form={form}
@@ -118,6 +122,7 @@ const FormProducto = (props) => {
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       onValuesChange={handleFormValuesChange}
+      hidden={show}
     >
       <Divider>PRODUCTO</Divider>
       <br />
@@ -166,6 +171,8 @@ const FormProducto = (props) => {
             <SelectOpciones
               tipo="procedencia"
               readOnly={location.state ? !location.state.permiso : false}
+              setShow={setShow}
+
             />
           </Form.Item>
           <Form.Item
@@ -181,6 +188,8 @@ const FormProducto = (props) => {
             <SelectOpciones
               tipo="proveedor"
               readOnly={location.state ? !location.state.permiso : false}
+            
+              setShow={setShow}
             />
           </Form.Item>
           <Form.Item
@@ -196,6 +205,8 @@ const FormProducto = (props) => {
             <SelectOpciones
               tipo="marca"
               readOnly={location.state ? !location.state.permiso : false}
+            
+              setShow={setShow}
             />
           </Form.Item>
           <Form.Item
@@ -212,6 +223,8 @@ const FormProducto = (props) => {
               tipo="línea"
               filter={selectedMarcaId}
               readOnly={location.state ? !location.state.permiso : false}
+            
+              setShow={setShow}
             />
           </Form.Item>
           <Form.Item
@@ -228,6 +241,8 @@ const FormProducto = (props) => {
               tipo="grupo"
               filter={selectedLineaId}
               readOnly={location.state ? !location.state.permiso : false}
+            
+              setShow={setShow}
             />
           </Form.Item>
           <Form.Item
@@ -296,6 +311,8 @@ const FormProducto = (props) => {
             <SelectOpciones
               tipo="unidad de medida"
               readOnly={location.state ? !location.state.permiso : false}
+            
+              setShow={setShow}
             />
           </Form.Item>
 
@@ -312,7 +329,8 @@ const FormProducto = (props) => {
             <SelectOpciones
               tipo="unidad de venta"
               readOnly={location.state ? !location.state.permiso : false}
-            />
+           
+              setShow={setShow} />
           </Form.Item>
         </Col>
         <Col span={12}>
@@ -510,6 +528,8 @@ const FormProducto = (props) => {
         </Col>
       </Row>
     </Form>
+    <Spin indicator={antIcon} hidden={!show} className="loading-producto"/>
+    </>
   );
 };
 
