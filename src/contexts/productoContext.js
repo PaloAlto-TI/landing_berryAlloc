@@ -21,7 +21,8 @@ const ProductoContextProvider = (props) => {
 
     console.log("err:", data);
     if (data.message === "OK CREATE") {
-      setProductos([...productos, data.data]);
+      productoService.getProductos().then((data) => setProductos(data));
+      // setProductos([...productos, data.data]);
     }
 
     return data.message;

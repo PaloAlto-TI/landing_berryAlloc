@@ -116,6 +116,8 @@ const FormProducto = (props) => {
       form.setFieldsValue({ fk_grupo_id: undefined });
       setSelectedLineaId(null); //reset product selection
       setInfoTecnica(null);
+      form.setFieldsValue({ atributos_js: undefined });
+
 
       //reset product selection
     }
