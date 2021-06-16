@@ -119,6 +119,8 @@ const ProductoList = () => {
       }}
       style={{ width: 200 }} 
     />
+      <br/>
+      <br/>
       {productos.length > 0 ? (
         <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={dataSource} rowKey='id' onChange={handleChange} />
       ) : (
