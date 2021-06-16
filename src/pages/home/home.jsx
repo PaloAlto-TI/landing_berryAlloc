@@ -29,7 +29,7 @@ const Home = () => {
               <Route exact path={`${path}/productos`}>
                 <ProductoList />
               </Route>
-              <Route exact path={`${path}/productos/producto`}>
+              <Route path={`${path}/productos/:codigo`}>
                 <ProductoForm />
               </Route>
               <Route exact path={`${path}`}>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { message, Row, Col, Divider, Spin } from "antd";
 import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
@@ -17,12 +17,21 @@ const FormProducto = (props) => {
   const { createProducto, updateProducto, setPermiso } =
     useContext(ProductoContext);
 
+  let history = useHistory();
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
   const [id, setId] = useState(null);
-  const [show, setShow] = useState(location.state.permiso);
+  const [show, setShow] = useState(null);
+
+  useEffect(() => {
+    if (location.state){
+      setShow(location.state.permiso)
+    }else{
+      history.goBack();
+    }
+  }, [])
 
   const [form] = Form.useForm();
   const layout = {
@@ -65,7 +74,6 @@ const FormProducto = (props) => {
     }
 
   }
-  let history = useHistory();
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 
@@ -120,6 +128,8 @@ const FormProducto = (props) => {
   };
 
   return (
+
+    location.state ?
     <>
       <Form
         {...layout}
@@ -572,8 +582,8 @@ const FormProducto = (props) => {
           </Col>
         </Row>
       </Form>
-      <Spin indicator={antIcon} hidden={!show} className="loading-producto" />
-    </>
+      <Spin indicator={antIcon} hidden={!show} className="loading-producto" /> 
+    </>: null
   );
 };
 
