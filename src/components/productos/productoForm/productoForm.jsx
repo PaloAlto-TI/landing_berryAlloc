@@ -24,7 +24,7 @@ const FormProducto = (props) => {
   const [tipoProducto, setTipoProducto] = useState(undefined);
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
-  const [infoTecnica, setInfoTecnica] = useState(null)
+  const [infoTecnica, setInfoTecnica] = useState(location.state ? location.state.fk_linea_id :null)
 
   useEffect(() => {
     if (location.state){
@@ -588,7 +588,7 @@ const FormProducto = (props) => {
             ) : null}
           </Col>
         </Row>
-        { infoTecnica==="60a7d6e408be1a4c6d9f019d" ? <p>PISO LAMINADO</p> :null}
+        { infoTecnica==="60a7d6e408be1a4c6d9f019d" ? <p>INFORMACIÓN TÉCNICA: PISO LAMINADO</p> :null}
       </Form>
       <Spin indicator={antIcon} hidden={!show} className="loading-producto" /> 
     </>: null
