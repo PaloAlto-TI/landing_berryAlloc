@@ -99,7 +99,7 @@ const ProductoList = () => {
       "permiso" : true,
       "nuevo" : true
     };
-    history.push(`${path}/producto`, record);
+    history.push(`${path}/nuevo`, record);
   }
 
   
