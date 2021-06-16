@@ -27,6 +27,7 @@ const ProductoList = () => {
   };
 
   useEffect(() => {
+    console.log(productos)
     setPermiso(false);
     if (!value){
       setDataSource(productos)

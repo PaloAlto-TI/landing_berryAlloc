@@ -66,7 +66,6 @@ const FormProducto = (props) => {
     if (!location.state.nuevo) {
       console.log(location.state.permiso);
       initialValues = location.state;
-
       if (!selectedMarcaId && !selectedLineaId) {
         setSelectedMarcaId(location.state.fk_marca_id);
         setSelectedLineaId(location.state.fk_linea_id);
@@ -572,6 +571,40 @@ const FormProducto = (props) => {
             </Form.Item>
           </Col>
         </Row>
+        { infoTecnica==="60a7d6e408be1a4c6d9f019d" ? (<div><Form.Item
+              label="Largo"
+              name={['atributos_js', 'largo']}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingrese el largo!",
+                },
+              ]}
+            >
+             <InputNumber
+                min={0}
+                readOnly={location.state ? !location.state.permiso : false}
+                formatter={(value) => `${value} mm`}
+                parser={(value) => value.replace(" mm", "")}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Ancho"
+              name={['atributos_js', 'ancho']}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingrese el ancho!",
+                },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                readOnly={location.state ? !location.state.permiso : false}
+                formatter={(value) => `${value} mm`}
+                parser={(value) => value.replace(" mm", "")}
+              />
+            </Form.Item></div>) :null}
         <br />
         <Row>
           <Col span={12} offset={4}>
@@ -588,7 +621,7 @@ const FormProducto = (props) => {
             ) : null}
           </Col>
         </Row>
-        { infoTecnica==="60a7d6e408be1a4c6d9f019d" ? <p>INFORMACIÓN TÉCNICA: PISO LAMINADO</p> :null}
+      
       </Form>
       <Spin indicator={antIcon} hidden={!show} className="loading-producto" /> 
     </>: null
