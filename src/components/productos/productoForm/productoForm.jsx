@@ -25,6 +25,7 @@ const FormProducto = (props) => {
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
   const [infoTecnica, setInfoTecnica] = useState(location.state ? location.state.fk_linea_id :null)
+  const [atributosJs, setAtributosJs] = useState(null)
 
   useEffect(() => {
     if (location.state){
@@ -64,7 +65,7 @@ const FormProducto = (props) => {
   if (location.state) {
     console.log(location.state)
     if (!location.state.nuevo) {
-      console.log(location.state.permiso);
+      console.log("sate",location.state);
       initialValues = location.state;
       if (!selectedMarcaId && !selectedLineaId) {
         setSelectedMarcaId(location.state.fk_marca_id);
@@ -82,6 +83,7 @@ const FormProducto = (props) => {
 
     delete values.permiso;
     console.log("Success:", values);
+    values["atributos_js"] = atributosJs;
     if (id) {
       values["id"] = id;
       console.log("values", values);
@@ -106,24 +108,32 @@ const FormProducto = (props) => {
 
   const handleFormValuesChange = (changedValues) => {
 
+    console.log("BF",form.getFieldValue("atributos_js"))
+    if ( form.getFieldValue("atributos_js") === undefined){
+      form.setFieldsValue({ atributos_js: {} });
+      console.log("AF",form.getFieldValue("atributos_js"))
+      
+    }
     
+    setAtributosJs(form.getFieldValue("atributos_js"));
+
     setInfoTecnica(form.getFieldValue("fk_linea_id"));
     
     const formFieldName = Object.keys(changedValues)[0];
+
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
       form.setFieldsValue({ fk_linea_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
-      setSelectedLineaId(null); //reset product selection
-      setInfoTecnica(null);
       form.setFieldsValue({ atributos_js: undefined });
+      setSelectedLineaId(null); 
+      setInfoTecnica(null);
 
 
-      //reset product selection
     }
     if (formFieldName === "fk_linea_id") {
       setSelectedLineaId(changedValues[formFieldName]);
-      form.setFieldsValue({ fk_grupo_id: undefined }); //reset product selection
+      form.setFieldsValue({ fk_grupo_id: undefined }); 
     }
   };
 
@@ -573,6 +583,36 @@ const FormProducto = (props) => {
             </Form.Item>
           </Col>
         </Row>
+        <Form.Item
+              label="Comun"
+              name={['atributos_js', 'comun']}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingrese el campo!",
+                },
+              ]}
+            >
+             <InputNumber
+                min={0}
+                readOnly={location.state ? !location.state.permiso : false}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Comun 2"
+              name={['atributos_js', 'comun2']}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingrese el campo2!",
+                },
+              ]}
+            >
+             <InputNumber
+                min={0}
+                readOnly={location.state ? !location.state.permiso : false}
+              />
+            </Form.Item>
         { infoTecnica==="60a7d6e408be1a4c6d9f019d" ? (<div><Form.Item
               label="Largo"
               name={['atributos_js', 'largo']}
@@ -606,7 +646,21 @@ const FormProducto = (props) => {
                 formatter={(value) => `${value} mm`}
                 parser={(value) => value.replace(" mm", "")}
               />
-            </Form.Item></div>) :null}
+            </Form.Item></div>) : infoTecnica==="60a8133d2591c75004eceaa8" ? <Form.Item
+              label="Otro"
+              name={['atributos_js', 'otro']}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingrese el atributo!",
+                },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                readOnly={location.state ? !location.state.permiso : false}
+              />
+            </Form.Item> : null}
         <br />
         <Row>
           <Col span={12} offset={4}>
