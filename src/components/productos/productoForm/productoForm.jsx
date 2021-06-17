@@ -25,9 +25,7 @@ const FormProducto = (props) => {
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
   const [infoTecnica, setInfoTecnica] = useState(location.state ? location.state.fk_linea_id :null)
-  const [atributosJs, setAtributosJs] = useState(location.state ? location.state.atributos_js.general :null)
-  const [atributosJs2, setAtributosJs2] = useState(location.state ? location.state.atributos_js.especifico :null)
-  const [final, setFinal] = useState(location.state ? location.state.atributos_js :null)
+
 
   useEffect(() => {
     if (location.state){
@@ -125,7 +123,6 @@ const FormProducto = (props) => {
 
     setInfoTecnica(form.getFieldValue("fk_linea_id"));
     
-    setAtributosJs(form.getFieldValue("atributos_js").general);
     const formFieldName = Object.keys(changedValues)[0];
 
     if (formFieldName === "fk_marca_id") {
@@ -140,7 +137,6 @@ const FormProducto = (props) => {
 
 
     }else{
-    setAtributosJs2(form.getFieldValue("atributos_js").especifico);
 
 
     }
