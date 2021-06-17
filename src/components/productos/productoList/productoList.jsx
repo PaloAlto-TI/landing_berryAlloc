@@ -53,7 +53,7 @@ const ProductoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
      
     },
     {
@@ -74,13 +74,14 @@ const ProductoList = () => {
 
     },
     {
-      title: "PRECIO ($)",
+      title: "PRECIO",
       dataIndex: "precio",
       key: "precio",
       sorter: {
         compare: (a, b) => a.precio - b.precio,
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      render: text => <p>{"$"+text}</p>,
 
     },
 
