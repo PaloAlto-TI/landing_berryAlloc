@@ -110,12 +110,12 @@ const FormProducto = (props) => {
 
 
     // setFinal(form.getFieldsValue());
-    console.log("BF",form.getFieldValue("atributos_js"))
-    console.log("BF2",form.getFieldValue("atributos_js").general);
+    // console.log("BF",form.getFieldValue("atributos_js"))
+    // console.log("BF2",form.getFieldValue("atributos_js").general);
 
     if ( form.getFieldValue("atributos_js") === undefined){
       //form.setFieldsValue({ atributos_js: {} });
-      console.log("AF",form.getFieldValue("atributos_js"))
+      // console.log("AF",form.getFieldValue("atributos_js"))
       
     }
     
@@ -131,7 +131,7 @@ const FormProducto = (props) => {
       form.setFieldsValue({ fk_linea_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
       // form.setFieldsValue({ atributos_js: {"general": atributosJs , "especifico": {}} });
-      console.log("TEST", form.getFieldValue("atributos_js").especifico)
+      // console.log("TEST", form.getFieldValue("atributos_js").especifico)
       setSelectedLineaId(null); 
       setInfoTecnica(null);
 
