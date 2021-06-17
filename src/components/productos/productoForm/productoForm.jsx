@@ -25,7 +25,9 @@ const FormProducto = (props) => {
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
   const [infoTecnica, setInfoTecnica] = useState(location.state ? location.state.fk_linea_id :null)
-  const [atributosJs, setAtributosJs] = useState(null)
+  const [atributosJs, setAtributosJs] = useState(location.state ? location.state.atributos_js.general :null)
+  const [atributosJs2, setAtributosJs2] = useState(location.state ? location.state.atributos_js.especifico :null)
+  const [final, setFinal] = useState(location.state ? location.state.atributos_js :null)
 
   useEffect(() => {
     if (location.state){
@@ -83,7 +85,7 @@ const FormProducto = (props) => {
 
     delete values.permiso;
     console.log("Success:", values);
-    values["atributos_js"] = atributosJs;
+    // values["atributos_js"] = final;
     if (id) {
       values["id"] = id;
       console.log("values", values);
@@ -108,26 +110,37 @@ const FormProducto = (props) => {
 
   const handleFormValuesChange = (changedValues) => {
 
+
+    // setFinal(form.getFieldsValue());
     console.log("BF",form.getFieldValue("atributos_js"))
+    console.log("BF2",form.getFieldValue("atributos_js").general);
+
     if ( form.getFieldValue("atributos_js") === undefined){
-      form.setFieldsValue({ atributos_js: {} });
+      //form.setFieldsValue({ atributos_js: {} });
       console.log("AF",form.getFieldValue("atributos_js"))
       
     }
     
-    setAtributosJs(form.getFieldValue("atributos_js"));
+
 
     setInfoTecnica(form.getFieldValue("fk_linea_id"));
     
+    setAtributosJs(form.getFieldValue("atributos_js").general);
     const formFieldName = Object.keys(changedValues)[0];
 
     if (formFieldName === "fk_marca_id") {
+      
       setSelectedMarcaId(changedValues[formFieldName]);
       form.setFieldsValue({ fk_linea_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
-      form.setFieldsValue({ atributos_js: undefined });
+      // form.setFieldsValue({ atributos_js: {"general": atributosJs , "especifico": {}} });
+      console.log("TEST", form.getFieldValue("atributos_js").especifico)
       setSelectedLineaId(null); 
       setInfoTecnica(null);
+
+
+    }else{
+    setAtributosJs2(form.getFieldValue("atributos_js").especifico);
 
 
     }
@@ -585,7 +598,7 @@ const FormProducto = (props) => {
         </Row>
         <Form.Item
               label="Comun"
-              name={['atributos_js', 'comun']}
+              name={['atributos_js', 'general', 'comun']}
               rules={[
                 {
                   required: true,
@@ -600,7 +613,7 @@ const FormProducto = (props) => {
             </Form.Item>
             <Form.Item
               label="Comun 2"
-              name={['atributos_js', 'comun2']}
+              name={['atributos_js', 'general', 'comun2']}
               rules={[
                 {
                   required: true,
@@ -615,7 +628,7 @@ const FormProducto = (props) => {
             </Form.Item>
         { infoTecnica==="60a7d6e408be1a4c6d9f019d" ? (<div><Form.Item
               label="Largo"
-              name={['atributos_js', 'largo']}
+              name={['atributos_js', 'especifico', 'largo']}
               rules={[
                 {
                   required: true,
@@ -632,7 +645,7 @@ const FormProducto = (props) => {
             </Form.Item>
             <Form.Item
               label="Ancho"
-              name={['atributos_js', 'ancho']}
+              name={['atributos_js', 'especifico', 'ancho']}
               rules={[
                 {
                   required: true,
@@ -648,7 +661,7 @@ const FormProducto = (props) => {
               />
             </Form.Item></div>) : infoTecnica==="60a8133d2591c75004eceaa8" ? <Form.Item
               label="Otro"
-              name={['atributos_js', 'otro']}
+              name={['atributos_js', 'especifico', 'otro']}
               rules={[
                 {
                   required: true,
