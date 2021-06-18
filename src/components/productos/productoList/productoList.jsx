@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Spin } from "antd";
 import { Button} from 'antd';
 import { Table } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, SmileOutlined } from '@ant-design/icons';
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProductoContext } from "../../../contexts/productoContext";
 import CrudButton from "../../crudButton/crudButton";
@@ -70,7 +70,9 @@ const ProductoList = () => {
       filteredValue: filteredInfo.tipo_inventario || null,
       onFilter: (value, record) => record.tipo_inventario.includes(value),
       ellipsis: true,
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      render: (text, record) => record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? <p style={{color:"blue"}}> <SmileOutlined /> {text}</p> : <p style={{color:"black"}}>{text}</p>   ,
+
 
     },
     {
