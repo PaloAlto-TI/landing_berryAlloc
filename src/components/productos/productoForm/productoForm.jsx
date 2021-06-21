@@ -4,7 +4,7 @@ import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { ProductoContext } from "../../../contexts/productoContext";
 import { useHistory } from "react-router";
-import { useLocation, useRouteMatch } from "react-router-dom";
+import { useLocation, useParams, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
 import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
 const FormProducto = (props) => {
@@ -14,10 +14,11 @@ const FormProducto = (props) => {
 
   console.log(path);
   // console.log(props);
-  const { createProducto, updateProducto, setPermiso } =
+  const { createProducto, updateProducto, setPermiso, findProducto, editProducto } =
     useContext(ProductoContext);
 
   let history = useHistory();
+  let { codigo } = useParams();
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [tipoInventario, setTipoInventario] = useState(undefined);
@@ -28,12 +29,30 @@ const FormProducto = (props) => {
 
 
   useEffect(() => {
-    if (location.state){
-      setShow(location.state.permiso)
-    }else{
-      history.goBack();
+
+    console.log(location.state);
+    console.log("CODIGO: ",codigo);
+    findProducto(codigo);
+    console.log("PRODUCTO", editProducto)
+    
+    if (editProducto){
+
+      if (!selectedMarcaId && !selectedLineaId) {
+        setSelectedMarcaId(editProducto.fk_marca_id);
+        setSelectedLineaId(editProducto.fk_linea_id);
+        setId(editProducto.id);
+      }
+
     }
-  }, [])
+    
+    if (show === null) {
+      if (location.state){
+        setShow(location.state.permiso)
+      }else{
+        history.goBack();
+      }
+    }
+  })
 
   const [form] = Form.useForm();
   const layout = {
@@ -62,19 +81,19 @@ const FormProducto = (props) => {
     limite_descuento5 :0,
   };
 
-  if (location.state) {
-    console.log(location.state)
-    if (!location.state.nuevo) {
-      console.log("sate",location.state);
-      initialValues = location.state;
-      if (!selectedMarcaId && !selectedLineaId) {
-        setSelectedMarcaId(location.state.fk_marca_id);
-        setSelectedLineaId(location.state.fk_linea_id);
-        setId(location.state.id);
-      }
-    }
+  // if (location.state) {
+  //   console.log(location.state)
+  //   if (!location.state.nuevo) {
+  //     console.log("sate",location.state);
+  //     initialValues = location.state;
+  //     if (!selectedMarcaId && !selectedLineaId) {
+  //       setSelectedMarcaId(location.state.fk_marca_id);
+  //       setSelectedLineaId(location.state.fk_linea_id);
+  //       setId(location.state.id);
+  //     }
+  //   }
 
-  }
+  // }
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 
@@ -156,13 +175,13 @@ const FormProducto = (props) => {
 
   return (
 
-    location.state ?
+    editProducto || location.state.nuevo ?
     <>
       <Form
         {...layout}
         form={form}
         name="customized_form_controls"
-        initialValues={initialValues}
+        initialValues={editProducto ?  editProducto : initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onValuesChange={handleFormValuesChange}
@@ -582,7 +601,7 @@ const FormProducto = (props) => {
                 disabled={location.state ? !location.state.permiso : false}
               >
                 En Sistema Externo
-              </Checkbox> : initialValues.en_sistema_externo ? <p> En Sistema Externo: <CheckCircleFilled /></p> : <p> En Sistema Externo: <CloseCircleFilled /></p>}
+              </Checkbox> : editProducto.en_sistema_externo ? <p> En Sistema Externo: <CheckCircleFilled /></p> : <p> En Sistema Externo: <CloseCircleFilled /></p>}
             </Form.Item>
             <Form.Item {...tailLayout} name="en_web" valuePropName="checked">
             { location.state.permiso ?
@@ -590,7 +609,7 @@ const FormProducto = (props) => {
                 disabled={location.state ? !location.state.permiso : false}
               >
                 En Página Web
-              </Checkbox>: initialValues.en_sistema_externo ? <p> En Página Web: <CheckCircleFilled /></p> : <p> En Página Web: <CloseCircleFilled /></p>}
+              </Checkbox>: editProducto.en_web ? <p> En Página Web: <CheckCircleFilled /></p> : <p> En Página Web: <CloseCircleFilled /></p>}
             </Form.Item>
           </Col>
         </Row>

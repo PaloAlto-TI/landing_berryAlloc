@@ -12,7 +12,7 @@ import Search from "antd/lib/input/Search";
 import './productoList.css'
 
 const ProductoList = () => {
-  const { productos, setPermiso } = useContext(ProductoContext);
+  const { productos, setPermiso, setEditProducto } = useContext(ProductoContext);
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
@@ -27,6 +27,7 @@ const ProductoList = () => {
   };
 
   useEffect(() => {
+    setEditProducto(null);
     console.log(productos)
     setPermiso(false);
     if (!value){

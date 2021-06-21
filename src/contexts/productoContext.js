@@ -35,8 +35,10 @@ const ProductoContextProvider = (props) => {
   };
 
   const findProducto = (id) => {
+
+
     console.log(id);
-    const producto = productos.find((p) => p.id === id);
+    const producto = productos.find((p) => p.codigo_interno === id);
 
     setEditProducto(producto);
   };
@@ -69,6 +71,7 @@ const ProductoContextProvider = (props) => {
         productos,
         permiso,
         setPermiso,
+        setEditProducto
       }}
     >
       {props.children}
