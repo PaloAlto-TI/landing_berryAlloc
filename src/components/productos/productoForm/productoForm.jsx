@@ -31,7 +31,6 @@ const FormProducto = (props) => {
   useEffect(() => {
 
 
-    console.log(location.state);
     console.log("CODIGO: ",codigo);
     findProducto(codigo);
     console.log("PRODUCTO", editProducto)
@@ -104,6 +103,11 @@ const FormProducto = (props) => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 
+  const randomNumber = (min, max) =>{ 
+    return Math.floor(Math.random() * (max - min) + min);
+  }
+  
+  
   const onFinish = async (values) => {
     let data = null;
 
@@ -134,6 +138,18 @@ const FormProducto = (props) => {
 
   const handleFormValuesChange = (changedValues) => {
 
+    console.log("LINEA", form.getFieldValue("fk_linea_id"));
+
+    if(form.getFieldValue("fk_linea_id") === "60a7d6e408be1a4c6d9f019d" ){
+      form.setFieldsValue({ codigo_interno: "PL"})     
+    }else{
+      form.setFieldsValue({ codigo_interno: ""})     
+
+    }
+    
+    if(form.getFieldValue("fk_grupo_id") === "60a811ad678a634fea2276ba" ){
+      form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno")+"CA-"+randomNumber(0,100)})     
+    }
 
     // setFinal(form.getFieldsValue());
     // console.log("BF",form.getFieldValue("atributos_js"))
@@ -160,6 +176,7 @@ const FormProducto = (props) => {
       // console.log("TEST", form.getFieldValue("atributos_js").especifico)
       setSelectedLineaId(null); 
       setInfoTecnica(null);
+      form.setFieldsValue({ codigo_interno: ""})     
 
 
     }else{
@@ -169,6 +186,7 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_linea_id") {
       setSelectedLineaId(changedValues[formFieldName]);
       form.setFieldsValue({ fk_grupo_id: undefined }); 
+      
     }
   };
 
