@@ -6,7 +6,7 @@ import { ProductoContext } from "../../../contexts/productoContext";
 import { useHistory } from "react-router";
 import { useLocation, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
-import { LoadingOutlined, SaveOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
@@ -577,18 +577,20 @@ const FormProducto = (props) => {
               name="en_sistema_externo"
               valuePropName="checked"
             >
+            { location.state.permiso ?
               <Checkbox
                 disabled={location.state ? !location.state.permiso : false}
               >
                 En Sistema Externo
-              </Checkbox>
+              </Checkbox> : initialValues.en_sistema_externo ? <p> En Sistema Externo: <CheckCircleFilled /></p> : <p> En Sistema Externo: <CloseCircleFilled /></p>}
             </Form.Item>
             <Form.Item {...tailLayout} name="en_web" valuePropName="checked">
+            { location.state.permiso ?
               <Checkbox
                 disabled={location.state ? !location.state.permiso : false}
               >
                 En Página Web
-              </Checkbox>
+              </Checkbox>: initialValues.en_sistema_externo ? <p> En Página Web: <CheckCircleFilled /></p> : <p> En Página Web: <CloseCircleFilled /></p>}
             </Form.Item>
           </Col>
         </Row>
