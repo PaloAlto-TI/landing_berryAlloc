@@ -107,6 +107,16 @@ const ProductoList = () => {
     history.push(`${path}/nuevo`, record);
   }
 
+  const filtrar = (e) => {
+    const currValue = e.target.value;
+    setValue(currValue);
+    const filteredData = productos.filter(entry => 
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.tipo_inventario.toLowerCase().includes(currValue.toLowerCase()) || entry.precio.toString().includes(currValue)
+    );
+    setDataSource(filteredData);
+  }
+
+
   
   return (
     <div>
@@ -114,14 +124,7 @@ const ProductoList = () => {
     <Search
       placeholder="Buscar producto..."
       value={value}
-      onChange={e => {
-        const currValue = e.target.value;
-        setValue(currValue);
-        const filteredData = productos.filter(entry => 
-          entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.tipo_inventario.toLowerCase().includes(currValue.toLowerCase()) || entry.precio.toString().includes(currValue)
-        );
-        setDataSource(filteredData);
-      }}
+      onChange={e => filtrar(e)}
       style={{ width: 200 }} 
     />
       <br/>

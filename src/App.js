@@ -7,6 +7,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
                 <Login/>
               </Route>
               <Route path="*">
-                <p>404 NOT FOUND</p>
+                <Redirect to="/home"/>
               </Route>
             </Switch>
           </Router>

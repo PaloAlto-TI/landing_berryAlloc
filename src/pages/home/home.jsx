@@ -39,6 +39,9 @@ const Home = () => {
                   </span>
                 </Layout>
               </Route>
+              <Route path="*">
+                <p>404 NOT FOUND</p>
+              </Route>
             </Switch>
           </ProductoContextProvider>
         </Router>
