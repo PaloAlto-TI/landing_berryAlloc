@@ -38,7 +38,6 @@ const FormProducto = (props) => {
     
     if (editProducto){
 
-      setInfoTecnica(editProducto.fk_linea_id);
       if (!selectedMarcaId && !selectedLineaId) {
         setSelectedMarcaId(editProducto.fk_marca_id);
         setSelectedLineaId(editProducto.fk_linea_id);
@@ -53,6 +52,12 @@ const FormProducto = (props) => {
       }else{
         history.goBack();
       }
+    }
+
+    if (!infoTecnica && editProducto){
+
+      setInfoTecnica(editProducto.fk_linea_id);
+
     }
   })
 
