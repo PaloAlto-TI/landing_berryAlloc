@@ -25,10 +25,11 @@ const FormProducto = (props) => {
   const [tipoProducto, setTipoProducto] = useState(undefined);
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
-  const [infoTecnica, setInfoTecnica] = useState(location.state ? location.state.fk_linea_id :null)
+  const [infoTecnica, setInfoTecnica] = useState(null)
 
 
   useEffect(() => {
+
 
     console.log(location.state);
     console.log("CODIGO: ",codigo);
@@ -37,6 +38,7 @@ const FormProducto = (props) => {
     
     if (editProducto){
 
+      setInfoTecnica(editProducto.fk_linea_id);
       if (!selectedMarcaId && !selectedLineaId) {
         setSelectedMarcaId(editProducto.fk_marca_id);
         setSelectedLineaId(editProducto.fk_linea_id);
