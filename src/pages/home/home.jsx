@@ -33,7 +33,7 @@ const Home = () => {
                 <ProductoForm />
               </Route>
               <Route exact path={`${path}`}>
-                <Layout style={{ height: "62vh", backgroundColor: "white", justifyContent: "center",}}>
+                <Layout style={{ height: "70vh", backgroundColor: "white", justifyContent: "center",}}>
                   <span style={{ color: "black", fontSize: "45px", fontWeight: "bold", }}>
                     PRODUCTOS - PALO ALTO
                   </span>
