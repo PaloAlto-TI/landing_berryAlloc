@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import './sidemenu.css';
 import { Menu } from 'antd';
 import { AppstoreOutlined, DollarCircleOutlined,  MenuOutlined, HighlightOutlined, HomeOutlined, LineChartOutlined, FundOutlined, WechatOutlined, BarcodeOutlined } from '@ant-design/icons';
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import { Row, Col, Drawer } from 'antd';
 import { useRouteMatch } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 const SideMenu = () => {
-
-  let { path} = useRouteMatch();
-  let history = useHistory();
-
+let { path} = useRouteMatch();
+  // let history = useHistory();
   const [visible, setVisible] = useState(false);
 
   const showDrawer = () => {

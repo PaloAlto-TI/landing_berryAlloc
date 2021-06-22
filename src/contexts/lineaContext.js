@@ -11,37 +11,46 @@ const LineaContextProvider = (props) => {
     
     const [editLinea, setEditLinea] = useState(null);
 
+    const [permiso, setPermiso] = useState(false);
+
     useEffect (() => {
         lineaService.getAll().then((data) => setLineas(data));
     }, []);
 
-    const createLinea = (linea) => {
-       lineaService
-       .create(linea)
-       .then((data) => setLineas([...lineas, data]));
-     };
+    const createLinea = async (linea) => {
+      const data = await lineaService.create(linea);
+      console.log("PASOO UN ERROR EN LINEAS: " + data);
+      if (data.message === "OK CREATE") {
+        lineaService.getAll().then((data) => setLineas(data));
+        console.log("LO QUE ESTA DENTRO DEL GET ALL: " + setLineas(data))
+      }
+      return data.message;
+    }
+
+    const softDeleteLinea = (linea) => {
+      lineaService
+        .softDeleteLinea(linea)
+        .then(() => setLineas(lineas.filter((l) => l.id !== linea.id)));
+    };
 
     const findLinea = (id) => {
-      const linea = lineas.find((l) => l._id === id);
+      console.log("EL ID PARA FINDLINEA: " + id);
+      const linea = lineas.find((l) => l.codigo_interno === id);
       setEditLinea(linea);
     };
 
-    const updateLinea = (linea) => {
-        lineaService
-          .update(linea)
-          .then((data) =>
-            setLineas(
-              lineas.map((l) => (l._id === linea._id ? data : linea))
-            )
-          );
-        setEditLinea(null);
-    };
+    const updateLinea = async(linea) => {
+      const data = await lineaService.updateLinea(linea);
 
-    const softDeleteLinea = (id) => {
-       lineaService
-         .softDelete(id)
-         .then(() => setLineas(lineas.filter((l) => l._id !== id)));
-     };
+      console.log("Paso un err: ", data);
+      if (data.message === "OK UPDATE") {
+        lineaService.getAll().then((data) => setLineas(data));
+      }
+  
+      setEditLinea(null);
+      console.log("El ultimo mensaje del update : ", data.message);
+      return data.message;
+    };
 
     return (
         <LineaContext.Provider value={{
@@ -50,12 +59,14 @@ const LineaContextProvider = (props) => {
             updateLinea,
             softDeleteLinea,
             editLinea,
-            lineas
+            lineas,
+            permiso,
+            setPermiso,
+            setEditLinea
         }}>
             {props.children}
         </LineaContext.Provider>
     );
-
 };
 
 export default LineaContextProvider;
