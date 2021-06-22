@@ -16,7 +16,7 @@ import {
 
 const Home = () => {
   
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
   
   return (
     <>
@@ -29,7 +29,7 @@ const Home = () => {
               <Route exact path={`${path}/productos`}>
                 <ProductoList />
               </Route>
-              <Route exact path={`${path}/productos/producto`}>
+              <Route path={`${path}/productos/:codigo`}>
                 <ProductoForm />
               </Route>
               <Route exact path={`${path}`}>
@@ -38,6 +38,9 @@ const Home = () => {
                     PRODUCTOS - PALO ALTO
                   </span>
                 </Layout>
+              </Route>
+              <Route path="*">
+                <p>404 NOT FOUND</p>
               </Route>
             </Switch>
           </ProductoContextProvider>

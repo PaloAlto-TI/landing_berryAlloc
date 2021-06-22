@@ -1,6 +1,6 @@
 import React from 'react'
 import "./footer.css";
-import { UserOutlined, HeartOutlined } from '@ant-design/icons';
+import { HeartOutlined } from '@ant-design/icons';
 import { Row, Col } from 'antd';
 
 const Footer = () => {

@@ -9,7 +9,7 @@ const CrudButton = (props) => {
 
 
   const { record } = props;
-  let { path, url } = useRouteMatch();
+  let { path } = useRouteMatch();
 
   console.log("path2", path);
 
@@ -37,13 +37,13 @@ const CrudButton = (props) => {
 
   function ver() {
     record["permiso"] = false;
-    history.push(`${path}/producto`, record);
+    history.push(`${path}/${record.codigo_interno}/ver`, record);
   }
 
   function editar() {
     setPermiso(true);
     record["permiso"] = true;
-    history.push(`${path}/producto`, record);
+    history.push(`${path}/${record.codigo_interno}/editar`, record);
   }
 
 

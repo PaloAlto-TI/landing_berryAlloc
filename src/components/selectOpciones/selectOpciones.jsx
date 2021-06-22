@@ -11,11 +11,12 @@ const { Option } = Select;
 const SelectOpciones = (props) => {
 
   // console.log(props)
-    const {tipo, onChange, value, filter, readOnly} = props;
+    const {tipo, onChange, value, filter, readOnly, setShow} = props;
     const [opciones, setOpciones] = useState([])
-    
+    console.log(props);
     // console.log(filter);
-    useEffect(() => {
+    useEffect(async () => {
+
       if (tipo === 'marca'){
         const marcaService = new MarcaService();
         marcaService.getAll().then((data) => setOpciones(data));
@@ -47,7 +48,8 @@ const SelectOpciones = (props) => {
         if (tipo === 'unidad de medida'){
           medidaService.getAll().then((data) => setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "MEDIDA" )));
         }else{
-          medidaService.getAll().then((data) => setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "VENTA")));
+          await medidaService.getAll().then((data) => setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "VENTA")));
+          setShow(false);
         }
       }else{
         setOpciones([]);
@@ -57,6 +59,7 @@ const SelectOpciones = (props) => {
         setOpciones(paises);
 
       }
+
 
 
     }, [filter])
