@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import { useLocation, useParams, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
 import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
+import { ColorService } from "../../../services/colorService";
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
@@ -21,19 +22,25 @@ const FormProducto = (props) => {
   let { codigo } = useParams();
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
+  
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
   const [infoTecnica, setInfoTecnica] = useState(null)
-
-
+  const [form] = Form.useForm();
+  let initialValues = {
+    en_sistema_externo: false,
+    en_web: false,
+    iva: 12,
+    limite_descuento1 :0,
+    limite_descuento2 :0,
+    limite_descuento3 :0,
+    limite_descuento4 :0,
+    limite_descuento5 :0,
+  };
   useEffect(() => {
 
-
-    console.log("CODIGO: ",codigo);
-    findProducto(codigo);
-    console.log("PRODUCTO", editProducto)
     
     if (editProducto){
 
@@ -43,6 +50,10 @@ const FormProducto = (props) => {
         setId(editProducto.id);
       }
 
+    }else{
+      console.log("CODIGO: ",codigo);
+      findProducto(codigo);
+      console.log("PRODUCTO", editProducto)
     }
     
     if (show === null) {
@@ -51,16 +62,26 @@ const FormProducto = (props) => {
       }else{
         history.goBack();
       }
-    }
 
+    }
+    
     if (!infoTecnica && editProducto){
 
       setInfoTecnica(editProducto.fk_linea_id);
 
     }
+
+    // return () => {
+    //   setSelectedLineaId(undefined);
+    //   setSelectedMarcaId(undefined);
+    //   setId(null);
+    //   setInfoTecnica(null);
+    //   setShow(null)
+    // };
+    
+    
   })
 
-  const [form] = Form.useForm();
   const layout = {
     labelCol: {
       span: 8,
@@ -76,16 +97,7 @@ const FormProducto = (props) => {
     },
   };
 
-  let initialValues = {
-    en_sistema_externo: false,
-    en_web: false,
-    iva: 12,
-    limite_descuento1 :0,
-    limite_descuento2 :0,
-    limite_descuento3 :0,
-    limite_descuento4 :0,
-    limite_descuento5 :0,
-  };
+  
 
   // if (location.state) {
   //   console.log(location.state)
@@ -103,15 +115,20 @@ const FormProducto = (props) => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 
-  const randomNumber = (min, max) =>{ 
-    return Math.floor(Math.random() * (max - min) + min);
-  }
+  // const randomNumber = (min, max) =>{ 
+  //   return Math.floor(Math.random() * (max - min) + min);
+  // }
   
   
   const onFinish = async (values) => {
     let data = null;
 
     delete values.permiso;
+    // if (values["fk_color_id"]){
+
+    //   values["fk_color_id"] = JSON.parse(values["fk_color_id"]).id;
+    // }
+
     console.log("Success:", values);
     // values["atributos_js"] = final;
     if (id) {
@@ -136,21 +153,14 @@ const FormProducto = (props) => {
     message.warning("Error al guardar producto...");
   };
 
-  const handleFormValuesChange = (changedValues) => {
+  const handleFormValuesChange = async (changedValues) => {
 
-    console.log("LINEA", form.getFieldValue("fk_linea_id"));
-
-    if(form.getFieldValue("fk_linea_id") === "60a7d6e408be1a4c6d9f019d" ){
-      form.setFieldsValue({ codigo_interno: "PL"})     
-    }else{
-      form.setFieldsValue({ codigo_interno: ""})     
-
-    }
+    console.log("COLOR", form.getFieldsValue());
     
-    if(form.getFieldValue("fk_grupo_id") === "60a811ad678a634fea2276ba" ){
-      form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno")+"CA-"+randomNumber(0,100)})     
-    }
+    
+    
 
+    
     // setFinal(form.getFieldsValue());
     // console.log("BF",form.getFieldValue("atributos_js"))
     // console.log("BF2",form.getFieldValue("atributos_js").general);
@@ -176,18 +186,77 @@ const FormProducto = (props) => {
       // console.log("TEST", form.getFieldValue("atributos_js").especifico)
       setSelectedLineaId(null); 
       setInfoTecnica(null);
-      form.setFieldsValue({ codigo_interno: ""})     
+      form.setFieldsValue({ codigo_interno: ""})
+      form.setFieldsValue({ nombre: ""})     
+
 
 
     }else{
 
 
     }
+
     if (formFieldName === "fk_linea_id") {
       setSelectedLineaId(changedValues[formFieldName]);
       form.setFieldsValue({ fk_grupo_id: undefined }); 
+      form.setFieldsValue({ color: undefined });
+
       
     }
+
+    // if (formFieldName === "color") {
+
+    //   form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("-")[0]+"-"+JSON.parse(form.getFieldValue("color").value).codigo})     
+    //   form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+ " "+form.getFieldValue("nombre").split(" ")[1]+ " "+ form.getFieldValue("color").label })     
+      
+    // }
+
+    // if (formFieldName === "fk_color_id") {
+
+    //   form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("-")[0]+"-"+JSON.parse(form.getFieldValue("fk_color_id").value).codigo})     
+    //   form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+ " "+form.getFieldValue("nombre").split(" ")[1]+ " "+ form.getFieldValue("fk_color_id").label })     
+      
+    // }
+
+    // if (formFieldName === "color") {
+
+    //   form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("-")[0]+"-"+JSON.parse(form.getFieldValue("color").value).codigo})     
+    //   form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+ " "+form.getFieldValue("nombre").split(" ")[1]+ " "+ form.getFieldValue("color").label })     
+      
+    // }
+
+    if (formFieldName === "fk_color_id") {
+
+      const colorService= new ColorService();
+      const color2 = await colorService.getOne(form.getFieldValue("fk_color_id"));
+      form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("-")[0]+"-"+  color2.codigo})     
+      form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+ " "+form.getFieldValue("nombre").split(" ")[1]+ " "+  color2.nombre  })     
+      
+    }
+
+    if (formFieldName === "fk_grupo_id"){
+      form.setFieldsValue({ color: undefined });
+
+      if(form.getFieldValue("fk_grupo_id") === "60a811ad678a634fea2276ba" ){
+
+        form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("CA")[0]+"CA"})  
+        form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+" CA"})     
+
+      }
+    }
+
+    if (formFieldName === "fk_linea_id"){
+      if(form.getFieldValue("fk_linea_id") === "60a7d6e408be1a4c6d9f019d" ){
+        console.log("si entra!!!!!")
+        form.setFieldsValue({ codigo_interno: "PL"})  
+        form.setFieldsValue({ nombre: "PL"})     
+
+      }else{
+        form.setFieldsValue({ codigo_interno: ""})     
+  
+      }
+    }
+    
   };
 
   const onChangeTipoInventario = (e) => {
@@ -228,7 +297,7 @@ const FormProducto = (props) => {
             >
               <Input
                 className="input-type"
-                readOnly={location.state ? !location.state.permiso : false}
+                readOnly={true}
               />
             </Form.Item>
             <Form.Item
@@ -243,7 +312,7 @@ const FormProducto = (props) => {
             >
               <Input
                 className="input-type"
-                readOnly={location.state ? !location.state.permiso : false}
+                readOnly={true}
               />
             </Form.Item>
             <Form.Item
@@ -332,6 +401,7 @@ const FormProducto = (props) => {
               />
             }
             </Form.Item>
+           
             <Form.Item
               label="Grupo"
               name={location.state.permiso ? "fk_grupo_id" : "grupo"}
@@ -354,6 +424,31 @@ const FormProducto = (props) => {
               />
             }
             </Form.Item>
+
+            <Form.Item
+              label="Color"
+              name={location.state.permiso ? "fk_color_id" : "color"}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, seleccione un color!",
+                },
+              ]}
+            >
+            { location.state.permiso ?
+              <SelectOpciones
+                tipo="color"
+                filter={selectedLineaId}
+                readOnly={location.state ? !location.state.permiso : false}
+                setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
+              />
+            }
+            </Form.Item>
+          
+           
             <Form.Item
               label="Descripción"
               name="descripcion"
