@@ -52,6 +52,9 @@ const Home = () => {
               <LineaList />
             </LineaContextProvider>
           </Route>
+          <Route exact path={`${path}/marcas`}>
+          <p>MARCAS</p>
+          </Route>
           <Route path="*">
             <p>404 NOT FOUND</p>
           </Route>

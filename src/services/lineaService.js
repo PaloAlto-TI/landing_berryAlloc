@@ -4,7 +4,7 @@ import {baseUrl} from "../utils/constantes";
 export class LineaService {
 
     getAll(){
-        return axios.get( baseUrl + "lineas" ).then( res => res.data );
+        return axios.get( baseUrl + "lineas" ).then( res => res.data.data);
     }
 
     getOne(linea){
