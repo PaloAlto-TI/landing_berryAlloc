@@ -7,7 +7,6 @@ import "./login.css";
 import { useHistory } from "react-router";
 //import imagen from "./img/img1.gif";
 import imagen from "./img/img2.ico";
-
 import {  message } from 'antd';
 
 
@@ -22,7 +21,6 @@ const Login = () => {
   function handleClick() {
     history.push("/home");
   }
-
 
   const responseGoogle = (response) => {
     let usuarioCheck = usuarios.find((u) => u.correo === response.profileObj.email);
