@@ -12,8 +12,11 @@ const ProductoContextProvider = (props) => {
 
   const [permiso, setPermiso] = useState(false);
 
+  const [isEmpty, setIsEmpty] = useState(false)
+
   useEffect(() => {
-    productoService.getProductos().then((data) => setProductos(data));
+    setIsEmpty(false)
+    productoService.getProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
   }, []);
 
   const createProducto = async (producto) => {
@@ -71,7 +74,8 @@ const ProductoContextProvider = (props) => {
         productos,
         permiso,
         setPermiso,
-        setEditProducto
+        setEditProducto,
+        isEmpty
       }}
     >
       {props.children}
