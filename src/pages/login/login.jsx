@@ -50,7 +50,7 @@ const Login = () => {
 
           <div className="box">
                <div className="ava">
-          <img className="avatar"  src={imagen} />
+          <img className="avatar" alt="img"  src={imagen} />
         </div>
           <h1 >Productos</h1>
 

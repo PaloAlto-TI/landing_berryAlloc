@@ -10,15 +10,25 @@ const ProductoContextProvider = (props) => {
 
   const [editProducto, setEditProducto] = useState(null);
 
-  const [permiso, setPermiso] = useState(false)
+  const [permiso, setPermiso] = useState(false);
+
+  const [isEmpty, setIsEmpty] = useState(false)
 
   useEffect(() => {
-    productoService.getProductos().then((data) => setProductos(data));
+    setIsEmpty(false)
+    productoService.getProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
   }, []);
-  const createProducto = (producto) => {
-    productoService
-      .createProducto(producto)
-      .then((data) => setProductos([...productos, data]));
+
+  const createProducto = async (producto) => {
+    const data = await productoService.createProducto(producto);
+
+    console.log("err:", data);
+    if (data.message === "OK CREATE") {
+      productoService.getProductos().then((data) => setProductos(data));
+      // setProductos([...productos, data.data]);
+    }
+
+    return data.message;
   };
 
   const softDeleteProducto = (producto) => {
@@ -28,22 +38,29 @@ const ProductoContextProvider = (props) => {
   };
 
   const findProducto = (id) => {
+
+
     console.log(id);
-    const producto = productos.find((p) => p.id === id);
+    const producto = productos.find((p) => p.codigo_interno === id);
 
     setEditProducto(producto);
   };
 
-  const updateProducto = (producto) => {
-    productoService
-      .updateProducto(producto)
-      .then((data) =>
-        setProductos(
-          productos.map((p) => (p.id === producto.id ? data : p))
-        )
-      );
+  const updateProducto = async(producto) => {
+   
+
+    const data = await productoService.updateProducto(producto);
+
+    console.log("err:", data);
+    if (data.message === "OK UPDATE") {
+      productoService.getProductos().then((data) => setProductos(data));
+      //setProductos(productos.map((p) => (p.id === producto.id ? data.data : p)))
+    }
 
     setEditProducto(null);
+
+    return data.message;
+
   };
 
   return (
@@ -56,7 +73,9 @@ const ProductoContextProvider = (props) => {
         editProducto,
         productos,
         permiso,
-        setPermiso
+        setPermiso,
+        setEditProducto,
+        isEmpty
       }}
     >
       {props.children}

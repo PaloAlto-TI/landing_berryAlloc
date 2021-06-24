@@ -1,5 +1,5 @@
 import React from "react";
-import "./App.css";
+import './App.less';
 import Home from "./pages/home/home";
 import Login from "./pages/login/login";
 
@@ -7,9 +7,8 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from "react-router-dom";
-import ProductoList from "./components/productos/productoList/productoList";
-import ProductoContextProvider from "./contexts/productoContext";
 
 function App() {
   return (
@@ -25,13 +24,9 @@ function App() {
               <Route path="/login">
                 <Login/>
               </Route>
-              
-
-              {/* <Route  path="/productos">
-                <ProductoContextProvider>
-                <ProductoList />
-                </ProductoContextProvider>
-              </Route>  */}
+              <Route path="*">
+                <Redirect to="/home"/>
+              </Route>
             </Switch>
           </Router>
     </div>

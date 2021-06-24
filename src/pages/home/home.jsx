@@ -11,15 +11,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useRouteMatch,
+  useRouteMatch
 } from "react-router-dom";
-import Login from "../login/login";
-
-const { Content } = Layout;
 
 const Home = () => {
-  let { path, url } = useRouteMatch();
-
+  
+  let { path } = useRouteMatch();
+  
   return (
     <>
       <Header />
@@ -31,42 +29,23 @@ const Home = () => {
               <Route exact path={`${path}/productos`}>
                 <ProductoList />
               </Route>
-              <Route exact path={`${path}/productos/producto`}>
+              <Route path={`${path}/productos/:codigo`}>
                 <ProductoForm />
               </Route>
-              {/* <Route path="/productos">
-                <ProductoList/>
-              </Route> */}
-              {/* <Route path="/login">
-                <Login/>
-              </Route> */}
-              {/* <Route path="/home">
-              <SideMenu />
-              </Route> */}
               <Route exact path={`${path}`}>
-                <Layout
-                  style={{
-                    height: "60vh",
-                    backgroundColor: "white",
-                    justifyContent: "center",
-                  }}
-                >
-                  <span
-                    style={{
-                      color: "black",
-                      fontSize: "45px",
-                      fontWeight: "bold",
-                    }}
-                  >
+                <Layout style={{ height: "62vh", backgroundColor: "white", justifyContent: "center",}}>
+                  <span style={{ color: "black", fontSize: "45px", fontWeight: "bold", }}>
                     PRODUCTOS - PALO ALTO
                   </span>
                 </Layout>
+              </Route>
+              <Route path="*">
+                <p>404 NOT FOUND</p>
               </Route>
             </Switch>
           </ProductoContextProvider>
         </Router>
       </main>
-
       <Footer />
     </>
   );
