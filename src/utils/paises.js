@@ -15,4 +15,12 @@ export const paises= [
         "id":"CHINA",
         "nombre":"CHINA"
     },
+    {
+        "id":"ESPAÑA",
+        "nombre":"ESPAÑA"
+    },
+    {
+        "id":"FRANCIA",
+        "nombre":"FRANCIA"
+    },
 ]

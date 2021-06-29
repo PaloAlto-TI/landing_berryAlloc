@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Select } from 'antd';
 import { LineaMarcaService } from "../../services/lineaMarcaService";
-import { GrupoService } from "../../services/grupoService";
-import { ProveedorService } from "../../services/proveedorService";
 import { MedidaService } from "../../services/medidaService";
 import { paises } from "../../utils/paises";
-import { ColorService } from "../../services/colorService";
 import { LineaService } from "../../services/lineaService";
+import { GrupoMarcaService } from "../../services/grupoMarcaService";
+import { ProveedorMarcaService } from "../../services/proveedorMarcaService";
+import { ColorGrupoService } from "../../services/colorGrupoService";
 
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
 
   // console.log(props)
-    const {tipo, onChange, value, filter, readOnly, setShow} = props;
+    const {tipo, onChange, value, filter, filter2, readOnly, setShow} = props;
     const [opciones, setOpciones] = useState([])
     console.log(props);
     useEffect(() => {
@@ -36,27 +36,29 @@ const SelectOpciones = (props) => {
           // setOpciones([]);
         }
   
-        if (tipo === 'grupo' && filter){
-          console.log("FILTER-GRUPO",filter)
-          const grupoService= new GrupoService();
-          grupoService.getAll().then((data) =>  {if (cancel) return; setOpciones(data.filter((p) => p.fk_marca_id === filter))});
+        if (tipo === 'grupo' && filter && filter2){
+          console.log("FILTER-MARCA",filter)
+          console.log("FILTER-LINEA",filter2)
+
+          const grupoService= new GrupoMarcaService();
+          grupoService.getAll().then((data) =>  {if (cancel) return; setOpciones(data.filter((p) => p.marca_id === filter && p.linea_id === filter2))});
 
         }else{
           // setOpciones([]);
         }
         if (tipo === 'color' && filter){
           console.log("FILTER-COLOR:",filter)
-          const colorService= new ColorService();
-          colorService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.fk_linea_id === filter))});
+          const colorService= new ColorGrupoService();
+          colorService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.grupo_id === filter))});
         }else{
           // setOpciones([]);
         }
   
       
   
-        if (tipo === 'proveedor'){
-          const proveedorService= new ProveedorService();
-          proveedorService.getAll().then((data) => {if (cancel) return;setOpciones(data)});
+        if (tipo === 'proveedor' && filter){
+          const proveedorService= new ProveedorMarcaService();
+          proveedorService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.marca_id === filter))});
         }else{
           // setOpciones([]);
         }

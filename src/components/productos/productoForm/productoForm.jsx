@@ -8,6 +8,8 @@ import { useLocation, useParams, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
 import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
 import { ColorService } from "../../../services/colorService";
+const { TextArea } = Input;
+
 const FormProducto = (props) => {
   // console.log(props);
   const location = useLocation();
@@ -22,6 +24,8 @@ const FormProducto = (props) => {
   let { codigo } = useParams();
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
+  const [selectedGrupoId, setSelectedGrupoId] = useState(undefined);
+
   
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
@@ -185,8 +189,8 @@ const FormProducto = (props) => {
       // form.setFieldsValue({ atributos_js: {"general": atributosJs , "especifico": {}} });
       // console.log("TEST", form.getFieldValue("atributos_js").especifico)
       setInfoTecnica(null);
-      form.setFieldsValue({ codigo_interno: ""})
-      form.setFieldsValue({ nombre: ""})     
+      // form.setFieldsValue({ codigo_interno: ""})
+      // form.setFieldsValue({ nombre: ""})     
       
       
       
@@ -196,11 +200,14 @@ const FormProducto = (props) => {
     }
     
     if (formFieldName === "fk_linea_id") {
+
       setSelectedLineaId(changedValues[formFieldName]);
       form.setFieldsValue({ color: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined }); 
       form.setFieldsValue({ fk_marca_id: undefined }); 
-      // setSelectedMarcaId(null); 
+      form.setFieldsValue({ fk_proveedor_id: undefined }); 
+
+      setSelectedMarcaId(null); 
 
 
       
@@ -237,9 +244,10 @@ const FormProducto = (props) => {
     }
 
     if (formFieldName === "fk_grupo_id"){
+      setSelectedGrupoId(changedValues[formFieldName])
       form.setFieldsValue({ color: undefined });
 
-      if(form.getFieldValue("fk_grupo_id") === "60a811ad678a634fea2276ba" ){
+      if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
 
         form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("CA")[0]+"CA"})  
         form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+" CA"})     
@@ -248,7 +256,7 @@ const FormProducto = (props) => {
     }
 
     if (formFieldName === "fk_linea_id"){
-      if(form.getFieldValue("fk_linea_id") === "60a7d6e408be1a4c6d9f019d" ){
+      if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
         console.log("si entra!!!!!")
         form.setFieldsValue({ codigo_interno: "PL"})  
         form.setFieldsValue({ nombre: "PL"})     
@@ -338,27 +346,7 @@ const FormProducto = (props) => {
               />
             }
             </Form.Item>
-            <Form.Item
-              label="Proveedor"
-              name={location.state.permiso ? "fk_proveedor_id" : "proveedor"}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, seleccione un proveedor!",
-                },
-              ]}
-            >
-             { location.state.permiso ?
-              <SelectOpciones
-                tipo="proveedor"
-                readOnly={location.state ? !location.state.permiso : false}
-                setShow={setShow}
-              />: <Input
-                className="input-type"
-                readOnly={location.state ? !location.state.permiso : false}
-              />
-            }
-            </Form.Item>
+           
             <Form.Item
               label="Línea"
               name={location.state.permiso ? "fk_linea_id" : "linea"}
@@ -406,6 +394,29 @@ const FormProducto = (props) => {
             </Form.Item>
            
             <Form.Item
+              label="Proveedor"
+              name={location.state.permiso ? "fk_proveedor_id" : "proveedor"}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, seleccione un proveedor!",
+                },
+              ]}
+            >
+             { location.state.permiso ?
+              <SelectOpciones
+                tipo="proveedor"
+                filter={selectedMarcaId}
+                readOnly={location.state ? !location.state.permiso : false}
+                setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
+              />
+            }
+            </Form.Item>
+
+            <Form.Item
               label="Grupo"
               name={location.state.permiso ? "fk_grupo_id" : "grupo"}
               rules={[
@@ -419,6 +430,7 @@ const FormProducto = (props) => {
               <SelectOpciones
                 tipo="grupo"
                 filter={selectedMarcaId}
+                filter2={selectedLineaId}
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
               />: <Input
@@ -441,7 +453,7 @@ const FormProducto = (props) => {
             { location.state.permiso ?
               <SelectOpciones
                 tipo="color"
-                filter={selectedLineaId}
+                filter={selectedGrupoId}
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
               />: <Input
@@ -462,10 +474,9 @@ const FormProducto = (props) => {
                 },
               ]}
             >
-              <Input
-                className="input-type"
-                readOnly={location.state ? !location.state.permiso : false}
-              />
+            <TextArea maxLength={280} className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}/>
+           
             </Form.Item>
             <Form.Item
               label="Tipo"
@@ -766,7 +777,7 @@ const FormProducto = (props) => {
                 readOnly={location.state ? !location.state.permiso : false}
               />
             </Form.Item>
-        { infoTecnica==="60a7d6e408be1a4c6d9f019d" ? (<div><Form.Item
+        { infoTecnica==="60d4c046e600f1b5e85d075c" ? (<div><Form.Item
               label="Largo"
               name={['atributos_js', 'especifico', 'largo']}
               rules={[
