@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Select } from 'antd';
-import { MarcaService } from "../../services/marcaService";
 import { LineaMarcaService } from "../../services/lineaMarcaService";
 import { GrupoService } from "../../services/grupoService";
 import { ProveedorService } from "../../services/proveedorService";
 import { MedidaService } from "../../services/medidaService";
 import { paises } from "../../utils/paises";
 import { ColorService } from "../../services/colorService";
+import { LineaService } from "../../services/lineaService";
+
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
@@ -20,18 +21,29 @@ const SelectOpciones = (props) => {
       let cancel = false;
 
       async function fetch() {
-        if (tipo === 'marca'){
-          const marcaService = new MarcaService();
-          marcaService.getAll().then( (data) =>  {if (cancel) return; setOpciones(data)});
+
+        console.log(filter);
+
+        if (tipo === 'línea'){
+          const lineaService = new LineaService();
+          lineaService.getAll().then( (data) =>  {if (cancel) return; setOpciones(data)});
         }
         
-        if (tipo === 'línea' && filter){
+        if (tipo === 'marca' && filter){
           const lineaMarcaService= new LineaMarcaService();
-          lineaMarcaService.getAll().then((data) =>  {if (cancel) return; setOpciones(data.filter((p) => p.marca_id === filter))});
+          lineaMarcaService.getAll().then((data) =>  {if (cancel) return; setOpciones(data.filter((p) => p.linea_id === filter))});
         }else{
           // setOpciones([]);
         }
   
+        if (tipo === 'grupo' && filter){
+          console.log("FILTER-GRUPO",filter)
+          const grupoService= new GrupoService();
+          grupoService.getAll().then((data) =>  {if (cancel) return; setOpciones(data.filter((p) => p.fk_marca_id === filter))});
+
+        }else{
+          // setOpciones([]);
+        }
         if (tipo === 'color' && filter){
           console.log("FILTER-COLOR:",filter)
           const colorService= new ColorService();
@@ -40,12 +52,7 @@ const SelectOpciones = (props) => {
           // setOpciones([]);
         }
   
-        if (tipo === 'grupo' && filter){
-          const grupoService= new GrupoService();
-          grupoService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.fk_linea_id === filter))});
-        }else{
-          // setOpciones([]);
-        }
+      
   
         if (tipo === 'proveedor'){
           const proveedorService= new ProveedorService();

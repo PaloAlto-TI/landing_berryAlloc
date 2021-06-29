@@ -157,6 +157,8 @@ const FormProducto = (props) => {
 
     console.log("COLOR", form.getFieldsValue());
     
+    console.log("FORMULARIO",form.getFieldsValue())
+    setSelectedMarcaId(form.getFieldValue("fk_marca_id"));
     
     
 
@@ -180,26 +182,26 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_marca_id") {
       
       setSelectedMarcaId(changedValues[formFieldName]);
-      form.setFieldsValue({ fk_linea_id: undefined });
-      form.setFieldsValue({ fk_grupo_id: undefined });
       // form.setFieldsValue({ atributos_js: {"general": atributosJs , "especifico": {}} });
       // console.log("TEST", form.getFieldValue("atributos_js").especifico)
-      setSelectedLineaId(null); 
       setInfoTecnica(null);
       form.setFieldsValue({ codigo_interno: ""})
       form.setFieldsValue({ nombre: ""})     
-
-
-
+      
+      
+      
     }else{
-
-
+      
+      
     }
-
+    
     if (formFieldName === "fk_linea_id") {
       setSelectedLineaId(changedValues[formFieldName]);
-      form.setFieldsValue({ fk_grupo_id: undefined }); 
       form.setFieldsValue({ color: undefined });
+      form.setFieldsValue({ fk_grupo_id: undefined }); 
+      form.setFieldsValue({ fk_marca_id: undefined }); 
+      // setSelectedMarcaId(null); 
+
 
       
     }
@@ -358,6 +360,28 @@ const FormProducto = (props) => {
             }
             </Form.Item>
             <Form.Item
+              label="Línea"
+              name={location.state.permiso ? "fk_linea_id" : "linea"}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, seleccione una linea!",
+                },
+              ]}
+            >
+            { location.state.permiso ?
+              <SelectOpciones
+                tipo="línea"
+                readOnly={location.state ? !location.state.permiso : false}
+                setShow={setShow}
+              />: <Input
+                className="input-type"
+                readOnly={location.state ? !location.state.permiso : false}
+              />
+            }
+            </Form.Item>
+           
+            <Form.Item
               label="Marca"
               name={location.state.permiso ? "fk_marca_id" : "marca"}
               rules={[
@@ -372,30 +396,9 @@ const FormProducto = (props) => {
               <SelectOpciones
                 tipo="marca"
                 readOnly={location.state ? !location.state.permiso : false}
+                filter={selectedLineaId}
                 setShow={setShow}
               /> : <Input
-                className="input-type"
-                readOnly={location.state ? !location.state.permiso : false}
-              />
-            }
-            </Form.Item>
-            <Form.Item
-              label="Línea"
-              name={location.state.permiso ? "fk_linea_id" : "linea"}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, seleccione una linea!",
-                },
-              ]}
-            >
-            { location.state.permiso ?
-              <SelectOpciones
-                tipo="línea"
-                filter={selectedMarcaId}
-                readOnly={location.state ? !location.state.permiso : false}
-                setShow={setShow}
-              />: <Input
                 className="input-type"
                 readOnly={location.state ? !location.state.permiso : false}
               />
@@ -415,7 +418,7 @@ const FormProducto = (props) => {
             { location.state.permiso ?
               <SelectOpciones
                 tipo="grupo"
-                filter={selectedLineaId}
+                filter={selectedMarcaId}
                 readOnly={location.state ? !location.state.permiso : false}
                 setShow={setShow}
               />: <Input
