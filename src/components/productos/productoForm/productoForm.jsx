@@ -52,10 +52,11 @@ const FormProducto = (props) => {
     
     if (editProducto){
 
-      if (!selectedMarcaId && !selectedLineaId && !selectedColorId) {
+
+      if (!selectedMarcaId && !selectedLineaId && !selectedGrupoId) {
         setSelectedMarcaId(editProducto.fk_marca_id);
         setSelectedLineaId(editProducto.fk_linea_id);
-        setSelectedColorId(editProducto.fk_color_id);
+        setSelectedGrupoId(editProducto.fk_grupo_id);
 
         setId(editProducto.id);
       }
@@ -205,6 +206,12 @@ const FormProducto = (props) => {
       
     }
     
+
+    if (formFieldName === "fk_color_id") {
+
+      setSelectedColorId(changedValues[formFieldName]);
+    }
+
     if (formFieldName === "fk_linea_id") {
 
       setSelectedLineaId(changedValues[formFieldName]);
