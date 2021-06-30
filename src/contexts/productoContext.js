@@ -67,7 +67,7 @@ const ProductoContextProvider = (props) => {
       //setProductos(productos.map((p) => (p.id === producto.id ? data.data : p)))
     }
 
-    setEditProducto(null);
+    // setEditProducto(null);
 
     return data.message;
 

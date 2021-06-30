@@ -130,7 +130,8 @@ const ProductoList = () => {
       <br/>
       <br/>
       { productos.length>0 || isEmpty ? (
-        <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={dataSource} rowKey='id' onChange={handleChange} />
+        <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={dataSource} rowKey='id' onChange={handleChange} pagination={{ defaultPageSize: 3}}
+ />
       ) : (
         <Spin indicator={antIcon} />
       )}

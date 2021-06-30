@@ -151,9 +151,10 @@ const FormProducto = (props) => {
 
     if (data.includes("OK")) {
       console.log(data);
-      history.goBack();
       //setPermiso(false);
-      message.info(data);
+      window.scrollTo(0, 0);
+      message.info(data, 2).then(t => history.goBack());
+      
     } else {
       message.warning(data);
     }
