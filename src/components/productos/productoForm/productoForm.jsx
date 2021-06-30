@@ -27,7 +27,6 @@ const FormProducto = (props) => {
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [selectedGrupoId, setSelectedGrupoId] = useState(undefined);
-  const [selectedColorId, setSelectedColorId] = useState(undefined);
 
 
   
@@ -207,10 +206,6 @@ const FormProducto = (props) => {
     }
     
 
-    if (formFieldName === "fk_color_id") {
-
-      setSelectedColorId(changedValues[formFieldName]);
-    }
 
     if (formFieldName === "fk_linea_id") {
 
