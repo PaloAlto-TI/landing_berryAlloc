@@ -16,12 +16,13 @@ const ProductoContextProvider = (props) => {
 
   useEffect(() => {
     setIsEmpty(false)
-    productoService.getProductos().then((data) => {setProductos(data)});
-    if (productos.length === 0){
-      setIsEmpty(true);
-    }
-  }, []);
+    productoService.getProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    
+    // if (productos.length === 0){
+    //   setIsEmpty(true);
+    // }
 
+  }, []);
 
   const createProducto = async (producto) => {
     const data = await productoService.createProducto(producto);

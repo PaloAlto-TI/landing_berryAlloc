@@ -19,7 +19,7 @@ const FormProducto = (props) => {
 
   console.log(path);
   // console.log(props);
-  const { createProducto, updateProducto, setPermiso, findProducto, editProducto } =
+  const { createProducto, updateProducto, findProducto, editProducto } =
     useContext(ProductoContext);
 
   let history = useHistory();
@@ -152,7 +152,7 @@ const FormProducto = (props) => {
     if (data.includes("OK")) {
       console.log(data);
       history.goBack();
-      setPermiso(false);
+      //setPermiso(false);
       message.info(data);
     } else {
       message.warning(data);
