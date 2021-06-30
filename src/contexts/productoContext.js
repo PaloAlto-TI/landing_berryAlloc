@@ -39,7 +39,9 @@ const ProductoContextProvider = (props) => {
   const softDeleteProducto = (producto) => {
     productoService
       .softDeleteProducto(producto)
-      .then(() => {setProductos(productos.filter((p) => p.id !== producto.id))});
+      .then(() => {productoService.getProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    });
+      // .then(() => {setProductos(productos.filter((p) => p.id !== producto.id))});
 
      
 
