@@ -7,8 +7,8 @@ export class LineaService {
         return axios.get( baseUrl + "lineas" ).then( res => res.data.data );
     }
 
-    getOne(linea){
-      return axios.get( baseUrl + "linea/" + linea._id, linea).then( res => res.data.data);
+    getOne(id){
+      return axios.get( baseUrl + "linea/" + id).then( res => res.data);
     }
 
     create(linea){

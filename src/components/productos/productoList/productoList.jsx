@@ -12,7 +12,7 @@ import Search from "antd/lib/input/Search";
 import './productoList.css'
 
 const ProductoList = () => {
-  const { productos, setPermiso, setEditProducto, isEmpty } = useContext(ProductoContext);
+  const { productos, setPermiso, setEditProducto, isEmpty, softDeleteProducto } = useContext(ProductoContext);
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
@@ -92,7 +92,7 @@ const ProductoList = () => {
       title: "ACCIONES",
       dataIndex: "",
       key: "x",
-      render: (_, record) => <CrudButton record={record} />,
+      render: (_, record) => <CrudButton record={record} softDelete={softDeleteProducto}/>,
     },
   ];
 

@@ -8,6 +8,8 @@ import { useLocation, useParams, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
 import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined, SaveOutlined } from "@ant-design/icons";
 import { ColorService } from "../../../services/colorService";
+import { GrupoService } from "../../../services/grupoService";
+import { LineaService } from "../../../services/lineaService";
 const { TextArea } = Input;
 
 const FormProducto = (props) => {
@@ -25,6 +27,8 @@ const FormProducto = (props) => {
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [selectedGrupoId, setSelectedGrupoId] = useState(undefined);
+  const [selectedColorId, setSelectedColorId] = useState(undefined);
+
 
   
   const [tipoInventario, setTipoInventario] = useState(undefined);
@@ -48,9 +52,11 @@ const FormProducto = (props) => {
     
     if (editProducto){
 
-      if (!selectedMarcaId && !selectedLineaId) {
+      if (!selectedMarcaId && !selectedLineaId && !selectedColorId) {
         setSelectedMarcaId(editProducto.fk_marca_id);
         setSelectedLineaId(editProducto.fk_linea_id);
+        setSelectedColorId(editProducto.fk_color_id);
+
         setId(editProducto.id);
       }
 
@@ -202,10 +208,15 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_linea_id") {
 
       setSelectedLineaId(changedValues[formFieldName]);
-      form.setFieldsValue({ color: undefined });
+      form.setFieldsValue({ fk_color_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined }); 
       form.setFieldsValue({ fk_marca_id: undefined }); 
       form.setFieldsValue({ fk_proveedor_id: undefined }); 
+      form.setFieldsValue({ codigo_interno: ''})
+      form.setFieldsValue({ nombre: ''})  
+
+
+
 
       setSelectedMarcaId(null); 
 
@@ -244,27 +255,32 @@ const FormProducto = (props) => {
     }
 
     if (formFieldName === "fk_grupo_id"){
+      
       setSelectedGrupoId(changedValues[formFieldName])
-      form.setFieldsValue({ color: undefined });
+      // form.setFieldsValue({ color: undefined });
+      const grupoService= new GrupoService();
+      const grupo = await grupoService.getOne(changedValues[formFieldName]);
+      // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
+       
+        form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").substring(0,2)+grupo.pseudo})  
+        form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+" "+grupo.pseudo})     
 
-      if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
-
-        form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("CA")[0]+"CA"})  
-        form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+" CA"})     
-
-      }
+      // }
     }
 
     if (formFieldName === "fk_linea_id"){
-      if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
-        console.log("si entra!!!!!")
-        form.setFieldsValue({ codigo_interno: "PL"})  
-        form.setFieldsValue({ nombre: "PL"})     
 
-      }else{
-        form.setFieldsValue({ codigo_interno: ""})     
+      const lineaService= new LineaService();
+      const linea = await lineaService.getOne(changedValues[formFieldName]);
+      // if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
+      //   console.log("si entra!!!!!")
+        form.setFieldsValue({ codigo_interno: linea.pseudo})  
+        form.setFieldsValue({ nombre: linea.pseudo})     
+
+      // }else{
+      //   form.setFieldsValue({ codigo_interno: ""})     
   
-      }
+      // }
     }
     
   };
