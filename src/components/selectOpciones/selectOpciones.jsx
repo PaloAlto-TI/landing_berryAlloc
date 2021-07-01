@@ -49,7 +49,9 @@ const SelectOpciones = (props) => {
         if (tipo === 'color' && filter){
           console.log("FILTER-COLOR:",filter)
           const colorService= new ColorGrupoService();
-          colorService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.grupo_id === filter))});
+          await colorService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.grupo_id === filter))});
+          setShow(false);
+        
         }else{
           // setOpciones([]);
         }
@@ -68,8 +70,8 @@ const SelectOpciones = (props) => {
           if (tipo === 'unidad de medida'){
             medidaService.getAll().then((data) =>{if (cancel) return; setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "MEDIDA" ))});
           }else{
-            await medidaService.getAll().then((data) => {if (cancel) return; setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "VENTA"))});
-            setShow(false);
+            medidaService.getAll().then((data) => {if (cancel) return; setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "VENTA"))});
+            // setShow(false);
           }
         }else{
           // setOpciones([]);

@@ -5,3 +5,7 @@
 .loading-producto{
     margin-top: 30vh;
 }
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    text-align: left;
+}
