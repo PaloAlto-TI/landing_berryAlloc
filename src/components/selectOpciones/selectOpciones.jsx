@@ -51,7 +51,7 @@ const SelectOpciones = (props) => {
           const colorService= new ColorGrupoService();
           await colorService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.grupo_id === filter))});
           setShow(false);
-        
+          
         }else{
           // setOpciones([]);
         }

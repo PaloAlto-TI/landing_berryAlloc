@@ -40,6 +40,7 @@ const FormProducto = (props) => {
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
   const [infoTecnica, setInfoTecnica] = useState(null);
+  const [precio, setPrecio] = useState(null)
   const [form] = Form.useForm();
   let initialValues = {
     en_sistema_externo: false,
@@ -117,6 +118,8 @@ const FormProducto = (props) => {
   // }
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
+ 
+
   const genExtra = () => (
     <PushpinFilled
       onClick={(event) => {
@@ -183,12 +186,21 @@ const FormProducto = (props) => {
 
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
+
+      form.setFieldsValue({ fk_color_id: undefined });
+      form.setFieldsValue({ fk_grupo_id: undefined });
+      form.setFieldsValue({ fk_proveedor_id: undefined });
       // form.setFieldsValue({ atributos_js: {"general": atributosJs , "especifico": {}} });
       // console.log("TEST", form.getFieldValue("atributos_js").especifico)
       setInfoTecnica(null);
       // form.setFieldsValue({ codigo_interno: ""})
       // form.setFieldsValue({ nombre: ""})
     } else {
+    }
+
+    if (formFieldName === "precio") {
+      setPrecio(changedValues[formFieldName]);
+
     }
 
     if (formFieldName === "fk_linea_id") {
@@ -246,6 +258,8 @@ const FormProducto = (props) => {
     }
 
     if (formFieldName === "fk_grupo_id") {
+      form.setFieldsValue({ fk_color_id: undefined });
+
       setSelectedGrupoId(changedValues[formFieldName]);
       // form.setFieldsValue({ color: undefined });
       const grupoService = new GrupoService();
@@ -524,6 +538,92 @@ const FormProducto = (props) => {
               </Col>
             </Row>
           </Panel>
+          <Panel header="INFORMACIÓN TÉCNICA" key="4" extra={genExtra()}>
+            <Form.Item
+              label="Comun"
+              name={["atributos_js", "general", "comun"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingrese el campo!",
+                },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                readOnly={location.state ? !location.state.permiso : false}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Comun 2"
+              name={["atributos_js", "general", "comun2"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingrese el campo2!",
+                },
+              ]}
+            >
+              <InputNumber
+                min={0}
+                readOnly={location.state ? !location.state.permiso : false}
+              />
+            </Form.Item>
+            {infoTecnica === "60d4c046e600f1b5e85d075c" ? (
+              <div>
+                <Form.Item
+                  label="Largo"
+                  name={["atributos_js", "especifico", "largo"]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor, ingrese el largo!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    readOnly={location.state ? !location.state.permiso : false}
+                    formatter={(value) => `${value} mm`}
+                    parser={(value) => value.replace(" mm", "")}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Ancho"
+                  name={["atributos_js", "especifico", "ancho"]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor, ingrese el ancho!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+                    min={0}
+                    readOnly={location.state ? !location.state.permiso : false}
+                    formatter={(value) => `${value} mm`}
+                    parser={(value) => value.replace(" mm", "")}
+                  />
+                </Form.Item>
+              </div>
+            ) : infoTecnica === "60a8133d2591c75004eceaa8" ? (
+              <Form.Item
+                label="Otro"
+                name={["atributos_js", "especifico", "otro"]}
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor, ingrese el atributo!",
+                  },
+                ]}
+              >
+                <InputNumber
+                  min={0}
+                  readOnly={location.state ? !location.state.permiso : false}
+                />
+              </Form.Item>
+            ) : null}
+          </Panel>
           <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
             <Row>
               <Col span={12}>
@@ -680,9 +780,11 @@ const FormProducto = (props) => {
                     },
                   ]}
                 >
-                  <InputNumber
+                   <InputNumber
                     min={0}
+                    precision={2}
                     readOnly={location.state ? !location.state.permiso : false}
+                    onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                     formatter={(value) =>
                       `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                     }
@@ -870,92 +972,6 @@ const FormProducto = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-          </Panel>
-          <Panel header="INFORMACIÓN TÉCNICA" key="4" extra={genExtra()}>
-            <Form.Item
-              label="Comun"
-              name={["atributos_js", "general", "comun"]}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingrese el campo!",
-                },
-              ]}
-            >
-              <InputNumber
-                min={0}
-                readOnly={location.state ? !location.state.permiso : false}
-              />
-            </Form.Item>
-            <Form.Item
-              label="Comun 2"
-              name={["atributos_js", "general", "comun2"]}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingrese el campo2!",
-                },
-              ]}
-            >
-              <InputNumber
-                min={0}
-                readOnly={location.state ? !location.state.permiso : false}
-              />
-            </Form.Item>
-            {infoTecnica === "60d4c046e600f1b5e85d075c" ? (
-              <div>
-                <Form.Item
-                  label="Largo"
-                  name={["atributos_js", "especifico", "largo"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el largo!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
-                    formatter={(value) => `${value} mm`}
-                    parser={(value) => value.replace(" mm", "")}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label="Ancho"
-                  name={["atributos_js", "especifico", "ancho"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el ancho!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
-                    formatter={(value) => `${value} mm`}
-                    parser={(value) => value.replace(" mm", "")}
-                  />
-                </Form.Item>
-              </div>
-            ) : infoTecnica === "60a8133d2591c75004eceaa8" ? (
-              <Form.Item
-                label="Otro"
-                name={["atributos_js", "especifico", "otro"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingrese el atributo!",
-                  },
-                ]}
-              >
-                <InputNumber
-                  min={0}
-                  readOnly={location.state ? !location.state.permiso : false}
-                />
-              </Form.Item>
-            ) : null}
           </Panel>
         </Collapse>
         <br />
