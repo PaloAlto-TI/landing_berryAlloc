@@ -140,6 +140,8 @@ const FormProducto = (props) => {
 
     //   values["fk_color_id"] = JSON.parse(values["fk_color_id"]).id;
     // }
+    values["precio"] = parseFloat(values["precio"]).toFixed(2);
+    values["costo"] = parseFloat(values["costo"]).toFixed(3);
 
     console.log("Success:", values);
     // values["atributos_js"] = final;
@@ -206,7 +208,7 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_linea_id") {
       setSelectedLineaId(changedValues[formFieldName]);
       setSelectedMarcaId(null);
-      setSelectedGrupoId(null);
+      setSelectedGrupoId(null)
       form.setFieldsValue({ fk_color_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
       form.setFieldsValue({ fk_marca_id: undefined });
@@ -771,7 +773,7 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
-                    precision={2}
+                    precision={3}
 
                     readOnly={location.state ? !location.state.permiso : false}
                     // formatter={(value) =>
