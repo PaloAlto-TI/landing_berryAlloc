@@ -40,7 +40,7 @@ const FormProducto = (props) => {
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
   const [infoTecnica, setInfoTecnica] = useState(null);
-  const [precio, setPrecio] = useState(null)
+  // const [precio, setPrecio] = useState(null)
   const [form] = Form.useForm();
   let initialValues = {
     en_sistema_externo: false,
@@ -198,21 +198,29 @@ const FormProducto = (props) => {
     } else {
     }
 
-    if (formFieldName === "precio") {
-      setPrecio(changedValues[formFieldName]);
+    // if (formFieldName === "precio") {
+    //   setPrecio(changedValues[formFieldName]);
 
-    }
+    // }
 
     if (formFieldName === "fk_linea_id") {
       setSelectedLineaId(changedValues[formFieldName]);
+      setSelectedMarcaId(null);
+      setSelectedGrupoId(null);
       form.setFieldsValue({ fk_color_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
       form.setFieldsValue({ fk_marca_id: undefined });
       form.setFieldsValue({ fk_proveedor_id: undefined });
-      form.setFieldsValue({ codigo_interno: "" });
-      form.setFieldsValue({ nombre: "" });
+      // form.setFieldsValue({ codigo_interno: "" });
+      // form.setFieldsValue({ nombre: "" });
 
-      setSelectedMarcaId(null);
+      const lineaService = new LineaService();
+      const linea = await lineaService.getOne(changedValues[formFieldName]);
+      // if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
+      //   console.log("si entra!!!!!")
+      form.setFieldsValue({ codigo_interno: linea.pseudo });
+      form.setFieldsValue({ nombre: linea.pseudo });
+
     }
 
     // if (formFieldName === "color") {
@@ -277,19 +285,19 @@ const FormProducto = (props) => {
       // }
     }
 
-    if (formFieldName === "fk_linea_id") {
-      const lineaService = new LineaService();
-      const linea = await lineaService.getOne(changedValues[formFieldName]);
-      // if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
-      //   console.log("si entra!!!!!")
-      form.setFieldsValue({ codigo_interno: linea.pseudo });
-      form.setFieldsValue({ nombre: linea.pseudo });
+    // if (formFieldName === "fk_linea_id") {
+    //   const lineaService = new LineaService();
+    //   const linea = await lineaService.getOne(changedValues[formFieldName]);
+    //   // if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
+    //   //   console.log("si entra!!!!!")
+    //   form.setFieldsValue({ codigo_interno: linea.pseudo });
+    //   form.setFieldsValue({ nombre: linea.pseudo });
 
-      // }else{
-      //   form.setFieldsValue({ codigo_interno: ""})
+    //   // }else{
+    //   //   form.setFieldsValue({ codigo_interno: ""})
 
-      // }
-    }
+    //   // }
+    // }
   };
 
   const onChangeTipoInventario = (e) => {
@@ -752,7 +760,7 @@ const FormProducto = (props) => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Costo"
+                  label="Costo ($)"
                   name="costo"
                   rules={[
                     {
@@ -763,15 +771,17 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
+                    precision={2}
+
                     readOnly={location.state ? !location.state.permiso : false}
-                    formatter={(value) =>
-                      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    // formatter={(value) =>
+                    //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    // }
+                    // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Precio"
+                  label="Precio ($)"
                   name="precio"
                   rules={[
                     {
@@ -784,11 +794,11 @@ const FormProducto = (props) => {
                     min={0}
                     precision={2}
                     readOnly={location.state ? !location.state.permiso : false}
-                    onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                    formatter={(value) =>
-                      `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    }
-                    parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                    // formatter={(value) =>
+                    //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    // }
+                    // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   />
                 </Form.Item>
                 <Form.Item
