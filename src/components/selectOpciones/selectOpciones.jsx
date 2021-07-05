@@ -7,6 +7,17 @@ import { LineaService } from "../../services/lineaService";
 import { GrupoMarcaService } from "../../services/grupoMarcaService";
 import { ProveedorMarcaService } from "../../services/proveedorMarcaService";
 import { ColorGrupoService } from "../../services/colorGrupoService";
+import { resistenciasAbrasion } from "../../utils/resistenciasAbrasion";
+import { sistemasClick } from "../../utils/sistemasClick";
+import { clasesIndustrial } from "../../utils/clasesIndustrial";
+import { clasesComercial } from "../../utils/clasesComercial";
+import { clasesResidencial } from "../../utils/clasesResidencial";
+import { core } from "../../utils/core";
+import { terminado } from "../../utils/terminado";
+import { tiposFilamento } from "../../utils/tipoFilamento";
+import { garantias } from "../../utils/garantias";
+import { materialesSubcapa } from "../../utils/materialesSubcapa";
+import { coloresSubcapa } from "../../utils/coloresSubcapa";
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
@@ -78,6 +89,28 @@ const SelectOpciones = (props) => {
         }
       } else if (tipo === "procedencia") {
         setOpciones(paises);
+      } else if (tipo === "resistencia a la abrasion") {
+        setOpciones(resistenciasAbrasion);
+      }else if (tipo === "sistema de click") {
+        setOpciones(sistemasClick);
+      } else if (tipo === "clase residencial") {
+        setOpciones(clasesResidencial);
+      } else if (tipo === "clase comercial") {
+        setOpciones(clasesComercial);
+      } else if (tipo === "clase industrial") {
+        setOpciones(clasesIndustrial);
+      }else if (tipo === "core") {
+        setOpciones(core);
+      }else if (tipo === "terminado") {
+        setOpciones(terminado);
+      }else if (tipo === "tipo de filamento") {
+        setOpciones(tiposFilamento);
+      }else if (tipo === "garantía") {
+        setOpciones(garantias);
+      }else if (tipo === "material") {
+        setOpciones(materialesSubcapa);
+      }else if (tipo === "color de subcapa") {
+        setOpciones(coloresSubcapa);
       } else {
         setOpciones([]);
       }
@@ -90,7 +123,6 @@ const SelectOpciones = (props) => {
   }, [filter]);
 
   function handleChange(value) {
-    console.log("value!!!!!!!!", value);
     onChange(value);
   }
 

@@ -37,6 +37,12 @@ const FormProducto = (props) => {
 
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
+  const [generacionClick, setGeneracionClick] = useState(undefined);
+  const [tieneSubcapaAdherida, setTieneSubcapaAdherida] = useState(undefined);
+  const [usoCesped, setUsoCesped] = useState(undefined);
+  const [rangoAlturaHebra, setRangoAlturaHebra] = useState(undefined);
+  const [metodoABC, setMetodoABC] = useState(undefined);
+
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
   const [infoTecnica, setInfoTecnica] = useState(null);
@@ -118,8 +124,6 @@ const FormProducto = (props) => {
   // }
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
- 
-
   const genExtra = () => (
     <PushpinFilled
       onClick={(event) => {
@@ -194,7 +198,7 @@ const FormProducto = (props) => {
       form.setFieldsValue({ fk_proveedor_id: undefined });
       // form.setFieldsValue({ atributos_js: {"general": atributosJs , "especifico": {}} });
       // console.log("TEST", form.getFieldValue("atributos_js").especifico)
-      setInfoTecnica(null);
+      // setInfoTecnica(null);
       // form.setFieldsValue({ codigo_interno: ""})
       // form.setFieldsValue({ nombre: ""})
     } else {
@@ -208,7 +212,7 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_linea_id") {
       setSelectedLineaId(changedValues[formFieldName]);
       setSelectedMarcaId(null);
-      setSelectedGrupoId(null)
+      setSelectedGrupoId(null);
       form.setFieldsValue({ fk_color_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
       form.setFieldsValue({ fk_marca_id: undefined });
@@ -222,7 +226,6 @@ const FormProducto = (props) => {
       //   console.log("si entra!!!!!")
       form.setFieldsValue({ codigo_interno: linea.pseudo });
       form.setFieldsValue({ nombre: linea.pseudo });
-
     }
 
     // if (formFieldName === "color") {
@@ -309,6 +312,28 @@ const FormProducto = (props) => {
   const onChangeTipoProducto = (e) => {
     setTipoProducto(e.target.value);
   };
+
+  const onChangeGeneracionClick = (e) => {
+    setGeneracionClick(e.target.value);
+  };
+
+  const onChangeTieneSubcapaAdherida = (e) => {
+    setTieneSubcapaAdherida(e.target.value);
+  };
+
+  const onChangeUsoCesped = (e) => {
+    setUsoCesped(e.target.value);
+  };
+
+  const onChangeRangoAlturaHebra = (e) => {
+    setRangoAlturaHebra(e.target.value);
+  };
+
+  const onChangeMetodoABC = (e) => {
+    setMetodoABC(e.target.value);
+  };
+
+  const plainOptions = ["INTERIOR", "EXTERIOR"];
 
   return editProducto || location.state.nuevo ? (
     <>
@@ -550,88 +575,683 @@ const FormProducto = (props) => {
           </Panel>
           <Panel header="INFORMACIÓN TÉCNICA" key="4" extra={genExtra()}>
             <Form.Item
-              label="Comun"
-              name={["atributos_js", "general", "comun"]}
+              label="Método ABC"
+              name={["atributos_js", "general", "metodo_abc"]}
               rules={[
                 {
                   required: true,
-                  message: "Por favor, ingrese el campo!",
+                  message: "Por favor, ingrese el método ABC!",
                 },
               ]}
             >
-              <InputNumber
-                min={0}
-                readOnly={location.state ? !location.state.permiso : false}
-              />
-            </Form.Item>
-            <Form.Item
-              label="Comun 2"
-              name={["atributos_js", "general", "comun2"]}
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor, ingrese el campo2!",
-                },
-              ]}
-            >
-              <InputNumber
-                min={0}
-                readOnly={location.state ? !location.state.permiso : false}
-              />
-            </Form.Item>
-            {infoTecnica === "60d4c046e600f1b5e85d075c" ? (
-              <div>
-                <Form.Item
-                  label="Largo"
-                  name={["atributos_js", "especifico", "largo"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el largo!",
-                    },
-                  ]}
+              {location.state.permiso ? (
+                <Radio.Group
+                  onChange={onChangeMetodoABC}
+                  value={metodoABC}
+                  disabled={location.state ? !location.state.permiso : false}
                 >
-                  <InputNumber
-                    min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
-                    formatter={(value) => `${value} mm`}
-                    parser={(value) => value.replace(" mm", "")}
-                  />
-                </Form.Item>
-                <Form.Item
-                  label="Ancho"
-                  name={["atributos_js", "especifico", "ancho"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el ancho!",
-                    },
-                  ]}
-                >
-                  <InputNumber
-                    min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
-                    formatter={(value) => `${value} mm`}
-                    parser={(value) => value.replace(" mm", "")}
-                  />
-                </Form.Item>
-              </div>
-            ) : infoTecnica === "60a8133d2591c75004eceaa8" ? (
-              <Form.Item
-                label="Otro"
-                name={["atributos_js", "especifico", "otro"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingrese el atributo!",
-                  },
-                ]}
-              >
-                <InputNumber
-                  min={0}
+                  <Radio value={"A"}>A</Radio>
+                  <Radio value={"B"}>B</Radio>
+                  <Radio value={"C"}>C</Radio>
+                </Radio.Group>
+              ) : (
+                <Input
+                  className="input-type"
                   readOnly={location.state ? !location.state.permiso : false}
                 />
-              </Form.Item>
+              )}
+            </Form.Item>
+            <Form.Item
+              label="Garantía"
+              name={["atributos_js", "general", "garantia1"]}
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor, ingrese la garantía!",
+                },
+              ]}
+            >
+              {location.state.permiso ? (
+                <SelectOpciones
+                  tipo="garantía"
+                  readOnly={location.state ? !location.state.permiso : false}
+                  setShow={setShow}
+                />
+              ) : (
+                <Input
+                  className="input-type"
+                  readOnly={location.state ? !location.state.permiso : false}
+                />
+              )}
+            </Form.Item>
+            {infoTecnica === "60d4c046e600f1b5e85d075c" ? (
+              <Row>
+                <Col span={12}>
+                  <Form.Item
+                    label="Biseles"
+                    name={["atributos_js", "especifico", "pl_biseles"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, ingrese el número de biseles!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      precision={0}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                      // formatter={(value) => `${value} mm`}
+                      // parser={(value) => value.replace(" mm", "")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Resistencia a la Abrasión"
+                    name={[
+                      "atributos_js",
+                      "especifico",
+                      "pl_resistencia_abrasion",
+                    ]}
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Por favor, seleccione la resistencia a la abrasión!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="resistencia a la abrasion"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Sistema de Click"
+                    name={["atributos_js", "especifico", "pl_sistema_click"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione el sistema de click!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="sistema de click"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Generación de Click "
+                    name={["atributos_js", "especifico", "pl_generacion_click"]}
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Por favor, seleccione si la generación de click!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <Radio.Group
+                        onChange={onChangeGeneracionClick}
+                        value={generacionClick}
+                        disabled={
+                          location.state ? !location.state.permiso : false
+                        }
+                      >
+                        <Radio value={"3G"}>3G</Radio>
+                        <Radio value={"5G"}>5G</Radio>
+                      </Radio.Group>
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Subcapa Adherida"
+                    name={["atributos_js", "especifico", "pl_subcapa_adherida"]}
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Por favor, seleccione si tiene subcapa adherida!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <Radio.Group
+                        onChange={onChangeTieneSubcapaAdherida}
+                        value={tieneSubcapaAdherida}
+                        disabled={
+                          location.state ? !location.state.permiso : false
+                        }
+                      >
+                        <Radio value={"SI"}>SI</Radio>
+                        <Radio value={"NO"}>NO</Radio>
+                      </Radio.Group>
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Clase Residencial"
+                    name={[
+                      "atributos_js",
+                      "especifico",
+                      "pl_clase_residencial",
+                    ]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione la clase residencial!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="clase residencial"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Clase Comercial"
+                    name={["atributos_js", "especifico", "pl_clase_comercial"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione la clase comercial!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="clase comercial"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Clase Industrial"
+                    name={["atributos_js", "especifico", "pl_clase_industrial"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione la clase industrial!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="clase industrial"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Core"
+                    name={["atributos_js", "especifico", "pl_core"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione el core!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="core"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Densidad"
+                    name={["atributos_js", "especifico", "pl_densidad"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, ingrese la densidad!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      precision={2}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                      formatter={(value) => `${value} kg/m3`}
+                      parser={(value) => value.replace(" kg/m3", "")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Terminado"
+                    name={["atributos_js", "especifico", "pl_terminado"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione el terminado!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="terminado"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+            ) : infoTecnica === "60d4c0477f7255b5e8cca2b7" ? (
+              <Row>
+                <Col span={12}>
+                  <Form.Item
+                    label="Uso"
+                    name={["atributos_js", "especifico", "cs_uso"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, ingrese el uso!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <Radio.Group
+                        onChange={onChangeUsoCesped}
+                        value={usoCesped}
+                        disabled={
+                          location.state ? !location.state.permiso : false
+                        }
+                      >
+                        <Radio value={"DECORATIVO"}>DECORATIVO</Radio>
+                        <Radio value={"DEPORTIVO"}>DEPORTIVO</Radio>
+                      </Radio.Group>
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Aplicación"
+                    name={["atributos_js", "especifico", "cs_aplicacion"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, ingrese la aplicación!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <Checkbox.Group options={plainOptions} />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Rango de Altura de Hebra"
+                    name={[
+                      "atributos_js",
+                      "especifico",
+                      "cs_rango_altura_hebra",
+                    ]}
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Por favor, seleccione el rango de altura de la hebra!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <Radio.Group
+                        onChange={onChangeRangoAlturaHebra}
+                        value={rangoAlturaHebra}
+                        disabled={
+                          location.state ? !location.state.permiso : false
+                        }
+                        de
+                      >
+                        <Radio value={"5 mm - 11 mm"}>5 mm - 11 mm</Radio>
+                        <Radio value={"18 mm - 45 mm"}>18 mm - 45 mm</Radio>
+                      </Radio.Group>
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                    label="Altura de Hebra"
+                    name={["atributos_js", "especifico", "cs_altura_hebra"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, ingrese la altura de la hebra!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      precision={0}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                      formatter={(value) => `${value} mm`}
+                      parser={(value) => value.replace(" mm", "")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Número de Puntadas cada 10 cm"
+                    name={["atributos_js", "especifico", "cs_puntadas_10cm"]}
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Por favor, ingrese el número de puntadas cada 10cm!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      precision={0}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Número de Puntadas por m2"
+                    name={["atributos_js", "especifico", "cs_puntadas_m2"]}
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Por favor, ingrese el número de puntadas por m2!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      precision={0}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Filamentos por Puntada"
+                    name={[
+                      "atributos_js",
+                      "especifico",
+                      "cs_filamentos_puntada",
+                    ]}
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Por favor, ingrese el número de filamentos por puntada!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      precision={0}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Número de Filamentos por m2"
+                    name={["atributos_js", "especifico", "cs_filamentos_m2"]}
+                    rules={[
+                      {
+                        required: true,
+                        message:
+                          "Por favor, ingrese el número de filamentos por m2!",
+                      },
+                    ]}
+                  >
+                    <InputNumber
+                      min={0}
+                      precision={0}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Galga"
+                    name={["atributos_js", "especifico", "cs_galga"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, ingrese la medida de galga!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      suffix="''"
+                      className="input-type"
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Tipo de Filamento"
+                    name={["atributos_js", "especifico", "cs_tipo_filamento"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione el tipo de filamento!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="tipo de filamento"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+              </Row>
+            ) : infoTecnica === "60d4c04a145bfab5e81b4626" ? (
+              <Row>
+                <Col span={12}>
+                  <Form.Item
+                    label="Material:"
+                    name={["atributos_js", "especifico", "sc_material"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione el material!",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="material"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Color:"
+                    name={["atributos_js", "especifico", "sc_color"]}
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, seleccione el color de la subcapa",
+                      },
+                    ]}
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                      tipo="color de subcapa"
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                      setShow={setShow}
+                    />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  <Form.Item
+                  label="Tipo de Esponja"
+                  name={["atributos_js", "especifico", "sc_tipo_esponja"]}
+
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor, seleccione el tipo de esponja!",
+                    },
+                  ]}
+                >
+                  {location.state.permiso ? (
+                    <Radio.Group
+                      disabled={
+                        location.state ? !location.state.permiso : false
+                      }
+                    >
+                      <Radio value={"EVA"}>EVA</Radio>
+                      <Radio value={"EPE"}>EPE</Radio>
+                    </Radio.Group>
+                  ) : (
+                    <Input
+                      className="input-type"
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  )}
+                </Form.Item>
+                </Col>
+              </Row>
             ) : null}
           </Panel>
           <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
@@ -774,7 +1394,6 @@ const FormProducto = (props) => {
                   <InputNumber
                     min={0}
                     precision={3}
-
                     readOnly={location.state ? !location.state.permiso : false}
                     // formatter={(value) =>
                     //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -792,7 +1411,7 @@ const FormProducto = (props) => {
                     },
                   ]}
                 >
-                   <InputNumber
+                  <InputNumber
                     min={0}
                     precision={2}
                     readOnly={location.state ? !location.state.permiso : false}
@@ -944,12 +1563,10 @@ const FormProducto = (props) => {
                     </Checkbox>
                   ) : editProducto.en_sistema_externo ? (
                     <p>
-                      {" "}
                       En Sistema Externo: <CheckCircleFilled />
                     </p>
                   ) : (
                     <p>
-                      {" "}
                       En Sistema Externo: <CloseCircleFilled />
                     </p>
                   )}
@@ -972,12 +1589,10 @@ const FormProducto = (props) => {
                     </Checkbox>
                   ) : editProducto.en_web ? (
                     <p>
-                      {" "}
                       En Página Web: <CheckCircleFilled />
                     </p>
                   ) : (
                     <p>
-                      {" "}
                       En Página Web: <CloseCircleFilled />
                     </p>
                   )}
