@@ -6,7 +6,11 @@
     margin-top: 30vh;
 }
 
-.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+.ant-collapse > .ant-collapse-item > .ant-collapse-header{
     text-align: left;
 }
 
+.tecnica >.ant-collapse-header  {
+    color: white !important;
+    background-color: black;
+}

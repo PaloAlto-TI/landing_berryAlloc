@@ -18,6 +18,14 @@ import { tiposFilamento } from "../../utils/tipoFilamento";
 import { garantias } from "../../utils/garantias";
 import { materialesSubcapa } from "../../utils/materialesSubcapa";
 import { coloresSubcapa } from "../../utils/coloresSubcapa";
+import { formatos } from "../../utils/formatos";
+import { tonos } from "../../utils/tonos";
+import { capacidadesRodamientoCarga } from "../../utils/capacidadesRodamientoCarga";
+import { coloresPegamentos } from "../../utils/coloresPegamentos";
+import { oloresPegamentos } from "../../utils/oloresPegamentos";
+import { adherenciasPegamentos } from "../../utils/adherenciasPegamentos";
+import { resistenciasDeslizamiento } from "../../utils/resistenciasDeslizamiento";
+import { resistenciasAbrasionPorcelanato } from "../../utils/resistenciasAbrasionPorcelanato";
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
@@ -111,7 +119,23 @@ const SelectOpciones = (props) => {
         setOpciones(materialesSubcapa);
       }else if (tipo === "color de subcapa") {
         setOpciones(coloresSubcapa);
-      } else {
+      }else if (tipo === "formato") {
+        setOpciones(formatos);
+      }else if (tipo === "tono") {
+        setOpciones(tonos);
+      }else if (tipo === "capacidad de rodamiento de carga") {
+        setOpciones(capacidadesRodamientoCarga);
+      }else if (tipo === "color de pegamento") {
+        setOpciones(coloresPegamentos);
+      }else if (tipo === "olor") {
+        setOpciones(oloresPegamentos);
+      }else if (tipo === "adherencia") {
+        setOpciones(adherenciasPegamentos);
+      }else if (tipo === "resistencia al deslizamiento") {
+        setOpciones(resistenciasDeslizamiento);
+      }else if (tipo === "resistencia a la abrasión") {
+        setOpciones(resistenciasAbrasionPorcelanato);
+      }  else {
         setOpciones([]);
       }
     }
