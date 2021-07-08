@@ -1,11 +1,11 @@
 export const capacidadesRodamientoCarga= [
     {
-        "id":"NINGUNO",
-        "nombre":"NINGUNO"
+        "id":"BAJA",
+        "nombre":"BAJA"
     },
     {
-        "id":"LIGERO",
-        "nombre":"LIGERO"
+        "id":"MODERADA",
+        "nombre":"MODERADA"
     },
 
 ]

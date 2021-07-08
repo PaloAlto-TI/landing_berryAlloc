@@ -135,7 +135,7 @@ const SelectOpciones = (props) => {
         setOpciones(resistenciasDeslizamiento);
       }else if (tipo === "resistencia a la abrasión") {
         setOpciones(resistenciasAbrasionPorcelanato);
-      }  else {
+      } else {
         setOpciones([]);
       }
     }
