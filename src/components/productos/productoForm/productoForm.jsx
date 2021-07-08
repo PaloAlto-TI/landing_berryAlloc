@@ -2199,8 +2199,8 @@ const FormProducto = (props) => {
                       {opcionesList}
                     </Select>
                   ) : (
-                    <Input
-                      className="input-type"
+                    <TextArea
+                      // className="input-type"
                       readOnly={
                         location.state ? !location.state.permiso : false
                       }
@@ -2424,7 +2424,7 @@ const FormProducto = (props) => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="Límite Descuento 1"
+                  label="Descuento Especialista"
                   name="limite_descuento1"
                   rules={[
                     {
@@ -2441,7 +2441,7 @@ const FormProducto = (props) => {
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Límite Descuento 2"
+                  label="Descuento Líder Retail"
                   name="limite_descuento2"
                   rules={[
                     {
@@ -2458,7 +2458,7 @@ const FormProducto = (props) => {
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Límite Descuento 3"
+                  label="Descuento Líder Proyectos"
                   name="limite_descuento3"
                   rules={[
                     {
@@ -2475,7 +2475,7 @@ const FormProducto = (props) => {
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Límite Descuento 4"
+                  label="Descuento Eventos"
                   name="limite_descuento4"
                   rules={[
                     {
