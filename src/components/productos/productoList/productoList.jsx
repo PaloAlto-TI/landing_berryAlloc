@@ -25,7 +25,7 @@ const ProductoList = () => {
 
   console.log("path");
   const [filteredInfo, setFilteredInfo] = useState([]);
-  const size = useWindowSize();
+  // const size = useWindowSize();
   const handleChange = (pagination, filters, sorter) => {
     console.log("Various parameters", pagination, filters, sorter);
 
@@ -169,8 +169,7 @@ const ProductoList = () => {
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
-                console.log(size)
-                if (event.clientX < size.width*0.80){
+                if (event.clientX < window.innerWidth*0.80){
                 record["permiso"] = false;
                 history.push(`${path}/${record.codigo_interno}/ver`, record);
 
@@ -188,22 +187,22 @@ const ProductoList = () => {
   );
 };
 
-function useWindowSize() {
-  const [windowSize, setWindowSize] = useState({
-    width: undefined,
-    height: undefined,
-  });
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    return () => window.removeEventListener("resize", handleResize);
-  }, []); 
-  return windowSize;
-}
+// function useWindowSize() {
+//   const [windowSize, setWindowSize] = useState({
+//     width: undefined,
+//     height: undefined,
+//   });
+//   useEffect(() => {
+//     function handleResize() {
+//       setWindowSize({
+//         width: window.innerWidth,
+//         height: window.innerHeight,
+//       });
+//     }
+//     window.addEventListener("resize", handleResize);
+//     handleResize();
+//     return () => window.removeEventListener("resize", handleResize);
+//   }, []); 
+//   return windowSize;
+// }
 export default ProductoList;
