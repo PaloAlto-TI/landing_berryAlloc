@@ -2976,6 +2976,7 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
+                
                   <InputNumber
                     min={0}
                     readOnly={location.state ? !location.state.permiso : false}
