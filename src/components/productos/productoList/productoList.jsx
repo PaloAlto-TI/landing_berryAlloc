@@ -128,6 +128,11 @@ const ProductoList = () => {
     history.push(`${path}/nuevo`, record);
   }
 
+  function ver(record) {
+    record["permiso"] = false;
+    history.push(`${path}/${record.codigo_interno}/ver`, record);
+  }
+
   const filtrar = (e) => {
     const currValue = e.target.value;
     setValue(currValue);
@@ -170,9 +175,9 @@ const ProductoList = () => {
             return {
               onClick: (event) => {
                 if (event.clientX < window.innerWidth*0.80){
-                record["permiso"] = false;
-                history.push(`${path}/${record.codigo_interno}/ver`, record);
-
+                // record["permiso"] = false;
+                // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                  ver(record)
                 }
               },
             };

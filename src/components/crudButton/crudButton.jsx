@@ -3,7 +3,7 @@ import { Menu, Dropdown } from "antd";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { Modal } from 'antd';
 // import { ProductoContext } from "../../contexts/productoContext";
-import { DeleteFilled, EditFilled, EyeFilled } from "@ant-design/icons";
+import { DeleteFilled, EditFilled} from "@ant-design/icons";
 
 const CrudButton = (props) => {
 
@@ -35,10 +35,10 @@ const CrudButton = (props) => {
 
   let history = useHistory();
 
-  function ver() {
-    record["permiso"] = false;
-    history.push(`${path}/${record.codigo_interno}/ver`, record);
-  }
+  // function ver() {
+  //   record["permiso"] = false;
+  //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+  // }
 
   function editar() {
     record["permiso"] = true;
@@ -48,9 +48,9 @@ const CrudButton = (props) => {
 
   const menu = (
     <Menu onClick={handleMenuClick}>
-      <Menu.Item icon={<EyeFilled />}key="1" onClick={ver}>
+      {/* <Menu.Item icon={<EyeFilled />}key="1" onClick={ver}>
         Ver
-      </Menu.Item>
+      </Menu.Item> */}
 
       <Menu.Item icon={<EditFilled />} key="2" onClick={editar}>
         Editar
