@@ -2882,7 +2882,7 @@ const FormProducto = (props) => {
                           {
                             required: true,
                             message:
-                              "Por favor, ingrese el limite de descuento 2!",
+                              "Por favor, ingrese el descuento!",
                           },
                         ]
                       : []
@@ -2904,7 +2904,7 @@ const FormProducto = (props) => {
                           {
                             required: true,
                             message:
-                              "Por favor, ingrese el limite de descuento 3!",
+                              "Por favor, ingrese el descuento!",
                           },
                         ]
                       : []
@@ -2926,7 +2926,7 @@ const FormProducto = (props) => {
                           {
                             required: true,
                             message:
-                              "Por favor, ingrese el limite de descuento 4!",
+                              "Por favor, ingrese el descuento!",
                           },
                         ]
                       : []
@@ -2948,7 +2948,7 @@ const FormProducto = (props) => {
                           {
                             required: true,
                             message:
-                              "Por favor, ingrese el limite de descuento 5!",
+                              "Por favor, ingrese el descuento!",
                           },
                         ]
                       : []
@@ -2976,7 +2976,7 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                
+
                   <InputNumber
                     min={0}
                     readOnly={location.state ? !location.state.permiso : false}
