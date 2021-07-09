@@ -2810,7 +2810,7 @@ const FormProducto = (props) => {
                 {!location.state.permiso ? (
                   <Form.Item label="Precio con IVA ($)">
                     <InputNumber
-                      value={form.getFieldValue("precio") * 1.12}
+                      value={form.getFieldValue("precio")*(parseFloat(form.getFieldValue("iva"))+100)/100}
                       min={0}
                       precision={2}
                       readOnly={
