@@ -14,7 +14,6 @@ import { clasesComercial } from "../../utils/clasesComercial";
 import { clasesResidencial } from "../../utils/clasesResidencial";
 import { core } from "../../utils/core";
 import { terminado } from "../../utils/terminado";
-import { tiposFilamento } from "../../utils/tipoFilamento";
 import { garantias } from "../../utils/garantias";
 import { materialesSubcapa } from "../../utils/materialesSubcapa";
 import { coloresSubcapa } from "../../utils/coloresSubcapa";
@@ -111,8 +110,6 @@ const SelectOpciones = (props) => {
         setOpciones(core);
       }else if (tipo === "terminado") {
         setOpciones(terminado);
-      }else if (tipo === "tipo de filamento") {
-        setOpciones(tiposFilamento);
       }else if (tipo === "garantía") {
         setOpciones(garantias);
       }else if (tipo === "material") {

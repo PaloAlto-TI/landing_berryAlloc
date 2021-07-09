@@ -2527,57 +2527,56 @@ const FormProducto = (props) => {
                 </Col>
               </Row>
             ) : null}
+            {infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ||
+            infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ||
+            infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
+              <Form.Item
+                label="Usos"
+                name={["atributos_js", "general", "usos"]}
+                rules={
+                  location.state.permiso
+                    ? [
+                        {
+                          required: true,
+                          message: "Por favor, seleccione los usos!",
+                        },
+                      ]
+                    : []
+                }
+              >
+                {location.state.permiso ? (
+                  <Select
+                    mode="multiple"
+                    allowClear
+                    placeholder="Seleccione usos"
+                    readOnly={location.state ? !location.state.permiso : false}
+                  >
+                    {infoTecnicaLinea === "60d4c04a145bfab5e81b4626"
+                      ? subcapaList
+                      : infoTecnicaGrupo === "60d617738d422eca134f6685"
+                      ? termostatosList
+                      : infoTecnicaGrupo === "60d61771a442edca131848b6"
+                      ? cartuchosList
+                      : infoTecnicaGrupo === "60d61771f30664ca137cf63f"
+                      ? pegamentosList
+                      : infoTecnicaGrupo === "60d617724ce2a1ca13e92920"
+                      ? mallasCeramicaList
+                      : infoTecnicaGrupo === "60d617724cbea5ca130847e1"
+                      ? mallasPisosFlotantesList
+                      : null}
+                  </Select>
+                ) : (
+                  <TextArea
+                    // className="input-type"
+                    readOnly={location.state ? !location.state.permiso : false}
+                  />
+                )}
+              </Form.Item>
+            ) : null}
           </Panel>
           <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
             <Row>
               <Col span={12}>
-                <Form.Item
-                  label="Usos"
-                  name={["atributos_js", "general", "usos"]}
-                  rules={
-                    location.state.permiso
-                      ? [
-                          {
-                            required: true,
-                            message: "Por favor, seleccione los usos!",
-                          },
-                        ]
-                      : []
-                  }
-                >
-                  {location.state.permiso ? (
-                    <Select
-                      mode="multiple"
-                      allowClear
-                      placeholder="Seleccione usos"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    >
-                      {infoTecnicaLinea === "60d4c04a145bfab5e81b4626"
-                        ? subcapaList
-                        : infoTecnicaGrupo === "60d617738d422eca134f6685"
-                        ? termostatosList
-                        : infoTecnicaGrupo === "60d61771a442edca131848b6"
-                        ? cartuchosList
-                        : infoTecnicaGrupo === "60d61771f30664ca137cf63f"
-                        ? pegamentosList
-                        : infoTecnicaGrupo === "60d617724ce2a1ca13e92920"
-                        ? mallasCeramicaList
-                        : infoTecnicaGrupo === "60d617724cbea5ca130847e1"
-                        ? mallasPisosFlotantesList
-                        : null}
-                    </Select>
-                  ) : (
-                    <TextArea
-                      // className="input-type"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  )}
-                </Form.Item>
-
                 <Form.Item
                   label="Método ABC"
                   name={["atributos_js", "general", "metodo_abc"]}
@@ -2810,7 +2809,11 @@ const FormProducto = (props) => {
                 {!location.state.permiso ? (
                   <Form.Item label="Precio con IVA ($)">
                     <InputNumber
-                      value={form.getFieldValue("precio")*(parseFloat(form.getFieldValue("iva"))+100)/100}
+                      value={
+                        (form.getFieldValue("precio") *
+                          (parseFloat(form.getFieldValue("iva")) + 100)) /
+                        100
+                      }
                       min={0}
                       precision={2}
                       readOnly={
