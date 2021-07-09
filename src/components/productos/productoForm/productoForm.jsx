@@ -473,12 +473,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Línea"
                   name={location.state.permiso ? "fk_linea_id" : "linea"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione una linea!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione una linea!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -500,12 +504,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Marca"
                   name={location.state.permiso ? "fk_marca_id" : "marca"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione una marca!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione una marca!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -528,12 +536,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Grupo"
                   name={location.state.permiso ? "fk_grupo_id" : "grupo"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione un grupo!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione un grupo!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -558,12 +570,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Modelo"
                   name={location.state.permiso ? "fk_color_id" : "color"}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione un color!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione un color!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -588,12 +604,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Procedencia"
                   name="procedencia"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la procedencia!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese la procedencia!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -618,12 +638,16 @@ const FormProducto = (props) => {
                   name={
                     location.state.permiso ? "fk_proveedor_id" : "proveedor"
                   }
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione un proveedor!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione un proveedor!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -647,24 +671,32 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Código Interno"
                   name="codigo_interno"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el código interno!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese el código interno!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <Input className="input-type" readOnly={true} />
                 </Form.Item>
                 <Form.Item
                   label="Nombre"
                   name="nombre"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el nombre!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese el nombre!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <Input className="input-type" readOnly={true} />
                 </Form.Item>
@@ -672,12 +704,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Descripción"
                   name="descripcion"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la descripción!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese la descripción!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <TextArea
                     maxLength={280}
@@ -708,12 +744,16 @@ const FormProducto = (props) => {
                       : "Garantía (años)"
                   }
                   name={["atributos_js", "general", "garantia1"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la garantía!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese la garantía!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -745,12 +785,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Garantía Comercial (años)"
                     name={["atributos_js", "general", "garantia2"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese el tiempo de garantía!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el tiempo de garantía!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -775,12 +820,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Garantía Industrial (años)"
                     name={["atributos_js", "general", "garantia3"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese el tiempo de garantía!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el tiempo de garantía!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -804,12 +854,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Formato"
                   name={["atributos_js", "general", "formato"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione el formato!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione el formato!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -833,12 +887,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Capa de Desgaste"
                     name={["atributos_js", "general", "capa_desgaste"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la capa de desgaste!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese la capa de desgaste!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <Input
                       // defaultValue={capaDesgaste}
@@ -855,12 +914,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Composición"
                     name={["atributos_js", "general", "composicion"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione la composicion!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione la composicion!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Radio.Group
@@ -889,12 +952,17 @@ const FormProducto = (props) => {
                     <Form.Item
                       label="Resistencia al Agua"
                       name={["atributos_js", "general", "resitencia_agua"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Por favor, si es resistente al agua o no!",
-                        },
-                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, si es resistente al agua o no!",
+                              },
+                            ]
+                          : []
+                      }
                     >
                       {location.state.permiso ? (
                         <Radio.Group
@@ -917,12 +985,16 @@ const FormProducto = (props) => {
                     <Form.Item
                       label="Tono"
                       name={["atributos_js", "general", "tono"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Por favor, seleccione el tono!",
-                        },
-                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione el tono!",
+                              },
+                            ]
+                          : []
+                      }
                     >
                       {location.state.permiso ? (
                         <SelectOpciones
@@ -943,12 +1015,16 @@ const FormProducto = (props) => {
                     <Form.Item
                       label="Textura"
                       name={["atributos_js", "general", "textura"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Por favor, seleccione la textura!",
-                        },
-                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione la textura!",
+                              },
+                            ]
+                          : []
+                      }
                     >
                       {location.state.permiso ? (
                         <Radio.Group
@@ -979,12 +1055,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Clase Residencial"
                     name={["atributos_js", "general", "clase_residencial"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione la clase residencial!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione la clase residencial!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -1016,12 +1097,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Clase Comercial"
                     name={["atributos_js", "general", "clase_comercial"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione la clase comercial!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione la clase comercial!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -1045,12 +1131,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Clase Industrial"
                     name={["atributos_js", "general", "clase_industrial"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione la clase industrial!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione la clase industrial!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -1075,12 +1166,17 @@ const FormProducto = (props) => {
                     <Form.Item
                       label="Largo"
                       name={["atributos_js", "general", "largo"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Por favor, ingrese la medida de largo!",
-                        },
-                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese la medida de largo!",
+                              },
+                            ]
+                          : []
+                      }
                     >
                       <InputNumber
                         min={0}
@@ -1095,12 +1191,17 @@ const FormProducto = (props) => {
                     <Form.Item
                       label="Ancho"
                       name={["atributos_js", "general", "ancho"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Por favor, ingrese la medida de ancho!",
-                        },
-                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese la medida de ancho!",
+                              },
+                            ]
+                          : []
+                      }
                     >
                       <InputNumber
                         min={0}
@@ -1121,12 +1222,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Espesor"
                     name={["atributos_js", "general", "espesor"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la medida de espesor!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese la medida de espesor!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1148,12 +1254,16 @@ const FormProducto = (props) => {
               <Form.Item
                 label="Densidad"
                 name={["atributos_js", "general", "densidad"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, ingrese la densidad!",
-                  },
-                ]}
+                rules={
+                  location.state.permiso
+                    ? [
+                        {
+                          required: true,
+                          message: "Por favor, ingrese la densidad!",
+                        },
+                      ]
+                    : []
+                }
               >
                 <InputNumber
                   min={0}
@@ -1174,12 +1284,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Core"
                   name={["atributos_js", "general", "core"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione el core!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione el core!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -1201,12 +1315,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Terminado"
                   name={["atributos_js", "general", "terminado"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione el terminado!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione el terminado!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -1236,12 +1354,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Biseles"
                     name={["atributos_js", "especifico", "pl_biseles"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese el número de biseles!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el número de biseles!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1260,13 +1383,17 @@ const FormProducto = (props) => {
                       "especifico",
                       "pl_resistencia_abrasion",
                     ]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, seleccione la resistencia a la abrasión!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione la resistencia a la abrasión!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -1287,12 +1414,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Sistema de Click"
                     name={["atributos_js", "especifico", "pl_sistema_click"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione el sistema de click!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el sistema de click!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -1313,13 +1445,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Generación de Click "
                     name={["atributos_js", "especifico", "pl_generacion_click"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, seleccione si la generación de click!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione si la generación de click!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Radio.Group
@@ -1344,13 +1480,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Subcapa Adherida"
                     name={["atributos_js", "especifico", "pl_subcapa_adherida"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, seleccione si tiene subcapa adherida!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione si tiene subcapa adherida!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Radio.Group
@@ -1381,12 +1521,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Uso(s)"
                     name={["atributos_js", "especifico", "cs_uso"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese el/los uso(s)!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el/los uso(s)!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Radio.Group
@@ -1411,12 +1555,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Aplicación"
                     name={["atributos_js", "especifico", "cs_aplicacion"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la aplicación!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, ingrese la aplicación!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Checkbox.Group options={plainOptions} />
@@ -1436,13 +1584,17 @@ const FormProducto = (props) => {
                       "especifico",
                       "cs_rango_altura_hebra",
                     ]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, seleccione el rango de altura de la hebra!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el rango de altura de la hebra!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Radio.Group
@@ -1468,12 +1620,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Altura de Hebra"
                     name={["atributos_js", "especifico", "cs_altura_hebra"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la altura de la hebra!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese la altura de la hebra!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1488,13 +1645,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Puntadas cada 10 cm"
                     name={["atributos_js", "especifico", "cs_puntadas_10cm"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, ingrese el número de puntadas cada 10cm!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el número de puntadas cada 10cm!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1507,13 +1668,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Puntadas por m2"
                     name={["atributos_js", "especifico", "cs_puntadas_m2"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, ingrese el número de puntadas por m2!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el número de puntadas por m2!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1532,13 +1697,17 @@ const FormProducto = (props) => {
                       "especifico",
                       "cs_filamentos_puntada",
                     ]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, ingrese el número de filamentos por puntada!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el número de filamentos por puntada!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1551,13 +1720,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Filamentos por m2"
                     name={["atributos_js", "especifico", "cs_filamentos_m2"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, ingrese el número de filamentos por m2!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el número de filamentos por m2!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1570,12 +1743,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Galga"
                     name={["atributos_js", "especifico", "cs_galga"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la medida de galga!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, ingrese la medida de galga!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <Input
                       suffix="''"
@@ -1589,13 +1766,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Tipo(s) de Filamento"
                     name={["atributos_js", "especifico", "cs_tipo_filamento"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, seleccione el tipo(s) de filamento!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el tipo(s) de filamento!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Select
@@ -1624,12 +1805,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Material:"
                     name={["atributos_js", "especifico", "sc_material"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione el material!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione el material!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -1652,12 +1837,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Color:"
                     name={["atributos_js", "especifico", "sc_color"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione el color de la subcapa",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el color de la subcapa",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -1679,12 +1869,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Tipo de Esponja"
                     name={["atributos_js", "especifico", "sc_tipo_esponja"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione el tipo de esponja!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el tipo de esponja!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Radio.Group
@@ -1710,12 +1905,16 @@ const FormProducto = (props) => {
               <Form.Item
                 label="Tipo de Hebra"
                 name={["atributos_js", "especifico", "pb_tipo_hebra"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor, seleccione el tipo de hebra!",
-                  },
-                ]}
+                rules={
+                  location.state.permiso
+                    ? [
+                        {
+                          required: true,
+                          message: "Por favor, seleccione el tipo de hebra!",
+                        },
+                      ]
+                    : []
+                }
               >
                 {location.state.permiso ? (
                   <Radio.Group
@@ -1743,12 +1942,17 @@ const FormProducto = (props) => {
                           "especifico",
                           "ca_dimension_pantalla",
                         ]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Por favor, seleccione el tipo de hebra!",
-                          },
-                        ]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el tipo de hebra!",
+                                },
+                              ]
+                            : []
+                        }
                       >
                         {location.state.permiso ? (
                           <Radio.Group
@@ -1771,12 +1975,17 @@ const FormProducto = (props) => {
                       <Form.Item
                         label="Conexión"
                         name={["atributos_js", "especifico", "ca_conexion"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Por favor, ingrese el tipo de conexión!",
-                          },
-                        ]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el tipo de conexión!",
+                                },
+                              ]
+                            : []
+                        }
                       >
                         <Input
                           // defaultValue="WI-FI"
@@ -1787,12 +1996,17 @@ const FormProducto = (props) => {
                       <Form.Item
                         label="Tipo de Sensor"
                         name={["atributos_js", "especifico", "ca_tipo_sensor"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Por favor, ingrese el tipo de sensor!",
-                          },
-                        ]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el tipo de sensor!",
+                                },
+                              ]
+                            : []
+                        }
                       >
                         <Input
                           // defaultValue="NTC 10K"
@@ -1807,13 +2021,17 @@ const FormProducto = (props) => {
                           "especifico",
                           "ca_color_calefactor",
                         ]}
-                        rules={[
-                          {
-                            required: true,
-                            message:
-                              "Por favor, seleccione el color del calefactor!",
-                          },
-                        ]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el color del calefactor!",
+                                },
+                              ]
+                            : []
+                        }
                       >
                         {location.state.permiso ? (
                           <Radio.Group
@@ -1839,13 +2057,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Alimentación"
                     name={["atributos_js", "especifico", "ca_alimentacion"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, ingrese el valor de la alimentación!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el valor de la alimentación!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1866,13 +2088,17 @@ const FormProducto = (props) => {
                       "especifico",
                       "ca_longitud_cable_alimentacion",
                     ]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, ingrese la longitud del cable de alimentación!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese la longitud del cable de alimentación!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1887,12 +2113,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Potencia"
                     name={["atributos_js", "especifico", "ca_potencia"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la potencia!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, ingrese la potencia!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1907,12 +2137,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Presentación"
                     name={["atributos_js", "especifico", "ca_presentacion"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la presentación!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, ingrese la presentación!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1927,12 +2161,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Corriente"
                     name={["atributos_js", "especifico", "ca_corriente"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la corriente!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, ingrese la corriente!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <InputNumber
                       min={0}
@@ -1950,13 +2188,17 @@ const FormProducto = (props) => {
               <Form.Item
                 label="Espesor de Capa de Madera"
                 name={["atributos_js", "especifico", "pi_espesor_capa_madera"]}
-                rules={[
-                  {
-                    required: true,
-                    message:
-                      "Por favor, ingrese el espesor de la capa de madera",
-                  },
-                ]}
+                rules={
+                  location.state.permiso
+                    ? [
+                        {
+                          required: true,
+                          message:
+                            "Por favor, ingrese el espesor de la capa de madera",
+                        },
+                      ]
+                    : []
+                }
               >
                 <InputNumber
                   min={0}
@@ -1976,13 +2218,17 @@ const FormProducto = (props) => {
                       "especifico",
                       "pa_capacidad_rodamiento_carga",
                     ]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, seleccione la capacidad de rodamiento de carga!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione la capacidad de rodamiento de carga!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <SelectOpciones
@@ -2011,12 +2257,17 @@ const FormProducto = (props) => {
                           "especifico",
                           "pa_tiempo_trabajo",
                         ]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Por favor, ingrese el tiempo de trabajo!",
-                          },
-                        ]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el tiempo de trabajo!",
+                                },
+                              ]
+                            : []
+                        }
                       >
                         <InputNumber
                           min={0}
@@ -2031,12 +2282,17 @@ const FormProducto = (props) => {
                       <Form.Item
                         label="Tiempo de Oreo"
                         name={["atributos_js", "especifico", "pa_tiempo_oreo"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Por favor, ingrese el tiempo de oreo!",
-                          },
-                        ]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el tiempo de oreo!",
+                                },
+                              ]
+                            : []
+                        }
                       >
                         <InputNumber
                           min={0}
@@ -2053,12 +2309,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Presentación"
                     name={["atributos_js", "especifico", "pa_presentacion"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese la presentacion!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, ingrese la presentacion!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <Input
                       suffix="gal"
@@ -2072,12 +2332,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Color"
                     name={["atributos_js", "especifico", "pa_color_pegamento"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione el color!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione el color!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <SelectOpciones
                       tipo="color de pegamento"
@@ -2090,12 +2354,16 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Olor"
                     name={["atributos_js", "especifico", "pa_olor_pegamento"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione el tipo de olor!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione el tipo de olor!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <SelectOpciones
                       tipo="olor"
@@ -2108,12 +2376,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Adherencia"
                     name={["atributos_js", "especifico", "pa_adherencia"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione el tipo adherencia!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el tipo adherencia!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <SelectOpciones
                       tipo="adherencia"
@@ -2131,25 +2404,34 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Proceso de Fabricación"
                     name={["atributos_js", "especifico", "pe_presentacion"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, ingrese el proceso de fabricación!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el proceso de fabricación!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <Input readOnly={true} defaultValue="MONOCOCCIÓN" />
                   </Form.Item>
                   <Form.Item
                     label="Rectificado"
                     name={["atributos_js", "especifico", "pe_rectificado"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, seleccione rectificado o no!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione rectificado o no!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     {location.state.permiso ? (
                       <Radio.Group
@@ -2172,13 +2454,17 @@ const FormProducto = (props) => {
                   <Form.Item
                     label="Absorción de Agua"
                     name={["atributos_js", "especifico", "pe_absorcion_agua"]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, ingrese el valor de absorción de agua!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el valor de absorción de agua!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <Input readOnly={true} defaultValue="<0.5%" />
                   </Form.Item>
@@ -2191,13 +2477,17 @@ const FormProducto = (props) => {
                       "especifico",
                       "pa_resistencia_deslizamiento",
                     ]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, seleccione la resistencia al deslizamiento!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione la resistencia al deslizamiento!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <SelectOpciones
                       tipo="resistencia al deslizamiento"
@@ -2214,13 +2504,17 @@ const FormProducto = (props) => {
                       "especifico",
                       "pa_resistencia_abrasion",
                     ]}
-                    rules={[
-                      {
-                        required: true,
-                        message:
-                          "Por favor, seleccione la resistencia a la abrasión!",
-                      },
-                    ]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione la resistencia a la abrasión!",
+                            },
+                          ]
+                        : []
+                    }
                   >
                     <SelectOpciones
                       tipo="resistencia a la abrasión"
@@ -2240,12 +2534,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Usos"
                   name={["atributos_js", "general", "usos"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione los usos!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione los usos!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <Select
@@ -2283,12 +2581,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Método ABC"
                   name={["atributos_js", "general", "metodo_abc"]}
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el método ABC!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese el método ABC!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <Radio.Group
@@ -2314,12 +2616,17 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Tipo"
                   name="tipo"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione el tipo de producto!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, seleccione el tipo de producto!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <Radio.Group
@@ -2344,12 +2651,17 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Tipo de Inventario"
                   name="tipo_inventario"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione el tipo de inventario!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, seleccione el tipo de inventario!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <Radio.Group
@@ -2378,12 +2690,17 @@ const FormProducto = (props) => {
                       ? "fk_unidad_medida_id"
                       : "unidad_medida"
                   }
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione una unidad de medida!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, seleccione una unidad de medida!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -2410,12 +2727,17 @@ const FormProducto = (props) => {
                       ? "fk_unidad_venta_id"
                       : "unidad_venta"
                   }
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione una unidad de venta!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, seleccione una unidad de venta!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   {location.state.permiso ? (
                     <SelectOpciones
@@ -2438,12 +2760,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Costo ($)"
                   name="costo"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el costo!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese el costo!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
@@ -2458,12 +2784,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Precio sin IVA ($)"
                   name="precio"
-                  rules={ location.state.permiso ? [
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el precio!",
-                    },
-                  ] : []}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese el precio!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
@@ -2498,12 +2828,16 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="IVA"
                   name="iva"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el IVA!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese el IVA!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
@@ -2517,12 +2851,17 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Descuento Especialista"
                   name="limite_descuento1"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el limite de descuento 1!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, ingrese el limite de descuento 1!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
@@ -2534,12 +2873,17 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Descuento Líder Retail"
                   name="limite_descuento2"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el limite de descuento 2!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, ingrese el limite de descuento 2!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
@@ -2551,12 +2895,17 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Descuento Líder Proyectos"
                   name="limite_descuento3"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el limite de descuento 3!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, ingrese el limite de descuento 3!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
@@ -2568,12 +2917,17 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Descuento Eventos"
                   name="limite_descuento4"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el limite de descuento 4!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, ingrese el limite de descuento 4!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
@@ -2585,12 +2939,17 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Límite Descuento 5"
                   name="limite_descuento5"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el limite de descuento 5!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, ingrese el limite de descuento 5!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
@@ -2602,13 +2961,17 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Dimensión de Unidad de Venta"
                   name="dimension_unidad_venta"
-                  rules={[
-                    {
-                      required: true,
-                      message:
-                        "Por favor, ingrese la dimensión de unidad de venta!",
-                    },
-                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, ingrese la dimensión de unidad de venta!",
+                          },
+                        ]
+                      : []
+                  }
                 >
                   <InputNumber
                     min={0}
