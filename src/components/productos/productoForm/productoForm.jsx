@@ -16,8 +16,16 @@ import {
 import { ColorService } from "../../../services/colorService";
 import { GrupoService } from "../../../services/grupoService";
 import { LineaService } from "../../../services/lineaService";
-import { usosCartuchos } from "../../../utils/usos";
+import {
+  usosCartuchos,
+  usosMallasCeramica,
+  usosMallasPisosFlotantes,
+  usosPegamentos,
+  usosSubcapa,
+  usosTermostatos,
+} from "../../../utils/usos";
 import { Option } from "antd/lib/mentions";
+import { tiposFilamento } from "../../../utils/tipoFilamento";
 const { TextArea } = Input;
 const { Panel } = Collapse;
 
@@ -63,7 +71,57 @@ const FormProducto = (props) => {
     limite_descuento5: 0,
   };
 
-  var opcionesList = usosCartuchos.map(function (opcion) {
+  var tiposFilamentoList = tiposFilamento.map(function (opcion) {
+    return (
+      <Option key={opcion.id} value={opcion.id}>
+        {opcion.nombre.toUpperCase()}
+      </Option>
+    );
+  });
+
+  var cartuchosList = usosCartuchos.map(function (opcion) {
+    return (
+      <Option key={opcion.id} value={opcion.id}>
+        {opcion.nombre.toUpperCase()}
+      </Option>
+    );
+  });
+
+  var mallasCeramicaList = usosMallasCeramica.map(function (opcion) {
+    return (
+      <Option key={opcion.id} value={opcion.id}>
+        {opcion.nombre.toUpperCase()}
+      </Option>
+    );
+  });
+
+  var mallasPisosFlotantesList = usosMallasPisosFlotantes.map(function (
+    opcion
+  ) {
+    return (
+      <Option key={opcion.id} value={opcion.id}>
+        {opcion.nombre.toUpperCase()}
+      </Option>
+    );
+  });
+
+  var pegamentosList = usosPegamentos.map(function (opcion) {
+    return (
+      <Option key={opcion.id} value={opcion.id}>
+        {opcion.nombre.toUpperCase()}
+      </Option>
+    );
+  });
+
+  var subcapaList = usosSubcapa.map(function (opcion) {
+    return (
+      <Option key={opcion.id} value={opcion.id}>
+        {opcion.nombre.toUpperCase()}
+      </Option>
+    );
+  });
+
+  var termostatosList = usosTermostatos.map(function (opcion) {
     return (
       <Option key={opcion.id} value={opcion.id}>
         {opcion.nombre.toUpperCase()}
@@ -92,7 +150,6 @@ const FormProducto = (props) => {
         setSelectedMarcaId(editProducto.fk_marca_id);
         setSelectedLineaId(editProducto.fk_linea_id);
         setSelectedGrupoId(editProducto.fk_grupo_id);
-
         setId(editProducto.id);
       }
     } else {
@@ -414,58 +471,6 @@ const FormProducto = (props) => {
             <Row>
               <Col span={12}>
                 <Form.Item
-                  label="Código Interno"
-                  name="codigo_interno"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el código interno!",
-                    },
-                  ]}
-                >
-                  <Input className="input-type" readOnly={true} />
-                </Form.Item>
-                <Form.Item
-                  label="Nombre"
-                  name="nombre"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el nombre!",
-                    },
-                  ]}
-                >
-                  <Input className="input-type" readOnly={true} />
-                </Form.Item>
-                <Form.Item
-                  label="Procedencia"
-                  name="procedencia"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la procedencia!",
-                    },
-                  ]}
-                >
-                  {location.state.permiso ? (
-                    <SelectOpciones
-                      tipo="procedencia"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  ) : (
-                    <Input
-                      className="input-type"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  )}
-                </Form.Item>
-
-                <Form.Item
                   label="Línea"
                   name={location.state.permiso ? "fk_linea_id" : "linea"}
                   rules={[
@@ -492,8 +497,6 @@ const FormProducto = (props) => {
                     />
                   )}
                 </Form.Item>
-              </Col>
-              <Col span={12}>
                 <Form.Item
                   label="Marca"
                   name={location.state.permiso ? "fk_marca_id" : "marca"}
@@ -511,6 +514,93 @@ const FormProducto = (props) => {
                         location.state ? !location.state.permiso : false
                       }
                       filter={selectedLineaId}
+                      setShow={setShow}
+                    />
+                  ) : (
+                    <Input
+                      className="input-type"
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  )}
+                </Form.Item>
+                <Form.Item
+                  label="Grupo"
+                  name={location.state.permiso ? "fk_grupo_id" : "grupo"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor, seleccione un grupo!",
+                    },
+                  ]}
+                >
+                  {location.state.permiso ? (
+                    <SelectOpciones
+                      tipo="grupo"
+                      filter={selectedMarcaId}
+                      filter2={selectedLineaId}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                      setShow={setShow}
+                    />
+                  ) : (
+                    <Input
+                      className="input-type"
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  )}
+                </Form.Item>
+
+                <Form.Item
+                  label="Modelo"
+                  name={location.state.permiso ? "fk_color_id" : "color"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor, seleccione un color!",
+                    },
+                  ]}
+                >
+                  {location.state.permiso ? (
+                    <SelectOpciones
+                      tipo="color"
+                      filter={selectedGrupoId}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                      setShow={setShow}
+                    />
+                  ) : (
+                    <Input
+                      className="input-type"
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  label="Procedencia"
+                  name="procedencia"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor, ingrese la procedencia!",
+                    },
+                  ]}
+                >
+                  {location.state.permiso ? (
+                    <SelectOpciones
+                      tipo="procedencia"
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
                       setShow={setShow}
                     />
                   ) : (
@@ -555,62 +645,28 @@ const FormProducto = (props) => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Grupo"
-                  name={location.state.permiso ? "fk_grupo_id" : "grupo"}
+                  label="Código Interno"
+                  name="codigo_interno"
                   rules={[
                     {
                       required: true,
-                      message: "Por favor, seleccione un grupo!",
+                      message: "Por favor, ingrese el código interno!",
                     },
                   ]}
                 >
-                  {location.state.permiso ? (
-                    <SelectOpciones
-                      tipo="grupo"
-                      filter={selectedMarcaId}
-                      filter2={selectedLineaId}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  ) : (
-                    <Input
-                      className="input-type"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  )}
+                  <Input className="input-type" readOnly={true} />
                 </Form.Item>
-
                 <Form.Item
-                  label="Color"
-                  name={location.state.permiso ? "fk_color_id" : "color"}
+                  label="Nombre"
+                  name="nombre"
                   rules={[
                     {
                       required: true,
-                      message: "Por favor, seleccione un color!",
+                      message: "Por favor, ingrese el nombre!",
                     },
                   ]}
                 >
-                  {location.state.permiso ? (
-                    <SelectOpciones
-                      tipo="color"
-                      filter={selectedGrupoId}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  ) : (
-                    <Input
-                      className="input-type"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  )}
+                  <Input className="input-type" readOnly={true} />
                 </Form.Item>
 
                 <Form.Item
@@ -1323,12 +1379,12 @@ const FormProducto = (props) => {
               <Row>
                 <Col span={12}>
                   <Form.Item
-                    label="Uso"
+                    label="Uso(s)"
                     name={["atributos_js", "especifico", "cs_uso"]}
                     rules={[
                       {
                         required: true,
-                        message: "Por favor, ingrese el uso!",
+                        message: "Por favor, ingrese el/los uso(s)!",
                       },
                     ]}
                   >
@@ -1531,25 +1587,29 @@ const FormProducto = (props) => {
                   </Form.Item>
 
                   <Form.Item
-                    label="Tipo de Filamento"
+                    label="Tipo(s) de Filamento"
                     name={["atributos_js", "especifico", "cs_tipo_filamento"]}
                     rules={[
                       {
                         required: true,
-                        message: "Por favor, seleccione el tipo de filamento!",
+                        message:
+                          "Por favor, seleccione el tipo(s) de filamento!",
                       },
                     ]}
                   >
                     {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="tipo de filamento"
+                      <Select
+                        mode="multiple"
+                        allowClear
+                        placeholder="Seleccione tipo de filamento"
                         readOnly={
                           location.state ? !location.state.permiso : false
                         }
-                      />
+                      >
+                        {tiposFilamentoList}
+                      </Select>
                     ) : (
-                      <Input
-                        className="input-type"
+                      <TextArea
                         readOnly={
                           location.state ? !location.state.permiso : false
                         }
@@ -2196,7 +2256,19 @@ const FormProducto = (props) => {
                         location.state ? !location.state.permiso : false
                       }
                     >
-                      {opcionesList}
+                      {infoTecnicaLinea === "60d4c04a145bfab5e81b4626"
+                        ? subcapaList
+                        : infoTecnicaGrupo === "60d617738d422eca134f6685"
+                        ? termostatosList
+                        : infoTecnicaGrupo === "60d61771a442edca131848b6"
+                        ? cartuchosList
+                        : infoTecnicaGrupo === "60d61771f30664ca137cf63f"
+                        ? pegamentosList
+                        : infoTecnicaGrupo === "60d617724ce2a1ca13e92920"
+                        ? mallasCeramicaList
+                        : infoTecnicaGrupo === "60d617724cbea5ca130847e1"
+                        ? mallasPisosFlotantesList
+                        : null}
                     </Select>
                   ) : (
                     <TextArea
@@ -2384,14 +2456,14 @@ const FormProducto = (props) => {
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Precio ($)"
+                  label="Precio sin IVA ($)"
                   name="precio"
-                  rules={[
+                  rules={ location.state.permiso ? [
                     {
                       required: true,
                       message: "Por favor, ingrese el precio!",
                     },
-                  ]}
+                  ] : []}
                 >
                   <InputNumber
                     min={0}
@@ -2404,6 +2476,25 @@ const FormProducto = (props) => {
                     // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                   />
                 </Form.Item>
+
+                {!location.state.permiso ? (
+                  <Form.Item label="Precio con IVA ($)">
+                    <InputNumber
+                      value={form.getFieldValue("precio") * 1.12}
+                      min={0}
+                      precision={2}
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                      // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                      // formatter={(value) =>
+                      //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      // }
+                      // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                    />
+                  </Form.Item>
+                ) : null}
+
                 <Form.Item
                   label="IVA"
                   name="iva"
