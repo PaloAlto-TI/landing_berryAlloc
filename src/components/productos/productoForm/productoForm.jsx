@@ -26,6 +26,7 @@ import {
 } from "../../../utils/usos";
 import { Option } from "antd/lib/mentions";
 import { tiposFilamento } from "../../../utils/tipoFilamento";
+import { MarcaService } from "../../../services/marcaService";
 const { TextArea } = Input;
 const { Panel } = Collapse;
 
@@ -279,6 +280,16 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
 
+      if (selectedLineaId === "60d4c04b894c18b5e810e025") {
+        form.setFieldsValue({ nombre: undefined });
+        const marcaService = new MarcaService();
+        const marca = await marcaService.getOne(changedValues[formFieldName]);
+        form.setFieldsValue({
+          codigo_interno:
+            form.getFieldValue("codigo_interno").substring(0, 2) + marca.pseudo,
+        });
+      }
+
       form.setFieldsValue({ fk_color_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
       form.setFieldsValue({ fk_proveedor_id: undefined });
@@ -304,6 +315,7 @@ const FormProducto = (props) => {
       setSelectedMarcaId(null);
       setSelectedGrupoId(null);
       form.setFieldsValue({ fk_color_id: undefined });
+      form.setFieldsValue({ nombre: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
       form.setFieldsValue({ fk_marca_id: undefined });
       form.setFieldsValue({ fk_proveedor_id: undefined });
@@ -315,7 +327,10 @@ const FormProducto = (props) => {
       // if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
       //   console.log("si entra!!!!!")
       form.setFieldsValue({ codigo_interno: linea.pseudo });
-      form.setFieldsValue({ nombre: linea.pseudo });
+      if (changedValues[formFieldName] === "60d4c04b894c18b5e810e025") {
+      } else {
+        form.setFieldsValue({ nombre: linea.pseudo });
+      }
 
       if (changedValues[formFieldName] === "60d4c0476e8514b5e8c66fd5") {
         form.setFieldsValue({
@@ -360,20 +375,37 @@ const FormProducto = (props) => {
       const color2 = await colorService.getOne(
         form.getFieldValue("fk_color_id")
       );
-      form.setFieldsValue({
-        codigo_interno:
-          form.getFieldValue("codigo_interno").split("-")[0] +
-          "-" +
-          color2.codigo,
-      });
-      form.setFieldsValue({
-        nombre:
-          form.getFieldValue("nombre").split(" ")[0] +
-          " " +
-          form.getFieldValue("nombre").split(" ")[1] +
-          " " +
-          color2.nombre,
-      });
+
+      if (selectedLineaId !== "60d4c04b894c18b5e810e025") {
+        form.setFieldsValue({
+          codigo_interno:
+            form.getFieldValue("codigo_interno").split("-")[0] +
+            "-" +
+            color2.codigo,
+        });
+
+        form.setFieldsValue({
+          nombre:
+            form.getFieldValue("nombre").split(" ")[0] +
+            " " +
+            form.getFieldValue("nombre").split(" ")[1] +
+            " " +
+            color2.nombre,
+        });
+      } else {
+        form.setFieldsValue({
+          codigo_interno:
+            form.getFieldValue("codigo_interno").substring(0, 6) +
+            color2.pseudo +
+            "-" +
+            color2.codigo,
+        });
+
+        form.setFieldsValue({
+          nombre:
+            form.getFieldValue("nombre").split(" ")[0] + " " + color2.nombre,
+        });
+      }
     }
 
     if (formFieldName === "fk_grupo_id") {
@@ -395,13 +427,33 @@ const FormProducto = (props) => {
       const grupo = await grupoService.getOne(changedValues[formFieldName]);
       // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
 
-      form.setFieldsValue({
-        codigo_interno:
-          form.getFieldValue("codigo_interno").substring(0, 2) + grupo.pseudo,
-      });
-      form.setFieldsValue({
-        nombre: form.getFieldValue("nombre").split(" ")[0] + " " + grupo.pseudo,
-      });
+      if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
+        form.setFieldsValue({
+          codigo_interno:
+            form.getFieldValue("codigo_interno").substring(0, 3) + grupo.pseudo,
+        });
+      } else if (selectedLineaId === "60d4c04b894c18b5e810e025") {
+        form.setFieldsValue({
+          codigo_interno:
+            form.getFieldValue("codigo_interno").substring(0, 4) + grupo.pseudo,
+        });
+      } else {
+        form.setFieldsValue({
+          codigo_interno:
+            form.getFieldValue("codigo_interno").substring(0, 2) + grupo.pseudo,
+        });
+      }
+
+      if (selectedLineaId !== "60d4c04b894c18b5e810e025") {
+        form.setFieldsValue({
+          nombre:
+            form.getFieldValue("nombre").split(" ")[0] + " " + grupo.pseudo,
+        });
+      } else {
+        form.setFieldsValue({
+          nombre: grupo.nombre + " ",
+        });
+      }
 
       // }
     }
@@ -724,7 +776,7 @@ const FormProducto = (props) => {
               </Col>
             </Row>
           </Panel>
-          <Panel
+          { selectedLineaId  !== "60d4c04b894c18b5e810e025" && <Panel
             className="tecnica"
             header="INFORMACIÓN TÉCNICA"
             key="4"
@@ -2574,6 +2626,7 @@ const FormProducto = (props) => {
               </Form.Item>
             ) : null}
           </Panel>
+          }
           <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
             <Row>
               <Col span={12}>
@@ -2881,8 +2934,7 @@ const FormProducto = (props) => {
                       ? [
                           {
                             required: true,
-                            message:
-                              "Por favor, ingrese el descuento!",
+                            message: "Por favor, ingrese el descuento!",
                           },
                         ]
                       : []
@@ -2903,8 +2955,7 @@ const FormProducto = (props) => {
                       ? [
                           {
                             required: true,
-                            message:
-                              "Por favor, ingrese el descuento!",
+                            message: "Por favor, ingrese el descuento!",
                           },
                         ]
                       : []
@@ -2925,8 +2976,7 @@ const FormProducto = (props) => {
                       ? [
                           {
                             required: true,
-                            message:
-                              "Por favor, ingrese el descuento!",
+                            message: "Por favor, ingrese el descuento!",
                           },
                         ]
                       : []
@@ -2947,8 +2997,7 @@ const FormProducto = (props) => {
                       ? [
                           {
                             required: true,
-                            message:
-                              "Por favor, ingrese el descuento!",
+                            message: "Por favor, ingrese el descuento!",
                           },
                         ]
                       : []
@@ -2976,7 +3025,6 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-
                   <InputNumber
                     min={0}
                     readOnly={location.state ? !location.state.permiso : false}
