@@ -22,7 +22,7 @@ const ProductoList = () => {
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
-
+  const [rowState, setRowState] = useState(true)
   console.log("path");
   const [filteredInfo, setFilteredInfo] = useState([]);
   // const size = useWindowSize();
@@ -112,7 +112,7 @@ const ProductoList = () => {
       dataIndex: "",
       key: "x",
       render: (_, record) => (
-        <CrudButton record={record} softDelete={softDeleteProducto} />
+        <CrudButton record={record} softDelete={softDeleteProducto} setRowState={setRowState} />
       ),
     },
   ];
@@ -174,9 +174,11 @@ const ProductoList = () => {
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
-                if (event.clientX < window.innerWidth*0.80){
+                console.log(event);
+                if (event.clientX < window.innerWidth*0.80 && rowState){
                 // record["permiso"] = false;
                 // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                  
                   ver(record)
                 }
               },

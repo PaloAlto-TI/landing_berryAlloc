@@ -8,7 +8,7 @@ import { DeleteFilled, EditFilled} from "@ant-design/icons";
 const CrudButton = (props) => {
 
 
-  const { record, softDelete } = props;
+  const { record, softDelete, setRowState } = props;
   let { path } = useRouteMatch();
 
   console.log("path2", path);
@@ -17,15 +17,18 @@ const CrudButton = (props) => {
   // const { softDeleteProducto, setPermiso } = useContext(ProductoContext);
   
   const showModal = () => {
+    setRowState(false);
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
+    setRowState(true);
     softDelete(record);
     setIsModalVisible(false);
   };
 
   const handleCancel = () => {
+    setRowState(true);
     setIsModalVisible(false);
   };
 
