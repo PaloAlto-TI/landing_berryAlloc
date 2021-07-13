@@ -10,7 +10,7 @@ import { Button, message } from 'antd';
 //import  { UsuarioService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/login/src/services/usuarioService";
 import { UsuarioService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/src/services/usuarioService";
 import { SesionService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/src/services/sesionService";
-
+import { useState } from 'react';
 
 const Login = () => {
   let history = useHistory();
@@ -22,7 +22,7 @@ const Login = () => {
   const ResponseGoogle = async (response) => {
     // console.log(response);
     const usuarioService = new UsuarioService();
-
+    const sesionService = new SesionService();
 
 
   
@@ -31,18 +31,12 @@ const Login = () => {
     let res2;
 
     const res1 = (data) => { res2 = data; }
-    
-    console.log("google: "+response);
-
-
+    console.log(response);
     await usuarioService.getAll().then(data => res1(data));
-
- 
 
     let usuarioCheck = res2.find((u) => u.correo === response.profileObj.email);
 
-    console.log("res2: "+res2);
-
+    console.log(usuarioCheck);
     if (usuarioCheck && usuarioCheck.active === true) {
       localStorage.setItem('user', JSON.stringify(usuarioCheck));
       console.log(response);
