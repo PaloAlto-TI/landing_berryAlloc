@@ -14,3 +14,7 @@
     color: white !important;
     background-color: black;
 }
+
+.ant-space-align-center {
+    margin-bottom: -3.5vh;
+}

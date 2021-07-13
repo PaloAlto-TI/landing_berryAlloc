@@ -1,5 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { message, Row, Col, Divider, Spin, Collapse, Select } from "antd";
+import {
+  message,
+  Row,
+  Col,
+  Divider,
+  Spin,
+  Collapse,
+  Select,
+  Space,
+} from "antd";
 import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { ProductoContext } from "../../../contexts/productoContext";
@@ -24,11 +33,11 @@ import {
   usosSubcapa,
   usosTermostatos,
 } from "../../../utils/usos";
-import { Option } from "antd/lib/mentions";
 import { tiposFilamento } from "../../../utils/tipoFilamento";
 import { MarcaService } from "../../../services/marcaService";
 const { TextArea } = Input;
 const { Panel } = Collapse;
+const { Option } = Select;
 
 const FormProducto = (props) => {
   // console.log(props);
@@ -53,6 +62,8 @@ const FormProducto = (props) => {
   const [usoCesped, setUsoCesped] = useState(undefined);
   const [rangoAlturaHebra, setRangoAlturaHebra] = useState(undefined);
   const [metodoABC, setMetodoABC] = useState(undefined);
+
+  const [unidadMedida, setUnidadMedida] = useState("");
 
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
@@ -151,6 +162,7 @@ const FormProducto = (props) => {
         setSelectedMarcaId(editProducto.fk_marca_id);
         setSelectedLineaId(editProducto.fk_linea_id);
         setSelectedGrupoId(editProducto.fk_grupo_id);
+        setUnidadMedida(editProducto.fk_unidad_medida_id);
         setId(editProducto.id);
       }
     } else {
@@ -276,6 +288,10 @@ const FormProducto = (props) => {
     // form.setFieldsValue({'atributos_js.general.capa_desgaste' : "cambio"})
 
     const formFieldName = Object.keys(changedValues)[0];
+
+    if (formFieldName === "fk_unidad_medida_id") {
+      setUnidadMedida(changedValues[formFieldName]);
+    }
 
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
@@ -776,74 +792,33 @@ const FormProducto = (props) => {
               </Col>
             </Row>
           </Panel>
-          { selectedLineaId  !== "60d4c04b894c18b5e810e025" && <Panel
-            className="tecnica"
-            header="INFORMACIÓN TÉCNICA"
-            key="4"
-            extra={genExtra()}
-          >
-            <Row>
-              <Col span={12}>
-                <Form.Item
-                  label={
-                    infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                    infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
-                    infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                    infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                    infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
-                    infoTecnicaLinea !== "60d4c04b894c18b5e810e025"
-                      ? "Garantía Residencial (años)"
-                      : "Garantía (años)"
-                  }
-                  name={["atributos_js", "general", "garantia1"]}
-                  rules={
-                    location.state.permiso
-                      ? [
-                          {
-                            required: true,
-                            message: "Por favor, ingrese la garantía!",
-                          },
-                        ]
-                      : []
-                  }
-                >
-                  {location.state.permiso ? (
-                    <SelectOpciones
-                      tipo="garantía"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  ) : (
-                    <Input
-                      className="input-type"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  )}
-                </Form.Item>
-
-                {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
-                infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
-                infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
-                infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
-                infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
+          {selectedLineaId !== "60d4c04b894c18b5e810e025" && (
+            <Panel
+              className="tecnica"
+              header="INFORMACIÓN TÉCNICA"
+              key="4"
+              extra={genExtra()}
+            >
+              <Row>
+                <Col span={12}>
                   <Form.Item
-                    label="Garantía Comercial (años)"
-                    name={["atributos_js", "general", "garantia2"]}
+                    label={
+                      infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                      infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
+                      infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                      infoTecnicaLinea !== "60d4c04b894c18b5e810e025"
+                        ? "Garantía Residencial (años)"
+                        : "Garantía (años)"
+                    }
+                    name={["atributos_js", "general", "garantia1"]}
                     rules={
                       location.state.permiso
                         ? [
                             {
                               required: true,
-                              message:
-                                "Por favor, ingrese el tiempo de garantía!",
+                              message: "Por favor, ingrese la garantía!",
                             },
                           ]
                         : []
@@ -866,151 +841,1693 @@ const FormProducto = (props) => {
                       />
                     )}
                   </Form.Item>
-                ) : null}
 
-                {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
-                  <Form.Item
-                    label="Garantía Industrial (años)"
-                    name={["atributos_js", "general", "garantia3"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el tiempo de garantía!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="garantía"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                ) : null}
-
-                <Form.Item
-                  label="Formato"
-                  name={["atributos_js", "general", "formato"]}
-                  rules={
-                    location.state.permiso
-                      ? [
-                          {
-                            required: true,
-                            message: "Por favor, seleccione el formato!",
-                          },
-                        ]
-                      : []
-                  }
-                >
-                  {location.state.permiso ? (
-                    <SelectOpciones
-                      tipo="formato"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  ) : (
-                    <Input
-                      className="input-type"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  )}
-                </Form.Item>
-                {infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
-                  <Form.Item
-                    label="Capa de Desgaste"
-                    name={["atributos_js", "general", "capa_desgaste"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese la capa de desgaste!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Input
-                      // defaultValue={capaDesgaste}
-                      className="input-type"
-                      readOnly={true}
-                    />
-                  </Form.Item>
-                ) : null}
-              </Col>
-              <Col span={12}>
-                {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
-                  <Form.Item
-                    label="Composición"
-                    name={["atributos_js", "general", "composicion"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione la composicion!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Radio.Group
-                        disabled={
-                          location.state ? !location.state.permiso : false
-                        }
-                      >
-                        <Radio value={"HOMOGÉNEO"}>HOMOGÉNEO</Radio>
-                        <Radio value={"HETEROGÉNEO"}>HETEROGÉNEO</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                ) : null}
-
-                {infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
-                  <div>
+                  {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                  infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
+                  infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
+                  infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
+                  infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                  infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                  infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                  infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
+                  infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
                     <Form.Item
-                      label="Resistencia al Agua"
-                      name={["atributos_js", "general", "resitencia_agua"]}
+                      label="Garantía Comercial (años)"
+                      name={["atributos_js", "general", "garantia2"]}
                       rules={
                         location.state.permiso
                           ? [
                               {
                                 required: true,
                                 message:
-                                  "Por favor, si es resistente al agua o no!",
+                                  "Por favor, ingrese el tiempo de garantía!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="garantía"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  ) : null}
+
+                  {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
+                    <Form.Item
+                      label="Garantía Industrial (años)"
+                      name={["atributos_js", "general", "garantia3"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el tiempo de garantía!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="garantía"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  ) : null}
+
+                  <Form.Item
+                    label="Formato"
+                    name={["atributos_js", "general", "formato"]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione el formato!",
+                            },
+                          ]
+                        : []
+                    }
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="formato"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                  {infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                  infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                  infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+                    <Form.Item
+                      label="Capa de Desgaste"
+                      name={["atributos_js", "general", "capa_desgaste"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese la capa de desgaste!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <Input
+                        // defaultValue={capaDesgaste}
+                        className="input-type"
+                        readOnly={true}
+                      />
+                    </Form.Item>
+                  ) : null}
+                </Col>
+                <Col span={12}>
+                  {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                  infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                  infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
+                    <Form.Item
+                      label="Composición"
+                      name={["atributos_js", "general", "composicion"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione la composicion!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <Radio.Group
+                          disabled={
+                            location.state ? !location.state.permiso : false
+                          }
+                        >
+                          <Radio value={"HOMOGÉNEO"}>HOMOGÉNEO</Radio>
+                          <Radio value={"HETEROGÉNEO"}>HETEROGÉNEO</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  ) : null}
+
+                  {infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                  infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                  infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
+                    <div>
+                      <Form.Item
+                        label="Resistencia al Agua"
+                        name={["atributos_js", "general", "resitencia_agua"]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, si es resistente al agua o no!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {location.state.permiso ? (
+                          <Radio.Group
+                            disabled={
+                              location.state ? !location.state.permiso : false
+                            }
+                          >
+                            <Radio value={"SI"}>SI</Radio>
+                            <Radio value={"NO"}>NO</Radio>
+                          </Radio.Group>
+                        ) : (
+                          <Input
+                            className="input-type"
+                            readOnly={
+                              location.state ? !location.state.permiso : false
+                            }
+                          />
+                        )}
+                      </Form.Item>
+                      <Form.Item
+                        label="Tono"
+                        name={["atributos_js", "general", "tono"]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message: "Por favor, seleccione el tono!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {location.state.permiso ? (
+                          <SelectOpciones
+                            tipo="tono"
+                            readOnly={
+                              location.state ? !location.state.permiso : false
+                            }
+                          />
+                        ) : (
+                          <Input
+                            className="input-type"
+                            readOnly={
+                              location.state ? !location.state.permiso : false
+                            }
+                          />
+                        )}
+                      </Form.Item>
+                      <Form.Item
+                        label="Textura"
+                        name={["atributos_js", "general", "textura"]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message: "Por favor, seleccione la textura!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {location.state.permiso ? (
+                          <Radio.Group
+                            disabled={
+                              location.state ? !location.state.permiso : false
+                            }
+                          >
+                            <Radio value={"MADERADO"}>MADERADO</Radio>
+                            <Radio value={"NO MADERADO"}>NO MADERADO</Radio>
+                          </Radio.Group>
+                        ) : (
+                          <Input
+                            className="input-type"
+                            readOnly={
+                              location.state ? !location.state.permiso : false
+                            }
+                          />
+                        )}
+                      </Form.Item>
+                    </div>
+                  ) : null}
+                  {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                  infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
+                  infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                  infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                  infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                  infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
+                    <Form.Item
+                      label="Clase Residencial"
+                      name={["atributos_js", "general", "clase_residencial"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione la clase residencial!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="clase residencial"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  ) : null}
+
+                  {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                  infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
+                  infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
+                  infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
+                  infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                  infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                  infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                  infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
+                  infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
+                    <Form.Item
+                      label="Clase Comercial"
+                      name={["atributos_js", "general", "clase_comercial"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione la clase comercial!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="clase comercial"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  ) : null}
+
+                  {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
+                    <Form.Item
+                      label="Clase Industrial"
+                      name={["atributos_js", "general", "clase_industrial"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione la clase industrial!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="clase industrial"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  ) : null}
+
+                  {infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
+                    <div>
+                      <Form.Item
+                        label="Largo"
+                        name={["atributos_js", "general", "largo"]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese la medida de largo!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        <InputNumber
+                          min={0}
+                          precision={0}
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          formatter={(value) => `${value} mm`}
+                          parser={(value) => value.replace(" mm", "")}
+                        />
+                      </Form.Item>
+                      <Form.Item
+                        label="Ancho"
+                        name={["atributos_js", "general", "ancho"]}
+                        rules={
+                          location.state.permiso
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese la medida de ancho!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        <InputNumber
+                          min={0}
+                          precision={0}
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          formatter={(value) => `${value} mm`}
+                          parser={(value) => value.replace(" mm", "")}
+                        />
+                      </Form.Item>
+                    </div>
+                  ) : null}
+
+                  {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                    infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68") ||
+                  infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
+                    <Form.Item
+                      label="Espesor"
+                      name={["atributos_js", "general", "espesor"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese la medida de espesor!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        formatter={(value) => `${value} mm`}
+                        parser={(value) => value.replace(" mm", "")}
+                      />
+                    </Form.Item>
+                  ) : null}
+                </Col>
+              </Row>
+              <Divider />
+              {infoTecnicaLinea !== "60d4c04663852fb5e8ad40d7" &&
+              infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+              infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" ? (
+                <Form.Item
+                  label="Densidad"
+                  name={["atributos_js", "general", "densidad"]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, ingrese la densidad!",
+                          },
+                        ]
+                      : []
+                  }
+                >
+                  <InputNumber
+                    min={0}
+                    precision={2}
+                    readOnly={location.state ? !location.state.permiso : false}
+                    formatter={(value) => `${value} kg/m3`}
+                    parser={(value) => value.replace(" kg/m3", "")}
+                  />
+                </Form.Item>
+              ) : null}
+              {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+              infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+              infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+              infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+              infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+              infoTecnicaLinea === "60d4c04880c445b5e8b87047" ? (
+                <div>
+                  <Form.Item
+                    label="Core"
+                    name={["atributos_js", "general", "core"]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione el core!",
+                            },
+                          ]
+                        : []
+                    }
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="core"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+
+                  <Form.Item
+                    label="Terminado"
+                    name={["atributos_js", "general", "terminado"]}
+                    rules={
+                      location.state.permiso
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione el terminado!",
+                            },
+                          ]
+                        : []
+                    }
+                  >
+                    {location.state.permiso ? (
+                      <SelectOpciones
+                        tipo="terminado"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    ) : (
+                      <Input
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    )}
+                  </Form.Item>
+                </div>
+              ) : null}
+
+              {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+              infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+              infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+              infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Biseles"
+                      name={["atributos_js", "especifico", "pl_biseles"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el número de biseles!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        // formatter={(value) => `${value} mm`}
+                        // parser={(value) => value.replace(" mm", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Resistencia a la Abrasión"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "pl_resistencia_abrasion",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione la resistencia a la abrasión!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="resistencia a la abrasion"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Sistema de Click"
+                      name={["atributos_js", "especifico", "pl_sistema_click"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el sistema de click!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="sistema de click"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Generación de Click "
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "pl_generacion_click",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione si la generación de click!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <Radio.Group
+                          onChange={onChangeGeneracionClick}
+                          value={generacionClick}
+                          disabled={
+                            location.state ? !location.state.permiso : false
+                          }
+                        >
+                          <Radio value={"3G"}>3G</Radio>
+                          <Radio value={"5G"}>5G</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Subcapa Adherida"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "pl_subcapa_adherida",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione si tiene subcapa adherida!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <Radio.Group
+                          onChange={onChangeTieneSubcapaAdherida}
+                          value={tieneSubcapaAdherida}
+                          disabled={
+                            location.state ? !location.state.permiso : false
+                          }
+                        >
+                          <Radio value={"SI"}>SI</Radio>
+                          <Radio value={"NO"}>NO</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}></Col>
+                </Row>
+              ) : infoTecnicaLinea === "60d4c0477f7255b5e8cca2b7" ? (
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Uso"
+                      name={["atributos_js", "especifico", "cs_uso"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el/los uso(s)!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <Radio.Group
+                          onChange={onChangeUsoCesped}
+                          value={usoCesped}
+                          disabled={
+                            location.state ? !location.state.permiso : false
+                          }
+                        >
+                          <Radio value={"DECORATIVO"}>DECORATIVO</Radio>
+                          <Radio value={"DEPORTIVO"}>DEPORTIVO</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Aplicación"
+                      name={["atributos_js", "especifico", "cs_aplicacion"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese la aplicación!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <Checkbox.Group options={plainOptions} />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Rango de Altura de Hebra"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "cs_rango_altura_hebra",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el rango de altura de la hebra!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <Radio.Group
+                          onChange={onChangeRangoAlturaHebra}
+                          value={rangoAlturaHebra}
+                          disabled={
+                            location.state ? !location.state.permiso : false
+                          }
+                          de
+                        >
+                          <Radio value={"5 mm - 11 mm"}>5 mm - 11 mm</Radio>
+                          <Radio value={"18 mm - 45 mm"}>18 mm - 45 mm</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Altura de Hebra"
+                      name={["atributos_js", "especifico", "cs_altura_hebra"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese la altura de la hebra!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        formatter={(value) => `${value} mm`}
+                        parser={(value) => value.replace(" mm", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Puntadas cada 10 cm"
+                      name={["atributos_js", "especifico", "cs_puntadas_10cm"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el número de puntadas cada 10cm!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Puntadas por m2"
+                      name={["atributos_js", "especifico", "cs_puntadas_m2"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el número de puntadas por m2!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Filamentos por Puntada"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "cs_filamentos_puntada",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el número de filamentos por puntada!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Filamentos por m2"
+                      name={["atributos_js", "especifico", "cs_filamentos_m2"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el número de filamentos por m2!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Galga"
+                      name={["atributos_js", "especifico", "cs_galga"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese la medida de galga!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <Input
+                        suffix="''"
+                        className="input-type"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Tipo(s) de Filamento"
+                      name={["atributos_js", "especifico", "cs_tipo_filamento"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el tipo(s) de filamento!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <Select
+                          mode="multiple"
+                          allowClear
+                          placeholder="Seleccione tipo de filamento"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        >
+                          {tiposFilamentoList}
+                        </Select>
+                      ) : (
+                        <TextArea
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ) : infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ? (
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Material:"
+                      name={["atributos_js", "especifico", "sc_material"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione el material!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="material"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Color:"
+                      name={["atributos_js", "especifico", "sc_color"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el color de la subcapa",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="color de subcapa"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Tipo de Esponja"
+                      name={["atributos_js", "especifico", "sc_tipo_esponja"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el tipo de esponja!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <Radio.Group
+                          disabled={
+                            location.state ? !location.state.permiso : false
+                          }
+                        >
+                          <Radio value={"EVA"}>EVA</Radio>
+                          <Radio value={"EPE"}>EPE</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ) : infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
+                <Form.Item
+                  label="Tipo de Hebra"
+                  name={["atributos_js", "especifico", "pb_tipo_hebra"]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione el tipo de hebra!",
+                          },
+                        ]
+                      : []
+                  }
+                >
+                  {location.state.permiso ? (
+                    <Radio.Group
+                      disabled={
+                        location.state ? !location.state.permiso : false
+                      }
+                    >
+                      <Radio value={"TEJIDA"}>TEJIDA</Radio>
+                      <Radio value={"HORIZONTAL"}>HORIZONTAL</Radio>
+                    </Radio.Group>
+                  ) : (
+                    <Input
+                      className="input-type"
+                      readOnly={
+                        location.state ? !location.state.permiso : false
+                      }
+                    />
+                  )}
+                </Form.Item>
+              ) : infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
+                <Row>
+                  <Col span={12}>
+                    {infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
+                      <div>
+                        <Form.Item
+                          label="Dimensión de la pantalla"
+                          name={[
+                            "atributos_js",
+                            "especifico",
+                            "ca_dimension_pantalla",
+                          ]}
+                          rules={
+                            location.state.permiso
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el tipo de hebra!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {location.state.permiso ? (
+                            <Radio.Group
+                              disabled={
+                                location.state ? !location.state.permiso : false
+                              }
+                            >
+                              <Radio value={"72 X 54 MM"}>72 X 54 MM</Radio>
+                              <Radio value={"35 X 50 MM"}>35 X 50 MM</Radio>
+                            </Radio.Group>
+                          ) : (
+                            <Input
+                              className="input-type"
+                              readOnly={
+                                location.state ? !location.state.permiso : false
+                              }
+                            />
+                          )}
+                        </Form.Item>
+                        <Form.Item
+                          label="Conexión"
+                          name={["atributos_js", "especifico", "ca_conexion"]}
+                          rules={
+                            location.state.permiso
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el tipo de conexión!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <Input
+                            // defaultValue="WI-FI"
+                            className="input-type"
+                            readOnly={true}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          label="Tipo de Sensor"
+                          name={[
+                            "atributos_js",
+                            "especifico",
+                            "ca_tipo_sensor",
+                          ]}
+                          rules={
+                            location.state.permiso
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el tipo de sensor!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <Input
+                            // defaultValue="NTC 10K"
+                            className="input-type"
+                            readOnly={true}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          label="Color del Calefactor"
+                          name={[
+                            "atributos_js",
+                            "especifico",
+                            "ca_color_calefactor",
+                          ]}
+                          rules={
+                            location.state.permiso
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el color del calefactor!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {location.state.permiso ? (
+                            <Radio.Group
+                              disabled={
+                                location.state ? !location.state.permiso : false
+                              }
+                            >
+                              <Radio value={"BLANCO"}>BLANCO</Radio>
+                              <Radio value={"NEGRO"}>NEGRO</Radio>
+                            </Radio.Group>
+                          ) : (
+                            <Input
+                              className="input-type"
+                              readOnly={
+                                location.state ? !location.state.permiso : false
+                              }
+                            />
+                          )}
+                        </Form.Item>
+                      </div>
+                    ) : null}
+
+                    <Form.Item
+                      label="Alimentación"
+                      name={["atributos_js", "especifico", "ca_alimentacion"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el valor de la alimentación!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        formatter={(value) => `${value} V`}
+                        parser={(value) => value.replace(" V", "")}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Longitud del Cable de Alimentación"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "ca_longitud_cable_alimentacion",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese la longitud del cable de alimentación!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        formatter={(value) => `${value} m`}
+                        parser={(value) => value.replace(" m", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Potencia"
+                      name={["atributos_js", "especifico", "ca_potencia"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese la potencia!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={2}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        formatter={(value) => `${value} W/m2`}
+                        parser={(value) => value.replace(" W/m2", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Presentación"
+                      name={["atributos_js", "especifico", "ca_presentacion"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese la presentación!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={0}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        formatter={(value) => `${value} m2`}
+                        parser={(value) => value.replace(" m2", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Corriente"
+                      name={["atributos_js", "especifico", "ca_corriente"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese la corriente!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={2}
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        formatter={(value) => `${value} A`}
+                        parser={(value) => value.replace(" A", "")}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ) : infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ? (
+                <Form.Item
+                  label="Espesor de Capa de Madera"
+                  name={[
+                    "atributos_js",
+                    "especifico",
+                    "pi_espesor_capa_madera",
+                  ]}
+                  rules={
+                    location.state.permiso
+                      ? [
+                          {
+                            required: true,
+                            message:
+                              "Por favor, ingrese el espesor de la capa de madera",
+                          },
+                        ]
+                      : []
+                  }
+                >
+                  <InputNumber
+                    min={0}
+                    precision={2}
+                    readOnly={location.state ? !location.state.permiso : false}
+                    formatter={(value) => `${value} mm`}
+                    parser={(value) => value.replace(" mm", "")}
+                  />
+                </Form.Item>
+              ) : infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ? (
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Rodamiento de Carga"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "pa_capacidad_rodamiento_carga",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione la capacidad de rodamiento de carga!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {location.state.permiso ? (
+                        <SelectOpciones
+                          tipo="capacidad de Rodamiento de Carga"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input
+                          className="input-type"
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                        />
+                      )}
+                    </Form.Item>
+
+                    {infoTecnicaGrupo === "60d61771f30664ca137cf63f" ? (
+                      <div>
+                        <Form.Item
+                          label="Tiempo de Trabajo"
+                          name={[
+                            "atributos_js",
+                            "especifico",
+                            "pa_tiempo_trabajo",
+                          ]}
+                          rules={
+                            location.state.permiso
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el tiempo de trabajo!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <InputNumber
+                            min={0}
+                            precision={0}
+                            readOnly={
+                              location.state ? !location.state.permiso : false
+                            }
+                            formatter={(value) => `${value} min`}
+                            parser={(value) => value.replace(" min", "")}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          label="Tiempo de Oreo"
+                          name={[
+                            "atributos_js",
+                            "especifico",
+                            "pa_tiempo_oreo",
+                          ]}
+                          rules={
+                            location.state.permiso
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el tiempo de oreo!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <InputNumber
+                            min={0}
+                            precision={0}
+                            readOnly={
+                              location.state ? !location.state.permiso : false
+                            }
+                            formatter={(value) => `${value} min`}
+                            parser={(value) => value.replace(" min", "")}
+                          />
+                        </Form.Item>
+                      </div>
+                    ) : null}
+                    <Form.Item
+                      label="Presentación"
+                      name={["atributos_js", "especifico", "pa_presentacion"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese la presentacion!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <Input
+                        suffix="gal"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Color"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "pa_color_pegamento",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione el color!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <SelectOpciones
+                        tipo="color de pegamento"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        setShow={setShow}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Olor"
+                      name={["atributos_js", "especifico", "pa_olor_pegamento"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el tipo de olor!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <SelectOpciones
+                        tipo="olor"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        setShow={setShow}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Adherencia"
+                      name={["atributos_js", "especifico", "pa_adherencia"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el tipo adherencia!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <SelectOpciones
+                        tipo="adherencia"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        setShow={setShow}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ) : infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Proceso de Fabricación"
+                      name={["atributos_js", "especifico", "pe_presentacion"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el proceso de fabricación!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <Input readOnly={true} defaultValue="MONOCOCCIÓN" />
+                    </Form.Item>
+                    <Form.Item
+                      label="Rectificado"
+                      name={["atributos_js", "especifico", "pe_rectificado"]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione rectificado o no!",
                               },
                             ]
                           : []
@@ -1035,1598 +2552,133 @@ const FormProducto = (props) => {
                       )}
                     </Form.Item>
                     <Form.Item
-                      label="Tono"
-                      name={["atributos_js", "general", "tono"]}
-                      rules={
-                        location.state.permiso
-                          ? [
-                              {
-                                required: true,
-                                message: "Por favor, seleccione el tono!",
-                              },
-                            ]
-                          : []
-                      }
-                    >
-                      {location.state.permiso ? (
-                        <SelectOpciones
-                          tipo="tono"
-                          readOnly={
-                            location.state ? !location.state.permiso : false
-                          }
-                        />
-                      ) : (
-                        <Input
-                          className="input-type"
-                          readOnly={
-                            location.state ? !location.state.permiso : false
-                          }
-                        />
-                      )}
-                    </Form.Item>
-                    <Form.Item
-                      label="Textura"
-                      name={["atributos_js", "general", "textura"]}
-                      rules={
-                        location.state.permiso
-                          ? [
-                              {
-                                required: true,
-                                message: "Por favor, seleccione la textura!",
-                              },
-                            ]
-                          : []
-                      }
-                    >
-                      {location.state.permiso ? (
-                        <Radio.Group
-                          disabled={
-                            location.state ? !location.state.permiso : false
-                          }
-                        >
-                          <Radio value={"MADERADO"}>MADERADO</Radio>
-                          <Radio value={"NO MADERADO"}>NO MADERADO</Radio>
-                        </Radio.Group>
-                      ) : (
-                        <Input
-                          className="input-type"
-                          readOnly={
-                            location.state ? !location.state.permiso : false
-                          }
-                        />
-                      )}
-                    </Form.Item>
-                  </div>
-                ) : null}
-                {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
-                infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
-                infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
-                  <Form.Item
-                    label="Clase Residencial"
-                    name={["atributos_js", "general", "clase_residencial"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione la clase residencial!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="clase residencial"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                ) : null}
-
-                {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
-                infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
-                infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
-                infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
-                infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
-                  <Form.Item
-                    label="Clase Comercial"
-                    name={["atributos_js", "general", "clase_comercial"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione la clase comercial!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="clase comercial"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                ) : null}
-
-                {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
-                  <Form.Item
-                    label="Clase Industrial"
-                    name={["atributos_js", "general", "clase_industrial"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione la clase industrial!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="clase industrial"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                ) : null}
-
-                {infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
-                  <div>
-                    <Form.Item
-                      label="Largo"
-                      name={["atributos_js", "general", "largo"]}
+                      label="Absorción de Agua"
+                      name={["atributos_js", "especifico", "pe_absorcion_agua"]}
                       rules={
                         location.state.permiso
                           ? [
                               {
                                 required: true,
                                 message:
-                                  "Por favor, ingrese la medida de largo!",
+                                  "Por favor, ingrese el valor de absorción de agua!",
                               },
                             ]
                           : []
                       }
                     >
-                      <InputNumber
-                        min={0}
-                        precision={0}
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                        formatter={(value) => `${value} mm`}
-                        parser={(value) => value.replace(" mm", "")}
-                      />
+                      <Input readOnly={true} defaultValue="<0.5%" />
                     </Form.Item>
+                  </Col>
+                  <Col span={12}>
                     <Form.Item
-                      label="Ancho"
-                      name={["atributos_js", "general", "ancho"]}
+                      label="Resistencia al Deslizamiento"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "pa_resistencia_deslizamiento",
+                      ]}
                       rules={
                         location.state.permiso
                           ? [
                               {
                                 required: true,
                                 message:
-                                  "Por favor, ingrese la medida de ancho!",
+                                  "Por favor, seleccione la resistencia al deslizamiento!",
                               },
                             ]
                           : []
                       }
                     >
-                      <InputNumber
-                        min={0}
-                        precision={0}
+                      <SelectOpciones
+                        tipo="resistencia al deslizamiento"
                         readOnly={
                           location.state ? !location.state.permiso : false
                         }
-                        formatter={(value) => `${value} mm`}
-                        parser={(value) => value.replace(" mm", "")}
+                        setShow={setShow}
                       />
                     </Form.Item>
-                  </div>
-                ) : null}
-
-                {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                  infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68") ||
-                infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
-                  <Form.Item
-                    label="Espesor"
-                    name={["atributos_js", "general", "espesor"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese la medida de espesor!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
+                    <Form.Item
+                      label="Resistencia a la Abrasión"
+                      name={[
+                        "atributos_js",
+                        "especifico",
+                        "pa_resistencia_abrasion",
+                      ]}
+                      rules={
+                        location.state.permiso
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione la resistencia a la abrasión!",
+                              },
+                            ]
+                          : []
                       }
-                      formatter={(value) => `${value} mm`}
-                      parser={(value) => value.replace(" mm", "")}
-                    />
-                  </Form.Item>
-                ) : null}
-              </Col>
-            </Row>
-            <Divider />
-            {infoTecnicaLinea !== "60d4c04663852fb5e8ad40d7" &&
-            infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-            infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" ? (
-              <Form.Item
-                label="Densidad"
-                name={["atributos_js", "general", "densidad"]}
-                rules={
-                  location.state.permiso
-                    ? [
-                        {
-                          required: true,
-                          message: "Por favor, ingrese la densidad!",
-                        },
-                      ]
-                    : []
-                }
-              >
-                <InputNumber
-                  min={0}
-                  precision={2}
-                  readOnly={location.state ? !location.state.permiso : false}
-                  formatter={(value) => `${value} kg/m3`}
-                  parser={(value) => value.replace(" kg/m3", "")}
-                />
-              </Form.Item>
-            ) : null}
-            {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-            infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-            infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-            infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-            infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-            infoTecnicaLinea === "60d4c04880c445b5e8b87047" ? (
-              <div>
+                    >
+                      <SelectOpciones
+                        tipo="resistencia a la abrasión"
+                        readOnly={
+                          location.state ? !location.state.permiso : false
+                        }
+                        setShow={setShow}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              ) : null}
+              {infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ||
+              infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ||
+              infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
                 <Form.Item
-                  label="Core"
-                  name={["atributos_js", "general", "core"]}
+                  label="Uso(s)"
+                  name={["atributos_js", "general", "usos"]}
                   rules={
                     location.state.permiso
                       ? [
                           {
                             required: true,
-                            message: "Por favor, seleccione el core!",
+                            message: "Por favor, seleccione los usos!",
                           },
                         ]
                       : []
                   }
                 >
                   {location.state.permiso ? (
-                    <SelectOpciones
-                      tipo="core"
+                    <Select
+                      mode="multiple"
+                      allowClear
+                      placeholder="Seleccione usos"
                       readOnly={
                         location.state ? !location.state.permiso : false
                       }
-                    />
+                    >
+                      {infoTecnicaLinea === "60d4c04a145bfab5e81b4626"
+                        ? subcapaList
+                        : infoTecnicaGrupo === "60d617738d422eca134f6685"
+                        ? termostatosList
+                        : infoTecnicaGrupo === "60d61771a442edca131848b6"
+                        ? cartuchosList
+                        : infoTecnicaGrupo === "60d61771f30664ca137cf63f"
+                        ? pegamentosList
+                        : infoTecnicaGrupo === "60d617724ce2a1ca13e92920"
+                        ? mallasCeramicaList
+                        : infoTecnicaGrupo === "60d617724cbea5ca130847e1"
+                        ? mallasPisosFlotantesList
+                        : []}
+                    </Select>
                   ) : (
-                    <Input
-                      className="input-type"
+                    <TextArea
+                      // className="input-type"
                       readOnly={
                         location.state ? !location.state.permiso : false
                       }
                     />
                   )}
                 </Form.Item>
-
-                <Form.Item
-                  label="Terminado"
-                  name={["atributos_js", "general", "terminado"]}
-                  rules={
-                    location.state.permiso
-                      ? [
-                          {
-                            required: true,
-                            message: "Por favor, seleccione el terminado!",
-                          },
-                        ]
-                      : []
-                  }
-                >
-                  {location.state.permiso ? (
-                    <SelectOpciones
-                      tipo="terminado"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  ) : (
-                    <Input
-                      className="input-type"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  )}
-                </Form.Item>
-              </div>
-            ) : null}
-
-            {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-            infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-            infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-            infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    label="Biseles"
-                    name={["atributos_js", "especifico", "pl_biseles"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el número de biseles!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      // formatter={(value) => `${value} mm`}
-                      // parser={(value) => value.replace(" mm", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Resistencia a la Abrasión"
-                    name={[
-                      "atributos_js",
-                      "especifico",
-                      "pl_resistencia_abrasion",
-                    ]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione la resistencia a la abrasión!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="resistencia a la abrasion"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Sistema de Click"
-                    name={["atributos_js", "especifico", "pl_sistema_click"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el sistema de click!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="sistema de click"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Generación de Click "
-                    name={["atributos_js", "especifico", "pl_generacion_click"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione si la generación de click!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Radio.Group
-                        onChange={onChangeGeneracionClick}
-                        value={generacionClick}
-                        disabled={
-                          location.state ? !location.state.permiso : false
-                        }
-                      >
-                        <Radio value={"3G"}>3G</Radio>
-                        <Radio value={"5G"}>5G</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Subcapa Adherida"
-                    name={["atributos_js", "especifico", "pl_subcapa_adherida"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione si tiene subcapa adherida!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Radio.Group
-                        onChange={onChangeTieneSubcapaAdherida}
-                        value={tieneSubcapaAdherida}
-                        disabled={
-                          location.state ? !location.state.permiso : false
-                        }
-                      >
-                        <Radio value={"SI"}>SI</Radio>
-                        <Radio value={"NO"}>NO</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={12}></Col>
-              </Row>
-            ) : infoTecnicaLinea === "60d4c0477f7255b5e8cca2b7" ? (
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    label="Uso(s)"
-                    name={["atributos_js", "especifico", "cs_uso"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el/los uso(s)!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Radio.Group
-                        onChange={onChangeUsoCesped}
-                        value={usoCesped}
-                        disabled={
-                          location.state ? !location.state.permiso : false
-                        }
-                      >
-                        <Radio value={"DECORATIVO"}>DECORATIVO</Radio>
-                        <Radio value={"DEPORTIVO"}>DEPORTIVO</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Aplicación"
-                    name={["atributos_js", "especifico", "cs_aplicacion"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese la aplicación!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Checkbox.Group options={plainOptions} />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Rango de Altura de Hebra"
-                    name={[
-                      "atributos_js",
-                      "especifico",
-                      "cs_rango_altura_hebra",
-                    ]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el rango de altura de la hebra!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Radio.Group
-                        onChange={onChangeRangoAlturaHebra}
-                        value={rangoAlturaHebra}
-                        disabled={
-                          location.state ? !location.state.permiso : false
-                        }
-                        de
-                      >
-                        <Radio value={"5 mm - 11 mm"}>5 mm - 11 mm</Radio>
-                        <Radio value={"18 mm - 45 mm"}>18 mm - 45 mm</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Altura de Hebra"
-                    name={["atributos_js", "especifico", "cs_altura_hebra"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese la altura de la hebra!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      formatter={(value) => `${value} mm`}
-                      parser={(value) => value.replace(" mm", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Puntadas cada 10 cm"
-                    name={["atributos_js", "especifico", "cs_puntadas_10cm"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el número de puntadas cada 10cm!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Puntadas por m2"
-                    name={["atributos_js", "especifico", "cs_puntadas_m2"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el número de puntadas por m2!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Filamentos por Puntada"
-                    name={[
-                      "atributos_js",
-                      "especifico",
-                      "cs_filamentos_puntada",
-                    ]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el número de filamentos por puntada!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Filamentos por m2"
-                    name={["atributos_js", "especifico", "cs_filamentos_m2"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el número de filamentos por m2!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Galga"
-                    name={["atributos_js", "especifico", "cs_galga"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese la medida de galga!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Input
-                      suffix="''"
-                      className="input-type"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="Tipo(s) de Filamento"
-                    name={["atributos_js", "especifico", "cs_tipo_filamento"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el tipo(s) de filamento!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Select
-                        mode="multiple"
-                        allowClear
-                        placeholder="Seleccione tipo de filamento"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      >
-                        {tiposFilamentoList}
-                      </Select>
-                    ) : (
-                      <TextArea
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-            ) : infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ? (
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    label="Material:"
-                    name={["atributos_js", "especifico", "sc_material"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione el material!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="material"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Color:"
-                    name={["atributos_js", "especifico", "sc_color"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el color de la subcapa",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="color de subcapa"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Tipo de Esponja"
-                    name={["atributos_js", "especifico", "sc_tipo_esponja"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el tipo de esponja!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Radio.Group
-                        disabled={
-                          location.state ? !location.state.permiso : false
-                        }
-                      >
-                        <Radio value={"EVA"}>EVA</Radio>
-                        <Radio value={"EPE"}>EPE</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-            ) : infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
-              <Form.Item
-                label="Tipo de Hebra"
-                name={["atributos_js", "especifico", "pb_tipo_hebra"]}
-                rules={
-                  location.state.permiso
-                    ? [
-                        {
-                          required: true,
-                          message: "Por favor, seleccione el tipo de hebra!",
-                        },
-                      ]
-                    : []
-                }
-              >
-                {location.state.permiso ? (
-                  <Radio.Group
-                    disabled={location.state ? !location.state.permiso : false}
-                  >
-                    <Radio value={"TEJIDA"}>TEJIDA</Radio>
-                    <Radio value={"HORIZONTAL"}>HORIZONTAL</Radio>
-                  </Radio.Group>
-                ) : (
-                  <Input
-                    className="input-type"
-                    readOnly={location.state ? !location.state.permiso : false}
-                  />
-                )}
-              </Form.Item>
-            ) : infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
-              <Row>
-                <Col span={12}>
-                  {infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
-                    <div>
-                      <Form.Item
-                        label="Dimensión de la pantalla"
-                        name={[
-                          "atributos_js",
-                          "especifico",
-                          "ca_dimension_pantalla",
-                        ]}
-                        rules={
-                          location.state.permiso
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el tipo de hebra!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {location.state.permiso ? (
-                          <Radio.Group
-                            disabled={
-                              location.state ? !location.state.permiso : false
-                            }
-                          >
-                            <Radio value={"72 X 54 MM"}>72 X 54 MM</Radio>
-                            <Radio value={"35 X 50 MM"}>35 X 50 MM</Radio>
-                          </Radio.Group>
-                        ) : (
-                          <Input
-                            className="input-type"
-                            readOnly={
-                              location.state ? !location.state.permiso : false
-                            }
-                          />
-                        )}
-                      </Form.Item>
-                      <Form.Item
-                        label="Conexión"
-                        name={["atributos_js", "especifico", "ca_conexion"]}
-                        rules={
-                          location.state.permiso
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el tipo de conexión!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <Input
-                          // defaultValue="WI-FI"
-                          className="input-type"
-                          readOnly={true}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="Tipo de Sensor"
-                        name={["atributos_js", "especifico", "ca_tipo_sensor"]}
-                        rules={
-                          location.state.permiso
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el tipo de sensor!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <Input
-                          // defaultValue="NTC 10K"
-                          className="input-type"
-                          readOnly={true}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="Color del Calefactor"
-                        name={[
-                          "atributos_js",
-                          "especifico",
-                          "ca_color_calefactor",
-                        ]}
-                        rules={
-                          location.state.permiso
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el color del calefactor!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {location.state.permiso ? (
-                          <Radio.Group
-                            disabled={
-                              location.state ? !location.state.permiso : false
-                            }
-                          >
-                            <Radio value={"BLANCO"}>BLANCO</Radio>
-                            <Radio value={"NEGRO"}>NEGRO</Radio>
-                          </Radio.Group>
-                        ) : (
-                          <Input
-                            className="input-type"
-                            readOnly={
-                              location.state ? !location.state.permiso : false
-                            }
-                          />
-                        )}
-                      </Form.Item>
-                    </div>
-                  ) : null}
-
-                  <Form.Item
-                    label="Alimentación"
-                    name={["atributos_js", "especifico", "ca_alimentacion"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el valor de la alimentación!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      formatter={(value) => `${value} V`}
-                      parser={(value) => value.replace(" V", "")}
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Longitud del Cable de Alimentación"
-                    name={[
-                      "atributos_js",
-                      "especifico",
-                      "ca_longitud_cable_alimentacion",
-                    ]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese la longitud del cable de alimentación!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      formatter={(value) => `${value} m`}
-                      parser={(value) => value.replace(" m", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Potencia"
-                    name={["atributos_js", "especifico", "ca_potencia"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese la potencia!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={2}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      formatter={(value) => `${value} W/m2`}
-                      parser={(value) => value.replace(" W/m2", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Presentación"
-                    name={["atributos_js", "especifico", "ca_presentacion"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese la presentación!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={0}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      formatter={(value) => `${value} m2`}
-                      parser={(value) => value.replace(" m2", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Corriente"
-                    name={["atributos_js", "especifico", "ca_corriente"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese la corriente!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={2}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      formatter={(value) => `${value} A`}
-                      parser={(value) => value.replace(" A", "")}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-            ) : infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ? (
-              <Form.Item
-                label="Espesor de Capa de Madera"
-                name={["atributos_js", "especifico", "pi_espesor_capa_madera"]}
-                rules={
-                  location.state.permiso
-                    ? [
-                        {
-                          required: true,
-                          message:
-                            "Por favor, ingrese el espesor de la capa de madera",
-                        },
-                      ]
-                    : []
-                }
-              >
-                <InputNumber
-                  min={0}
-                  precision={2}
-                  readOnly={location.state ? !location.state.permiso : false}
-                  formatter={(value) => `${value} mm`}
-                  parser={(value) => value.replace(" mm", "")}
-                />
-              </Form.Item>
-            ) : infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ? (
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    label="Rodamiento de Carga"
-                    name={[
-                      "atributos_js",
-                      "especifico",
-                      "pa_capacidad_rodamiento_carga",
-                    ]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione la capacidad de rodamiento de carga!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <SelectOpciones
-                        tipo="capacidad de Rodamiento de Carga"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-
-                  {infoTecnicaGrupo === "60d61771f30664ca137cf63f" ? (
-                    <div>
-                      <Form.Item
-                        label="Tiempo de Trabajo"
-                        name={[
-                          "atributos_js",
-                          "especifico",
-                          "pa_tiempo_trabajo",
-                        ]}
-                        rules={
-                          location.state.permiso
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el tiempo de trabajo!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber
-                          min={0}
-                          precision={0}
-                          readOnly={
-                            location.state ? !location.state.permiso : false
-                          }
-                          formatter={(value) => `${value} min`}
-                          parser={(value) => value.replace(" min", "")}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="Tiempo de Oreo"
-                        name={["atributos_js", "especifico", "pa_tiempo_oreo"]}
-                        rules={
-                          location.state.permiso
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el tiempo de oreo!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber
-                          min={0}
-                          precision={0}
-                          readOnly={
-                            location.state ? !location.state.permiso : false
-                          }
-                          formatter={(value) => `${value} min`}
-                          parser={(value) => value.replace(" min", "")}
-                        />
-                      </Form.Item>
-                    </div>
-                  ) : null}
-                  <Form.Item
-                    label="Presentación"
-                    name={["atributos_js", "especifico", "pa_presentacion"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese la presentacion!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Input
-                      suffix="gal"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                    />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Color"
-                    name={["atributos_js", "especifico", "pa_color_pegamento"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione el color!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <SelectOpciones
-                      tipo="color de pegamento"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Olor"
-                    name={["atributos_js", "especifico", "pa_olor_pegamento"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione el tipo de olor!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <SelectOpciones
-                      tipo="olor"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Adherencia"
-                    name={["atributos_js", "especifico", "pa_adherencia"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el tipo adherencia!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <SelectOpciones
-                      tipo="adherencia"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-            ) : infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    label="Proceso de Fabricación"
-                    name={["atributos_js", "especifico", "pe_presentacion"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el proceso de fabricación!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Input readOnly={true} defaultValue="MONOCOCCIÓN" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Rectificado"
-                    name={["atributos_js", "especifico", "pe_rectificado"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione rectificado o no!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {location.state.permiso ? (
-                      <Radio.Group
-                        disabled={
-                          location.state ? !location.state.permiso : false
-                        }
-                      >
-                        <Radio value={"SI"}>SI</Radio>
-                        <Radio value={"NO"}>NO</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input
-                        className="input-type"
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                      />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Absorción de Agua"
-                    name={["atributos_js", "especifico", "pe_absorcion_agua"]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el valor de absorción de agua!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Input readOnly={true} defaultValue="<0.5%" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Resistencia al Deslizamiento"
-                    name={[
-                      "atributos_js",
-                      "especifico",
-                      "pa_resistencia_deslizamiento",
-                    ]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione la resistencia al deslizamiento!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <SelectOpciones
-                      tipo="resistencia al deslizamiento"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Resistencia a la Abrasión"
-                    name={[
-                      "atributos_js",
-                      "especifico",
-                      "pa_resistencia_abrasion",
-                    ]}
-                    rules={
-                      location.state.permiso
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione la resistencia a la abrasión!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <SelectOpciones
-                      tipo="resistencia a la abrasión"
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      setShow={setShow}
-                    />
-                  </Form.Item>
-                </Col>
-              </Row>
-            ) : null}
-            {infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ||
-            infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ||
-            infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
-              <Form.Item
-                label="Usos"
-                name={["atributos_js", "general", "usos"]}
-                rules={
-                  location.state.permiso
-                    ? [
-                        {
-                          required: true,
-                          message: "Por favor, seleccione los usos!",
-                        },
-                      ]
-                    : []
-                }
-              >
-                {location.state.permiso ? (
-                  <Select
-                    mode="multiple"
-                    allowClear
-                    placeholder="Seleccione usos"
-                    readOnly={location.state ? !location.state.permiso : false}
-                  >
-                    {infoTecnicaLinea === "60d4c04a145bfab5e81b4626"
-                      ? subcapaList
-                      : infoTecnicaGrupo === "60d617738d422eca134f6685"
-                      ? termostatosList
-                      : infoTecnicaGrupo === "60d61771a442edca131848b6"
-                      ? cartuchosList
-                      : infoTecnicaGrupo === "60d61771f30664ca137cf63f"
-                      ? pegamentosList
-                      : infoTecnicaGrupo === "60d617724ce2a1ca13e92920"
-                      ? mallasCeramicaList
-                      : infoTecnicaGrupo === "60d617724cbea5ca130847e1"
-                      ? mallasPisosFlotantesList
-                      : null}
-                  </Select>
-                ) : (
-                  <TextArea
-                    // className="input-type"
-                    readOnly={location.state ? !location.state.permiso : false}
-                  />
-                )}
-              </Form.Item>
-            ) : null}
-          </Panel>
-          }
+              ) : null}
+            </Panel>
+          )}
           <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
             <Row>
               <Col span={12}>
@@ -2810,7 +2862,7 @@ const FormProducto = (props) => {
                 </Form.Item>
 
                 <Form.Item
-                  label="Costo ($)"
+                  label="Costo"
                   name="costo"
                   rules={
                     location.state.permiso
@@ -2823,19 +2875,49 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  <InputNumber
-                    min={0}
-                    precision={2}
-                    readOnly={location.state ? !location.state.permiso : false}
-                    // formatter={(value) =>
-                    //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    // }
-                    // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  />
+                  <Space>
+                    <Row>
+                      <div
+                        className="ant-input-group-addon"
+                        style={{
+                          paddingTop: "2px",
+                          verticalAlign: "middle",
+                          display: "inline-table",
+                          lineHeight: "24px",
+                          height: "32px",
+                        }}
+                      >
+                        {"$"}
+                      </div>
+                      <Form.Item name="costo">
+                        <InputNumber
+                          min={0}
+                          precision={2}
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          // formatter={(value) =>
+                          //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          // }
+                          // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        />
+                      </Form.Item>
+                    </Row>
+                  </Space>
                 </Form.Item>
                 <Form.Item
-                  label="Precio sin IVA ($)"
                   name="precio"
+                  label={
+                    unidadMedida === "60d4ffd26a0c87b992906be4"
+                      ? "Precio sin IVA (M2)"
+                      : unidadMedida === "60d4ffd22c89acb9921b328a"
+                      ? "Precio sin IVA (M)"
+                      : unidadMedida === "60d4ffd21f3a73b992f66054"
+                      ? "Precio sin IVA (GAL)"
+                      : unidadMedida === "60d4ffd377ef4ab9922ed0b2"
+                      ? "Precio sin IVA (ML)"
+                      : "Precio sin IVA ()"
+                  }
                   rules={
                     location.state.permiso
                       ? [
@@ -2847,38 +2929,116 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  <InputNumber
-                    min={0}
-                    precision={2}
-                    readOnly={location.state ? !location.state.permiso : false}
-                    // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                    // formatter={(value) =>
-                    //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                    // }
-                    // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                  />
+                  <Space>
+                    <Row>
+                      <div
+                        className="ant-input-group-addon"
+                        style={{
+                          paddingTop: "2px",
+                          verticalAlign: "middle",
+                          display: "inline-table",
+                          lineHeight: "24px",
+                          height: "32px",
+                        }}
+                      >
+                        {"$"}
+                      </div>
+                      <Form.Item name="precio">
+                        <InputNumber
+                          min={0}
+                          precision={2}
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                          // formatter={(value) =>
+                          //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          // }
+                          // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        />
+                      </Form.Item>
+                    </Row>
+                  </Space>
                 </Form.Item>
 
                 {!location.state.permiso ? (
-                  <Form.Item label="Precio con IVA ($)">
-                    <InputNumber
-                      value={
-                        (form.getFieldValue("precio") *
-                          (parseFloat(form.getFieldValue("iva")) + 100)) /
-                        100
+                  <div>
+                    <Form.Item label="Precio con IVA ($)">
+                      <Space>
+                        <Row>
+                          <div
+                            className="ant-input-group-addon"
+                            style={{
+                              paddingTop: "2px",
+                              verticalAlign: "middle",
+                              display: "inline-table",
+                              lineHeight: "24px",
+                              height: "32px",
+                            }}
+                          >
+                            {"$"}
+                          </div>
+                          <InputNumber
+                            value={
+                              (form.getFieldValue("precio") *
+                                (parseFloat(form.getFieldValue("iva")) + 100)) /
+                              100
+                            }
+                            min={0}
+                            precision={2}
+                            readOnly={
+                              location.state ? !location.state.permiso : false
+                            }
+                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                            // formatter={(value) =>
+                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            // }
+                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                          />
+                        </Row>
+                      </Space>
+                    </Form.Item>
+                    <Form.Item
+                      label={
+                        "Precio sin IVA (" +
+                        form.getFieldValue("unidad_venta_abreviatura") +
+                        ")"
                       }
-                      min={0}
-                      precision={2}
-                      readOnly={
-                        location.state ? !location.state.permiso : false
-                      }
-                      // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                      // formatter={(value) =>
-                      //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                      // }
-                      // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                    />
-                  </Form.Item>
+                    >
+                      <Space>
+                        <Row>
+                          <div
+                            className="ant-input-group-addon"
+                            style={{
+                              paddingTop: "2px",
+                              verticalAlign: "middle",
+                              display: "inline-table",
+                              lineHeight: "24px",
+                              height: "32px",
+                            }}
+                          >
+                            {"$"}
+                          </div>
+                          <InputNumber
+                            value={
+                              form.getFieldValue("precio") *
+                              form.getFieldValue("dimension_unidad_venta")
+                            }
+                            min={0}
+                            precision={2}
+                            readOnly={
+                              location.state ? !location.state.permiso : false
+                            }
+                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                            // formatter={(value) =>
+                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            // }
+                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                          />
+                        </Row>
+                      </Space>
+                    </Form.Item>
+                  </div>
                 ) : null}
 
                 <Form.Item
