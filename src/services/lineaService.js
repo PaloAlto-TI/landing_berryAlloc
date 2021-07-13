@@ -12,11 +12,11 @@ export class LineaService {
     }
 
     create(linea){
-      return axios.post( baseUrl + "linea", linea).then( res => res.data);
+      return axios.post( baseUrl + "linea", linea).then( res => res.data).catch(error => error.response.data);
     }
 
     update(linea){
-      return axios.put( baseUrl + "linea/" + linea._id, linea).then( res => res.data)
+      return axios.put( baseUrl + "linea/" + linea._id, linea).then( res => res.data).catch(error => error.response.data);
     }
 
     softDelete(linea){

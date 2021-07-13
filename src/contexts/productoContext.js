@@ -5,13 +5,9 @@ export const ProductoContext = createContext();
 
 const ProductoContextProvider = (props) => {
   const productoService = new ProductoService();
-
   const [productos, setProductos] = useState([]);
-
   const [editProducto, setEditProducto] = useState(null);
-
   const [permiso, setPermiso] = useState(false);
-
   const [isEmpty, setIsEmpty] = useState(false)
 
   useEffect(() => {
@@ -48,7 +44,6 @@ const ProductoContextProvider = (props) => {
 
   const updateProducto = async(producto) => {
    
-
     const data = await productoService.updateProducto(producto);
 
     console.log("err:", data);

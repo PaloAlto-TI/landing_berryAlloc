@@ -6,20 +6,19 @@ export const LineaContext = createContext();
 const LineaContextProvider = (props) => {
 
     const lineaService = new LineaService();
-    
     const [lineas, setLineas] = useState([]);
-    
     const [editLinea, setEditLinea] = useState(null);
-
     const [permiso, setPermiso] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
 
     useEffect (() => {
-        lineaService.getAll().then((data) => setLineas(data));
+      setIsEmpty(false);
+      lineaService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setLineas(data)});
     }, []);
 
     const createLinea = async (linea) => {
       const data = await lineaService.create(linea);
-      console.log("PASOO UN ERROR EN LINEAS: " + data);
+      console.log("PASOO UN ERROR EN LINEAS: " + JSON.stringify(data));
       if (data.message === "OK CREATE") {
         lineaService.getAll().then((data) => setLineas(data));
         console.log("LO QUE ESTA DENTRO DEL GET ALL: " + setLineas(data))
@@ -62,7 +61,8 @@ const LineaContextProvider = (props) => {
             lineas,
             permiso,
             setPermiso,
-            setEditLinea
+            setEditLinea,
+            isEmpty
         }}>
             {props.children}
         </LineaContext.Provider>

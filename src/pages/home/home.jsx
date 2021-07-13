@@ -7,7 +7,7 @@ import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
 
 import LineaList from "../../components/lineas/lineaList/lineaList";
-// import LineaForm from "../../components/lineas/lineaForm/";
+import LineaForm from "../../components/lineas/lineaForm/lineaForm";
 import LineaContextProvider from "../../contexts/lineaContext";
 
 import { Layout } from "antd";
@@ -48,8 +48,13 @@ const Home = () => {
             </ProductoContextProvider>
           </Route>
           <Route exact path={`${path}/lineas`}>
-            <LineaContextProvider>
+            <LineaContextProvider Provider>
               <LineaList />
+            </LineaContextProvider>
+          </Route>
+          <Route path={`${path}/lineas/:pseudo`}>
+          <LineaContextProvider Provider>
+              <LineaForm />
             </LineaContextProvider>
           </Route>
           <Route exact path={`${path}/marcas`}>

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Spin, Button, Table } from "antd";
-import { PlusOutlined, SmileOutlined, LoadingOutlined } from '@ant-design/icons';
+import { PlusOutlined, /*SmileOutlined,*/ LoadingOutlined } from '@ant-design/icons';
 import CrudButton from "../../crudButton/crudButton";
 import { LineaContext } from "../../../contexts/lineaContext";
 import { useHistory } from "react-router";
@@ -8,9 +8,8 @@ import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './lineaList.css';
 
-
 const LineaList = () => {
-    const { lineas, setEditLinea } = useContext(LineaContext);
+    const { lineas, setEditLinea, isEmpty, softDeleteLinea } = useContext(LineaContext);
     const [filteredInfo, setFilteredInfo] = useState([])
     const [value, setValue] = useState(null);
     const [dataSource, setDataSource] = useState([]);
@@ -18,30 +17,44 @@ const LineaList = () => {
 
     const columns = [
         {
-          title: "CÓDIGO",
-          dataIndex: "id",
-          key: "id",
-          sorter: {
-            compare: (a, b) => a.id.localeCompare(b.id),
-          },
-          showSorterTooltip: false
-        },
-        {
           title: "NOMBRE",
           dataIndex: "nombre",
           key: "nombre",
           sorter: {
             compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
-          showSorterTooltip: false,
-         
+          showSorterTooltip: false
+        },
+        {
+          title: "PSEUDÓNIMO",
+          dataIndex: "pseudo",
+          key: "pseudo",
+          align: "center",
+          sorter: {
+            compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+          },
+          showSorterTooltip: false
+        },
+        {
+          title: "DESCRIPCIÓN",
+          dataIndex: "descripcion",
+          key: "descripcion",
+          className:"longText",
+          sorter: {
+            compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+          },
+          showSorterTooltip: false
+        },
+        {
+          title: "ACCIONES",
+          dataIndex: "",
+          key: "x",
+          render: (_, record) => <CrudButton record={record} sofDelete={softDeleteLinea} tableName={"Linea"} />,
         }
     ]
 
     let { path } = useRouteMatch();
     let history = useHistory();
-
-    // console.log("LOS COLUMMNS: " + columns);
 
     const handleChange = (pagination, filters, sorter) => {
         console.log('Various parameters', pagination, filters, sorter);  
@@ -57,17 +70,24 @@ const LineaList = () => {
         history.push(`${path}/nuevo`, record);
     }
 
+    function ver(record) {
+      record["permiso"] = false;
+      alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
+
+      // history.push(`${path}/${record.codigo_interno}/ver`, record);
+    }
+
     const filtrar = (e) => {
         const currValue = e.target.value;
         setValue(currValue);
         const filteredData = lineas.filter(entry => 
-          entry.nombre.toLowerCase().includes(currValue.toLowerCase()));
+          entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase()));
         setDataSource(filteredData);
       }
 
     useEffect(() => {
         setEditLinea(null);
-        // console.log("Usse Effect -> Las lineas: " + lineas)
+        console.log("Usse Effect -> Value: " + value)
         // setPermiso(false);
         if (!value){
           setDataSource(lineas)
@@ -76,15 +96,48 @@ const LineaList = () => {
 
     return (
     <div>
-        {/*JSON.stringify(lineas)*/}
-        {lineas.length + " las lineas length" }
-        {lineas.length + " las lineas length" }
+      <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+      <Search
+        placeholder="Buscar línea..."
+        value={value}
+        onChange={e => filtrar(e)}
+        style={{ width: 200 }} 
+      />
+        <br/>
+        <br/>
         
-        {lineas.length > 0 ? (
-           // dataSource={state.hasData ? data : null}
-
+        {/*lineas.length === 0 || isEmpty ? (
+        // dataSource={state.hasData ? data : null}
+        
         <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={null} rowKey='id' onChange={handleChange} />) : (
-        <Spin indicator={antIcon} />
+        // <Spin indicator={antIcon} />
+
+        <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={dataSource} rowKey='id' onChange={handleChange} />
+        )*/}
+
+      { lineas.length > 0 || isEmpty ? (
+              <Table 
+              locale={{ emptyText: 'No hay datos' }} 
+              columns={columns} 
+              dataSource={dataSource} 
+              rowKey='id' 
+              onChange={handleChange} 
+              pagination={{ defaultPageSize: 30}}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    if (event.clientX < window.innerWidth*0.80){
+                    // record["permiso"] = false;
+                    // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                    // alert("CLICK DONDE SEA");  
+                    ver(record);
+                    }
+                  },
+                };
+              }}
+              />
+            ) : (
+              <Spin indicator={antIcon} />
       )}
     </div>
     );

@@ -2,28 +2,21 @@ import React, { useContext, useState } from "react";
 import { Menu, Dropdown } from "antd";
 import { useHistory, useRouteMatch } from "react-router-dom";
 import { Modal } from 'antd';
-import { ProductoContext } from "../../contexts/productoContext";
 import { DeleteFilled, EditFilled, EyeFilled } from "@ant-design/icons";
 
 const CrudButton = (props) => {
+const { record, softDelete, tableName} = props;
+const [isModalVisible, setIsModalVisible] = useState(false);
+let { path } = useRouteMatch();
+// const { softDeleteProducto, setPermiso } = useContext(ProductoContext);
+const showModal = () => {
+  setIsModalVisible(true);
+};
 
-
-  const { record } = props;
-  let { path } = useRouteMatch();
-
-  console.log("path2", path);
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const { softDeleteProducto, setPermiso } = useContext(ProductoContext);
-  
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    softDeleteProducto(record);
-    setIsModalVisible(false);
-  };
+const handleOk = () => {
+  softDelete(record);
+  setIsModalVisible(false);
+};
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -37,11 +30,25 @@ const CrudButton = (props) => {
 
   function ver() {
     record["permiso"] = false;
-    history.push(`${path}/${record.codigo_interno}/ver`, record);
+    console.log("EL RECORD: " + JSON.stringify(record));
+    console.log("EL tableName: " + tableName);
+
+    switch(tableName) {
+      case 'Linea':
+      case 'Marca':
+      case 'Grupo':
+        return history.push(`${path}/${record.pseudo}/ver`, record);
+      
+      case 'Producto':
+        return history.push(`${path}/${record.codigo_interno}/ver`, record);
+
+       default:
+        return history.push(`${path}/${record.codigo_interno}/ver`, record);// Definir bien esta parte ya que no todos tienen un codigo/codigo_interno
+    }
+    
   }
 
   function editar() {
-    setPermiso(true);
     record["permiso"] = true;
     history.push(`${path}/${record.codigo_interno}/editar`, record);
   }
