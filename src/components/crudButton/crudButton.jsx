@@ -65,7 +65,7 @@ const CrudButton = (props) => {
   );
   return (
     <>
-      <Dropdown.Button overlay={menu}></Dropdown.Button>
+      <Dropdown.Button overlay={menu} placement="bottomCenter"></Dropdown.Button>
       <Modal title="Eliminar Producto" okType="danger" okText="Eliminar" cancelText="Cancelar" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <p>¿Está seguro que desea eliminar {record.nombre}?</p>
       </Modal>
