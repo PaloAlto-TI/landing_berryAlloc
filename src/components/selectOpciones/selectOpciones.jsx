@@ -29,7 +29,8 @@ import { resistenciasAbrasionPorcelanato } from "../../utils/resistenciasAbrasio
 const { Option } = Select;
 const SelectOpciones = (props) => {
   // console.log(props)
-  const { tipo, onChange, value, filter, filter2, readOnly, setShow } = props;
+  const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow } =
+    props;
   const [opciones, setOpciones] = useState([]);
   console.log(props);
   useEffect(() => {
@@ -63,10 +64,24 @@ const SelectOpciones = (props) => {
         });
       } else if (tipo === "color" && filter) {
         console.log("FILTER-COLOR:", filter);
+        console.log("FILTER-COLOR2:", filter2);
+
         const colorService = new ColorGrupoService();
         await colorService.getAll().then((data) => {
           if (cancel) return;
-          setOpciones(data.filter((p) => p.grupo_id === filter));
+          if (filter3 === "60d4c04b894c18b5e810e025") {
+            setOpciones(
+              data.filter(
+                (p) => p.grupo_id === filter && p.marca_id === filter2
+              )
+            );
+          } else {
+            setOpciones(
+              data.filter(
+                (p) => p.grupo_id === filter
+              )
+            );
+          }
         });
         setShow(false);
       } else if (tipo === "proveedor" && filter) {
@@ -98,7 +113,7 @@ const SelectOpciones = (props) => {
         setOpciones(paises);
       } else if (tipo === "resistencia a la abrasion") {
         setOpciones(resistenciasAbrasion);
-      }else if (tipo === "sistema de click") {
+      } else if (tipo === "sistema de click") {
         setOpciones(sistemasClick);
       } else if (tipo === "clase residencial") {
         setOpciones(clasesResidencial);
@@ -106,31 +121,31 @@ const SelectOpciones = (props) => {
         setOpciones(clasesComercial);
       } else if (tipo === "clase industrial") {
         setOpciones(clasesIndustrial);
-      }else if (tipo === "core") {
+      } else if (tipo === "core") {
         setOpciones(core);
-      }else if (tipo === "terminado") {
+      } else if (tipo === "terminado") {
         setOpciones(terminado);
-      }else if (tipo === "garantía") {
+      } else if (tipo === "garantía") {
         setOpciones(garantias);
-      }else if (tipo === "material") {
+      } else if (tipo === "material") {
         setOpciones(materialesSubcapa);
-      }else if (tipo === "color de subcapa") {
+      } else if (tipo === "color de subcapa") {
         setOpciones(coloresSubcapa);
-      }else if (tipo === "formato") {
+      } else if (tipo === "formato") {
         setOpciones(formatos);
-      }else if (tipo === "tono") {
+      } else if (tipo === "tono") {
         setOpciones(tonos);
-      }else if (tipo === "capacidad de rodamiento de carga") {
+      } else if (tipo === "capacidad de rodamiento de carga") {
         setOpciones(capacidadesRodamientoCarga);
-      }else if (tipo === "color de pegamento") {
+      } else if (tipo === "color de pegamento") {
         setOpciones(coloresPegamentos);
-      }else if (tipo === "olor") {
+      } else if (tipo === "olor") {
         setOpciones(oloresPegamentos);
-      }else if (tipo === "adherencia") {
+      } else if (tipo === "adherencia") {
         setOpciones(adherenciasPegamentos);
-      }else if (tipo === "resistencia al deslizamiento") {
+      } else if (tipo === "resistencia al deslizamiento") {
         setOpciones(resistenciasDeslizamiento);
-      }else if (tipo === "resistencia a la abrasión") {
+      } else if (tipo === "resistencia a la abrasión") {
         setOpciones(resistenciasAbrasionPorcelanato);
       } else {
         setOpciones([]);

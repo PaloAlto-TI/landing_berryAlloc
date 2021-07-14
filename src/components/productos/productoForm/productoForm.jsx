@@ -45,7 +45,7 @@ const FormProducto = (props) => {
   let { path } = useRouteMatch();
 
   console.log(path);
-  
+
   // console.log(props);
   const { createProducto, updateProducto, findProducto, editProducto } =
     useContext(ProductoContext);
@@ -275,7 +275,7 @@ const FormProducto = (props) => {
     console.log("COLOR", form.getFieldsValue());
 
     console.log("FORMULARIO", form.getFieldsValue());
-    setSelectedMarcaId(form.getFieldValue("fk_marca_id"));
+    // setSelectedMarcaId(form.getFieldValue("fk_marca_id"));
 
     // setFinal(form.getFieldsValue());
     // console.log("BF",form.getFieldValue("atributos_js"))
@@ -296,7 +296,7 @@ const FormProducto = (props) => {
 
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
-
+      setSelectedGrupoId(null);
       if (selectedLineaId === "60d4c04b894c18b5e810e025") {
         form.setFieldsValue({ nombre: undefined });
         const marcaService = new MarcaService();
@@ -654,6 +654,8 @@ const FormProducto = (props) => {
                     <SelectOpciones
                       tipo="color"
                       filter={selectedGrupoId}
+                      filter2={selectedMarcaId}
+                      filter3={selectedLineaId}
                       readOnly={
                         location.state ? !location.state.permiso : false
                       }
@@ -3239,156 +3241,162 @@ const FormProducto = (props) => {
                   />
                 </Form.Item>
                 {!location.state.permiso ? (
-                <Form.Item label="Total con Descuento Especialista">
-                  <Space>
-                    <Row>
-                      <div
-                        className="ant-input-group-addon"
-                        style={{
-                          paddingTop: "2px",
-                          verticalAlign: "middle",
-                          display: "inline-table",
-                          lineHeight: "24px",
-                          height: "32px",
-                        }}
-                      >
-                        {"$"}
-                      </div>
-                      <InputNumber
-                        value={
-                          form.getFieldValue("precio") * 1.12 -
-                          (form.getFieldValue("precio") *
-                            1.12 *
-                            form.getFieldValue("limite_descuento1")) /
-                            100
-                        }
-                        min={0}
-                        precision={2}
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                        // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                        // formatter={(value) =>
-                        //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        // }
-                        // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                      />
-                    </Row>
-                  </Space>
-                </Form.Item>):null}
+                  <Form.Item label="Total con Descuento Especialista">
+                    <Space>
+                      <Row>
+                        <div
+                          className="ant-input-group-addon"
+                          style={{
+                            paddingTop: "2px",
+                            verticalAlign: "middle",
+                            display: "inline-table",
+                            lineHeight: "24px",
+                            height: "32px",
+                          }}
+                        >
+                          {"$"}
+                        </div>
+                        <InputNumber
+                          value={
+                            form.getFieldValue("precio") * 1.12 -
+                            (form.getFieldValue("precio") *
+                              1.12 *
+                              form.getFieldValue("limite_descuento1")) /
+                              100
+                          }
+                          min={0}
+                          precision={2}
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                          // formatter={(value) =>
+                          //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          // }
+                          // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        />
+                      </Row>
+                    </Space>
+                  </Form.Item>
+                ) : null}
 
                 {!location.state.permiso ? (
-                <Form.Item label="Total con Descuento Líder Retail">
-                  <Space>
-                    <Row>
-                      <div
-                        className="ant-input-group-addon"
-                        style={{
-                          paddingTop: "2px",
-                          verticalAlign: "middle",
-                          display: "inline-table",
-                          lineHeight: "24px",
-                          height: "32px",
-                        }}
-                      >
-                        {"$"}
-                      </div>
-                      <InputNumber
-                        value={
-                          form.getFieldValue("precio") * 1.12 -
-                          (form.getFieldValue("precio") *
-                            1.12 *
-                            form.getFieldValue("limite_descuento2")) /
-                            100
-                        }
-                        min={0}
-                        precision={2}
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                        // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                        // formatter={(value) =>
-                        //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        // }
-                        // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                      />
-                    </Row>
-                  </Space>
-                </Form.Item>) :null}
-                {!location.state.permiso ? (<Form.Item label="Total con Descuento Líder Proyectos">
-                  <Space>
-                    <Row>
-                      <div
-                        className="ant-input-group-addon"
-                        style={{
-                          paddingTop: "2px",
-                          verticalAlign: "middle",
-                          display: "inline-table",
-                          lineHeight: "24px",
-                          height: "32px",
-                        }}
-                      >
-                        {"$"}
-                      </div>
-                      <InputNumber
-                        value={
-                          form.getFieldValue("precio") * 1.12 -
-                          (form.getFieldValue("precio") *
-                            1.12 *
-                            form.getFieldValue("limite_descuento3")) /
-                            100
-                        }
-                        min={0}
-                        precision={2}
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                        // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                        // formatter={(value) =>
-                        //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        // }
-                        // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                      />
-                    </Row>
-                  </Space>
-                </Form.Item> ) :null}
-                {!location.state.permiso ? (<Form.Item label="Total con Descuento Eventos">
-                  <Space>
-                    <Row>
-                      <div
-                        className="ant-input-group-addon"
-                        style={{
-                          paddingTop: "2px",
-                          verticalAlign: "middle",
-                          display: "inline-table",
-                          lineHeight: "24px",
-                          height: "32px",
-                        }}
-                      >
-                        {"$"}
-                      </div>
-                      <InputNumber
-                        value={
-                          form.getFieldValue("precio") * 1.12 -
-                          (form.getFieldValue("precio") *
-                            1.12 *
-                            form.getFieldValue("limite_descuento4")) /
-                            100
-                        }
-                        min={0}
-                        precision={2}
-                        readOnly={
-                          location.state ? !location.state.permiso : false
-                        }
-                        // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                        // formatter={(value) =>
-                        //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                        // }
-                        // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                      />
-                    </Row>
-                  </Space>
-                </Form.Item>):null}
+                  <Form.Item label="Total con Descuento Líder Retail">
+                    <Space>
+                      <Row>
+                        <div
+                          className="ant-input-group-addon"
+                          style={{
+                            paddingTop: "2px",
+                            verticalAlign: "middle",
+                            display: "inline-table",
+                            lineHeight: "24px",
+                            height: "32px",
+                          }}
+                        >
+                          {"$"}
+                        </div>
+                        <InputNumber
+                          value={
+                            form.getFieldValue("precio") * 1.12 -
+                            (form.getFieldValue("precio") *
+                              1.12 *
+                              form.getFieldValue("limite_descuento2")) /
+                              100
+                          }
+                          min={0}
+                          precision={2}
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                          // formatter={(value) =>
+                          //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          // }
+                          // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        />
+                      </Row>
+                    </Space>
+                  </Form.Item>
+                ) : null}
+                {!location.state.permiso ? (
+                  <Form.Item label="Total con Descuento Líder Proyectos">
+                    <Space>
+                      <Row>
+                        <div
+                          className="ant-input-group-addon"
+                          style={{
+                            paddingTop: "2px",
+                            verticalAlign: "middle",
+                            display: "inline-table",
+                            lineHeight: "24px",
+                            height: "32px",
+                          }}
+                        >
+                          {"$"}
+                        </div>
+                        <InputNumber
+                          value={
+                            form.getFieldValue("precio") * 1.12 -
+                            (form.getFieldValue("precio") *
+                              1.12 *
+                              form.getFieldValue("limite_descuento3")) /
+                              100
+                          }
+                          min={0}
+                          precision={2}
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                          // formatter={(value) =>
+                          //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          // }
+                          // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        />
+                      </Row>
+                    </Space>
+                  </Form.Item>
+                ) : null}
+                {!location.state.permiso ? (
+                  <Form.Item label="Total con Descuento Eventos">
+                    <Space>
+                      <Row>
+                        <div
+                          className="ant-input-group-addon"
+                          style={{
+                            paddingTop: "2px",
+                            verticalAlign: "middle",
+                            display: "inline-table",
+                            lineHeight: "24px",
+                            height: "32px",
+                          }}
+                        >
+                          {"$"}
+                        </div>
+                        <InputNumber
+                          value={
+                            form.getFieldValue("precio") * 1.12 -
+                            (form.getFieldValue("precio") *
+                              1.12 *
+                              form.getFieldValue("limite_descuento4")) /
+                              100
+                          }
+                          min={0}
+                          precision={2}
+                          readOnly={
+                            location.state ? !location.state.permiso : false
+                          }
+                          // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                          // formatter={(value) =>
+                          //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                          // }
+                          // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                        />
+                      </Row>
+                    </Space>
+                  </Form.Item>
+                ) : null}
               </Col>
             </Row>
           </Panel>
