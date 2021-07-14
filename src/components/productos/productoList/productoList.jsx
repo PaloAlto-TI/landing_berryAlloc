@@ -138,6 +138,7 @@ const ProductoList = () => {
     setValue(currValue);
     const filteredData = productos.filter(
       (entry) =>
+        entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
         entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
         entry.tipo_inventario.toLowerCase().includes(currValue.toLowerCase()) ||
         entry.precio.toString().includes(currValue)
