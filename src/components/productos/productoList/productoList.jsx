@@ -43,7 +43,7 @@ const ProductoList = () => {
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const columns =
-    JSON.parse(localStorage.getItem("user")).rol === 1
+    JSON.parse(localStorage.getItem("user")).rol === 2
       ? [
           {
             title: "CÓDIGO",
@@ -223,6 +223,7 @@ const ProductoList = () => {
 
   return (
     <div>
+    {JSON.parse(localStorage.getItem("user")).rol === 2 &&
       <Button
         type="primary"
         className="success"
@@ -230,7 +231,7 @@ const ProductoList = () => {
         onClick={handleClick}
       >
         Nuevo
-      </Button>
+      </Button>}
       <Search
         placeholder="Buscar producto..."
         value={value}
@@ -252,7 +253,7 @@ const ProductoList = () => {
               onClick: (event) => {
                 console.log(event);
 
-                if (JSON.parse(localStorage.getItem("user")).rol === 1) {
+                if (JSON.parse(localStorage.getItem("user")).rol === 2) {
                   if (event.clientX < window.innerWidth * 0.8 && rowState) {
                     // record["permiso"] = false;
                     // history.push(`${path}/${record.codigo_interno}/ver`, record);
