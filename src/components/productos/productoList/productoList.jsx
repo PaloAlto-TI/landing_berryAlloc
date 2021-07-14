@@ -22,7 +22,7 @@ const ProductoList = () => {
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
-  const [rowState, setRowState] = useState(true)
+  const [rowState, setRowState] = useState(true);
   console.log("path");
   const [filteredInfo, setFilteredInfo] = useState([]);
   // const size = useWindowSize();
@@ -42,80 +42,155 @@ const ProductoList = () => {
   });
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-  const columns = [
-    {
-      title: "CÓDIGO",
-      dataIndex: "codigo_interno",
-      key: "codigo_interno",
-      sorter: {
-        compare: (a, b) => a.codigo_interno.localeCompare(b.codigo_interno),
-      },
-      showSorterTooltip: false,
-    },
-    {
-      title: "NOMBRE",
-      dataIndex: "nombre",
-      key: "nombre",
-      sorter: {
-        compare: (a, b) => a.nombre.localeCompare(b.nombre),
-      },
-      showSorterTooltip: false,
-      // render:(text)=><Link to='/inicio'>{text}</Link>
-    },
-    {
-      title: "TIPO DE INVENTARIO",
-      dataIndex: "tipo_inventario",
-      key: "tipo_inventario",
-      sorter: {
-        compare: (a, b) => a.tipo_inventario.localeCompare(b.tipo_inventario),
-      },
-      filters: [
-        { text: "PERMANENTE", value: "PERMANENTE" },
-        { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
-      ],
-      filteredValue: filteredInfo.tipo_inventario || null,
-      onFilter: (value, record) => record.tipo_inventario.includes(value),
-      ellipsis: true,
-      showSorterTooltip: false,
-      render: (text, record) =>
-        record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
-          <p style={{ color: "blue" }}>
-            {" "}
-            <SmileOutlined /> {text}
-          </p>
-        ) : (
-          <p style={{ color: "black" }}>{text}</p>
-        ),
-    },
-    {
-      title: "PRECIO",
-      dataIndex: "precio",
-      key: "precio",
-      sorter: {
-        compare: (a, b) => a.precio - b.precio,
-      },
-      showSorterTooltip: false,
-      render: (text, record) => (
-        <p
-          // onClick={() => {
-          //   record["permiso"] = false;
-          //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-          // }}
-        >
-          {"$" + text}
-        </p>
-      ),
-    },
+  const columns =
+    JSON.parse(localStorage.getItem("user")).rol === 2
+      ? [
+          {
+            title: "CÓDIGO",
+            dataIndex: "codigo_interno",
+            key: "codigo_interno",
+            sorter: {
+              compare: (a, b) =>
+                a.codigo_interno.localeCompare(b.codigo_interno),
+            },
+            showSorterTooltip: false,
+          },
+          {
+            title: "NOMBRE",
+            dataIndex: "nombre",
+            key: "nombre",
+            sorter: {
+              compare: (a, b) => a.nombre.localeCompare(b.nombre),
+            },
+            showSorterTooltip: false,
+            // render:(text)=><Link to='/inicio'>{text}</Link>
+          },
+          {
+            title: "TIPO DE INVENTARIO",
+            dataIndex: "tipo_inventario",
+            key: "tipo_inventario",
+            sorter: {
+              compare: (a, b) =>
+                a.tipo_inventario.localeCompare(b.tipo_inventario),
+            },
+            filters: [
+              { text: "PERMANENTE", value: "PERMANENTE" },
+              { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
+            ],
+            filteredValue: filteredInfo.tipo_inventario || null,
+            onFilter: (value, record) => record.tipo_inventario.includes(value),
+            ellipsis: true,
+            showSorterTooltip: false,
+            render: (text, record) =>
+              record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
+                <p style={{ color: "blue" }}>
+                  {" "}
+                  <SmileOutlined /> {text}
+                </p>
+              ) : (
+                <p style={{ color: "black" }}>{text}</p>
+              ),
+          },
+          {
+            title: "PRECIO",
+            dataIndex: "precio",
+            key: "precio",
+            sorter: {
+              compare: (a, b) => a.precio - b.precio,
+            },
+            showSorterTooltip: false,
+            render: (text, record) => (
+              <p
+              // onClick={() => {
+              //   record["permiso"] = false;
+              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+              // }}
+              >
+                {"$" + text}
+              </p>
+            ),
+          },
 
-    {
-      title: "ACCIONES",
-      dataIndex: "",
-      key: "x",
-      render: (_, record) => (
-        <CrudButton record={record} softDelete={softDeleteProducto} setRowState={setRowState} />
-      ),
-    },
-  ];
+          {
+            title: "ACCIONES",
+            dataIndex: "",
+            key: "x",
+            render: (_, record) => (
+              <CrudButton
+                record={record}
+                softDelete={softDeleteProducto}
+                setRowState={setRowState}
+              />
+            ),
+          },
+        ]
+      : [
+          {
+            title: "CÓDIGO",
+            dataIndex: "codigo_interno",
+            key: "codigo_interno",
+            sorter: {
+              compare: (a, b) =>
+                a.codigo_interno.localeCompare(b.codigo_interno),
+            },
+            showSorterTooltip: false,
+          },
+          {
+            title: "NOMBRE",
+            dataIndex: "nombre",
+            key: "nombre",
+            sorter: {
+              compare: (a, b) => a.nombre.localeCompare(b.nombre),
+            },
+            showSorterTooltip: false,
+            // render:(text)=><Link to='/inicio'>{text}</Link>
+          },
+          {
+            title: "TIPO DE INVENTARIO",
+            dataIndex: "tipo_inventario",
+            key: "tipo_inventario",
+            sorter: {
+              compare: (a, b) =>
+                a.tipo_inventario.localeCompare(b.tipo_inventario),
+            },
+            filters: [
+              { text: "PERMANENTE", value: "PERMANENTE" },
+              { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
+            ],
+            filteredValue: filteredInfo.tipo_inventario || null,
+            onFilter: (value, record) => record.tipo_inventario.includes(value),
+            ellipsis: true,
+            showSorterTooltip: false,
+            render: (text, record) =>
+              record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
+                <p style={{ color: "blue" }}>
+                  {" "}
+                  <SmileOutlined /> {text}
+                </p>
+              ) : (
+                <p style={{ color: "black" }}>{text}</p>
+              ),
+          },
+          {
+            title: "PRECIO",
+            dataIndex: "precio",
+            key: "precio",
+            sorter: {
+              compare: (a, b) => a.precio - b.precio,
+            },
+            showSorterTooltip: false,
+            render: (text, record) => (
+              <p
+              // onClick={() => {
+              //   record["permiso"] = false;
+              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+              // }}
+              >
+                {"$" + text}
+              </p>
+            ),
+          },
+        ];
 
   let history = useHistory();
 
@@ -176,16 +251,20 @@ const ProductoList = () => {
             return {
               onClick: (event) => {
                 console.log(event);
-                if (event.clientX < window.innerWidth*0.80 && rowState){
-                // record["permiso"] = false;
-                // history.push(`${path}/${record.codigo_interno}/ver`, record);
-                  
-                  ver(record)
+
+                if (JSON.parse(localStorage.getItem("user")).rol === 2) {
+                  if (event.clientX < window.innerWidth * 0.8 && rowState) {
+                    // record["permiso"] = false;
+                    // history.push(`${path}/${record.codigo_interno}/ver`, record);
+
+                    ver(record);
+                  }
+                } else {
+                  ver(record);
                 }
               },
             };
           }}
-          
         />
       ) : (
         <Spin indicator={antIcon} />
@@ -210,7 +289,7 @@ const ProductoList = () => {
 //     window.addEventListener("resize", handleResize);
 //     handleResize();
 //     return () => window.removeEventListener("resize", handleResize);
-//   }, []); 
+//   }, []);
 //   return windowSize;
 // }
 export default ProductoList;
