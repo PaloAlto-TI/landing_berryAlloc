@@ -6,9 +6,6 @@
     text-align: left;
 }
 
-.click-t{
-   width: 100%;       /* set to 100% */
-   height: 100% !important;
-   border-color: red;      /* set to 100% */
-   
+p{
+    margin-bottom: 0em;
 }

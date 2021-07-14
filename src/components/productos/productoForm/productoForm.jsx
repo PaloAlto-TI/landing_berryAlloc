@@ -13,7 +13,7 @@ import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { ProductoContext } from "../../../contexts/productoContext";
 import { useHistory } from "react-router";
-import { useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { useParams, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
 import {
   CheckCircleFilled,
@@ -41,17 +41,20 @@ const { Option } = Select;
 
 const FormProducto = (props) => {
   // console.log(props);
-  const location = useLocation();
+  // const location = useLocation();
   let { path } = useRouteMatch();
 
   console.log(path);
-
   // console.log(props);
   const { createProducto, updateProducto, findProducto, editProducto } =
     useContext(ProductoContext);
 
   let history = useHistory();
-  let { codigo } = useParams();
+  let { codigo, operacion } = useParams();
+
+  console.log("codigo", codigo);
+  console.log("operacion", operacion);
+
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [selectedGrupoId, setSelectedGrupoId] = useState(undefined);
@@ -63,14 +66,14 @@ const FormProducto = (props) => {
   const [usoCesped, setUsoCesped] = useState(undefined);
   const [rangoAlturaHebra, setRangoAlturaHebra] = useState(undefined);
   const [metodoABC, setMetodoABC] = useState(undefined);
-
+  const [crud, setCrud] = useState(null)
   const [unidadMedida, setUnidadMedida] = useState("");
 
   const [id, setId] = useState(null);
   const [show, setShow] = useState(null);
   const [infoTecnicaLinea, setinfoTecnicaLinea] = useState(null);
   const [infoTecnicaGrupo, setinfoTecnicaGrupo] = useState(null);
-
+  
   // const [precio, setPrecio] = useState(null)
   const [form] = Form.useForm();
   let initialValues = {
@@ -158,6 +161,11 @@ const FormProducto = (props) => {
   // }, [infoTecnicaLinea]);
 
   useEffect(() => {
+
+    if (crud === null){
+      setCrud(operacion  === "editar" || codigo  === "nuevo" ? true  : false );
+    }
+
     if (editProducto) {
       if (!selectedMarcaId && !selectedLineaId && !selectedGrupoId) {
         setSelectedMarcaId(editProducto.fk_marca_id);
@@ -173,11 +181,11 @@ const FormProducto = (props) => {
     }
 
     if (show === null) {
-      if (location.state) {
-        setShow(location.state.permiso);
-      } else {
-        history.goBack();
-      }
+      // if (crud) {
+        setShow(crud);
+      // } else {
+      //   history.goBack();
+      // }
     }
 
     if (!infoTecnicaLinea && editProducto) {
@@ -209,15 +217,15 @@ const FormProducto = (props) => {
     },
   };
 
-  // if (location.state) {
-  //   console.log(location.state)
-  //   if (!location.state.nuevo) {
-  //     console.log("sate",location.state);
-  //     initialValues = location.state;
+  // if (crud) {
+  //   console.log(crud)
+  //   if (!codigo === "nuevo") {
+  //     console.log("sate",crud);
+  //     initialValues = crud;
   //     if (!selectedMarcaId && !selectedLineaId) {
-  //       setSelectedMarcaId(location.state.fk_marca_id);
-  //       setSelectedLineaId(location.state.fk_linea_id);
-  //       setId(location.state.id);
+  //       setSelectedMarcaId(crud.fk_marca_id);
+  //       setSelectedLineaId(crud.fk_linea_id);
+  //       setId(crud.id);
   //     }
   //   }
 
@@ -520,7 +528,7 @@ const FormProducto = (props) => {
 
   const plainOptions = ["INTERIOR", "EXTERIOR"];
 
-  return editProducto || location.state.nuevo ? (
+  return editProducto || codigo === "nuevo" ? (
     <>
       <Form
         {...layout}
@@ -530,7 +538,7 @@ const FormProducto = (props) => {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         onValuesChange={handleFormValuesChange}
-        hidden={!location.state.nuevo ? show : false}
+        hidden={codigo !== "nuevo" ? show : false}
       >
         <Divider>PRODUCTO</Divider>
         <br />
@@ -541,9 +549,9 @@ const FormProducto = (props) => {
               <Col span={12}>
                 <Form.Item
                   label="Línea"
-                  name={location.state.permiso ? "fk_linea_id" : "linea"}
+                  name={crud ? "fk_linea_id" : "linea"}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -553,11 +561,11 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <SelectOpciones
                       tipo="línea"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                       setShow={setShow}
                     />
@@ -565,16 +573,16 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
                 </Form.Item>
                 <Form.Item
                   label="Marca"
-                  name={location.state.permiso ? "fk_marca_id" : "marca"}
+                  name={crud ? "fk_marca_id" : "marca"}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -584,11 +592,11 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <SelectOpciones
                       tipo="marca"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                       filter={selectedLineaId}
                       setShow={setShow}
@@ -597,16 +605,16 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
                 </Form.Item>
                 <Form.Item
                   label="Grupo"
-                  name={location.state.permiso ? "fk_grupo_id" : "grupo"}
+                  name={crud ? "fk_grupo_id" : "grupo"}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -616,13 +624,13 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <SelectOpciones
                       tipo="grupo"
                       filter={selectedMarcaId}
                       filter2={selectedLineaId}
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                       setShow={setShow}
                     />
@@ -630,7 +638,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -638,9 +646,9 @@ const FormProducto = (props) => {
 
                 <Form.Item
                   label="Modelo"
-                  name={location.state.permiso ? "fk_color_id" : "color"}
+                  name={crud ? "fk_color_id" : "color"}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -650,14 +658,14 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <SelectOpciones
                       tipo="color"
                       filter={selectedGrupoId}
                       filter2={selectedMarcaId}
                       filter3={selectedLineaId}
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                       setShow={setShow}
                     />
@@ -665,7 +673,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -676,7 +684,7 @@ const FormProducto = (props) => {
                   label="Procedencia"
                   name="procedencia"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -686,11 +694,11 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <SelectOpciones
                       tipo="procedencia"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                       setShow={setShow}
                     />
@@ -698,7 +706,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -707,10 +715,10 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Proveedor"
                   name={
-                    location.state.permiso ? "fk_proveedor_id" : "proveedor"
+                    crud ? "fk_proveedor_id" : "proveedor"
                   }
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -720,12 +728,12 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <SelectOpciones
                       tipo="proveedor"
                       filter={selectedMarcaId}
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                       setShow={setShow}
                     />
@@ -733,7 +741,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -743,7 +751,7 @@ const FormProducto = (props) => {
                   label="Código Interno"
                   name="codigo_interno"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -759,7 +767,7 @@ const FormProducto = (props) => {
                   label="Nombre"
                   name="nombre"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -776,7 +784,7 @@ const FormProducto = (props) => {
                   label="Descripción"
                   name="descripcion"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -789,7 +797,7 @@ const FormProducto = (props) => {
                   <TextArea
                     maxLength={280}
                     className="input-type"
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                   />
                 </Form.Item>
               </Col>
@@ -817,7 +825,7 @@ const FormProducto = (props) => {
                     }
                     name={["atributos_js", "general", "garantia1"]}
                     rules={
-                      location.state.permiso
+                      crud
                         ? [
                             {
                               required: true,
@@ -827,11 +835,11 @@ const FormProducto = (props) => {
                         : []
                     }
                   >
-                    {location.state.permiso ? (
+                    {crud ? (
                       <SelectOpciones
                         tipo="garantía"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         setShow={setShow}
                       />
@@ -839,7 +847,7 @@ const FormProducto = (props) => {
                       <Input
                         className="input-type"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     )}
@@ -858,7 +866,7 @@ const FormProducto = (props) => {
                       label="Garantía Comercial (años)"
                       name={["atributos_js", "general", "garantia2"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -869,11 +877,11 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="garantía"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           setShow={setShow}
                         />
@@ -881,7 +889,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -893,7 +901,7 @@ const FormProducto = (props) => {
                       label="Garantía Industrial (años)"
                       name={["atributos_js", "general", "garantia3"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -904,11 +912,11 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="garantía"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           setShow={setShow}
                         />
@@ -916,7 +924,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -927,7 +935,7 @@ const FormProducto = (props) => {
                     label="Formato"
                     name={["atributos_js", "general", "formato"]}
                     rules={
-                      location.state.permiso
+                      crud
                         ? [
                             {
                               required: true,
@@ -937,18 +945,18 @@ const FormProducto = (props) => {
                         : []
                     }
                   >
-                    {location.state.permiso ? (
+                    {crud ? (
                       <SelectOpciones
                         tipo="formato"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     ) : (
                       <Input
                         className="input-type"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     )}
@@ -960,7 +968,7 @@ const FormProducto = (props) => {
                       label="Capa de Desgaste"
                       name={["atributos_js", "general", "capa_desgaste"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -987,7 +995,7 @@ const FormProducto = (props) => {
                       label="Composición"
                       name={["atributos_js", "general", "composicion"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -998,10 +1006,10 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Radio.Group
                           disabled={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         >
                           <Radio value={"HOMOGÉNEO"}>HOMOGÉNEO</Radio>
@@ -1011,7 +1019,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1026,7 +1034,7 @@ const FormProducto = (props) => {
                         label="Resistencia al Agua"
                         name={["atributos_js", "general", "resitencia_agua"]}
                         rules={
-                          location.state.permiso
+                          crud
                             ? [
                                 {
                                   required: true,
@@ -1037,10 +1045,10 @@ const FormProducto = (props) => {
                             : []
                         }
                       >
-                        {location.state.permiso ? (
+                        {crud ? (
                           <Radio.Group
                             disabled={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                           >
                             <Radio value={"SI"}>SI</Radio>
@@ -1050,7 +1058,7 @@ const FormProducto = (props) => {
                           <Input
                             className="input-type"
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                           />
                         )}
@@ -1059,7 +1067,7 @@ const FormProducto = (props) => {
                         label="Tono"
                         name={["atributos_js", "general", "tono"]}
                         rules={
-                          location.state.permiso
+                          crud
                             ? [
                                 {
                                   required: true,
@@ -1069,18 +1077,18 @@ const FormProducto = (props) => {
                             : []
                         }
                       >
-                        {location.state.permiso ? (
+                        {crud ? (
                           <SelectOpciones
                             tipo="tono"
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                           />
                         ) : (
                           <Input
                             className="input-type"
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                           />
                         )}
@@ -1089,7 +1097,7 @@ const FormProducto = (props) => {
                         label="Textura"
                         name={["atributos_js", "general", "textura"]}
                         rules={
-                          location.state.permiso
+                          crud
                             ? [
                                 {
                                   required: true,
@@ -1099,10 +1107,10 @@ const FormProducto = (props) => {
                             : []
                         }
                       >
-                        {location.state.permiso ? (
+                        {crud ? (
                           <Radio.Group
                             disabled={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                           >
                             <Radio value={"MADERADO"}>MADERADO</Radio>
@@ -1112,7 +1120,7 @@ const FormProducto = (props) => {
                           <Input
                             className="input-type"
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                           />
                         )}
@@ -1129,7 +1137,7 @@ const FormProducto = (props) => {
                       label="Clase Residencial"
                       name={["atributos_js", "general", "clase_residencial"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1140,18 +1148,18 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="clase residencial"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       ) : (
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1171,7 +1179,7 @@ const FormProducto = (props) => {
                       label="Clase Comercial"
                       name={["atributos_js", "general", "clase_comercial"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1182,18 +1190,18 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="clase comercial"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       ) : (
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1205,7 +1213,7 @@ const FormProducto = (props) => {
                       label="Clase Industrial"
                       name={["atributos_js", "general", "clase_industrial"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1216,18 +1224,18 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="clase industrial"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       ) : (
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1240,7 +1248,7 @@ const FormProducto = (props) => {
                         label="Largo"
                         name={["atributos_js", "general", "largo"]}
                         rules={
-                          location.state.permiso
+                          crud
                             ? [
                                 {
                                   required: true,
@@ -1255,7 +1263,7 @@ const FormProducto = (props) => {
                           min={0}
                           precision={0}
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           formatter={(value) => `${value} mm`}
                           parser={(value) => value.replace(" mm", "")}
@@ -1265,7 +1273,7 @@ const FormProducto = (props) => {
                         label="Ancho"
                         name={["atributos_js", "general", "ancho"]}
                         rules={
-                          location.state.permiso
+                          crud
                             ? [
                                 {
                                   required: true,
@@ -1280,7 +1288,7 @@ const FormProducto = (props) => {
                           min={0}
                           precision={0}
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           formatter={(value) => `${value} mm`}
                           parser={(value) => value.replace(" mm", "")}
@@ -1296,7 +1304,7 @@ const FormProducto = (props) => {
                       label="Espesor"
                       name={["atributos_js", "general", "espesor"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1311,7 +1319,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         formatter={(value) => `${value} mm`}
                         parser={(value) => value.replace(" mm", "")}
@@ -1328,7 +1336,7 @@ const FormProducto = (props) => {
                   label="Densidad"
                   name={["atributos_js", "general", "densidad"]}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -1341,7 +1349,7 @@ const FormProducto = (props) => {
                   <InputNumber
                     min={0}
                     precision={2}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                     formatter={(value) => `${value} kg/m3`}
                     parser={(value) => value.replace(" kg/m3", "")}
                   />
@@ -1358,7 +1366,7 @@ const FormProducto = (props) => {
                     label="Core"
                     name={["atributos_js", "general", "core"]}
                     rules={
-                      location.state.permiso
+                      crud
                         ? [
                             {
                               required: true,
@@ -1368,18 +1376,18 @@ const FormProducto = (props) => {
                         : []
                     }
                   >
-                    {location.state.permiso ? (
+                    {crud ? (
                       <SelectOpciones
                         tipo="core"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     ) : (
                       <Input
                         className="input-type"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     )}
@@ -1389,7 +1397,7 @@ const FormProducto = (props) => {
                     label="Terminado"
                     name={["atributos_js", "general", "terminado"]}
                     rules={
-                      location.state.permiso
+                      crud
                         ? [
                             {
                               required: true,
@@ -1399,18 +1407,18 @@ const FormProducto = (props) => {
                         : []
                     }
                   >
-                    {location.state.permiso ? (
+                    {crud ? (
                       <SelectOpciones
                         tipo="terminado"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     ) : (
                       <Input
                         className="input-type"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     )}
@@ -1428,7 +1436,7 @@ const FormProducto = (props) => {
                       label="Biseles"
                       name={["atributos_js", "especifico", "pl_biseles"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1443,7 +1451,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         // formatter={(value) => `${value} mm`}
                         // parser={(value) => value.replace(" mm", "")}
@@ -1457,7 +1465,7 @@ const FormProducto = (props) => {
                         "pl_resistencia_abrasion",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1468,18 +1476,18 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="resistencia a la abrasion"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       ) : (
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1488,7 +1496,7 @@ const FormProducto = (props) => {
                       label="Sistema de Click"
                       name={["atributos_js", "especifico", "pl_sistema_click"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1499,18 +1507,18 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="sistema de click"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       ) : (
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1523,7 +1531,7 @@ const FormProducto = (props) => {
                         "pl_generacion_click",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1534,12 +1542,12 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Radio.Group
                           onChange={onChangeGeneracionClick}
                           value={generacionClick}
                           disabled={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         >
                           <Radio value={"3G"}>3G</Radio>
@@ -1549,7 +1557,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1562,7 +1570,7 @@ const FormProducto = (props) => {
                         "pl_subcapa_adherida",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1573,12 +1581,12 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Radio.Group
                           onChange={onChangeTieneSubcapaAdherida}
                           value={tieneSubcapaAdherida}
                           disabled={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         >
                           <Radio value={"SI"}>SI</Radio>
@@ -1588,7 +1596,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1603,7 +1611,7 @@ const FormProducto = (props) => {
                       label="Uso"
                       name={["atributos_js", "especifico", "cs_uso"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1613,12 +1621,12 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Radio.Group
                           onChange={onChangeUsoCesped}
                           value={usoCesped}
                           disabled={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         >
                           <Radio value={"DECORATIVO"}>DECORATIVO</Radio>
@@ -1628,7 +1636,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1637,7 +1645,7 @@ const FormProducto = (props) => {
                       label="Aplicación"
                       name={["atributos_js", "especifico", "cs_aplicacion"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1647,13 +1655,13 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Checkbox.Group options={plainOptions} />
                       ) : (
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1666,7 +1674,7 @@ const FormProducto = (props) => {
                         "cs_rango_altura_hebra",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1677,12 +1685,12 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Radio.Group
                           onChange={onChangeRangoAlturaHebra}
                           value={rangoAlturaHebra}
                           disabled={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           de
                         >
@@ -1693,7 +1701,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1702,7 +1710,7 @@ const FormProducto = (props) => {
                       label="Altura de Hebra"
                       name={["atributos_js", "especifico", "cs_altura_hebra"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1717,7 +1725,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         formatter={(value) => `${value} mm`}
                         parser={(value) => value.replace(" mm", "")}
@@ -1727,7 +1735,7 @@ const FormProducto = (props) => {
                       label="Puntadas cada 10 cm"
                       name={["atributos_js", "especifico", "cs_puntadas_10cm"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1742,7 +1750,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     </Form.Item>
@@ -1750,7 +1758,7 @@ const FormProducto = (props) => {
                       label="Puntadas por m2"
                       name={["atributos_js", "especifico", "cs_puntadas_m2"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1765,7 +1773,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     </Form.Item>
@@ -1779,7 +1787,7 @@ const FormProducto = (props) => {
                         "cs_filamentos_puntada",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1794,7 +1802,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     </Form.Item>
@@ -1802,7 +1810,7 @@ const FormProducto = (props) => {
                       label="Filamentos por m2"
                       name={["atributos_js", "especifico", "cs_filamentos_m2"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1817,7 +1825,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     </Form.Item>
@@ -1825,7 +1833,7 @@ const FormProducto = (props) => {
                       label="Galga"
                       name={["atributos_js", "especifico", "cs_galga"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1840,7 +1848,7 @@ const FormProducto = (props) => {
                         suffix="''"
                         className="input-type"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     </Form.Item>
@@ -1849,7 +1857,7 @@ const FormProducto = (props) => {
                       label="Tipo(s) de Filamento"
                       name={["atributos_js", "especifico", "cs_tipo_filamento"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1860,13 +1868,13 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Select
                           mode="multiple"
                           allowClear
                           placeholder="Seleccione tipo de filamento"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         >
                           {tiposFilamentoList}
@@ -1874,7 +1882,7 @@ const FormProducto = (props) => {
                       ) : (
                         <TextArea
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1888,7 +1896,7 @@ const FormProducto = (props) => {
                       label="Material:"
                       name={["atributos_js", "especifico", "sc_material"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1898,18 +1906,18 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="material"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       ) : (
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1920,7 +1928,7 @@ const FormProducto = (props) => {
                       label="Color:"
                       name={["atributos_js", "especifico", "sc_color"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1931,11 +1939,11 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="color de subcapa"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           setShow={setShow}
                         />
@@ -1943,7 +1951,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1952,7 +1960,7 @@ const FormProducto = (props) => {
                       label="Tipo de Esponja"
                       name={["atributos_js", "especifico", "sc_tipo_esponja"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -1963,10 +1971,10 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Radio.Group
                           disabled={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         >
                           <Radio value={"EVA"}>EVA</Radio>
@@ -1976,7 +1984,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -1988,7 +1996,7 @@ const FormProducto = (props) => {
                   label="Tipo de Hebra"
                   name={["atributos_js", "especifico", "pb_tipo_hebra"]}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -1998,10 +2006,10 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <Radio.Group
                       disabled={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     >
                       <Radio value={"TEJIDA"}>TEJIDA</Radio>
@@ -2011,7 +2019,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -2029,7 +2037,7 @@ const FormProducto = (props) => {
                             "ca_dimension_pantalla",
                           ]}
                           rules={
-                            location.state.permiso
+                            crud
                               ? [
                                   {
                                     required: true,
@@ -2040,10 +2048,10 @@ const FormProducto = (props) => {
                               : []
                           }
                         >
-                          {location.state.permiso ? (
+                          {crud ? (
                             <Radio.Group
                               disabled={
-                                location.state ? !location.state.permiso : false
+                                !crud
                               }
                             >
                               <Radio value={"72 X 54 MM"}>72 X 54 MM</Radio>
@@ -2053,7 +2061,7 @@ const FormProducto = (props) => {
                             <Input
                               className="input-type"
                               readOnly={
-                                location.state ? !location.state.permiso : false
+                                !crud
                               }
                             />
                           )}
@@ -2062,7 +2070,7 @@ const FormProducto = (props) => {
                           label="Conexión"
                           name={["atributos_js", "especifico", "ca_conexion"]}
                           rules={
-                            location.state.permiso
+                            crud
                               ? [
                                   {
                                     required: true,
@@ -2087,7 +2095,7 @@ const FormProducto = (props) => {
                             "ca_tipo_sensor",
                           ]}
                           rules={
-                            location.state.permiso
+                            crud
                               ? [
                                   {
                                     required: true,
@@ -2112,7 +2120,7 @@ const FormProducto = (props) => {
                             "ca_color_calefactor",
                           ]}
                           rules={
-                            location.state.permiso
+                            crud
                               ? [
                                   {
                                     required: true,
@@ -2123,10 +2131,10 @@ const FormProducto = (props) => {
                               : []
                           }
                         >
-                          {location.state.permiso ? (
+                          {crud ? (
                             <Radio.Group
                               disabled={
-                                location.state ? !location.state.permiso : false
+                                !crud
                               }
                             >
                               <Radio value={"BLANCO"}>BLANCO</Radio>
@@ -2136,7 +2144,7 @@ const FormProducto = (props) => {
                             <Input
                               className="input-type"
                               readOnly={
-                                location.state ? !location.state.permiso : false
+                                !crud
                               }
                             />
                           )}
@@ -2148,7 +2156,7 @@ const FormProducto = (props) => {
                       label="Alimentación"
                       name={["atributos_js", "especifico", "ca_alimentacion"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2163,7 +2171,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         formatter={(value) => `${value} V`}
                         parser={(value) => value.replace(" V", "")}
@@ -2179,7 +2187,7 @@ const FormProducto = (props) => {
                         "ca_longitud_cable_alimentacion",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2194,7 +2202,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         formatter={(value) => `${value} m`}
                         parser={(value) => value.replace(" m", "")}
@@ -2204,7 +2212,7 @@ const FormProducto = (props) => {
                       label="Potencia"
                       name={["atributos_js", "especifico", "ca_potencia"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2218,7 +2226,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={2}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         formatter={(value) => `${value} W/m2`}
                         parser={(value) => value.replace(" W/m2", "")}
@@ -2228,7 +2236,7 @@ const FormProducto = (props) => {
                       label="Presentación"
                       name={["atributos_js", "especifico", "ca_presentacion"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2242,7 +2250,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={0}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         formatter={(value) => `${value} m2`}
                         parser={(value) => value.replace(" m2", "")}
@@ -2252,7 +2260,7 @@ const FormProducto = (props) => {
                       label="Corriente"
                       name={["atributos_js", "especifico", "ca_corriente"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2266,7 +2274,7 @@ const FormProducto = (props) => {
                         min={0}
                         precision={2}
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         formatter={(value) => `${value} A`}
                         parser={(value) => value.replace(" A", "")}
@@ -2283,7 +2291,7 @@ const FormProducto = (props) => {
                     "pi_espesor_capa_madera",
                   ]}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2297,7 +2305,7 @@ const FormProducto = (props) => {
                   <InputNumber
                     min={0}
                     precision={2}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                     formatter={(value) => `${value} mm`}
                     parser={(value) => value.replace(" mm", "")}
                   />
@@ -2313,7 +2321,7 @@ const FormProducto = (props) => {
                         "pa_capacidad_rodamiento_carga",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2324,11 +2332,11 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <SelectOpciones
                           tipo="capacidad de Rodamiento de Carga"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           setShow={setShow}
                         />
@@ -2336,7 +2344,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -2352,7 +2360,7 @@ const FormProducto = (props) => {
                             "pa_tiempo_trabajo",
                           ]}
                           rules={
-                            location.state.permiso
+                            crud
                               ? [
                                   {
                                     required: true,
@@ -2367,7 +2375,7 @@ const FormProducto = (props) => {
                             min={0}
                             precision={0}
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                             formatter={(value) => `${value} min`}
                             parser={(value) => value.replace(" min", "")}
@@ -2381,7 +2389,7 @@ const FormProducto = (props) => {
                             "pa_tiempo_oreo",
                           ]}
                           rules={
-                            location.state.permiso
+                            crud
                               ? [
                                   {
                                     required: true,
@@ -2396,7 +2404,7 @@ const FormProducto = (props) => {
                             min={0}
                             precision={0}
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                             formatter={(value) => `${value} min`}
                             parser={(value) => value.replace(" min", "")}
@@ -2408,7 +2416,7 @@ const FormProducto = (props) => {
                       label="Presentación"
                       name={["atributos_js", "especifico", "pa_presentacion"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2421,7 +2429,7 @@ const FormProducto = (props) => {
                       <Input
                         suffix="gal"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                       />
                     </Form.Item>
@@ -2435,7 +2443,7 @@ const FormProducto = (props) => {
                         "pa_color_pegamento",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2448,7 +2456,7 @@ const FormProducto = (props) => {
                       <SelectOpciones
                         tipo="color de pegamento"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         setShow={setShow}
                       />
@@ -2457,7 +2465,7 @@ const FormProducto = (props) => {
                       label="Olor"
                       name={["atributos_js", "especifico", "pa_olor_pegamento"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2471,7 +2479,7 @@ const FormProducto = (props) => {
                       <SelectOpciones
                         tipo="olor"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         setShow={setShow}
                       />
@@ -2480,7 +2488,7 @@ const FormProducto = (props) => {
                       label="Adherencia"
                       name={["atributos_js", "especifico", "pa_adherencia"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2494,7 +2502,7 @@ const FormProducto = (props) => {
                       <SelectOpciones
                         tipo="adherencia"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         setShow={setShow}
                       />
@@ -2508,7 +2516,7 @@ const FormProducto = (props) => {
                       label="Proceso de Fabricación"
                       name={["atributos_js", "especifico", "pe_presentacion"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2525,7 +2533,7 @@ const FormProducto = (props) => {
                       label="Rectificado"
                       name={["atributos_js", "especifico", "pe_rectificado"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2536,10 +2544,10 @@ const FormProducto = (props) => {
                           : []
                       }
                     >
-                      {location.state.permiso ? (
+                      {crud ? (
                         <Radio.Group
                           disabled={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         >
                           <Radio value={"SI"}>SI</Radio>
@@ -2549,7 +2557,7 @@ const FormProducto = (props) => {
                         <Input
                           className="input-type"
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                         />
                       )}
@@ -2558,7 +2566,7 @@ const FormProducto = (props) => {
                       label="Absorción de Agua"
                       name={["atributos_js", "especifico", "pe_absorcion_agua"]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2581,7 +2589,7 @@ const FormProducto = (props) => {
                         "pa_resistencia_deslizamiento",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2595,7 +2603,7 @@ const FormProducto = (props) => {
                       <SelectOpciones
                         tipo="resistencia al deslizamiento"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         setShow={setShow}
                       />
@@ -2608,7 +2616,7 @@ const FormProducto = (props) => {
                         "pa_resistencia_abrasion",
                       ]}
                       rules={
-                        location.state.permiso
+                        crud
                           ? [
                               {
                                 required: true,
@@ -2622,7 +2630,7 @@ const FormProducto = (props) => {
                       <SelectOpciones
                         tipo="resistencia a la abrasión"
                         readOnly={
-                          location.state ? !location.state.permiso : false
+                          !crud
                         }
                         setShow={setShow}
                       />
@@ -2637,7 +2645,7 @@ const FormProducto = (props) => {
                   label="Uso(s)"
                   name={["atributos_js", "general", "usos"]}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2647,13 +2655,13 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <Select
                       mode="multiple"
                       allowClear
                       placeholder="Seleccione usos"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     >
                       {infoTecnicaLinea === "60d4c04a145bfab5e81b4626"
@@ -2674,7 +2682,7 @@ const FormProducto = (props) => {
                     <TextArea
                       // className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -2689,7 +2697,7 @@ const FormProducto = (props) => {
                   label="Método ABC"
                   name={["atributos_js", "general", "metodo_abc"]}
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2699,12 +2707,12 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <Radio.Group
                       onChange={onChangeMetodoABC}
                       value={metodoABC}
                       disabled={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     >
                       <Radio value={"A"}>A</Radio>
@@ -2715,7 +2723,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -2724,7 +2732,7 @@ const FormProducto = (props) => {
                   label="Tipo"
                   name="tipo"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2735,12 +2743,12 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <Radio.Group
                       onChange={onChangeTipoProducto}
                       value={tipoProducto}
                       disabled={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     >
                       <Radio value={"BIENES"}>BIENES</Radio>
@@ -2750,7 +2758,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -2759,7 +2767,7 @@ const FormProducto = (props) => {
                   label="Tipo de Inventario"
                   name="tipo_inventario"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2770,12 +2778,12 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <Radio.Group
                       onChange={onChangeTipoInventario}
                       value={tipoInventario}
                       disabled={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     >
                       <Radio value={"PERMANENTE"}>PERMANENTE</Radio>
@@ -2785,7 +2793,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -2793,12 +2801,12 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Unidad de Medida"
                   name={
-                    location.state.permiso
+                    crud
                       ? "fk_unidad_medida_id"
                       : "unidad_medida"
                   }
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2809,11 +2817,11 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <SelectOpciones
                       tipo="unidad de medida"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                       setShow={setShow}
                     />
@@ -2821,7 +2829,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -2830,12 +2838,12 @@ const FormProducto = (props) => {
                 <Form.Item
                   label="Unidad de Venta"
                   name={
-                    location.state.permiso
+                    crud
                       ? "fk_unidad_venta_id"
                       : "unidad_venta"
                   }
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2846,11 +2854,11 @@ const FormProducto = (props) => {
                       : []
                   }
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <SelectOpciones
                       tipo="unidad de venta"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                       setShow={setShow}
                     />
@@ -2858,7 +2866,7 @@ const FormProducto = (props) => {
                     <Input
                       className="input-type"
                       readOnly={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     />
                   )}
@@ -2868,7 +2876,7 @@ const FormProducto = (props) => {
                   label="Costo"
                   name="costo"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2897,7 +2905,7 @@ const FormProducto = (props) => {
                           min={0}
                           precision={2}
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           // formatter={(value) =>
                           //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -2922,7 +2930,7 @@ const FormProducto = (props) => {
                       : "Precio sin IVA ()"
                   }
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -2951,7 +2959,7 @@ const FormProducto = (props) => {
                           min={0}
                           precision={2}
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                           // formatter={(value) =>
@@ -2964,7 +2972,7 @@ const FormProducto = (props) => {
                   </Space>
                 </Form.Item>
 
-                {!location.state.permiso ? (
+                {!crud ? (
                   <div>
                     <Form.Item
                       label={
@@ -2996,7 +3004,7 @@ const FormProducto = (props) => {
                             min={0}
                             precision={2}
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                             // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                             // formatter={(value) =>
@@ -3036,7 +3044,7 @@ const FormProducto = (props) => {
                             min={0}
                             precision={2}
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                             // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                             // formatter={(value) =>
@@ -3077,7 +3085,7 @@ const FormProducto = (props) => {
                             min={0}
                             precision={2}
                             readOnly={
-                              location.state ? !location.state.permiso : false
+                              !crud
                             }
                             // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                             // formatter={(value) =>
@@ -3095,7 +3103,7 @@ const FormProducto = (props) => {
                   label="IVA"
                   name="iva"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -3107,7 +3115,7 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                     formatter={(value) => `${value}%`}
                     parser={(value) => value.replace("%", "")}
                   />
@@ -3118,7 +3126,7 @@ const FormProducto = (props) => {
                   label="Descuento Especialista"
                   name="limite_descuento1"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -3131,7 +3139,7 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                     formatter={(value) => `${value}%`}
                     parser={(value) => value.replace("%", "")}
                   />
@@ -3140,7 +3148,7 @@ const FormProducto = (props) => {
                   label="Descuento Líder Retail"
                   name="limite_descuento2"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -3152,7 +3160,7 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                     formatter={(value) => `${value}%`}
                     parser={(value) => value.replace("%", "")}
                   />
@@ -3161,7 +3169,7 @@ const FormProducto = (props) => {
                   label="Descuento Líder Proyectos"
                   name="limite_descuento3"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -3173,7 +3181,7 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                     formatter={(value) => `${value}%`}
                     parser={(value) => value.replace("%", "")}
                   />
@@ -3182,7 +3190,7 @@ const FormProducto = (props) => {
                   label="Descuento Eventos"
                   name="limite_descuento4"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -3194,7 +3202,7 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                     formatter={(value) => `${value}%`}
                     parser={(value) => value.replace("%", "")}
                   />
@@ -3203,7 +3211,7 @@ const FormProducto = (props) => {
                   label="Límite Descuento 5"
                   name="limite_descuento5"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -3215,7 +3223,7 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                     formatter={(value) => `${value}%`}
                     parser={(value) => value.replace("%", "")}
                   />
@@ -3224,7 +3232,7 @@ const FormProducto = (props) => {
                   label="Dimensión de Unidad de Venta"
                   name="dimension_unidad_venta"
                   rules={
-                    location.state.permiso
+                    crud
                       ? [
                           {
                             required: true,
@@ -3237,10 +3245,10 @@ const FormProducto = (props) => {
                 >
                   <InputNumber
                     min={0}
-                    readOnly={location.state ? !location.state.permiso : false}
+                    readOnly={!crud}
                   />
                 </Form.Item>
-                {!location.state.permiso ? (
+                {!crud ? (
                   <Form.Item label="Total con Descuento Especialista">
                     <Space>
                       <Row>
@@ -3267,7 +3275,7 @@ const FormProducto = (props) => {
                           min={0}
                           precision={2}
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                           // formatter={(value) =>
@@ -3280,7 +3288,7 @@ const FormProducto = (props) => {
                   </Form.Item>
                 ) : null}
 
-                {!location.state.permiso ? (
+                {!crud ? (
                   <Form.Item label="Total con Descuento Líder Retail">
                     <Space>
                       <Row>
@@ -3307,7 +3315,7 @@ const FormProducto = (props) => {
                           min={0}
                           precision={2}
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                           // formatter={(value) =>
@@ -3319,7 +3327,7 @@ const FormProducto = (props) => {
                     </Space>
                   </Form.Item>
                 ) : null}
-                {!location.state.permiso ? (
+                {!crud ? (
                   <Form.Item label="Total con Descuento Líder Proyectos">
                     <Space>
                       <Row>
@@ -3346,7 +3354,7 @@ const FormProducto = (props) => {
                           min={0}
                           precision={2}
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                           // formatter={(value) =>
@@ -3358,7 +3366,7 @@ const FormProducto = (props) => {
                     </Space>
                   </Form.Item>
                 ) : null}
-                {!location.state.permiso ? (
+                {!crud ? (
                   <Form.Item label="Total con Descuento Eventos">
                     <Space>
                       <Row>
@@ -3385,7 +3393,7 @@ const FormProducto = (props) => {
                           min={0}
                           precision={2}
                           readOnly={
-                            location.state ? !location.state.permiso : false
+                            !crud
                           }
                           // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
                           // formatter={(value) =>
@@ -3408,10 +3416,10 @@ const FormProducto = (props) => {
                   name="en_sistema_externo"
                   valuePropName="checked"
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <Checkbox
                       disabled={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     >
                       En Sistema Externo
@@ -3434,10 +3442,10 @@ const FormProducto = (props) => {
                   name="en_web"
                   valuePropName="checked"
                 >
-                  {location.state.permiso ? (
+                  {crud ? (
                     <Checkbox
                       disabled={
-                        location.state ? !location.state.permiso : false
+                        !crud
                       }
                     >
                       En Página Web
@@ -3459,7 +3467,7 @@ const FormProducto = (props) => {
         <br />
         <Row>
           <Col md={18} xs={15}>
-            {location.state.permiso ? (
+            {crud ? (
               <Form.Item {...tailLayout}>
                 <Button
                   icon={<SaveOutlined />}
@@ -3475,7 +3483,7 @@ const FormProducto = (props) => {
       </Form>
       <Spin
         indicator={antIcon}
-        hidden={!location.state.nuevo ? !show : true}
+        hidden={ codigo !== "nuevo" ? !show : true}
         className="loading-producto"
       />
     </>
