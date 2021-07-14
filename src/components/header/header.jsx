@@ -5,6 +5,7 @@ import "./header.css";
 import { useHistory } from "react-router";
 import {  message } from 'antd';
 
+
 const Header = () => {
   let history = useHistory();
   const userName = JSON.parse(localStorage.getItem("user"));
@@ -27,6 +28,7 @@ const Header = () => {
     message.success('Log Out');
     localStorage.clear();
     history.push("/login");
+
   }
 
   return (

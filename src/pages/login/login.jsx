@@ -59,8 +59,8 @@ const Login = () => {
         expires_at: google.tokenObj.expires_at,
         expires_in: google.tokenObj.expires_in,
       });
-
-      console.log("sesion guardada:"+( JSON.stringify(sesionState)));
+      console.log("Sesion Guardada "+sesionService.create(sesionState));
+     
       
     }
 
@@ -90,7 +90,7 @@ const [google,SetGoogle] = useState(null);
     await usuarioService.getAll().then(data => res1(data));
 
     let usuarioCheck_1 = res2.find((u) => u.correo === response.profileObj.email);
-    SetUsuarioCheck(usuarioCheck_1);
+     SetUsuarioCheck(usuarioCheck_1);
     SetGoogle(response);
     
 
@@ -99,8 +99,8 @@ const [google,SetGoogle] = useState(null);
       //console.log(usuarioCheck_1);
       //console.log(response);
       console.log(response.tokenObj);
-
-
+     // await sesionService(sesionState);
+     sesionService.create(sesionState)
       message.success('Permiso Concedido');
       handleClick();
     }
