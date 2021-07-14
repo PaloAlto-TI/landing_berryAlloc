@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GoogleLogin } from 'react-google-login';
+import { useState } from 'react';
 //import UsuarioService from '../../services/Usuarios/UsuariosService';
 // import { useState } from 'react';
 import "./login.css";
@@ -10,10 +11,69 @@ import { Button, message } from 'antd';
 //import  { UsuarioService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/login/src/services/usuarioService";
 import { UsuarioService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/src/services/usuarioService";
 import { SesionService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/src/services/sesionService";
-import { useState } from 'react';
 
 const Login = () => {
   let history = useHistory();
+  const sesionService = new SesionService();
+  //------------------------------------------------
+  const [sesionState, setSesionState] = useState({
+
+    id_usuario: "",
+    token_obj:
+    {
+      access_token: "",
+      expires_at: null,
+      expires_in: null,
+      id_token: "",
+      first_issued_at: null,
+      idpId: "",
+      login_hint: "",
+      scope: "",
+
+    },
+    expires_at: null,
+    expires_in: null
+
+
+  })
+
+  //--------------------------------------------
+  useEffect(() => {
+
+    if (usuarioCheck && usuarioCheck.active === true && google) {
+
+      setSesionState({ ...sesionState,
+        id_usuario: usuarioCheck._id,
+        token_obj:
+        {
+          access_token: google.tokenObj.access_token,
+          expires_at: google.tokenObj.expires_at,
+          expires_in: google.tokenObj.expires_in,
+          id_token: google.tokenObj.id_token,
+          first_issued_at: google.tokenObj.first_issued_at,
+          idpId: google.tokenObj.idpId,
+          login_hint:  google.tokenObj.login_hint,
+          scope: google.tokenObj.scope,
+
+        },
+        expires_at: google.tokenObj.expires_at,
+        expires_in: google.tokenObj.expires_in,
+      });
+
+      console.log("sesion guardada:"+( JSON.stringify(sesionState)));
+      
+    }
+
+   
+    //console.log("Usuario Check: "+usuarioCheck);
+   // console.log("Usuario Sesion: "+sesionState.id_usuario);
+    
+  });
+  //----------------------------------------------
+const [usuarioCheck,SetUsuarioCheck] = useState(null);
+const [google,SetGoogle] = useState(null);
+
+  //--------------------------------------------     
 
   function handleClick() {
     history.push("/home");
@@ -22,24 +82,25 @@ const Login = () => {
   const ResponseGoogle = async (response) => {
     // console.log(response);
     const usuarioService = new UsuarioService();
-    const sesionService = new SesionService();
-
-
-  
-
 
     let res2;
 
     const res1 = (data) => { res2 = data; }
-    console.log(response);
+    //console.log(response);
     await usuarioService.getAll().then(data => res1(data));
 
-    let usuarioCheck = res2.find((u) => u.correo === response.profileObj.email);
+    let usuarioCheck_1 = res2.find((u) => u.correo === response.profileObj.email);
+    SetUsuarioCheck(usuarioCheck_1);
+    SetGoogle(response);
+    
 
-    console.log(usuarioCheck);
-    if (usuarioCheck && usuarioCheck.active === true) {
-      localStorage.setItem('user', JSON.stringify(usuarioCheck));
-      console.log(response);
+    if (usuarioCheck_1 && usuarioCheck_1.active === true) {
+      localStorage.setItem('user', JSON.stringify(usuarioCheck_1));
+      //console.log(usuarioCheck_1);
+      //console.log(response);
+      console.log(response.tokenObj);
+
+
       message.success('Permiso Concedido');
       handleClick();
     }
