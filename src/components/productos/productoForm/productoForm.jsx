@@ -66,7 +66,7 @@ const FormProducto = (props) => {
   const [usoCesped, setUsoCesped] = useState(undefined);
   const [rangoAlturaHebra, setRangoAlturaHebra] = useState(undefined);
   const [metodoABC, setMetodoABC] = useState(undefined);
-  const [crud, setCrud] = useState(null)
+  const [crud, setCrud] = useState(operacion  === "editar" || codigo  === "nuevo" ? true  : false)
   const [unidadMedida, setUnidadMedida] = useState("");
 
   const [id, setId] = useState(null);
