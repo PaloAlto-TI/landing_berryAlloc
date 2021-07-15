@@ -21,9 +21,8 @@ const LineaContextProvider = (props) => {
       console.log("PASOO UN ERROR EN LINEAS: " + JSON.stringify(data));
       if (data.message === "OK CREATE") {
         lineaService.getAll().then((data) => setLineas(data));
-        console.log("LO QUE ESTA DENTRO DEL GET ALL: " + setLineas(data))
       }
-      return data.message;
+      return data;
     }
 
     const softDeleteLinea = (linea) => {

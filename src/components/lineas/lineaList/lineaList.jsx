@@ -9,7 +9,7 @@ import Search from "antd/lib/input/Search";
 import './lineaList.css';
 
 const LineaList = () => {
-    const { lineas, setEditLinea, isEmpty, softDeleteLinea } = useContext(LineaContext);
+    const { lineas, setPermiso, setEditLinea, isEmpty, softDeleteLinea } = useContext(LineaContext);
     const [filteredInfo, setFilteredInfo] = useState([])
     const [value, setValue] = useState(null);
     const [dataSource, setDataSource] = useState([]);
@@ -62,10 +62,11 @@ const LineaList = () => {
     };
 
     function handleClick() {
-        // setPermiso(true);
+      console.log("ENTRA AL HANDLE CLICK");
+        setPermiso(true);
         let record = {
-        // "permiso" : true,
-        "nuevo" : true
+          permiso: true,
+          nuevo: true,
         };
         history.push(`${path}/nuevo`, record);
     }
@@ -74,7 +75,7 @@ const LineaList = () => {
       record["permiso"] = false;
       alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
 
-      // history.push(`${path}/${record.codigo_interno}/ver`, record);
+      history.push(`${path}/${record.codigo_interno}/ver`, record);
     }
 
     const filtrar = (e) => {
@@ -88,7 +89,7 @@ const LineaList = () => {
     useEffect(() => {
         setEditLinea(null);
         console.log("Usse Effect -> Value: " + value)
-        // setPermiso(false);
+        setPermiso(false);
         if (!value){
           setDataSource(lineas)
         }

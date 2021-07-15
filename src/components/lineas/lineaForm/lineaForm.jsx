@@ -13,7 +13,10 @@ const { TextArea } = Input;
 // import { LineaService } from "../../../services/lineaService";
 
 function shoot() {
-  window.history.back();
+ 
+  if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
+    window.history.back();
+  }
 }
 
 const FormLinea = (props) => {
@@ -35,10 +38,10 @@ const FormLinea = (props) => {
         descripcion: ''
     };
 
-    console.log("EL EDITLINEA: + " + editLinea);
-    console.log("EL CODIGO: + " + pseudo);
-    console.log("EL HISTORY: + " + JSON.stringify(history));
-    console.log("EL LOCATION: + " + JSON.stringify(location));
+    // console.log("EL EDITLINEA: + " + editLinea);
+    // console.log("EL CODIGO: + " + pseudo);
+    // console.log("EL HISTORY: + " + JSON.stringify(history));
+    // console.log("EL LOCATION: + " + JSON.stringify(location));
     // console.log("lOS PROPS DE lINEA: " + JSON.stringify(props));
     //esta parte estaba despues del useeffect
 
@@ -128,18 +131,16 @@ const FormLinea = (props) => {
           console.log("LO QUE VA A GUARDAR:",JSON.stringify(values));
           data = await createLinea(values);
         }
-        //console.log("LA DATA QUE RETORNA EL FORMULARIO EN stringify: " + JSON.stringify(data));
-        //console.log("EL DATA.DATA: " + data.data);
+        console.log("LA DATA QUE RETORNA EL FORMULARIO EN stringify: " + JSON.stringify(data));
+        // console.log("LA DATA ERROR Q RETORNA: " + JSON.stringify(data.errorDetails));
+        console.log("EL DATA.MESSAGE: " + JSON.stringify(data.message));
+        console.log("EL DATA.DATA: " + JSON.stringify(data.data));
 
-        if (data.includes("OK")) {
-          console.log(data);
-
-          message.info(data, 2).then((t) => history.goBack());
-
+        if (data.message.includes("OK")) {
           // setPermiso(false);
-          // message.info(data);
+          message.info(JSON.stringify(data.message) + ": "+ "LA LÍNEA " + JSON.stringify(data.data.nombre) + " SE CREÓ CON ÉXITO", 4).then((t) => history.goBack());
         } else {
-          message.warning(data);
+          message.error("ERROR AL MOMENTO DE CREAR LA LÍNEA: \n"+ JSON.stringify(data.errorDetails.description), 15);
         }
 
       }
@@ -165,15 +166,8 @@ const FormLinea = (props) => {
         /*onValuesChange={handleFormValuesChange}*/
         hidden={show}
       >
-        <div>
-          {"EL EDIT LINEA: " + editLinea}
-          {"EL SHOW: " + show}
-        <br/>
-          {"EL LOCATON: " + location.state.nuevo}
-        <br/>
-          Hola mundo!
-        </div>
-          <Divider>LÍNEA</Divider>
+          <Divider className="titleFont">LÍNEA</Divider>
+          <br/>
           <Row>
           <Col span={12}>
           <Form.Item
@@ -201,6 +195,7 @@ const FormLinea = (props) => {
                   required: true,
                   message: "Por favor, ingrese el Pseudónimo de la Línea!",
                 },
+                { max: 3, message: 'El Pseudónimo debe tener como máximo 3 caracteres' },
               ]}
             >
               <Input
@@ -210,6 +205,7 @@ const FormLinea = (props) => {
             </Form.Item>
             </Col>
             </Row>
+            <br/><br/>
             <Row justify="start">
               <Col span={18}>
                 <Form.Item
@@ -226,10 +222,9 @@ const FormLinea = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-        <br/>
+        <br/><br/><br/>
         <Row>
           <Col span={18} >
-            {"El permiso: " + location.state.permiso}
             {// location.state.permiso ? (
               <Form.Item {...tailLayout}>
                 <Button
@@ -239,6 +234,7 @@ const FormLinea = (props) => {
                 >
                   GUARDAR
                 </Button>
+                &nbsp;&nbsp;
                 <Button
                   className="button button3"
                   icon={<CloseSquareOutlined />}
@@ -252,18 +248,6 @@ const FormLinea = (props) => {
           }
           </Col>
         </Row>
-        <Row>
-    <Col xs={24} xl={8}>
-      One of three columns
-    </Col>
-    <Col xs={24} xl={8}>
-      One of three columns
-    </Col>
-    <Col xs={24} xl={8}>
-      One of three columns
-    </Col>
-  </Row>
-
       </Form>
       <Spin indicator={antIcon} hidden={!show} className="loading-producto" /> 
       </>: null
