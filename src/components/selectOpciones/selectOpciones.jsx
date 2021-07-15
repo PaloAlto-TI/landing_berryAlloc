@@ -1,126 +1,194 @@
 import React, { useEffect, useState } from "react";
-import { Select } from 'antd';
-import { MarcaService } from "../../services/marcaService";
+import { Select } from "antd";
 import { LineaMarcaService } from "../../services/lineaMarcaService";
-import { GrupoService } from "../../services/grupoService";
-import { ProveedorService } from "../../services/proveedorService";
 import { MedidaService } from "../../services/medidaService";
 import { paises } from "../../utils/paises";
-import { ColorService } from "../../services/colorService";
+import { LineaService } from "../../services/lineaService";
+import { GrupoMarcaService } from "../../services/grupoMarcaService";
+import { ProveedorMarcaService } from "../../services/proveedorMarcaService";
+import { ColorGrupoService } from "../../services/colorGrupoService";
+import { resistenciasAbrasion } from "../../utils/resistenciasAbrasion";
+import { sistemasClick } from "../../utils/sistemasClick";
+import { clasesIndustrial } from "../../utils/clasesIndustrial";
+import { clasesComercial } from "../../utils/clasesComercial";
+import { clasesResidencial } from "../../utils/clasesResidencial";
+import { core } from "../../utils/core";
+import { terminado } from "../../utils/terminado";
+import { garantias } from "../../utils/garantias";
+import { materialesSubcapa } from "../../utils/materialesSubcapa";
+import { coloresSubcapa } from "../../utils/coloresSubcapa";
+import { formatos } from "../../utils/formatos";
+import { tonos } from "../../utils/tonos";
+import { capacidadesRodamientoCarga } from "../../utils/capacidadesRodamientoCarga";
+import { coloresPegamentos } from "../../utils/coloresPegamentos";
+import { oloresPegamentos } from "../../utils/oloresPegamentos";
+import { adherenciasPegamentos } from "../../utils/adherenciasPegamentos";
+import { resistenciasDeslizamiento } from "../../utils/resistenciasDeslizamiento";
+import { resistenciasAbrasionPorcelanato } from "../../utils/resistenciasAbrasionPorcelanato";
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
-
   // console.log(props)
-    const {tipo, onChange, value, filter, readOnly, setShow} = props;
-    const [opciones, setOpciones] = useState([])
-    console.log(props);
-    useEffect(() => {
+  const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow } =
+    props;
+  const [opciones, setOpciones] = useState([]);
+  console.log(props);
+  useEffect(() => {
+    let cancel = false;
 
-      let cancel = false;
+    async function fetch() {
+      console.log(filter);
 
-      async function fetch() {
-        if (tipo === 'marca'){
-          const marcaService = new MarcaService();
-          marcaService.getAll().then( (data) =>  {if (cancel) return; setOpciones(data)});
-        }
-        
-        if (tipo === 'línea' && filter){
-          const lineaMarcaService= new LineaMarcaService();
-          lineaMarcaService.getAll().then((data) =>  {if (cancel) return; setOpciones(data.filter((p) => p.marca_id === filter))});
-        }else{
-          // setOpciones([]);
-        }
-  
-        if (tipo === 'color' && filter){
-          console.log("FILTER-COLOR:",filter)
-          const colorService= new ColorService();
-          colorService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.fk_linea_id === filter))});
-        }else{
-          // setOpciones([]);
-        }
-  
-        if (tipo === 'grupo' && filter){
-          const grupoService= new GrupoService();
-          grupoService.getAll().then((data) => {if (cancel) return;setOpciones(data.filter((p) => p.fk_linea_id === filter))});
-        }else{
-          // setOpciones([]);
-        }
-  
-        if (tipo === 'proveedor'){
-          const proveedorService= new ProveedorService();
-          proveedorService.getAll().then((data) => {if (cancel) return;setOpciones(data)});
-        }else{
-          // setOpciones([]);
-        }
-  
-        if (tipo === 'unidad de medida' || tipo === 'unidad de venta'){
-          const medidaService= new MedidaService();
-          if (tipo === 'unidad de medida'){
-            medidaService.getAll().then((data) =>{if (cancel) return; setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "MEDIDA" ))});
-          }else{
-            await medidaService.getAll().then((data) => {if (cancel) return; setOpciones(data.filter((p) => p.tipo_unidad.toUpperCase() === "VENTA"))});
-            setShow(false);
+      if (tipo === "línea") {
+        const lineaService = new LineaService();
+        lineaService.getAll().then((data) => {
+          if (cancel) return;
+          setOpciones(data);
+        });
+      } else if (tipo === "marca" && filter) {
+        const lineaMarcaService = new LineaMarcaService();
+        lineaMarcaService.getAll().then((data) => {
+          if (cancel) return;
+          setOpciones(data.filter((p) => p.linea_id === filter));
+        });
+      } else if (tipo === "grupo" && filter && filter2) {
+        console.log("FILTER-MARCA", filter);
+        console.log("FILTER-LINEA", filter2);
+
+        const grupoService = new GrupoMarcaService();
+        grupoService.getAll().then((data) => {
+          if (cancel) return;
+          setOpciones(
+            data.filter((p) => p.marca_id === filter && p.linea_id === filter2)
+          );
+        });
+      } else if (tipo === "color" && filter) {
+        console.log("FILTER-COLOR:", filter);
+        console.log("FILTER-COLOR2:", filter2);
+
+        const colorService = new ColorGrupoService();
+        await colorService.getAll().then((data) => {
+          if (cancel) return;
+          if (filter3 === "60d4c04b894c18b5e810e025") {
+            setOpciones(
+              data.filter(
+                (p) => p.grupo_id === filter && p.marca_id === filter2
+              )
+            );
+          } else {
+            setOpciones(
+              data.filter(
+                (p) => p.grupo_id === filter
+              )
+            );
           }
-        }else{
-          // setOpciones([]);
+        });
+        setShow(false);
+      } else if (tipo === "proveedor" && filter) {
+        console.log("ejecuta proveedor");
+        const proveedorService = new ProveedorMarcaService();
+        proveedorService.getAll().then((data) => {
+          if (cancel) return;
+          setOpciones(data.filter((p) => p.marca_id === filter));
+        });
+      } else if (tipo === "unidad de medida" || tipo === "unidad de venta") {
+        const medidaService = new MedidaService();
+        if (tipo === "unidad de medida") {
+          medidaService.getAll().then((data) => {
+            if (cancel) return;
+            setOpciones(
+              data.filter((p) => p.tipo_unidad.toUpperCase() === "MEDIDA")
+            );
+          });
+        } else {
+          medidaService.getAll().then((data) => {
+            if (cancel) return;
+            setOpciones(
+              data.filter((p) => p.tipo_unidad.toUpperCase() === "VENTA")
+            );
+          });
+          // setShow(false);
         }
-  
-        if (tipo === 'procedencia'){
-          setOpciones(paises);
-        }
-
-
-  
+      } else if (tipo === "procedencia") {
+        setOpciones(paises);
+      } else if (tipo === "resistencia a la abrasion") {
+        setOpciones(resistenciasAbrasion);
+      } else if (tipo === "sistema de click") {
+        setOpciones(sistemasClick);
+      } else if (tipo === "clase residencial") {
+        setOpciones(clasesResidencial);
+      } else if (tipo === "clase comercial") {
+        setOpciones(clasesComercial);
+      } else if (tipo === "clase industrial") {
+        setOpciones(clasesIndustrial);
+      } else if (tipo === "core") {
+        setOpciones(core);
+      } else if (tipo === "terminado") {
+        setOpciones(terminado);
+      } else if (tipo === "garantía") {
+        setOpciones(garantias);
+      } else if (tipo === "material") {
+        setOpciones(materialesSubcapa);
+      } else if (tipo === "color de subcapa") {
+        setOpciones(coloresSubcapa);
+      } else if (tipo === "formato") {
+        setOpciones(formatos);
+      } else if (tipo === "tono") {
+        setOpciones(tonos);
+      } else if (tipo === "capacidad de rodamiento de carga") {
+        setOpciones(capacidadesRodamientoCarga);
+      } else if (tipo === "color de pegamento") {
+        setOpciones(coloresPegamentos);
+      } else if (tipo === "olor") {
+        setOpciones(oloresPegamentos);
+      } else if (tipo === "adherencia") {
+        setOpciones(adherenciasPegamentos);
+      } else if (tipo === "resistencia al deslizamiento") {
+        setOpciones(resistenciasDeslizamiento);
+      } else if (tipo === "resistencia a la abrasión") {
+        setOpciones(resistenciasAbrasionPorcelanato);
+      } else {
+        setOpciones([]);
       }
-      
-     
-        fetch();
+    }
 
-        return () => { 
-          cancel = true;
-        }
+    fetch();
+    return () => {
+      cancel = true;
+    };
+  }, [filter]);
 
+  function handleChange(value) {
+    onChange(value);
+  }
 
-    }, [filter])
-  
+  function onBlur() {
+    console.log("blur");
+  }
 
-    function handleChange(value) {
-       console.log("value!!!!!!!!",value);
-        onChange(value);
-      
-      }
-      
-      function onBlur() {
-        console.log('blur');
-      }
-      
-      function onFocus() {
-        console.log('focus');
-      }
-      
-      function onSearch(val) {
-        console.log('search:', val);
-      }
+  function onFocus() {
+    console.log("focus");
+  }
 
-      var opcionesList = opciones.map(function (opcion) {
-        
-        if (opcion.codigo){
-  
-          return (
-          
-            <Option key={opcion.id} value={opcion.id}>{opcion.nombre.toUpperCase()}</Option> 
-  
-          );
-        }else{
-          return (
-          
-            <Option key={opcion.id} value={opcion.id}>{opcion.nombre.toUpperCase()}</Option> 
-  
-          );
-        }
-        
-      });
+  function onSearch(val) {
+    console.log("search:", val);
+  }
+
+  var opcionesList = opciones.map(function (opcion) {
+    if (opcion.codigo) {
+      return (
+        <Option key={opcion.id} value={opcion.id}>
+          {opcion.nombre.toUpperCase()}
+        </Option>
+      );
+    } else {
+      return (
+        <Option key={opcion.id} value={opcion.id}>
+          {opcion.nombre.toUpperCase()}
+        </Option>
+      );
+    }
+  });
 
   return (
     <Select
@@ -128,7 +196,7 @@ const SelectOpciones = (props) => {
       showSearch
       disabled={readOnly}
       style={{ width: 200 }}
-      placeholder={"Seleccione "+tipo}
+      placeholder={"Seleccione " + tipo}
       optionFilterProp="children"
       onChange={handleChange}
       onFocus={onFocus}
@@ -140,9 +208,7 @@ const SelectOpciones = (props) => {
         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
       }
     >
-
-
-     {opcionesList}
+      {opcionesList}
     </Select>
   );
 };

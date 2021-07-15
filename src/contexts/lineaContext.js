@@ -33,7 +33,7 @@ const LineaContextProvider = (props) => {
 
     const findLinea = (id) => {
       console.log("EL ID PARA FINDLINEA: " + id);
-      const linea = lineas.find((l) => l.codigo_interno === id);
+      const linea = lineas.find((l) => l.id === id);
       setEditLinea(linea);
     };
 

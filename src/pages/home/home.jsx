@@ -20,50 +20,51 @@ import {
 } from "react-router-dom";
 
 const Home = () => {
-  
+
   let { path } = useRouteMatch();
-  
+
   return (
     <>
-      <Header />
+    <Header />
       <main>
         <SideMenu />
         <Router>
-        <Switch>
-          <Route exact path={`${path}`}>
-            <Layout style={{ height: "78.5vh", backgroundColor: "white", justifyContent: "center", }}>
-              <span style={{ color: "black", fontSize: "45px", fontWeight: "bold", }}>
-                PRODUCTOS - PALO ALTO
-              </span>
-            </Layout>
-          </Route>
-          <Route exact path={`${path}/productos`}>
-            <ProductoContextProvider Provider>
-              <ProductoList />
-            </ProductoContextProvider>
-          </Route>
-          <Route path={`${path}/productos/:codigo`}>
-            <ProductoContextProvider Provider>
+          <ProductoContextProvider Provider>
+            <Switch>
+              <Route exact path={`${path}/productos`}>
+                <ProductoList />
+              </Route>
+              <Route path={`${path}/productos/:codigo?/:operacion?`}>
                 <ProductoForm />
-            </ProductoContextProvider>
-          </Route>
-          <Route exact path={`${path}/lineas`}>
-            <LineaContextProvider Provider>
-              <LineaList />
-            </LineaContextProvider>
-          </Route>
-          <Route path={`${path}/lineas/:pseudo`}>
+              </Route>
+              <Route exact path={`${path}`}>
+                <Layout style={{ height: "62vh", backgroundColor: "white", justifyContent: "center",}}>
+                  <span style={{ color: "black", fontSize: "45px", fontWeight: "bold", }}>
+                    PRODUCTOS - PALO ALTO
+                  </span>
+                </Layout>
+              </Route>
+            </Switch>
+          </ProductoContextProvider>
+
           <LineaContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/lineas`}>
+              <LineaList />
+          </Route>
+          <Route path={`${path}/lineas/:codigo?/:operacion?`}>
               <LineaForm />
-            </LineaContextProvider>
-          </Route>
-          <Route exact path={`${path}/marcas`}>
-          <p>MARCAS</p>
-          </Route>
-          <Route path="*">
-            <p>404 NOT FOUND</p>
           </Route>
           </Switch>
+            </LineaContextProvider>
+
+            <Route exact path={`${path}/marcas`}>
+              <p>MARCAS</p>
+            </Route>
+            
+            {/*<Route path="*">
+              <p>404 NOT FOUND</p>
+  </Route>*/}
         </Router>
       </main>
       <Footer />
