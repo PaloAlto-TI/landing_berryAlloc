@@ -15,6 +15,13 @@ export class SesionService {
 
     create(sesion){
         return axios.post(baseUrl+"sesion/", sesion).then(res => res.data).catch(error => error.response.data);
+        
+    }
+
+    getUsuario(sesion){
+        //console.log("token sesion: "+sesion.token);
+
+        return axios.post(baseUrl+"sesionusuario", sesion).then(res => res.data).catch(error => error.response.data);
     }
 
 

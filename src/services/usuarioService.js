@@ -18,7 +18,7 @@ export class UsuarioService {
 
 
     update(usuario){
-        return axios.put(baseUrl+"usuario/"+usuario.id, usuario).then(res => res.data).catch(error => error.response.data);;
+        return axios.put(baseUrl+"usuario/"+usuario.id, usuario).then(res => res).catch(error => error.response.data);;
     }
 
     softDelete(usuario){

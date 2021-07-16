@@ -32,7 +32,9 @@ const Login = () => {
 
     },
     expires_at: null,
-    expires_in: null
+    expires_in: null,
+    active:true,
+    token:null
 
 
   })
@@ -40,8 +42,11 @@ const Login = () => {
   //--------------------------------------------
   useEffect(() => {
 
-    if (usuarioCheck && usuarioCheck.active === true && google) {
-
+//console.log("usuario check:"+usuarioCheck);
+if (usuarioCheck && usuarioCheck.active === true && google) {
+  
+  
+  
       setSesionState({ ...sesionState,
         id_usuario: usuarioCheck._id,
         token_obj:
@@ -58,16 +63,27 @@ const Login = () => {
         },
         expires_at: google.tokenObj.expires_at,
         expires_in: google.tokenObj.expires_in,
+        active:true,
+        token:google.tokenObj.access_token
       });
-      console.log("Sesion Guardada "+sesionService.create(sesionState));
+
+      
+      
+   sesionService.create(sesionState);
+
+   localStorage.setItem('token', sesionState.token);
+
+     //-------------------------------------
+    // const tok={"token":localStorage.getItem("token")};
+     
+     
+     //sesionService.getUsuario(tok).then(t=>console.log("RESULTADO:"+JSON.stringify(t)));
      
       
+   //  console.log("google:"+JSON.stringify(sesionState));
     }
 
-   
-    //console.log("Usuario Check: "+usuarioCheck);
-   // console.log("Usuario Sesion: "+sesionState.id_usuario);
-    
+
   });
   //----------------------------------------------
 const [usuarioCheck,SetUsuarioCheck] = useState(null);
@@ -90,17 +106,24 @@ const [google,SetGoogle] = useState(null);
     await usuarioService.getAll().then(data => res1(data));
 
     let usuarioCheck_1 = res2.find((u) => u.correo === response.profileObj.email);
-     SetUsuarioCheck(usuarioCheck_1);
+    SetUsuarioCheck(usuarioCheck_1);
     SetGoogle(response);
+
+   // console.log("usuariocheck:"+usuarioCheck_1);
+    //console.log("usuarioresponse:"+JSON.stringify(response));
     
 
     if (usuarioCheck_1 && usuarioCheck_1.active === true) {
+      
       localStorage.setItem('user', JSON.stringify(usuarioCheck_1));
+     
       //console.log(usuarioCheck_1);
       //console.log(response);
-      console.log(response.tokenObj);
-     // await sesionService(sesionState);
-     sesionService.create(sesionState)
+      //console.log(response.tokenObj);
+      
+      //console.log("SESION STATE:"+JSON.stringify(sesionState));
+
+     
       message.success('Permiso Concedido');
       handleClick();
     }
@@ -113,6 +136,7 @@ const [google,SetGoogle] = useState(null);
 
     {
       localStorage.getItem("user") === null ?
+      
         <div className="box">
           <div className="ava">
             <img className="avatar" alt="img" src={imagen} />
