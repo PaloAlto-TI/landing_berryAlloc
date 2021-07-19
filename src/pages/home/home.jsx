@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
 import SideMenu from "../../components/menu/sidemenu";
 import ProductoList from "../../components/productos/productoList/productoList";
 import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
+import { SesionContext } from "../../../src/contexts/sesionContext";
+
 import { Layout } from "antd";
 import "./home.css";
 import {
@@ -14,7 +16,23 @@ import {
   useRouteMatch
 } from "react-router-dom";
 
-const Home = () => {
+
+
+
+
+const Home =  () => {
+
+const Sesion= async()=>{
+
+  const { usuario} =  useContext(SesionContext);
+
+  return await usuario();
+
+
+}
+
+console.log(Sesion());
+  
   
   let { path } = useRouteMatch();
   

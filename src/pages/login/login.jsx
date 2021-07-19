@@ -33,61 +33,69 @@ const Login = () => {
     },
     expires_at: null,
     expires_in: null,
-    active:true,
-    token:null
+    active: true,
+    token: null
 
 
   })
 
   //--------------------------------------------
-  useEffect(() => {
+  useEffect(async () => {
 
-//console.log("usuario check:"+usuarioCheck);
-if (usuarioCheck && usuarioCheck.active === true && google) {
+    //console.log("usuario check:"+usuarioCheck);
+    if (usuarioCheck && usuarioCheck.active === true && google) {
+
+
+
+      
+
+      
+        await setSesionState({
+          ...sesionState,
+          id_usuario: usuarioCheck._id,
+          token_obj:
+          {
+            access_token: google.tokenObj.access_token,
+            expires_at: google.tokenObj.expires_at,
+            expires_in: google.tokenObj.expires_in,
+            id_token: google.tokenObj.id_token,
+            first_issued_at: google.tokenObj.first_issued_at,
+            idpId: google.tokenObj.idpId,
+            login_hint: google.tokenObj.login_hint,
+            scope: google.tokenObj.scope,
   
-  
-  
-      setSesionState({ ...sesionState,
-        id_usuario: usuarioCheck._id,
-        token_obj:
-        {
-          access_token: google.tokenObj.access_token,
+          },
           expires_at: google.tokenObj.expires_at,
           expires_in: google.tokenObj.expires_in,
-          id_token: google.tokenObj.id_token,
-          first_issued_at: google.tokenObj.first_issued_at,
-          idpId: google.tokenObj.idpId,
-          login_hint:  google.tokenObj.login_hint,
-          scope: google.tokenObj.scope,
+          active: true,
+          token: google.tokenObj.access_token
+        });
+     
+        await sesionService.create(sesionState);
+        await localStorage.setItem('token', sesionState.token);
+        
+        
+     
 
-        },
-        expires_at: google.tokenObj.expires_at,
-        expires_in: google.tokenObj.expires_in,
-        active:true,
-        token:google.tokenObj.access_token
-      });
-
+      console.log("google:"+localStorage.getItem('token'));
       
       
-   sesionService.create(sesionState);
 
-   localStorage.setItem('token', sesionState.token);
+      //-------------------------------------
+      // const tok={"token":localStorage.getItem("token")};
 
-     //-------------------------------------
-    // const tok={"token":localStorage.getItem("token")};
-     
-     
-     //sesionService.getUsuario(tok).then(t=>console.log("RESULTADO:"+JSON.stringify(t)));
-     
-      
-   //  console.log("google:"+JSON.stringify(sesionState));
+
+      //sesionService.getUsuario(tok).then(t=>console.log("RESULTADO:"+JSON.stringify(t)));
+
+
+      //  console.log("google:"+JSON.stringify(sesionState));
     }
 
 
   });
   //----------------------------------------------
-const [usuarioCheck,SetUsuarioCheck] = useState(null);
-const [google,SetGoogle] = useState(null);
+  const [usuarioCheck, SetUsuarioCheck] = useState(null);
+  const [google, SetGoogle] = useState(null);
 
   //--------------------------------------------     
 
@@ -109,21 +117,21 @@ const [google,SetGoogle] = useState(null);
     SetUsuarioCheck(usuarioCheck_1);
     SetGoogle(response);
 
-   // console.log("usuariocheck:"+usuarioCheck_1);
+    // console.log("usuariocheck:"+usuarioCheck_1);
     //console.log("usuarioresponse:"+JSON.stringify(response));
-    
+
 
     if (usuarioCheck_1 && usuarioCheck_1.active === true) {
-      
+
       localStorage.setItem('user', JSON.stringify(usuarioCheck_1));
-     
+
       //console.log(usuarioCheck_1);
       //console.log(response);
       //console.log(response.tokenObj);
-      
+
       //console.log("SESION STATE:"+JSON.stringify(sesionState));
 
-     
+
       message.success('Permiso Concedido');
       handleClick();
     }
@@ -136,7 +144,7 @@ const [google,SetGoogle] = useState(null);
 
     {
       localStorage.getItem("user") === null ?
-      
+
         <div className="box">
           <div className="ava">
             <img className="avatar" alt="img" src={imagen} />
@@ -162,7 +170,7 @@ const [google,SetGoogle] = useState(null);
               render={(renderProps) => (
                 <Button className='googleButton' color='primary' onClick={renderProps.onClick} disabled={renderProps.disabled}  >
                   <img className="googleIcon" alt="img" src="https://img.icons8.com/material-outlined/50/000000/google-logo.png" />
-                Entrar con Google
+                  Entrar con Google
                 </Button>
               )}
               onSuccess={ResponseGoogle}

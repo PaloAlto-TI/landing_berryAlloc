@@ -4,23 +4,18 @@ import { UserOutlined } from '@ant-design/icons';
 import "./header.css";
 import { useHistory } from "react-router";
 import {  message } from 'antd';
-import { SesionService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/src/services/sesionService";
 
 
 
 
 const Header = () => {
 
-  //-------------------------------------------------
-  const sesionService = new SesionService();
 
- 
-
-//-----------------------------------------------------------------
 
   let history = useHistory();
+
   const userName = JSON.parse(localStorage.getItem("user"));
-  
+   
 
   const menu = (
     <Menu>
