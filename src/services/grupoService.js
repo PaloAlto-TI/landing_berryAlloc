@@ -9,8 +9,9 @@ export class GrupoService {
         return axios.get( baseUrl + "grupos" ).then( res => res.data.data );
     }
 
-    getOne(grupo){
-      return axios.get( baseUrl + "grupo/" + grupo._id, grupo).then( res => res.data);
+    getOne(id){
+      console.log("EL ID:",id);
+      return axios.get( baseUrl + "grupo/" + id).then( res => res.data);
     }
 
     create(grupo){

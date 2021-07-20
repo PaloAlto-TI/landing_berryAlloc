@@ -7,8 +7,8 @@ export class MarcaService {
         return axios.get( baseUrl + "marcas" ).then( res => res.data.data );
     }
 
-    getOne(marca){
-      return axios.get( baseUrl + "marca/" + marca._id, marca).then( res => res.data);
+    getOne(id){
+      return axios.get( baseUrl + "marca/" + id).then( res => res.data);
     }
 
     create(marca){
