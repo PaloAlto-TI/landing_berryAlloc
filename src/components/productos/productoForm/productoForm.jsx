@@ -163,6 +163,7 @@ const FormProducto = (props) => {
   // }, [infoTecnicaLinea]);
 
   useEffect(() => {
+
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
@@ -738,7 +739,7 @@ const FormProducto = (props) => {
                     <Input className="input-type" readOnly={true} />
                   </Form.Item>
 
-                  <Form.Item
+                  {/* <Form.Item
                     label="Descripción"
                     name="descripcion"
                     rules={
@@ -757,7 +758,7 @@ const FormProducto = (props) => {
                       className="input-type"
                       readOnly={!crud}
                     />
-                  </Form.Item>
+                  </Form.Item> */}
                 </Col>
               </Row>
             </Panel>

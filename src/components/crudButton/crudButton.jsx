@@ -33,6 +33,7 @@ const CrudButton = (props) => {
   };
 
   function handleMenuClick(e) {
+    e.preventDefault()
     console.log("click", e);
   }
 
