@@ -223,15 +223,16 @@ const ProductoList = () => {
 
   return (
     <div>
-    {JSON.parse(localStorage.getItem("user")).rol === 2 &&
-      <Button
-        type="primary"
-        className="success"
-        icon={<PlusOutlined />}
-        onClick={handleClick}
-      >
-        Nuevo
-      </Button>}
+      {JSON.parse(localStorage.getItem("user")).rol === 2 && (
+        <Button
+          type="primary"
+          className="success"
+          icon={<PlusOutlined />}
+          onClick={handleClick}
+        >
+          Nuevo
+        </Button>
+      )}
       <Search
         placeholder="Buscar producto..."
         value={value}
@@ -247,7 +248,7 @@ const ProductoList = () => {
           dataSource={dataSource}
           rowKey="id"
           onChange={handleChange}
-          pagination={{ defaultPageSize: 3 }}
+          pagination={{ defaultPageSize: 20 }}
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
@@ -263,6 +264,7 @@ const ProductoList = () => {
                 } else {
                   ver(record);
                 }
+                window.scrollTo(0, 0);
               },
             };
           }}

@@ -76,11 +76,7 @@ const SelectOpciones = (props) => {
               )
             );
           } else {
-            setOpciones(
-              data.filter(
-                (p) => p.grupo_id === filter
-              )
-            );
+            setOpciones(data.filter((p) => p.grupo_id === filter));
           }
         });
         setShow(false);
@@ -190,6 +186,15 @@ const SelectOpciones = (props) => {
     }
   });
 
+  const strForSearch = (str) => {
+    return str
+      ? str
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+      : str;
+  };
+
   return (
     <Select
       // labelInValue={tipo ==="color" ? true : false}
@@ -204,9 +209,15 @@ const SelectOpciones = (props) => {
       value={opcionesList.length > 0 ? value : null}
       onSearch={onSearch}
       notFoundContent="No hay coincidencias"
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
+      filterOption={(input, option) => {
+        if (option.props.value) {
+          return strForSearch(option.props.children).includes(
+            strForSearch(input)
+          );
+        } else {
+          return false;
+        }
+      }}
     >
       {opcionesList}
     </Select>

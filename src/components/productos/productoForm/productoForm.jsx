@@ -44,7 +44,7 @@ const FormProducto = (props) => {
   // const location = useLocation();
   let { path } = useRouteMatch();
 
-  console.log(path);
+  console.log("path",path);
   // console.log(props);
   const { createProducto, updateProducto, findProducto, editProducto } =
     useContext(ProductoContext);
@@ -270,7 +270,7 @@ const FormProducto = (props) => {
       console.log(data);
       //setPermiso(false);
       window.scrollTo(0, 0);
-      message.info(data, 2).then((t) => history.goBack());
+      message.info(data, 2).then((t) => history.push("/home/productos/"));
     } else {
       message.warning(data);
     }
@@ -781,7 +781,7 @@ const FormProducto = (props) => {
                           ? "Garantía Residencial (años)"
                           : "Garantía (años)"
                       }
-                      name={["atributos_js", "general", "garantia1"]}
+                      name={["atributos_js",  "garantia_residencial"]}
                       rules={
                         crud
                           ? [
@@ -815,7 +815,7 @@ const FormProducto = (props) => {
                     infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
                       <Form.Item
                         label="Garantía Comercial (años)"
-                        name={["atributos_js", "general", "garantia2"]}
+                        name={["atributos_js",  "garantia_comercial"]}
                         rules={
                           crud
                             ? [
@@ -843,7 +843,7 @@ const FormProducto = (props) => {
                     {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
                       <Form.Item
                         label="Garantía Industrial (años)"
-                        name={["atributos_js", "general", "garantia3"]}
+                        name={["atributos_js",  "garantia3"]}
                         rules={
                           crud
                             ? [
@@ -870,7 +870,7 @@ const FormProducto = (props) => {
 
                     <Form.Item
                       label="Formato"
-                      name={["atributos_js", "general", "formato"]}
+                      name={["atributos_js",  "formato"]}
                       rules={
                         crud
                           ? [
@@ -893,7 +893,7 @@ const FormProducto = (props) => {
                     infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
                       <Form.Item
                         label="Capa de Desgaste"
-                        name={["atributos_js", "general", "capa_desgaste"]}
+                        name={["atributos_js",  "capa_desgaste"]}
                         rules={
                           crud
                             ? [
@@ -920,7 +920,7 @@ const FormProducto = (props) => {
                     infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
                       <Form.Item
                         label="Composición"
-                        name={["atributos_js", "general", "composicion"]}
+                        name={["atributos_js",  "composicion"]}
                         rules={
                           crud
                             ? [
@@ -950,7 +950,7 @@ const FormProducto = (props) => {
                       <div>
                         <Form.Item
                           label="Resistencia al Agua"
-                          name={["atributos_js", "general", "resitencia_agua"]}
+                          name={["atributos_js",  "resistencia_agua"]}
                           rules={
                             crud
                               ? [
@@ -974,7 +974,7 @@ const FormProducto = (props) => {
                         </Form.Item>
                         <Form.Item
                           label="Tono"
-                          name={["atributos_js", "general", "tono"]}
+                          name={["atributos_js",  "tono"]}
                           rules={
                             crud
                               ? [
@@ -994,7 +994,7 @@ const FormProducto = (props) => {
                         </Form.Item>
                         <Form.Item
                           label="Textura"
-                          name={["atributos_js", "general", "textura"]}
+                          name={["atributos_js",  "textura"]}
                           rules={
                             crud
                               ? [
@@ -1026,7 +1026,7 @@ const FormProducto = (props) => {
                     infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
                       <Form.Item
                         label="Clase Residencial"
-                        name={["atributos_js", "general", "clase_residencial"]}
+                        name={["atributos_js",  "clase_residencial"]}
                         rules={
                           crud
                             ? [
@@ -1061,7 +1061,7 @@ const FormProducto = (props) => {
                     infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
                       <Form.Item
                         label="Clase Comercial"
-                        name={["atributos_js", "general", "clase_comercial"]}
+                        name={["atributos_js",  "clase_comercial"]}
                         rules={
                           crud
                             ? [
@@ -1088,7 +1088,7 @@ const FormProducto = (props) => {
                     {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
                       <Form.Item
                         label="Clase Industrial"
-                        name={["atributos_js", "general", "clase_industrial"]}
+                        name={["atributos_js",  "clase_industrial"]}
                         rules={
                           crud
                             ? [
@@ -1116,7 +1116,7 @@ const FormProducto = (props) => {
                       <div>
                         <Form.Item
                           label="Largo"
-                          name={["atributos_js", "general", "largo"]}
+                          name={["atributos_js",  "largo"]}
                           rules={
                             crud
                               ? [
@@ -1139,7 +1139,7 @@ const FormProducto = (props) => {
                         </Form.Item>
                         <Form.Item
                           label="Ancho"
-                          name={["atributos_js", "general", "ancho"]}
+                          name={["atributos_js",  "ancho"]}
                           rules={
                             crud
                               ? [
@@ -1168,7 +1168,7 @@ const FormProducto = (props) => {
                     infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
                       <Form.Item
                         label="Espesor"
-                        name={["atributos_js", "general", "espesor"]}
+                        name={["atributos_js",  "espesor"]}
                         rules={
                           crud
                             ? [
@@ -1198,7 +1198,7 @@ const FormProducto = (props) => {
                 infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" ? (
                   <Form.Item
                     label="Densidad"
-                    name={["atributos_js", "general", "densidad"]}
+                    name={["atributos_js",  "densidad"]}
                     rules={
                       crud
                         ? [
@@ -1228,7 +1228,7 @@ const FormProducto = (props) => {
                   <div>
                     <Form.Item
                       label="Core"
-                      name={["atributos_js", "general", "core"]}
+                      name={["atributos_js",  "core"]}
                       rules={
                         crud
                           ? [
@@ -1249,7 +1249,7 @@ const FormProducto = (props) => {
 
                     <Form.Item
                       label="Terminado"
-                      name={["atributos_js", "general", "terminado"]}
+                      name={["atributos_js",  "terminado"]}
                       rules={
                         crud
                           ? [
@@ -1278,7 +1278,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Biseles"
-                        name={["atributos_js", "especifico", "pl_biseles"]}
+                        name={["atributos_js",  "biseles"]}
                         rules={
                           crud
                             ? [
@@ -1303,8 +1303,8 @@ const FormProducto = (props) => {
                         label="Resistencia a la Abrasión"
                         name={[
                           "atributos_js",
-                          "especifico",
-                          "pl_resistencia_abrasion",
+                          
+                          "resistencia_abrasion",
                         ]}
                         rules={
                           crud
@@ -1331,8 +1331,8 @@ const FormProducto = (props) => {
                         label="Sistema de Click"
                         name={[
                           "atributos_js",
-                          "especifico",
-                          "pl_sistema_click",
+                          
+                          "sistema_click",
                         ]}
                         rules={
                           crud
@@ -1359,8 +1359,8 @@ const FormProducto = (props) => {
                         label="Generación de Click "
                         name={[
                           "atributos_js",
-                          "especifico",
-                          "pl_generacion_click",
+                          
+                          "generacion_click",
                         ]}
                         rules={
                           crud
@@ -1391,8 +1391,8 @@ const FormProducto = (props) => {
                         label="Subcapa Adherida"
                         name={[
                           "atributos_js",
-                          "especifico",
-                          "pl_subcapa_adherida",
+                          
+                          "subcapa_adherida",
                         ]}
                         rules={
                           crud
@@ -1427,7 +1427,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Uso"
-                        name={["atributos_js", "especifico", "cs_uso"]}
+                        name={["atributos_js",  "cs_uso"]}
                         rules={
                           crud
                             ? [
@@ -1454,7 +1454,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Aplicación"
-                        name={["atributos_js", "especifico", "cs_aplicacion"]}
+                        name={["atributos_js",  "cs_aplicacion"]}
                         rules={
                           crud
                             ? [
@@ -1476,7 +1476,7 @@ const FormProducto = (props) => {
                         label="Rango de Altura de Hebra"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "cs_rango_altura_hebra",
                         ]}
                         rules={
@@ -1507,7 +1507,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Altura de Hebra"
-                        name={["atributos_js", "especifico", "cs_altura_hebra"]}
+                        name={["atributos_js",  "cs_altura_hebra"]}
                         rules={
                           crud
                             ? [
@@ -1532,7 +1532,7 @@ const FormProducto = (props) => {
                         label="Puntadas cada 10 cm"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "cs_puntadas_10cm",
                         ]}
                         rules={
@@ -1551,7 +1551,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Puntadas por m2"
-                        name={["atributos_js", "especifico", "cs_puntadas_m2"]}
+                        name={["atributos_js",  "cs_puntadas_m2"]}
                         rules={
                           crud
                             ? [
@@ -1572,7 +1572,7 @@ const FormProducto = (props) => {
                         label="Filamentos por Puntada"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "cs_filamentos_puntada",
                         ]}
                         rules={
@@ -1593,7 +1593,7 @@ const FormProducto = (props) => {
                         label="Filamentos por m2"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "cs_filamentos_m2",
                         ]}
                         rules={
@@ -1612,7 +1612,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Galga"
-                        name={["atributos_js", "especifico", "cs_galga"]}
+                        name={["atributos_js",  "cs_galga"]}
                         rules={
                           crud
                             ? [
@@ -1636,7 +1636,7 @@ const FormProducto = (props) => {
                         label="Tipo(s) de Filamento"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "cs_tipo_filamento",
                         ]}
                         rules={
@@ -1671,7 +1671,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Material:"
-                        name={["atributos_js", "especifico", "sc_material"]}
+                        name={["atributos_js",  "sc_material"]}
                         rules={
                           crud
                             ? [
@@ -1693,7 +1693,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Color:"
-                        name={["atributos_js", "especifico", "sc_color"]}
+                        name={["atributos_js",  "sc_color"]}
                         rules={
                           crud
                             ? [
@@ -1718,7 +1718,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Tipo de Esponja"
-                        name={["atributos_js", "especifico", "sc_tipo_esponja"]}
+                        name={["atributos_js",  "sc_tipo_esponja"]}
                         rules={
                           crud
                             ? [
@@ -1745,7 +1745,7 @@ const FormProducto = (props) => {
                 ) : infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
                   <Form.Item
                     label="Tipo de Hebra"
-                    name={["atributos_js", "especifico", "pb_tipo_hebra"]}
+                    name={["atributos_js",  "pb_tipo_hebra"]}
                     rules={
                       crud
                         ? [
@@ -1776,7 +1776,7 @@ const FormProducto = (props) => {
                             label="Dimensión de la pantalla"
                             name={[
                               "atributos_js",
-                              "especifico",
+                              
                               "ca_dimension_pantalla",
                             ]}
                             rules={
@@ -1802,7 +1802,7 @@ const FormProducto = (props) => {
                           </Form.Item>
                           <Form.Item
                             label="Conexión"
-                            name={["atributos_js", "especifico", "ca_conexion"]}
+                            name={["atributos_js",  "ca_conexion"]}
                             rules={
                               crud
                                 ? [
@@ -1825,7 +1825,7 @@ const FormProducto = (props) => {
                             label="Tipo de Sensor"
                             name={[
                               "atributos_js",
-                              "especifico",
+                              
                               "ca_tipo_sensor",
                             ]}
                             rules={
@@ -1850,7 +1850,7 @@ const FormProducto = (props) => {
                             label="Color del Calefactor"
                             name={[
                               "atributos_js",
-                              "especifico",
+                              
                               "ca_color_calefactor",
                             ]}
                             rules={
@@ -1879,7 +1879,7 @@ const FormProducto = (props) => {
 
                       <Form.Item
                         label="Alimentación"
-                        name={["atributos_js", "especifico", "ca_alimentacion"]}
+                        name={["atributos_js",  "ca_alimentacion"]}
                         rules={
                           crud
                             ? [
@@ -1906,7 +1906,7 @@ const FormProducto = (props) => {
                         label="Longitud del Cable de Alimentación"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "ca_longitud_cable_alimentacion",
                         ]}
                         rules={
@@ -1931,7 +1931,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Potencia"
-                        name={["atributos_js", "especifico", "ca_potencia"]}
+                        name={["atributos_js",  "ca_potencia"]}
                         rules={
                           crud
                             ? [
@@ -1953,7 +1953,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Presentación"
-                        name={["atributos_js", "especifico", "ca_presentacion"]}
+                        name={["atributos_js",  "ca_presentacion"]}
                         rules={
                           crud
                             ? [
@@ -1976,7 +1976,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Corriente"
-                        name={["atributos_js", "especifico", "ca_corriente"]}
+                        name={["atributos_js",  "ca_corriente"]}
                         rules={
                           crud
                             ? [
@@ -2003,7 +2003,7 @@ const FormProducto = (props) => {
                     label="Espesor de Capa de Madera"
                     name={[
                       "atributos_js",
-                      "especifico",
+                      
                       "pi_espesor_capa_madera",
                     ]}
                     rules={
@@ -2033,7 +2033,7 @@ const FormProducto = (props) => {
                         label="Rodamiento de Carga"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "pa_capacidad_rodamiento_carga",
                         ]}
                         rules={
@@ -2065,7 +2065,7 @@ const FormProducto = (props) => {
                             label="Tiempo de Trabajo"
                             name={[
                               "atributos_js",
-                              "especifico",
+                              
                               "pa_tiempo_trabajo",
                             ]}
                             rules={
@@ -2092,7 +2092,7 @@ const FormProducto = (props) => {
                             label="Tiempo de Oreo"
                             name={[
                               "atributos_js",
-                              "especifico",
+                              
                               "pa_tiempo_oreo",
                             ]}
                             rules={
@@ -2119,7 +2119,7 @@ const FormProducto = (props) => {
                       ) : null}
                       <Form.Item
                         label="Presentación"
-                        name={["atributos_js", "especifico", "pa_presentacion"]}
+                        name={["atributos_js",  "pa_presentacion"]}
                         rules={
                           crud
                             ? [
@@ -2140,7 +2140,7 @@ const FormProducto = (props) => {
                         label="Color"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "pa_color_pegamento",
                         ]}
                         rules={
@@ -2164,7 +2164,7 @@ const FormProducto = (props) => {
                         label="Olor"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "pa_olor_pegamento",
                         ]}
                         rules={
@@ -2187,7 +2187,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Adherencia"
-                        name={["atributos_js", "especifico", "pa_adherencia"]}
+                        name={["atributos_js",  "pa_adherencia"]}
                         rules={
                           crud
                             ? [
@@ -2213,7 +2213,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Proceso de Fabricación"
-                        name={["atributos_js", "especifico", "pe_presentacion"]}
+                        name={["atributos_js",  "pe_presentacion"]}
                         rules={
                           crud
                             ? [
@@ -2230,7 +2230,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Rectificado"
-                        name={["atributos_js", "especifico", "pe_rectificado"]}
+                        name={["atributos_js",  "pe_rectificado"]}
                         rules={
                           crud
                             ? [
@@ -2256,7 +2256,7 @@ const FormProducto = (props) => {
                         label="Absorción de Agua"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "pe_absorcion_agua",
                         ]}
                         rules={
@@ -2279,7 +2279,7 @@ const FormProducto = (props) => {
                         label="Resistencia al Deslizamiento"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "pa_resistencia_deslizamiento",
                         ]}
                         rules={
@@ -2304,7 +2304,7 @@ const FormProducto = (props) => {
                         label="Resistencia a la Abrasión"
                         name={[
                           "atributos_js",
-                          "especifico",
+                          
                           "pa_resistencia_abrasion",
                         ]}
                         rules={
@@ -2333,7 +2333,7 @@ const FormProducto = (props) => {
                 infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
                   <Form.Item
                     label="Uso(s)"
-                    name={["atributos_js", "general", "usos"]}
+                    name={["atributos_js",  "usos"]}
                     rules={
                       crud
                         ? [
@@ -2381,7 +2381,7 @@ const FormProducto = (props) => {
                 <Col span={12}>
                   <Form.Item
                     label="Método ABC"
-                    name={["atributos_js", "general", "metodo_abc"]}
+                    name={["atributos_js",  "metodo_abc"]}
                     rules={
                       crud
                         ? [
