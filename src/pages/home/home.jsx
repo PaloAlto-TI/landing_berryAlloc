@@ -26,7 +26,13 @@ const Sesion= async()=>{
 
   const { usuario} =  useContext(SesionContext);
 
-  return await usuario();
+  if(localStorage.getItem('token')){
+
+    return await usuario();
+  }
+  
+
+  
 
 
 }
