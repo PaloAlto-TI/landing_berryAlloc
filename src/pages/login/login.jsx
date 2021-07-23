@@ -40,59 +40,59 @@ const Login = () => {
   })
 
   //--------------------------------------------
-  useEffect(async () => {
+  // useEffect(async () => {
 
-    //console.log("usuario check:"+usuarioCheck);
-    if (usuarioCheck && usuarioCheck.active === true && google) {
-
-
-
-      
-
-      
-        await setSesionState({
-          ...sesionState,
-          id_usuario: usuarioCheck._id,
-          token_obj:
-          {
-            access_token: google.tokenObj.access_token,
-            expires_at: google.tokenObj.expires_at,
-            expires_in: google.tokenObj.expires_in,
-            id_token: google.tokenObj.id_token,
-            first_issued_at: google.tokenObj.first_issued_at,
-            idpId: google.tokenObj.idpId,
-            login_hint: google.tokenObj.login_hint,
-            scope: google.tokenObj.scope,
-  
-          },
-          expires_at: google.tokenObj.expires_at,
-          expires_in: google.tokenObj.expires_in,
-          active: true,
-          token: google.tokenObj.access_token
-        });
-     
-        await sesionService.create(sesionState);
-        await localStorage.setItem('token', sesionState.token);
-        
-        
-     
-
-      console.log("google:"+localStorage.getItem('token'));
-      
-      
-
-      //-------------------------------------
-      // const tok={"token":localStorage.getItem("token")};
+  //   //console.log("usuario check:"+usuarioCheck);
+  //   if (usuarioCheck && usuarioCheck.active === true && google) {
 
 
-      //sesionService.getUsuario(tok).then(t=>console.log("RESULTADO:"+JSON.stringify(t)));
 
 
-      //  console.log("google:"+JSON.stringify(sesionState));
-    }
 
 
-  });
+  //     await setSesionState({
+  //       ...sesionState,
+  //       id_usuario: usuarioCheck._id,
+  //       token_obj:
+  //       {
+  //         access_token: google.tokenObj.access_token,
+  //         expires_at: google.tokenObj.expires_at,
+  //         expires_in: google.tokenObj.expires_in,
+  //         id_token: google.tokenObj.id_token,
+  //         first_issued_at: google.tokenObj.first_issued_at,
+  //         idpId: google.tokenObj.idpId,
+  //         login_hint: google.tokenObj.login_hint,
+  //         scope: google.tokenObj.scope,
+
+  //       },
+  //       expires_at: google.tokenObj.expires_at,
+  //       expires_in: google.tokenObj.expires_in,
+  //       active: true,
+  //       token: google.tokenObj.access_token
+  //     });
+
+  //    // await sesionService.create(sesionState);
+  //    // await localStorage.setItem('token', sesionState.token);
+
+
+
+
+  //     // console.log("google:"+localStorage.getItem('token'));
+
+
+
+  //     //-------------------------------------
+  //     // const tok={"token":localStorage.getItem("token")};
+
+
+  //     //sesionService.getUsuario(tok).then(t=>console.log("RESULTADO:"+JSON.stringify(t)));
+
+
+  //     //  console.log("google:"+JSON.stringify(sesionState));
+  //   }
+
+
+  // });
   //----------------------------------------------
   const [usuarioCheck, SetUsuarioCheck] = useState(null);
   const [google, SetGoogle] = useState(null);
@@ -121,10 +121,46 @@ const Login = () => {
     //console.log("usuarioresponse:"+JSON.stringify(response));
 
 
+
+
+
+
     if (usuarioCheck_1 && usuarioCheck_1.active === true) {
 
-      localStorage.setItem('user', JSON.stringify(usuarioCheck_1));
+      let objeto={
+        "id_usuario": usuarioCheck_1._id,
+        "token_obj":
+        {
+          "access_token": response.tokenObj.access_token,
+          "expires_at": response.tokenObj.expires_at,
+          "expires_in": response.tokenObj.expires_in,
+          "id_token": response.tokenObj.id_token,
+          "first_issued_at": response.tokenObj.first_issued_at,
+          "idpId": response.tokenObj.idpId,
+          "login_hint": response.tokenObj.login_hint,
+          "scope": response.tokenObj.scope,
 
+        },
+        "expires_at": response.tokenObj.expires_at,
+        "expires_in": response.tokenObj.expires_in,
+        "active": true,
+        "token": response.tokenObj.access_token
+      };
+      console.log("Entra en el bucle1");
+      await localStorage.setItem('user', JSON.stringify(usuarioCheck_1));
+      await localStorage.setItem('token', response.tokenObj.access_token);
+      console.log("Entra en el bucle2");
+      console.log("Entra en el bucle3: "+JSON.stringify(objeto));
+      await sesionService.create(objeto);
+      console.log("google:" + localStorage.getItem('token'));
+     
+     
+      //------------------------------------------------------------------------
+  
+     
+     
+
+      //----------------------------------------------------
       //console.log(usuarioCheck_1);
       //console.log(response);
       //console.log(response.tokenObj);
@@ -133,6 +169,7 @@ const Login = () => {
 
 
       message.success('Permiso Concedido');
+
       handleClick();
     }
     else {

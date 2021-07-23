@@ -1,15 +1,16 @@
-import React from "react";
+import React,{ useContext} from "react";
 import { Menu, Button, Dropdown, Row, Col} from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import "./header.css";
 import { useHistory } from "react-router";
 import {  message } from 'antd';
+import { SesionContext } from "../../../src/contexts/sesionContext";
 
 
 
 
 const Header = () => {
-
+  const { usuario,softDeleteSesion} =  useContext(SesionContext);
 
 
   let history = useHistory();
@@ -36,12 +37,31 @@ const Header = () => {
     
   );
   
-  function logOut() {
+  const Sesion= async()=>{
+
+    //const { usuario,softDeleteSesion} =  useContext(SesionContext);
+  
+      return await usuario(); 
+  }
+
+
+  const DeleteSesion= async()=>{
+    
+    
+    console.log("entra:");
+    let usuario1= await usuario();
+    console.log("usuario1:"+JSON.stringify(usuario1));
+    delete usuario1._usuario;
+    await softDeleteSesion(usuario1); 
+  }
+
+
+  function  logOut() {
+    DeleteSesion();
     message.success('Log Out');
     localStorage.clear();
     history.push("/login");
-   window.location.reload();
-    
+   //window.location.reload();
 
   }
 

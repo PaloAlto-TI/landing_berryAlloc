@@ -9,16 +9,34 @@ const SesionContextProvider = (props) => {
   const [sesiones, setSesiones] = useState([]);
 
   const [editSesion, setEditSesion] = useState(null);
-
-
-
   const [isEmpty, setIsEmpty] = useState(false)
+//------------------------------------------------------
 
-  useEffect(() => {
-    setIsEmpty(false)
-    sesionService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setSesiones(data)});
+
+  useEffect(async () => {
+    
+    // if (productos.length === 0){
+    //   setIsEmpty(true);
+
+
+    if(localStorage.getItem("token") && isEmpty===false)
+    {
+
+      const tok={"token":localStorage.getItem("token")};
+
+
+    
+    const data = await sesionService.getUsuario(tok);
+    setSesiones(data);
+    setIsEmpty(true);
+    }
+    // }
+
   }, []);
+  
 //----------------------------------------------------------------
+
+
   const usuario = async () => {
     const tok={"token":localStorage.getItem("token")};
 
@@ -26,23 +44,20 @@ const SesionContextProvider = (props) => {
     const data = await sesionService.getUsuario(tok);
 
     console.log("err2:", data);
+
     if (data.message === "OK CREATE") {
       sesionService.getAll().then((data) => setSesiones(data));
       // setSesiones([...sesiones, data.data]);
     }
 
-    return data.message;
+    return data;
   };
 
   const softDeleteSesion = (sesion) => {
-    sesionService
-      .softDelete(sesion)
-      .then(() => setSesiones(sesiones.filter((p) => p.id !== sesion.id)));
+    console.log("SESION:"+JSON.stringify(sesion));
+    sesionService.softDelete(sesion)
+     
   };
-
-  
-
-  
 
   return (
     <SesionContext.Provider
@@ -53,7 +68,6 @@ const SesionContextProvider = (props) => {
         editSesion,
         sesiones,
         setEditSesion,
-        isEmpty
       }}
     >
       {props.children}

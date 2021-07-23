@@ -30,7 +30,8 @@ export class SesionService {
     }
 
     softDelete(sesion){
-        return axios.put(baseUrl+"delete-sesion/"+sesion.id, sesion).then(res => res.data);
+        console.log("sesion Service:"+JSON.stringify(sesion._id));
+        return axios.put(baseUrl+"delete-sesion/"+sesion._id, sesion).then(res => res.data);
     }
     
 }

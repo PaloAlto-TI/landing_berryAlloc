@@ -22,22 +22,17 @@ import {
 
 const Home =  () => {
 
+
+
+  
 const Sesion= async()=>{
 
   const { usuario} =  useContext(SesionContext);
 
-  if(localStorage.getItem('token')){
-
-    return await usuario();
-  }
-  
-
-  
-
-
+    return await usuario(); 
 }
 
-console.log(Sesion());
+console.log("SESION: "+Sesion());
   
   
   let { path } = useRouteMatch();
