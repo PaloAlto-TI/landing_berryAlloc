@@ -18,36 +18,52 @@ const LineaContextProvider = (props) => {
 
     const createLinea = async (linea) => {
       const data = await lineaService.create(linea);
-      console.log("PASOO UN ERROR EN LINEAS: " + JSON.stringify(data));
+      // console.log("PASOO UN ERROR EN LINEAS: " + JSON.stringify(data));
       if (data.message === "OK CREATE") {
         lineaService.getAll().then((data) => setLineas(data));
       }
       return data;
     }
 
-    const softDeleteLinea = (linea) => {
-      lineaService
-        .softDeleteLinea(linea)
-        .then(() => setLineas(lineas.filter((l) => l.id !== linea.id)));
+    const softDeleteLinea = async(linea) => {
+      // console.log("ENTRA AL SOFT DELETE LINEA CONTEXT CON: " + JSON.stringify(linea));
+       // lineaService
+       //   .softDelete(linea)
+       //   // .then(() => setLineas(lineas.filter((l) => l.id !== linea.id)));
+       //   .then(() => {lineaService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setLineas(data)});
+       // });
+
+       const data = await lineaService.softDelete(linea);
+       // console.log("LA DATA QUE REGRESA DE SOFTDELETELINEA : ", JSON.stringify(data));
+
+       if (data.message === "OK SOFTDELETE") {
+        lineaService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setLineas(data)});
+      }
+
+      setEditLinea(null);
+      // console.log("El ultimo mensaje del SOFTDELETE : ", data.message);
+      return data;
+
     };
 
     const findLinea = (id) => {
-      console.log("EL ID PARA FINDLINEA: " + id);
+      // console.log("EL ID PARA FINDLINEA: " + id);
       const linea = lineas.find((l) => l.id === id);
       setEditLinea(linea);
     };
 
     const updateLinea = async(linea) => {
-      const data = await lineaService.updateLinea(linea);
+      // console.log("VA HACER EL AWAIT DEL UPDATE LINEA DEL CONTEXT: ", linea);
+      const data = await lineaService.update(linea);
+      /// console.log("LA DATA QUE REGRESA DE UPDATELINEA : ", JSON.stringify(data));
 
-      console.log("Paso un err: ", data);
       if (data.message === "OK UPDATE") {
         lineaService.getAll().then((data) => setLineas(data));
       }
   
       setEditLinea(null);
-      console.log("El ultimo mensaje del update : ", data.message);
-      return data.message;
+      // console.log("El ultimo mensaje del update : ", data.message);
+      return data;
     };
 
     return (

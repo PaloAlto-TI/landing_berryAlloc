@@ -16,10 +16,10 @@ export class LineaService {
     }
 
     update(linea){
-      return axios.put( baseUrl + "linea/" + linea._id, linea).then( res => res.data).catch(error => error.response.data);
+      return axios.put( baseUrl + "linea/" + linea.id, linea).then( res => res.data).catch(error => error.response.data);
     }
 
     softDelete(linea){
-      return axios.put( baseUrl + "delete-linea/"+ linea._id, linea).then(res => res.data);
+      return axios.put( baseUrl + "delete-linea/"+ linea.id, linea).then(res => res.data);
   }
 }

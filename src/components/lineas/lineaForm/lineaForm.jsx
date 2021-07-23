@@ -1,40 +1,22 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Redirect, useLocation, useParams, useRouteMatch } from "react-router-dom";
-import { Form, Input, Button, Checkbox, InputNumber, Radio, message, Row, Col, Divider, Spin } from "antd";
-import SelectOpciones from "../../selectOpciones/selectOpciones";
+import { Redirect, useParams/*, useRouteMatch*/ } from "react-router-dom";
+import { Form, Input, Button, message, Row, Col, Divider } from "antd";
 import { useHistory } from "react-router";
-import { CheckCircleFilled, CloseCircleFilled, LoadingOutlined, SaveOutlined, CloseSquareOutlined } from "@ant-design/icons";
+import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design/icons";
 import { LineaContext } from "../../../contexts/lineaContext";
 import "./lineaForm.css";
 const { TextArea } = Input;
 
-// import { ColorService } from "../../../services/colorService";
-// import { GrupoService } from "../../../services/grupoService";
-// import { LineaService } from "../../../services/lineaService";
-
-function cancelConfirm() {
-
-  if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
-    window.history.back();
-  }
-}
-
 const FormLinea = (props) => {
 
   const { createLinea, updateLinea, findLinea, editLinea } = useContext(LineaContext);
-  const location = useLocation();
-  let { path } = useRouteMatch();
-  console.log("EL PATH A NIVEL PRINCIPAL: ", path);
+  // let { path } = useRouteMatch();
+  // console.log("EL PATH A NIVEL PRINCIPAL: ", path);
   let history = useHistory();
-  // let { pseudo } = useParams();
   let { codigo, operacion } = useParams();
-  console.log("El codigo de params: ", codigo);
-  console.log("La operacion de params: ", operacion);
-
-  const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
-  const [selectedLineaId, setSelectedLineaId] = useState(undefined);
-  const [selectedGrupoId, setSelectedGrupoId] = useState(undefined);
-
+  // console.log("El codigo de params: ", codigo);
+  // console.log("La operacion de params: ", operacion);
+  let formHasChanges = false;
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
   );
@@ -46,14 +28,36 @@ const FormLinea = (props) => {
     descripcion: ''
   };
 
+  function cancelConfirm() {
+
+    if (formHasChanges !== null) {
+       if (formHasChanges === true) {
+        if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
+          history.push("/home/lineas/");
+        }
+       } else {
+          history.push("/home/lineas/");
+       }
+    } else {
+      if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
+        history.push("/home/lineas/");
+      }
+
+    }
+  }
+
+  function goBackHistory() {
+    history.push("/home/lineas/")
+    // window.history.back();
+  }
+
   // console.log("EL EDITLINEA: + " + editLinea);
   // console.log("EL CODIGO: + " + pseudo);
   // console.log("EL HISTORY: + " + JSON.stringify(history));
   // console.log("EL LOCATION: + " + JSON.stringify(location));
   // console.log("lOS PROPS DE lINEA: " + JSON.stringify(props));
-  //esta parte estaba despues del useeffect
 
-  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   const layout = {
     labelCol: {
@@ -72,108 +76,68 @@ const FormLinea = (props) => {
 
   useEffect(() => {
 
-    console.log("ENTRA EN USEEFFECT Y EL EDITLINEA ES: " + JSON.stringify(editLinea));
-    console.log("EL CRUD EN EFFECT=  " + crud);
-    
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
 
     if (editLinea) {
-      /*if (!selectedMarcaId && !selectedLineaId && !selectedGrupoId) {
-        setSelectedMarcaId(editProducto.fk_marca_id);
-        setSelectedLineaId(editProducto.fk_linea_id);
-        setSelectedGrupoId(editProducto.fk_grupo_id);
-        setId(editProducto.id);
-      }*/
-      console.log("ENTRA EN EDIT LINEA DE USEEFFECT Y HAY DATOS PARA EDITAR");
+
+      setId(editLinea.id);
+      // console.log("ENTRA EN EDIT LINEA DE USEEFFECT Y DESPUES DEL SETID QUEDA: " + id);
 
     } else {
-
-      // console.log("ENTRA AL ELSE DE EDITLINEA: ");
-
-      /* console.log("CODIGO: ",codigo);
-      findProducto(codigo);
-      console.log("PRODUCTO", editProducto)
-     */
-      console.log("CODIGO DE LA LINEA PARA VER: ", codigo);
-      // findProducto(codigo);
-      findLinea(codigo);
-      console.log("EL EDIT LINEA ", editLinea);
       
+      findLinea(codigo);
+    
     }
-    // console.log("EL SHOW EN STATE: "+ show);
-    // console.log("EL LOCATION STATE: " + JSON.stringify(location.state));
-
-    /*if (show === null) {
-      setShow(crud);
-    }*/
-
-
-    /*if (show === null) {
-      // console.log("ENTRA  AL SHOW NULL: "+ show);
-      if (location.state) {
-        setShow(location.state.permiso)
-        // console.log("EL LOCATION STATE PERMISO: " + JSON.stringify(location.state.permiso));
-      } else {
-        history.goBack();
-        // console.log("ENTRA AL HISTORY GOBACK: "+ JSON.stringify(history));
-      }
-    } else {
-      // BORRAR ELSE
-      // console.log("NO ENTRA AL SHOW NULL: "+ show);
-    }*/
-    /*
-    if (!infoTecnica && editProducto){
-      setInfoTecnica(editProducto.fk_linea_id);
-    }*/
   })
 
   const onFinish = async (values) => {
+    
     let data = null;
-    // console.log("La Data en OnFinish: " + data);
-
+    let messagesOnFinish = operacion === "editar" ? ["EDITAR", "EDITÓ"] : ["CREAR","CREÓ"];
     delete values.permiso;
-    // if (values["fk_color_id"]){
-    //   values["fk_color_id"] = JSON.parse(values["fk_color_id"]).id;
-    // }
 
-    // values["atributos_js"] = final;
-
-    // ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
-    values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
-
-
+    // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
+    // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
+  
     if (id) {
+      
       values["id"] = id;
-      // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
-      console.log("ENTRA EL IF(ID) values", values);
-
+      // console.log("LA DATA ANTES DE LLAMAR A UPDATE CONTEXT: " + JSON.stringify(values));
       data = await updateLinea(values);
-    } else {
+      // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
 
-      // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
-      console.log("LO QUE VA A GUARDAR:", JSON.stringify(values));
+    } else {
+      values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
+      // console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR:", JSON.stringify(values));
       data = await createLinea(values);
+
     }
-    console.log("LA DATA QUE RETORNA EL FORMULARIO EN stringify: " + JSON.stringify(data));
-    // console.log("LA DATA ERROR Q RETORNA: " + JSON.stringify(data.errorDetails));
-    console.log("EL DATA.MESSAGE: " + JSON.stringify(data.message));
-    console.log("EL DATA.DATA: " + JSON.stringify(data.data));
 
     if (data.message.includes("OK")) {
-      // setPermiso(false);
-      message.info(JSON.stringify(data.message) + ": " + "LA LÍNEA " + JSON.stringify(data.data.nombre) + " SE CREÓ CON ÉXITO", 4).then((t) => history.goBack());
+      message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] +  " CON ÉXITO", 4).then((t) => history.push("/home/lineas/"));
     } else {
-      message.error("ERROR AL MOMENTO DE CREAR LA LÍNEA: \n" + JSON.stringify(data.errorDetails.description), 15);
+      message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
-
+    /// console.log("LA DATA QUE RETORNA EL FORMULARIO EN stringify: " + JSON.stringify(data));
+    /// // console.log("LA DATA ERROR Q RETORNA: " + JSON.stringify(data.errorDetails));
+    /// console.log("EL DATA.MESSAGE: " + JSON.stringify(data.message));
+    /// console.log("EL DATA.DATA: " + JSON.stringify(data.data));
   }
 
   const onFinishFailed = (errorInfo) => {
     // console.log("onFinishFailed - Error al guardar la Linea: " + errorInfo.errorFields, errorInfo);
-    console.log("BRINCA EL ONFINISHFAILED");
-    message.warning("Error al guardar la Línea");
+    // console.log("BRINCA EL ONFINISHFAILED"); // OBSER
+
+    // 21/07/2021 - OBSERVACIÓN: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUE TIPO DE ELIMINADO LÓGICO SE DEBE HACER. 
+    // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
+    // console.log("ENTRA AL ELIMINAR EN HANDLEOK LINEA CON RECORD: " + JSON.stringify(record))
+    message.warning("ERROR AL GUARDAR LA LÍNEA");
+  };
+
+  const handleFormValuesChange = async (changedValues) => {
+    formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
   };
 
   // console.log("EL ROL DEL USER ID: " + JSON.parse(localStorage.getItem("user")).rol);
@@ -189,6 +153,7 @@ const FormLinea = (props) => {
             initialValues={editLinea ? editLinea : initialValues}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
+            onValuesChange={handleFormValuesChange}
           >
             <Divider className="titleFont">LÍNEA</Divider>
             <br />
@@ -205,6 +170,7 @@ const FormLinea = (props) => {
                   ]}
                 >
                   <Input
+                    readOnly={!crud}
                     placeholder="Ej: Piso Laminado"
                     className="input-type"
                   />
@@ -215,14 +181,12 @@ const FormLinea = (props) => {
                   label="Pseudónimo"
                   name="pseudo"
                   rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el Pseudónimo de la Línea!",
-                    },
+                    { required: true, message: "Por favor, ingrese el Pseudónimo de la Línea!" },
                     { max: 3, message: 'El Pseudónimo debe tener como máximo 3 caracteres' },
                   ]}
                 >
                   <Input
+                    readOnly={ operacion === "editar" ? crud : !crud }
                     placeholder="Ej: PL"
                     className="input-type"
                   />
@@ -242,14 +206,14 @@ const FormLinea = (props) => {
                     },
                   ]}
                 >
-                  <TextArea rows={6} placeholder="Descripción de la Línea, esta descripción se visualizará en la página web." />
+                  <TextArea rows={6} readOnly={!crud} placeholder="Descripción de la Línea, esta descripción se visualizará en la página web." />
                 </Form.Item>
               </Col>
             </Row>
             <br /><br /><br />
             <Row>
-              <Col span={18} >
-                {// location.state.permiso ? (
+                {crud ? (
+                  <Col md={18} xs={15}>
                   <Form.Item {...tailLayout}>
                     <Button
                       icon={<SaveOutlined />}
@@ -268,10 +232,21 @@ const FormLinea = (props) => {
                       CANCELAR
                     </Button>
                   </Form.Item>
-                  // ) : null
-                }
+                  </Col>
+                ) : 
+                <Col md={24} xs={15}>
+                <Button
+                icon={<RollbackOutlined />}
+                type="primary"
+                onClick={goBackHistory}
+              >
+                REGRESAR
+              </Button>
               </Col>
+              }
             </Row>
+            <br />
+            <Divider className="titleFont" orientation="left" >MARCAS DE LÍNEA</Divider>
           </Form>
         </> : null
     );

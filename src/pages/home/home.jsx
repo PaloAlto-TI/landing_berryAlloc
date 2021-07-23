@@ -46,7 +46,6 @@ const Home = () => {
               </Route>
             </Switch>
           </ProductoContextProvider>
-
           <LineaContextProvider Provider>
           <Switch>
           <Route exact path={`${path}/lineas`}>
@@ -57,7 +56,6 @@ const Home = () => {
           </Route>
           </Switch>
             </LineaContextProvider>
-
             <Route exact path={`${path}/marcas`}>
               <p>MARCAS</p>
             </Route>

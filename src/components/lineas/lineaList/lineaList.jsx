@@ -10,7 +10,7 @@ import './lineaList.css';
 
 const LineaList = () => {
   const { lineas, setPermiso, setEditLinea, isEmpty, softDeleteLinea } = useContext(LineaContext);
-  const [filteredInfo, setFilteredInfo] = useState([])
+  // const [filteredInfo, setFilteredInfo] = useState([]);
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -50,20 +50,34 @@ const LineaList = () => {
       title: "ACCIONES",
       dataIndex: "",
       key: "x",
-      render: (_, record) => <CrudButton record={record} sofDelete={softDeleteLinea} tableName={"Linea"} setRowState={setRowState} />,
-    }
+      render: (_, record) => (
+        <CrudButton 
+          record={record} 
+          softDelete={softDeleteLinea}
+          typeTransaction={typeTransactionData}
+          setRowState={setRowState} 
+        />
+      ),
+    },
   ]
 
   let { path } = useRouteMatch();
   let history = useHistory();
 
+  const typeTransactionData = {
+    tableNamePSQL: "linea",
+    byIdPSQL: true,
+    byInternalCodePSQL: false,
+    dependenciesPSQL: false,
+    labelCrudPlural: "LÍNEAS",
+    labelCrudSingle: "LÍNEA"
+  };
+
   const handleChange = (pagination, filters, sorter) => {
-    console.log('Various parameters', pagination, filters, sorter);
-    setFilteredInfo(filters);
+    // setFilteredInfo(filters); No se usa a nivel de Línea porque no tiene un filtro directo a nivel de tabla
   };
 
   function handleClick() {
-    console.log("ENTRA AL HANDLE CLICK");
     setPermiso(true);
     let record = {
       permiso: true,
@@ -74,7 +88,7 @@ const LineaList = () => {
 
   function ver(record) {
     record["permiso"] = false;
-    alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
+    // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
     history.push(`${path}/${record.id}/ver`, record);
   }
 
@@ -88,7 +102,6 @@ const LineaList = () => {
 
   useEffect(() => {
     setEditLinea(null);
-    // console.log("Usse Effect -> Value: " + value)
     setPermiso(false);
     if (!value) {
       setDataSource(lineas)
@@ -99,22 +112,13 @@ const LineaList = () => {
     <div>
       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
       <Search
-        placeholder="Buscar línea..."
+        placeholder="Buscar Línea..."
         value={value}
         onChange={e => filtrar(e)}
         style={{ width: 200 }}
       />
       <br />
       <br />
-
-      {/*lineas.length === 0 || isEmpty ? (
-        // dataSource={state.hasData ? data : null}
-        
-        <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={null} rowKey='id' onChange={handleChange} />) : (
-        // <Spin indicator={antIcon} />
-
-        <Table locale={{ emptyText: 'No hay datos' }} columns={columns} dataSource={dataSource} rowKey='id' onChange={handleChange} />
-        )*/}
 
       {lineas.length > 0 || isEmpty ? (
         <Table
@@ -127,8 +131,6 @@ const LineaList = () => {
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
-                console.log(event);
-
                 if (JSON.parse(localStorage.getItem("user")).rol === 2) {
                   if (event.clientX < window.innerWidth * 0.8 && rowState) {
                     // record["permiso"] = false;
