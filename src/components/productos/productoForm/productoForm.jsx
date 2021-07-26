@@ -178,7 +178,7 @@ const FormProducto = (props) => {
         setId(editProducto.id);
       }
 
-      if (!crud){
+      if (!crud && editProducto.atributos_js){
         if (editProducto.atributos_js.garantia_residencial === -1){
           editProducto.atributos_js.garantia_residencial = "POR VIDA"
         }else  if (editProducto.atributos_js.garantia_comercial === -1){
@@ -1685,7 +1685,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Material:"
-                        name={["atributos_js",  "sc_material"]}
+                        name={["atributos_js",  "material"]}
                         rules={
                           crud
                             ? [
@@ -1707,7 +1707,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Color:"
-                        name={["atributos_js",  "sc_color"]}
+                        name={["atributos_js",  "color"]}
                         rules={
                           crud
                             ? [
@@ -1732,7 +1732,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Tipo de Esponja"
-                        name={["atributos_js",  "sc_tipo_esponja"]}
+                        name={["atributos_js",  "tipo_esponja"]}
                         rules={
                           crud
                             ? [
@@ -1893,7 +1893,7 @@ const FormProducto = (props) => {
 
                       <Form.Item
                         label="Alimentación"
-                        name={["atributos_js",  "ca_alimentacion"]}
+                        name={["atributos_js",  "alimentacion"]}
                         rules={
                           crud
                             ? [
@@ -1921,7 +1921,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "ca_longitud_cable_alimentacion",
+                          "longitud_cable_alimentacion",
                         ]}
                         rules={
                           crud
@@ -1945,7 +1945,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Potencia"
-                        name={["atributos_js",  "ca_potencia"]}
+                        name={["atributos_js",  "potencia"]}
                         rules={
                           crud
                             ? [
@@ -1967,7 +1967,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Presentación"
-                        name={["atributos_js",  "ca_presentacion"]}
+                        name={["atributos_js",  "presentacion"]}
                         rules={
                           crud
                             ? [
@@ -1990,7 +1990,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Corriente"
-                        name={["atributos_js",  "ca_corriente"]}
+                        name={["atributos_js",  "corriente"]}
                         rules={
                           crud
                             ? [
@@ -2133,7 +2133,7 @@ const FormProducto = (props) => {
                       ) : null}
                       <Form.Item
                         label="Presentación"
-                        name={["atributos_js",  "pa_presentacion"]}
+                        name={["atributos_js",  "presentacion"]}
                         rules={
                           crud
                             ? [
@@ -2227,7 +2227,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Proceso de Fabricación"
-                        name={["atributos_js",  "pe_presentacion"]}
+                        name={["atributos_js",  "proceso_fabricacion"]}
                         rules={
                           crud
                             ? [
