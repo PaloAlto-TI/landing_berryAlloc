@@ -264,7 +264,6 @@ const ProductoList = () => {
                 } else {
                   ver(record);
                 }
-                window.scrollTo(0, 0);
               },
             };
           }}

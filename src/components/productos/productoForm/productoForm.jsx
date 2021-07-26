@@ -165,6 +165,7 @@ const FormProducto = (props) => {
   useEffect(() => {
 
     if (crud === null) {
+
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
 
@@ -176,6 +177,16 @@ const FormProducto = (props) => {
         setUnidadMedida(editProducto.fk_unidad_medida_id);
         setId(editProducto.id);
       }
+
+      if (!crud){
+        if (editProducto.atributos_js.garantia_residencial === -1){
+          editProducto.atributos_js.garantia_residencial = "POR VIDA"
+        }else  if (editProducto.atributos_js.garantia_comercial === -1){
+          editProducto.atributos_js.garantia_comercial = "POR VIDA"
+        }else  if (editProducto.atributos_js.garantia_industrial === -1){
+          editProducto.atributos_js.garantia_industrial = "POR VIDA"
+        }
+      }
     } else {
       console.log("CODIGO: ", codigo);
       findProducto(codigo);
@@ -183,6 +194,8 @@ const FormProducto = (props) => {
     }
 
     if (show === null) {
+      window.scrollTo(0, 0);
+
       // if (crud) {
       setShow(crud);
       // } else {
@@ -361,18 +374,18 @@ const FormProducto = (props) => {
 
       if (changedValues[formFieldName] === "60d4c0476e8514b5e8c66fd5") {
         form.setFieldsValue({
-          atributos_js: { general: { capa_desgaste: "LACA ULTIMTEC" } },
-        });
+          atributos_js: { capa_desgaste: "LACA ULTIMTEC" } },
+        );
       } else if (changedValues[formFieldName] === "60d4c04851cbd1b5e83632d3") {
         form.setFieldsValue({
           atributos_js: {
-            general: { capa_desgaste: "LACA UV DE ÓXIDO DE ALUMINIO" },
+            general: "LACA UV DE ÓXIDO DE ALUMINIO" },
           },
-        });
+        );
       } else if (changedValues[formFieldName] === "60d4c0491b6606b5e836f80f") {
         form.setFieldsValue({
-          atributos_js: { general: { capa_desgaste: "PUR" } },
-        });
+          atributos_js: { capa_desgaste: "PUR" } },
+        );
       }
     }
 
@@ -1428,7 +1441,7 @@ const FormProducto = (props) => {
                     <Col span={12}>
                       <Form.Item
                         label="Uso"
-                        name={["atributos_js",  "cs_uso"]}
+                        name={["atributos_js",  "uso"]}
                         rules={
                           crud
                             ? [
@@ -1455,7 +1468,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Aplicación"
-                        name={["atributos_js",  "cs_aplicacion"]}
+                        name={["atributos_js",  "aplicacion"]}
                         rules={
                           crud
                             ? [
@@ -1478,7 +1491,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "cs_rango_altura_hebra",
+                          "rango_altura_hebra",
                         ]}
                         rules={
                           crud
@@ -1508,7 +1521,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Altura de Hebra"
-                        name={["atributos_js",  "cs_altura_hebra"]}
+                        name={["atributos_js",  "altura_hebra"]}
                         rules={
                           crud
                             ? [
@@ -1534,7 +1547,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "cs_puntadas_10cm",
+                          "puntadas_10cm",
                         ]}
                         rules={
                           crud
@@ -1552,7 +1565,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Puntadas por m2"
-                        name={["atributos_js",  "cs_puntadas_m2"]}
+                        name={["atributos_js",  "puntadas_m2"]}
                         rules={
                           crud
                             ? [
@@ -1574,7 +1587,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "cs_filamentos_puntada",
+                          "filamentos_puntada",
                         ]}
                         rules={
                           crud
@@ -1595,7 +1608,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "cs_filamentos_m2",
+                          "filamentos_m2",
                         ]}
                         rules={
                           crud
@@ -1613,7 +1626,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Galga"
-                        name={["atributos_js",  "cs_galga"]}
+                        name={["atributos_js",  "galga"]}
                         rules={
                           crud
                             ? [
@@ -1638,7 +1651,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "cs_tipo_filamento",
+                          "tipo_filamento",
                         ]}
                         rules={
                           crud
@@ -2005,7 +2018,7 @@ const FormProducto = (props) => {
                     name={[
                       "atributos_js",
                       
-                      "pi_espesor_capa_madera",
+                      "espesor_capa_madera",
                     ]}
                     rules={
                       crud
