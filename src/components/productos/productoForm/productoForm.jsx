@@ -171,8 +171,8 @@ const FormProducto = (props) => {
 
     if (editProducto) {
       if (!selectedMarcaId && !selectedLineaId && !selectedGrupoId) {
-        setSelectedMarcaId(editProducto.fk_marid);
         setSelectedLineaId(editProducto.fk_linea_id);
+        setSelectedMarcaId(editProducto.fk_marca_id);
         setSelectedGrupoId(editProducto.fk_grupo_id);
         setUnidadMedida(editProducto.fk_unidad_medida_id);
         setId(editProducto.id);
@@ -2179,7 +2179,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "olor_pegamento",
+                          "olor",
                         ]}
                         rules={
                           crud
