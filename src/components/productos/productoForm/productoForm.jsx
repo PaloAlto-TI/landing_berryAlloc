@@ -171,7 +171,7 @@ const FormProducto = (props) => {
 
     if (editProducto) {
       if (!selectedMarcaId && !selectedLineaId && !selectedGrupoId) {
-        setSelectedMarcaId(editProducto.fk_marca_id);
+        setSelectedMarcaId(editProducto.fk_marid);
         setSelectedLineaId(editProducto.fk_linea_id);
         setSelectedGrupoId(editProducto.fk_grupo_id);
         setUnidadMedida(editProducto.fk_unidad_medida_id);
@@ -238,7 +238,7 @@ const FormProducto = (props) => {
   //     console.log("sate",crud);
   //     initialValues = crud;
   //     if (!selectedMarcaId && !selectedLineaId) {
-  //       setSelectedMarcaId(crud.fk_marca_id);
+  //       setSelectedMarcaId(crud.fk_marid);
   //       setSelectedLineaId(crud.fk_linea_id);
   //       setId(crud.id);
   //     }
@@ -298,7 +298,7 @@ const FormProducto = (props) => {
     console.log("COLOR", form.getFieldsValue());
 
     console.log("FORMULARIO", form.getFieldsValue());
-    // setSelectedMarcaId(form.getFieldValue("fk_marca_id"));
+    // setSelectedMarcaId(form.getFieldValue("fk_marid"));
 
     // setFinal(form.getFieldsValue());
     // console.log("BF",form.getFieldValue("atributos_js"))
@@ -317,7 +317,7 @@ const FormProducto = (props) => {
       setUnidadMedida(changedValues[formFieldName]);
     }
 
-    if (formFieldName === "fk_marca_id") {
+    if (formFieldName === "fk_marid") {
       setSelectedMarcaId(changedValues[formFieldName]);
       setSelectedGrupoId(null);
       if (selectedLineaId === "60d4c04b894c18b5e810e025") {
@@ -357,7 +357,7 @@ const FormProducto = (props) => {
       form.setFieldsValue({ fk_color_id: undefined });
       form.setFieldsValue({ nombre: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
-      form.setFieldsValue({ fk_marca_id: undefined });
+      form.setFieldsValue({ fk_marid: undefined });
       form.setFieldsValue({ fk_proveedor_id: undefined });
       // form.setFieldsValue({ codigo_interno: "" });
       // form.setFieldsValue({ nombre: "" });
@@ -379,7 +379,7 @@ const FormProducto = (props) => {
       } else if (changedValues[formFieldName] === "60d4c04851cbd1b5e83632d3") {
         form.setFieldsValue({
           atributos_js: {
-            general: "LACA UV DE ÓXIDO DE ALUMINIO" },
+            capa_desgaste: "LACA UV DE ÓXIDO DE ALUMINIO" },
           },
         );
       } else if (changedValues[formFieldName] === "60d4c0491b6606b5e836f80f") {
@@ -451,10 +451,10 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_grupo_id") {
       if (form.getFieldValue("fk_grupo_id") === "60d617738d422eca134f6685") {
         form.setFieldsValue({
-          atributos_js: { especifico: { ca_conexion: "WI-FI" } },
+          atributos_js: {  conexion: "WI-FI"  },
         });
         form.setFieldsValue({
-          atributos_js: { especifico: { ca_tipo_sensor: "NTC 10K" } },
+          atributos_js: {  tipo_sensor: "NTC 10K"  },
         });
       }
 
@@ -589,7 +589,7 @@ const FormProducto = (props) => {
                   </Form.Item>
                   <Form.Item
                     label="Marca"
-                    name={crud ? "fk_marca_id" : "marca"}
+                    name={crud ? "fk_marid" : "marca"}
                     rules={
                       crud
                         ? [
@@ -1791,7 +1791,7 @@ const FormProducto = (props) => {
                             name={[
                               "atributos_js",
                               
-                              "ca_dimension_pantalla",
+                              "dimension_pantalla",
                             ]}
                             rules={
                               crud
@@ -1816,7 +1816,7 @@ const FormProducto = (props) => {
                           </Form.Item>
                           <Form.Item
                             label="Conexión"
-                            name={["atributos_js",  "ca_conexion"]}
+                            name={["atributos_js",  "conexion"]}
                             rules={
                               crud
                                 ? [
@@ -1840,7 +1840,7 @@ const FormProducto = (props) => {
                             name={[
                               "atributos_js",
                               
-                              "ca_tipo_sensor",
+                              "tipo_sensor",
                             ]}
                             rules={
                               crud
@@ -1865,7 +1865,7 @@ const FormProducto = (props) => {
                             name={[
                               "atributos_js",
                               
-                              "ca_color_calefactor",
+                              "color_calefactor",
                             ]}
                             rules={
                               crud
@@ -2048,7 +2048,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "pa_capacidad_rodamiento_carga",
+                          "capacidad_rodamiento_carga",
                         ]}
                         rules={
                           crud
@@ -2080,7 +2080,7 @@ const FormProducto = (props) => {
                             name={[
                               "atributos_js",
                               
-                              "pa_tiempo_trabajo",
+                              "tiempo_trabajo",
                             ]}
                             rules={
                               crud
@@ -2107,7 +2107,7 @@ const FormProducto = (props) => {
                             name={[
                               "atributos_js",
                               
-                              "pa_tiempo_oreo",
+                              "tiempo_oreo",
                             ]}
                             rules={
                               crud
@@ -2155,7 +2155,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "pa_color_pegamento",
+                          "color_pegamento",
                         ]}
                         rules={
                           crud
@@ -2179,7 +2179,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "pa_olor_pegamento",
+                          "olor_pegamento",
                         ]}
                         rules={
                           crud
@@ -2201,7 +2201,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Adherencia"
-                        name={["atributos_js",  "pa_adherencia"]}
+                        name={["atributos_js",  "adherencia"]}
                         rules={
                           crud
                             ? [
@@ -2244,7 +2244,7 @@ const FormProducto = (props) => {
                       </Form.Item>
                       <Form.Item
                         label="Rectificado"
-                        name={["atributos_js",  "pe_rectificado"]}
+                        name={["atributos_js",  "rectificado"]}
                         rules={
                           crud
                             ? [
@@ -2271,7 +2271,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "pe_absorcion_agua",
+                          "absorcion_agua",
                         ]}
                         rules={
                           crud
@@ -2294,7 +2294,7 @@ const FormProducto = (props) => {
                         name={[
                           "atributos_js",
                           
-                          "pa_resistencia_deslizamiento",
+                          "resistencia_deslizamiento",
                         ]}
                         rules={
                           crud
@@ -2308,18 +2308,19 @@ const FormProducto = (props) => {
                             : []
                         }
                       >
+                      {crud ? (
                         <SelectOpciones
                           tipo="resistencia al deslizamiento"
                           readOnly={!crud}
                           setShow={setShow}
-                        />
+                        />):   <Input className="input-type" readOnly={!crud} />}
                       </Form.Item>
                       <Form.Item
                         label="Resistencia a la Abrasión"
                         name={[
                           "atributos_js",
                           
-                          "pa_resistencia_abrasion",
+                          "resistencia_abrasion",
                         ]}
                         rules={
                           crud
@@ -2333,11 +2334,12 @@ const FormProducto = (props) => {
                             : []
                         }
                       >
+                      {crud ? (
                         <SelectOpciones
                           tipo="resistencia a la abrasión"
                           readOnly={!crud}
                           setShow={setShow}
-                        />
+                        />) : <Input className="input-type" readOnly={!crud} />}
                       </Form.Item>
                     </Col>
                   </Row>
