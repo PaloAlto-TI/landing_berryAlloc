@@ -238,7 +238,7 @@ const FormProducto = (props) => {
   //     console.log("sate",crud);
   //     initialValues = crud;
   //     if (!selectedMarcaId && !selectedLineaId) {
-  //       setSelectedMarcaId(crud.fk_marid);
+  //       setSelectedMarcaId(crud.fk_marca_id);
   //       setSelectedLineaId(crud.fk_linea_id);
   //       setId(crud.id);
   //     }
@@ -298,7 +298,7 @@ const FormProducto = (props) => {
     console.log("COLOR", form.getFieldsValue());
 
     console.log("FORMULARIO", form.getFieldsValue());
-    // setSelectedMarcaId(form.getFieldValue("fk_marid"));
+    // setSelectedMarcaId(form.getFieldValue("fk_marca_id"));
 
     // setFinal(form.getFieldsValue());
     // console.log("BF",form.getFieldValue("atributos_js"))
@@ -317,7 +317,7 @@ const FormProducto = (props) => {
       setUnidadMedida(changedValues[formFieldName]);
     }
 
-    if (formFieldName === "fk_marid") {
+    if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
       setSelectedGrupoId(null);
       if (selectedLineaId === "60d4c04b894c18b5e810e025") {
@@ -357,7 +357,7 @@ const FormProducto = (props) => {
       form.setFieldsValue({ fk_color_id: undefined });
       form.setFieldsValue({ nombre: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
-      form.setFieldsValue({ fk_marid: undefined });
+      form.setFieldsValue({ fk_marca_id: undefined });
       form.setFieldsValue({ fk_proveedor_id: undefined });
       // form.setFieldsValue({ codigo_interno: "" });
       // form.setFieldsValue({ nombre: "" });
@@ -589,7 +589,7 @@ const FormProducto = (props) => {
                   </Form.Item>
                   <Form.Item
                     label="Marca"
-                    name={crud ? "fk_marid" : "marca"}
+                    name={crud ? "fk_marca_id" : "marca"}
                     rules={
                       crud
                         ? [
