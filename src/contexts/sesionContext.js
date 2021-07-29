@@ -1,73 +1,131 @@
 import React, { createContext, useState, useEffect } from "react";
 import { SesionService } from "../services/sesionService";
+import {  message } from 'antd';
+import { useHistory } from "react-router";
+
+
 
 export const SesionContext = createContext();
 
 const SesionContextProvider = (props) => {
+  let history = useHistory();
   const sesionService = new SesionService();
 
-  const [sesiones, setSesiones] = useState([]);
-
-  const [editSesion, setEditSesion] = useState(null);
-  const [isEmpty, setIsEmpty] = useState(false)
-//------------------------------------------------------
+  const [sesions, setSesions] = useState();
+  const [isLogged, setIsLogged] = useState(false)
+  //------------------------------------------------------
 
 
   useEffect(async () => {
-    
+  
     // if (productos.length === 0){
     //   setIsEmpty(true);
+    console.log("imprime token :"+localStorage.getItem("token"));
+    if (localStorage.getItem("token")) {
 
 
-    if(localStorage.getItem("token") && isEmpty===false)
-    {
-
-      const tok={"token":localStorage.getItem("token")};
+      const tok = { "token": localStorage.getItem("token") };
+      let data = await usuario(tok);
 
 
-    
-    const data = await sesionService.getUsuario(tok);
-    setSesiones(data);
-    setIsEmpty(true);
+      console.log("prueba data "+JSON.stringify(sesions));
+      //console.log("Entra en effect service1 " + JSON.stringify(sesions));
+      if (!sesions) {
+
+        setSesions(data);
+        setIsLogged(true);
+        console.log("fecha ahora:"+new Date()+"milisegundos ahora"+ new Date().getTime())
+        console.log("fecha salir:"+new Date( (new Date(data.fecha).getTime() + data.time_out))+"milisegundos para salir"+  (new Date(data.fecha).getTime() + data.time_out))
+        
+        if (  new Date().getTime() > (new Date(data.fecha).getTime() + data.time_out) )
+        { 
+          LogOut();
+          setIsLogged(false);
+          
+          
+
+
+
+        }
+
+
+
+      }
+
+
+
+
+      console.log("Entra en effect service2 " + new Date(JSON.stringify(data.fecha)));
+      console.log("Entra en effect service3 " + new Date(new Date(data.fecha).getTime() + data.time_out));
+    }
+    else {
+      setIsLogged(false);
+
     }
     // }
 
-  }, []);
+  });
+
+  //----------------------------------------------------------------
+
   
-//----------------------------------------------------------------
+  
+  const LogOut = async () => {
+    //sesionService.softDelete(sesion);
+
+    const tok = { "token": localStorage.getItem("token") };
+    const data = await sesionService.getUsuario(tok);
+
+    softDeleteSesion(data);
+    localStorage.clear();
+    history.push("/login");
+    message.success('Log Out');
+  // console.log("cookies:"+ document.cookie.split(";"));
+   //document.cookie = "userId=nick123";
+
+    
+    //removeCookies();
+   
+    //setSesions(data);
+    // console.log("Entra en sesion");
+    // setSesiones([...sesiones, data.data]);
+
+
+    return data;
+  };
+
+
 
 
   const usuario = async () => {
-    const tok={"token":localStorage.getItem("token")};
-
-    console.log("err1:", tok);
+    const tok = { "token": localStorage.getItem("token") };
     const data = await sesionService.getUsuario(tok);
+    //setSesions(data);
+    // console.log("Entra en sesion");
+    // setSesiones([...sesiones, data.data]);
 
-    console.log("err2:", data);
-
-    if (data.message === "OK CREATE") {
-      sesionService.getAll().then((data) => setSesiones(data));
-      // setSesiones([...sesiones, data.data]);
-    }
 
     return data;
   };
 
   const softDeleteSesion = (sesion) => {
-    console.log("SESION:"+JSON.stringify(sesion));
-    sesionService.softDelete(sesion)
-     
+    //console.log("SESION:"+JSON.stringify(sesion));
+    sesionService.softDelete(sesion);
+    setIsLogged(false);
+
   };
 
   return (
     <SesionContext.Provider
       value={{
         
+        isLogged,
         usuario,
         softDeleteSesion,
-        editSesion,
-        sesiones,
-        setEditSesion,
+        setIsLogged,
+        sesions,
+        LogOut
+        
       }}
     >
       {props.children}

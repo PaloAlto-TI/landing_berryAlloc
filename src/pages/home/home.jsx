@@ -23,7 +23,6 @@ import {
 const Home =  () => {
 
 
-
   
 const Sesion= async()=>{
 
@@ -32,7 +31,7 @@ const Sesion= async()=>{
     return await usuario(); 
 }
 
-console.log("SESION: "+Sesion());
+//console.log("SESION: "+Sesion());
   
   
   let { path } = useRouteMatch();

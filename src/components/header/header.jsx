@@ -1,25 +1,41 @@
-import React,{ useContext} from "react";
+import React,{ useContext,useEffect,useState} from "react";
 import { Menu, Button, Dropdown, Row, Col} from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import "./header.css";
-import { useHistory } from "react-router";
-import {  message } from 'antd';
 import { SesionContext } from "../../../src/contexts/sesionContext";
 
 
 
 
 const Header = () => {
-  const { usuario,softDeleteSesion} =  useContext(SesionContext);
-
-
-  let history = useHistory();
-
+  const { sesions,LogOut} =  useContext(SesionContext);
   const userName = JSON.parse(localStorage.getItem("user"));
+
+//----------------------------------------------------------------------
+// useEffect(async () => {
+
+//   if (sesions) {
+//    // console.log("permiso: "+JSON.stringify(sesions));
+//    console.log(sesions._usuario[0].rol.permisos[1]);
+//   }
+
+  
+
+// }, [sesions]);
+
+//if(permiso){
+
+ 
+//}
+
+
+//-----------------------------------------------------------------------
+
    
 
   const menu = (
     <Menu>
+      
       <Menu.Item key="1">
         <a target="_blank" rel="noopener noreferrer" href="./">
           Account Info
@@ -37,31 +53,18 @@ const Header = () => {
     
   );
   
-  const Sesion= async()=>{
-
-    //const { usuario,softDeleteSesion} =  useContext(SesionContext);
-  
-      return await usuario(); 
-  }
 
 
-  const DeleteSesion= async()=>{
-    
-    
-    console.log("entra:");
-    let usuario1= await usuario();
-    console.log("usuario1:"+JSON.stringify(usuario1));
-    delete usuario1._usuario;
-    await softDeleteSesion(usuario1); 
-  }
 
+ 
 
   function  logOut() {
-    DeleteSesion();
-    message.success('Log Out');
-    localStorage.clear();
-    history.push("/login");
-   //window.location.reload();
+    LogOut();
+    //DeleteSesion();
+    //message.success('Log Out');
+    //localStorage.clear();
+    //history.push("/login");
+   //*//window.location.reload();
 
   }
 
@@ -69,7 +72,9 @@ const Header = () => {
     <header className="main-header">
       { localStorage.getItem("user") === null ? logOut():
       <Row>
-      <Col span={8} className="labels-header">PALO ALTO - Especialista en Pisos</Col>
+      <Col span={8} className="labels-header">{sesions?JSON.stringify(sesions._usuario[0].rol.permisos[1]):null}</Col>
+
+      {/* <Col span={8} className="labels-header">PALO ALTO - Especialista en Pisos</Col> */}
       <Col span={8}></Col>
       <Col span={8} className="icons-end-header"><Dropdown overlay={menu} placement="bottomLeft">
         <Button icon={<UserOutlined />}>{userName.nombre}</Button>

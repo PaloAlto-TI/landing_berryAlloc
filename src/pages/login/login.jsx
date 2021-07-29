@@ -16,86 +16,34 @@ const Login = () => {
   let history = useHistory();
   const sesionService = new SesionService();
   //------------------------------------------------
-  const [sesionState, setSesionState] = useState({
+  // const [sesionState, setSesionState] = useState({
 
-    id_usuario: "",
-    token_obj:
-    {
-      access_token: "",
-      expires_at: null,
-      expires_in: null,
-      id_token: "",
-      first_issued_at: null,
-      idpId: "",
-      login_hint: "",
-      scope: "",
+  //   id_usuario: "",
+  //   token_obj:
+  //   {
+  //     access_token: "",
+  //     expires_at: null,
+  //     expires_in: null,
+  //     id_token: "",
+  //     first_issued_at: null,
+  //     idpId: "",
+  //     login_hint: "",
+  //     scope: "",
 
-    },
-    expires_at: null,
-    expires_in: null,
-    active: true,
-    token: null
+  //   },
+  //   expires_at: null,
+  //   expires_in: null,
+  //   active: true,
+  //   token: null
 
 
-  })
+  // })
 
   //--------------------------------------------
-  // useEffect(async () => {
 
-  //   //console.log("usuario check:"+usuarioCheck);
-  //   if (usuarioCheck && usuarioCheck.active === true && google) {
-
-
-
-
-
-
-  //     await setSesionState({
-  //       ...sesionState,
-  //       id_usuario: usuarioCheck._id,
-  //       token_obj:
-  //       {
-  //         access_token: google.tokenObj.access_token,
-  //         expires_at: google.tokenObj.expires_at,
-  //         expires_in: google.tokenObj.expires_in,
-  //         id_token: google.tokenObj.id_token,
-  //         first_issued_at: google.tokenObj.first_issued_at,
-  //         idpId: google.tokenObj.idpId,
-  //         login_hint: google.tokenObj.login_hint,
-  //         scope: google.tokenObj.scope,
-
-  //       },
-  //       expires_at: google.tokenObj.expires_at,
-  //       expires_in: google.tokenObj.expires_in,
-  //       active: true,
-  //       token: google.tokenObj.access_token
-  //     });
-
-  //    // await sesionService.create(sesionState);
-  //    // await localStorage.setItem('token', sesionState.token);
-
-
-
-
-  //     // console.log("google:"+localStorage.getItem('token'));
-
-
-
-  //     //-------------------------------------
-  //     // const tok={"token":localStorage.getItem("token")};
-
-
-  //     //sesionService.getUsuario(tok).then(t=>console.log("RESULTADO:"+JSON.stringify(t)));
-
-
-  //     //  console.log("google:"+JSON.stringify(sesionState));
-  //   }
-
-
-  // });
   //----------------------------------------------
-  const [usuarioCheck, SetUsuarioCheck] = useState(null);
-  const [google, SetGoogle] = useState(null);
+  // const [usuarioCheck, SetUsuarioCheck] = useState(null);
+  // const [google, SetGoogle] = useState(null);
 
   //--------------------------------------------     
 
@@ -114,17 +62,11 @@ const Login = () => {
     await usuarioService.getAll().then(data => res1(data));
 
     let usuarioCheck_1 = res2.find((u) => u.correo === response.profileObj.email);
-    SetUsuarioCheck(usuarioCheck_1);
-    SetGoogle(response);
+    //SetUsuarioCheck(usuarioCheck_1);
+    //SetGoogle(response);
 
     // console.log("usuariocheck:"+usuarioCheck_1);
     //console.log("usuarioresponse:"+JSON.stringify(response));
-
-
-
-
-
-
     if (usuarioCheck_1 && usuarioCheck_1.active === true) {
 
       let objeto={
@@ -146,11 +88,11 @@ const Login = () => {
         "active": true,
         "token": response.tokenObj.access_token
       };
-      console.log("Entra en el bucle1");
+      //console.log("Entra en el bucle1");
       await localStorage.setItem('user', JSON.stringify(usuarioCheck_1));
       await localStorage.setItem('token', response.tokenObj.access_token);
-      console.log("Entra en el bucle2");
-      console.log("Entra en el bucle3: "+JSON.stringify(objeto));
+      //console.log("Entra en el bucle2");
+      //console.log("Entra en el bucle3: "+JSON.stringify(objeto));
       await sesionService.create(objeto);
       console.log("google:" + localStorage.getItem('token'));
      
