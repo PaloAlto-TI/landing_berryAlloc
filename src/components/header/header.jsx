@@ -12,14 +12,7 @@ const Header = () => {
   const userName = JSON.parse(localStorage.getItem("user"));
 
 //----------------------------------------------------------------------
-// useEffect(async () => {
 
-//   if (sesions) {
-//    // console.log("permiso: "+JSON.stringify(sesions));
-//    console.log(sesions._usuario[0].rol.permisos[1]);
-//   }
-
-  
 
 // }, [sesions]);
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useContext } from "react";
 import { GoogleLogin } from 'react-google-login';
 import { useState } from 'react';
 //import UsuarioService from '../../services/Usuarios/UsuariosService';
@@ -12,9 +12,11 @@ import { Button, message } from 'antd';
 import { UsuarioService } from "../../services/usuarioService";
 
  import { SesionService } from "../../services/sesionService";
+ import { SesionContext } from "../../../src/contexts/sesionContext";
 
 const Login = () => {
   let history = useHistory();
+  const {setMoved} =  useContext(SesionContext);
   const sesionService = new SesionService();
   //------------------------------------------------
   // const [sesionState, setSesionState] = useState({
@@ -96,6 +98,7 @@ const Login = () => {
       //console.log("Entra en el bucle3: "+JSON.stringify(objeto));
       await sesionService.create(objeto);
       console.log("google:" + localStorage.getItem('token'));
+      setMoved(true);
      
      
       //------------------------------------------------------------------------

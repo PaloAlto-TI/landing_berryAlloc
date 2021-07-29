@@ -12,7 +12,8 @@ const SesionContextProvider = (props) => {
   const sesionService = new SesionService();
 
   const [sesions, setSesions] = useState();
-  const [isLogged, setIsLogged] = useState(false)
+  const [isLogged, setIsLogged] = useState(false);
+  const [ismoved, setMoved] = useState(false);
   //------------------------------------------------------
 
 
@@ -64,7 +65,7 @@ const SesionContextProvider = (props) => {
     }
     // }
 
-  });
+  },[localStorage.getItem("token"),sesions],ismoved);
 
   //----------------------------------------------------------------
 
@@ -124,7 +125,8 @@ const SesionContextProvider = (props) => {
         softDeleteSesion,
         setIsLogged,
         sesions,
-        LogOut
+        LogOut,
+        setMoved
         
       }}
     >
