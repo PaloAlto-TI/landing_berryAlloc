@@ -1,5 +1,5 @@
 import axios from "axios";
-import {baseUrl} from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/src/utils/constantes";
+import {baseUrl} from "../utils/constantes";
 export class UsuarioService {
 
    

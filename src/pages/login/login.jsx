@@ -8,11 +8,9 @@ import { useHistory } from "react-router";
 //import imagen from "./img/img1.gif";
 import imagen from "./img/img2.ico";
 import { Button, message } from 'antd';
-//import  { UsuarioService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/login/src/services/usuarioService";
-//import { UsuarioService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/src/services/usuarioService";
+
 import { UsuarioService } from "../../services/usuarioService";
 
-// import { SesionService } from "/Users/Jonnathan/Documents/PALO ALTO PROJECTS/PRODUCTOS/PRODUCTOS_PA_FE/src/services/sesionService";
  import { SesionService } from "../../services/sesionService";
 
 const Login = () => {
