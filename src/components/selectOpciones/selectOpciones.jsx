@@ -25,6 +25,7 @@ import { oloresPegamentos } from "../../utils/oloresPegamentos";
 import { adherenciasPegamentos } from "../../utils/adherenciasPegamentos";
 import { resistenciasDeslizamiento } from "../../utils/resistenciasDeslizamiento";
 import { resistenciasAbrasionPorcelanato } from "../../utils/resistenciasAbrasionPorcelanato";
+import { ProductoTipoService } from "../../services/productoTipoService";
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
@@ -32,7 +33,7 @@ const SelectOpciones = (props) => {
   const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow } =
     props;
   const [opciones, setOpciones] = useState([]);
-  console.log(props);
+  console.log("MIS PROPS",props);
   useEffect(() => {
     let cancel = false;
 
@@ -105,7 +106,13 @@ const SelectOpciones = (props) => {
           });
           // setShow(false);
         }
-      } else if (tipo === "procedencia") {
+      }else if(tipo === "tipo"){ 
+        const productoTipoService = new ProductoTipoService();
+        productoTipoService.getAll().then((data) => {
+          if (cancel) return;
+          setOpciones(data);
+        });
+      }else if (tipo === "procedencia") {
         setOpciones(paises);
       } else if (tipo === "resistencia a la abrasion") {
         setOpciones(resistenciasAbrasion);
@@ -155,7 +162,8 @@ const SelectOpciones = (props) => {
   }, [filter]);
 
   function handleChange(value) {
-    onChange(value);
+    console.log("VALORES CON LABEL",value);
+      onChange(value);
   }
 
   function onBlur() {
@@ -197,7 +205,7 @@ const SelectOpciones = (props) => {
 
   return (
     <Select
-      // labelInValue={tipo ==="color" ? true : false}
+      labelInValue={tipo ==="tipo" ? true : false}
       showSearch
       disabled={readOnly}
       style={{ width: 200 }}

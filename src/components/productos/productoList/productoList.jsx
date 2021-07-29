@@ -10,6 +10,7 @@ import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import "./productoList.css";
+import SelectOpciones from "../../selectOpciones/selectOpciones";
 
 const ProductoList = () => {
   const {
@@ -18,9 +19,15 @@ const ProductoList = () => {
     setEditProducto,
     isEmpty,
     softDeleteProducto,
+    editProducto,
+    filterProductos
   } = useContext(ProductoContext);
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
+  const [selectedLineaId, setSelectedLineaId] = useState(!editProducto ? "60d4c046e600f1b5e85d075c" : editProducto.fk_linea_id)
+  const [selectedMarcaId, setSelectedMarcaId] = useState(null)
+  const [selectedGrupoId, setSelectedGrupoId] = useState(null)
+  const [filtro, setFiltro] = useState(null)
   const [dataSource, setDataSource] = useState([]);
   const [rowState, setRowState] = useState(true);
   console.log("path");
@@ -34,9 +41,9 @@ const ProductoList = () => {
 
   useEffect(() => {
     setEditProducto(null);
-    console.log(productos);
+    console.log("LOS PRODUCTOS",productos);
     setPermiso(false);
-    if (!value) {
+    if (!value && !filtro ) {
       setDataSource(productos);
     }
   });
@@ -195,6 +202,7 @@ const ProductoList = () => {
   let history = useHistory();
 
   function handleClick() {
+    filterProductos("60d4c046e600f1b5e85d075c")
     setPermiso(true);
     let record = {
       permiso: true,
@@ -208,7 +216,7 @@ const ProductoList = () => {
     history.push(`${path}/${record.codigo_interno}/ver`, record);
   }
 
-  const filtrar = (e) => {
+  const filtrarB = (e) => {
     const currValue = e.target.value;
     setValue(currValue);
     const filteredData = productos.filter(
@@ -220,6 +228,34 @@ const ProductoList = () => {
     );
     setDataSource(filteredData);
   };
+
+  const filtrarM = (e) => {
+    setFiltro(e);
+
+    const filteredData = productos.filter(
+      (entry) =>
+        entry.fk_marca_id === e
+    );
+
+    console.log("FILTRADOS X MARCA", filteredData);
+    
+    setDataSource(filteredData)
+  };
+
+  const filtrarG = (e) => {
+    setFiltro(e);
+
+    const filteredData = productos.filter(
+      (entry) =>
+        entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId 
+    );
+
+    console.log("FILTRADOS X GRUPO", filteredData);
+    
+    setDataSource(filteredData)
+  };
+
+  
 
   return (
     <div>
@@ -236,14 +272,17 @@ const ProductoList = () => {
       <Search
         placeholder="Buscar producto..."
         value={value}
-        onChange={(e) => filtrar(e)}
+        onChange={(e) => filtrarB(e)}
         style={{ width: 200 }}
       />
+      <SelectOpciones tipo="línea" onChange={(e) => {filterProductos(e); setSelectedLineaId(e); setSelectedMarcaId(null); setSelectedGrupoId(null); setFiltro(null); setValue(null)}} value={selectedLineaId} />
+      <SelectOpciones tipo="marca" filter={selectedLineaId} onChange={(e) =>  {setSelectedMarcaId(e); setSelectedGrupoId(null); setDataSource(null); filtrarM(e)}} value={selectedMarcaId}/>
+      <SelectOpciones tipo="grupo" filter={selectedMarcaId} filter2={selectedLineaId} onChange={(e) => {setSelectedGrupoId(e); filtrarG(e)}} value={selectedGrupoId}/>
       <br />
       <br />
       {productos.length > 0 || isEmpty ? (
         <Table
-          locale={{ emptyText: "No hay datos" }}
+          locale={{ emptyText: "No hay productos" }}
           columns={columns}
           dataSource={dataSource}
           rowKey="id"
