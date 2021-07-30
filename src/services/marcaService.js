@@ -20,7 +20,7 @@ export class MarcaService {
     }
 
     update(marca){
-      return axios.put( baseUrl + "marca/" + marca.id, marca).then( res => res.data).catch(error => error.response.data);
+      return axios.put( baseUrl + "marca/" + marca[0].id, marca).then( res => res.data).catch(error => error.response.data);
     }
 
     softDelete(marca){

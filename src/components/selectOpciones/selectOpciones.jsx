@@ -169,7 +169,7 @@ const SelectOpciones = (props) => {
   }, [filter]);
 
   function handleChange(value) {
-    console.log("HARA EL HANDLECHANGE CON: " + value)
+    // console.log("HARA EL HANDLECHANGE CON: " + value)
     onChange(value);
   }
 
