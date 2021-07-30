@@ -246,7 +246,7 @@ const FormLinea = (props) => {
               }
             </Row>
             <br />
-            <Divider className="titleFont" orientation="left" >MARCAS DE LÍNEA</Divider>
+            <Divider className="titleFont" orientation="left" >MARCAS DE LA LÍNEA</Divider>
           </Form>
         </> : null
     );

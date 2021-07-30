@@ -20,6 +20,6 @@ export class LineaService {
     }
 
     softDelete(linea){
-      return axios.put( baseUrl + "delete-linea/"+ linea.id, linea).then(res => res.data);
-  }
+      return axios.put( baseUrl + "delete-linea/"+ linea.id, linea).then(res => res.data).catch(error => error.response.data);
+    }
 }

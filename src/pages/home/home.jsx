@@ -5,10 +5,12 @@ import SideMenu from "../../components/menu/sidemenu";
 import ProductoList from "../../components/productos/productoList/productoList";
 import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
-
 import LineaList from "../../components/lineas/lineaList/lineaList";
 import LineaForm from "../../components/lineas/lineaForm/lineaForm";
 import LineaContextProvider from "../../contexts/lineaContext";
+import MarcaList from "../../components/marcas/marcaList/marcaList";
+import MarcaForm from "../../components/marcas/marcaForm/marcaForm";
+import MarcaContextProvider from "../../contexts/marcaContext";
 
 import { Layout } from "antd";
 import "./home.css";
@@ -56,8 +58,18 @@ const Home = () => {
           </Route>
           </Switch>
             </LineaContextProvider>
-            <Route exact path={`${path}/marcas`}>
-              <p>MARCAS</p>
+          <MarcaContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/marcas`}>
+              <MarcaList />
+          </Route>
+          <Route path={`${path}/marcas/:codigo?/:operacion?`}>
+              <MarcaForm />
+          </Route>
+          </Switch>
+          </MarcaContextProvider>
+            <Route exact path={`${path}/grupos`}>
+              <p>GRUPOS</p>
             </Route>
             
             {/*<Route path="*">

@@ -10,8 +10,8 @@ const CrudButton = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   // console.log("EL TIPO DE TRANSACTION: " + JSON.stringify(typeTransaction));
+  // console.log("EL SOFDELETE DE CRUDBUTTON: " + softDelete);
   // console.log("EL ROWSTATE = ", setRowState )
-  // const { softDeleteProducto, setPermiso } = useContext(ProductoContext);
   
   const showModal = () => {
     setRowState(false);
@@ -26,7 +26,7 @@ const CrudButton = (props) => {
     let dataSoftDelete = null;
     setRowState(true);
     
-    // record.pseudo = null;// PRUEBA PARA NUEVO TIPO DE ERRO
+    // record.pseudo = null;// PRUEBA PARA NUEVO TIPO DE ERROR
     dataSoftDelete = await softDelete(record);
     
     // console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete));
@@ -36,7 +36,7 @@ const CrudButton = (props) => {
         "REGISTRO" : typeTransaction.labelCrudSingle) + ": "  + JSON.stringify(dataSoftDelete.data.nombre) + " SE REALIZÓ CON ÉXITO", 15);
       // message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] +  " CON ÉXITO", 4).then((t) => history.goBack());
     } else {
-      message.error("ERROR AL MOMENTO DE ELIMINAR LA LINEA", 15);
+      message.error("ERROR AL MOMENTO DE ELIMINAR " + typeTransaction.labelCrudSingle, 15);
       // message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
     setIsModalVisible(false);
@@ -61,7 +61,7 @@ const CrudButton = (props) => {
   function editar() {
     record["permiso"] = true;
     // console.log("ENTRA  EL TYPE AL EDITAR DEL CRUD CON " + JSON.stringify(typeTransaction));
-    // console.log("ENTRA EL RECORD AL EDITAR DEL CRUD CON " + JSON.stringify(record));
+    console.log("ENTRA EL RECORD AL EDITAR DEL CRUD CON " + JSON.stringify(record));
 
     if (typeTransaction === null || typeTransaction === undefined){
 
@@ -75,11 +75,9 @@ const CrudButton = (props) => {
         default:
           return history.push(`${path}/${record.codigo_interno}/editar`, record);
         } 
-
     }
 
     // typeTransaction ? ( history.push(`${path}/${record.codigo_interno}/editar`, record)
-        
     //   ) : history.push(`${path}/${record.codigo_interno}/editar`, record);
     
       // switch(typeTransaction.byIdPSQL) {

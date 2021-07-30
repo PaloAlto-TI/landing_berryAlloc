@@ -28,20 +28,22 @@ import { resistenciasAbrasionPorcelanato } from "../../utils/resistenciasAbrasio
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
-  // console.log(props)
-  const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow } =
+
+  const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow, typeTransaction } =
     props;
   const [opciones, setOpciones] = useState([]);
-  console.log(props);
+  // console.log("los props: " + JSON.stringify(props));
+
   useEffect(() => {
     let cancel = false;
 
     async function fetch() {
-      console.log(filter);
+      // console.log("EL FILTER: " + filter);
 
       if (tipo === "línea") {
         const lineaService = new LineaService();
         lineaService.getAll().then((data) => {
+          // console.log("LAS LINEAS QUE SACA EL SELECTOPTION: " + JSON.stringify(data))
           if (cancel) return;
           setOpciones(data);
         });
@@ -147,7 +149,15 @@ const SelectOpciones = (props) => {
         setOpciones(resistenciasDeslizamiento);
       } else if (tipo === "resistencia a la abrasión") {
         setOpciones(resistenciasAbrasionPorcelanato);
-      } else {
+      } //  else if (tipo === "lineas_nn") {
+      //   const lineaService = new LineaService();
+      //   lineaService.getAll().then((data) => {
+      //     // console.log("LAS LINEAS QUE SACA EL SELECTOPTION: " + JSON.stringify(data))
+      //     if (cancel) return;
+      //     setOpciones(data);
+      //   });
+      // }
+      else {
         setOpciones([]);
       }
     }
@@ -159,6 +169,7 @@ const SelectOpciones = (props) => {
   }, [filter]);
 
   function handleChange(value) {
+    console.log("HARA EL HANDLECHANGE CON: " + value)
     onChange(value);
   }
 
@@ -195,8 +206,9 @@ const SelectOpciones = (props) => {
       // labelInValue={tipo ==="color" ? true : false}
       showSearch
       disabled={readOnly}
-      style={{ width: 200 }}
-      placeholder={"Seleccione " + tipo}
+      mode={typeTransaction ? typeTransaction.mode : "simple"}
+      style={typeTransaction ? typeTransaction.mode === "multiple" ? { width: 1100 } : { width: 200 }  : { width: 200 }}
+      placeholder={ typeTransaction ? "Seleccione " + typeTransaction.placeHoldertext : "Seleccione " + tipo}
       optionFilterProp="children"
       onChange={handleChange}
       onFocus={onFocus}
