@@ -21,16 +21,17 @@ const SesionContextProvider = (props) => {
   
     // if (productos.length === 0){
     //   setIsEmpty(true);
-    console.log("imprime token :"+localStorage.getItem("token"));
+    //console.log("imprime token :"+localStorage.getItem("token"));
     if (localStorage.getItem("token")) {
 
 
       const tok = { "token": localStorage.getItem("token") };
       let data = await usuario(tok);
 
-
-      console.log("prueba data "+JSON.stringify(sesions));
+      
+      //console.log("prueba data "+JSON.stringify(sesions));
       //console.log("Entra en effect service1 " + JSON.stringify(sesions));
+
       if (!sesions) {
 
         setSesions(data);
@@ -52,12 +53,13 @@ const SesionContextProvider = (props) => {
 
 
       }
+     // else{if(!sesions._usuario[0]){window.location.reload()}}
 
 
 
 
-      console.log("Entra en effect service2 " + new Date(JSON.stringify(data.fecha)));
-      console.log("Entra en effect service3 " + new Date(new Date(data.fecha).getTime() + data.time_out));
+     // console.log("Entra en effect service2 " + new Date(JSON.stringify(data.fecha)));
+      //console.log("Entra en effect service3 " + new Date(new Date(data.fecha).getTime() + data.time_out));
     }
     else {
       setIsLogged(false);
@@ -65,7 +67,8 @@ const SesionContextProvider = (props) => {
     }
     // }
 
-  },[localStorage.getItem("token"),sesions],ismoved);
+  //},[localStorage.getItem("token"),sesions],ismoved);
+},[localStorage,sesions,ismoved,setSesions]);
 
   //----------------------------------------------------------------
 
@@ -81,6 +84,8 @@ const SesionContextProvider = (props) => {
     localStorage.clear();
     history.push("/login");
     message.success('Log Out');
+    setSesions();
+    setMoved(false);
   // console.log("cookies:"+ document.cookie.split(";"));
    //document.cookie = "userId=nick123";
 

@@ -10,6 +10,7 @@ import { SesionContext } from "../../../src/contexts/sesionContext";
 const Header = () => {
   const { sesions,LogOut} =  useContext(SesionContext);
   const userName = JSON.parse(localStorage.getItem("user"));
+  
 
 //----------------------------------------------------------------------
 
@@ -46,8 +47,18 @@ const Header = () => {
     
   );
   
+function valid()
+{
+   if(sesions._usuario[0].rol.nombre)
+   {
+    return JSON.stringify(sesions._usuario[0].rol.nombre)
+   }
+   else {
+     return "NO HAY"
+   }
 
 
+};
 
  
 
@@ -65,7 +76,7 @@ const Header = () => {
     <header className="main-header">
       { localStorage.getItem("user") === null ? logOut():
       <Row>
-      <Col span={8} className="labels-header">{sesions?JSON.stringify(sesions._usuario[0].rol.permisos[1]):null}</Col>
+      <Col span={8} className="labels-header">{ sesions ? valid() :null }</Col>
 
       {/* <Col span={8} className="labels-header">PALO ALTO - Especialista en Pisos</Col> */}
       <Col span={8}></Col>
