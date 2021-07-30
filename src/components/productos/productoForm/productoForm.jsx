@@ -446,22 +446,27 @@ const FormProducto = (props) => {
 
       let index = form.getFieldValue("nombre").lastIndexOf(" ");
       
-      // if ( form.getFieldValue("fk_productotipo_id").label === "DE ALMACENAMIENTO"){
+      if ( form.getFieldValue("nombre").includes("DE ALMACENAMIENTO")){
 
-      //   index = form.getFieldValue("nombre").lastIndexOf("DE");
+        index = form.getFieldValue("nombre").lastIndexOf(" DE");
         
+      }
 
-      // }
 
+      if ( form.getFieldValue("fk_productotipo_id").label === "MADERA"){
+        form.setFieldsValue({
+          nombre:
+            form.getFieldValue("nombre").substring(0, index) +
+            " " 
+        });
 
-      if ( form.getFieldValue("fk_productotipo_id").label !== "MADERA"){
+      }else{
         form.setFieldsValue({
           nombre:
             form.getFieldValue("nombre").substring(0, index) +
             " " +
             form.getFieldValue("fk_productotipo_id").label,
         });
-
       }
 
       

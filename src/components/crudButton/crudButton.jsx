@@ -7,7 +7,7 @@ import { DeleteFilled, EditFilled} from "@ant-design/icons";
 
 const CrudButton = (props) => {
 
-
+  
   const { record, softDelete, setRowState } = props;
   let { path } = useRouteMatch();
 

@@ -58,7 +58,7 @@ const ProductoContextProvider = (props) => {
 
     console.log(id);
     const producto = productos.find((p) => p.codigo_interno === id);
-
+    
     setEditProducto(producto);
   };
 
