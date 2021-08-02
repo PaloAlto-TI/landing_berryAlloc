@@ -61,7 +61,7 @@ const CrudButton = (props) => {
   function editar() {
     record["permiso"] = true;
     // console.log("ENTRA  EL TYPE AL EDITAR DEL CRUD CON " + JSON.stringify(typeTransaction));
-    console.log("ENTRA EL RECORD AL EDITAR DEL CRUD CON " + JSON.stringify(record));
+    // console.log("ENTRA EL RECORD AL EDITAR DEL CRUD CON " + JSON.stringify(record));
 
     if (typeTransaction === null || typeTransaction === undefined){
 

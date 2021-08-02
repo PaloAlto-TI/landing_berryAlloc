@@ -15,6 +15,7 @@ const FormMarca = (props) => {
   const { createMarca, updateMarca, findMarca, editMarca } = useContext(MarcaContext);
   // let { path } = useRouteMatch();
   // console.log("EL PATH A NIVEL PRINCIPAL: ", path);
+  console.log("LO QUE ESTA EN EDIT MARCA: " + JSON.stringify(editMarca))
 
   let history = useHistory();
   let { codigo, operacion } = useParams();
@@ -146,7 +147,7 @@ const FormMarca = (props) => {
   const onFinish = async (values) => {
 
     let data = null;
-    let dataNN = null;
+    // let dataNN = null;
 
     let messagesOnFinish = operacion === "editar" ? ["EDITAR", "EDITÓ"] : ["CREAR", "CREÓ"];
     delete values.permiso;
@@ -155,21 +156,26 @@ const FormMarca = (props) => {
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
 
     console.log("EL ID QUE TRAE: " + id);
+    console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
 
     if (id) {
 
       values["id"] = id;
       
-      let array1 = editMarca.lineas_nn.map(x=>x.id);
+      let array1 = editMarca.lineas_nn.map(x=>x.id); // LINEAS INICIALES (BD)
+      let array2 = values.lineas_nn_in; // LINEAS DE FORM
+      // let array2 = values.lineas_nn; // LINEAS DE FORM
 
-      let array2 = values.lineas_nn_in;
+      console.log("como el array1: " + array1);
+      console.log("como el array2: " + array2);
+      console.log("C1: ", array2.filter(x => !array1.includes(x)));
 
-      console.log("C1: ", array2.filter(x => !array1.includes(x)))
-      let toCreateMarcaLineasN = array2.filter(x => !array1.includes(x));
+      // SETTING LINEAS_MARCAS TO CREATE OR UPDATE
+      let temp_toCreateMarcaLineasN = array2.filter(x => !array1.includes(x));
+      // let arrx = toCreateMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id })) // SET FORMAT JSON
+      let toCreateMarcaLineasN = temp_toCreateMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id })) // SET FORMAT JSON
       
-      let arrx = toCreateMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id }))
-      //SOFTDELETE
-      
+      // SETTING LINEAS_MARCAS TO DELETE (SOFTDELETE)
       console.log("C2: ", array1.filter(x => !array2.includes(x)))
       let toDeleteMarcaLineasN = array1.filter(x => !array2.includes(x));
 
@@ -178,36 +184,22 @@ const FormMarca = (props) => {
 
       console.log("LO QUE ESTABA AL INICIO (CONTEXT): " + array1);
       console.log("LO QUE ESTA EN EL FORMULARIO: " + array2);
-      console.log("LA DATA QUE QUE ESCOGIO (FORM): " + JSON.stringify(values));
-
-     
+      console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.lineas_nn_in.length);
+      // console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.lineas_nn.length);
 
       // let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
-      let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: arrx, marcas_lineas_delete: toDeleteMarcaLineasN};
-
-
-      
-
+      let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
 
     //   console.log("EL JSON : " + JSON.stringify(jsonLineasMarcas))
 
-    //   let valuesArrObj = [];
-
-    //   jsonLineasMarcas.forEach((val) => {
-    //     valuesArrObj.push({
-    //       [val]: val
-    //     })
-    // })
-
       // console.log("EL ARRAY OBJ: " + valuesArrObj)
 
-
-      console.log("EL JSON A MANDAR: " + JSON.stringify(jsonLineasMarcas))
+      console.log("EL JSON LINEAS_MARCAS A MANDAR: " + JSON.stringify(jsonLineasMarcas))
 
       data = await updateMarca([values, jsonLineasMarcas]);
       // dataNN = await updateMarcaLineas(jsonLineasMarcas);
 
-      // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
+      console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
 
     } else {
       values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
@@ -215,16 +207,28 @@ const FormMarca = (props) => {
       data = await createMarca(values);
 
     }
-
-    /*console.log("LA DTAA QUE SALIO: " + JSON.stringify(data))
+    console.log("LA DTAA QUE SALIO: " + JSON.stringify(data))
 
     if (data.message.includes("OK")) {
-      message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] + " CON ÉXITO", 4).then((t) => history.push("/home/marcas/"));
+
+      // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
+
+      if (Object.keys(data.data).length > 0){
+
+        message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] + " CON ÉXITO", 4).then((t) => history.push("/home/marcas/"));
+      
+      } else {
+
+        console.log("MENSAJE DE VALIDACION DE OBJECTS EN DATA RES: " + values.nombre)
+      
+      }
+
     } else {
+      // 01/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted
+      // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
       message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA MARCA - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
 
-    */
 
     /// console.log("LA DATA QUE RETORNA EL FORMULARIO EN stringify: " + JSON.stringify(data));
     //  console.log("LA DATA ERROR Q RETORNA: " + JSON.stringify(data.errorDetails));
@@ -327,6 +331,7 @@ const FormMarca = (props) => {
                 <Form.Item
                   label="Línea"
                   name={"lineas_nn_in"}
+                  // name={"lineas_nn"}
                   >
                     {/* <Select
                         mode="multiple"
