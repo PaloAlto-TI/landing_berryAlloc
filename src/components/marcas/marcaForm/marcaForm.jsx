@@ -29,10 +29,9 @@ const FormMarca = (props) => {
   const [id, setId] = useState(null);
   // const [tempS, setTempS] = useState(["60faeee1a412169c92c778c2"]);
   // const [selectedLineaId, setSelectedLineaId] = useState(undefined);
-  const [opcionesLineaId, setOpcionesLineaId] = useState([]);
+  // const [opcionesLineaId, setOpcionesLineaId] = useState([]);
   
-
-  var lineasList = [];
+  // var lineasList = [];
 
   // const [show, setShow] = useState(null);
   const [form] = Form.useForm();
@@ -161,7 +160,6 @@ const FormMarca = (props) => {
     if (id) {
 
       values["id"] = id;
-      
       let array1 = editMarca.lineas_nn.map(x=>x.id); // LINEAS INICIALES (BD)
       let array2 = values.lineas_nn_in; // LINEAS DE FORM
       // let array2 = values.lineas_nn; // LINEAS DE FORM

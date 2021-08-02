@@ -91,8 +91,14 @@ const ProveedorContextProvider = (props) => {
         createProveedor,
         findProveedor,
         updateProveedor,
+        softDeleteProveedor,
         editProveedor,
         proveedores,
+        proveedores_marcas_nn,
+        permiso,
+        setPermiso,
+        setEditProveedor,
+        isEmpty
       }}
     >
       {props.children}

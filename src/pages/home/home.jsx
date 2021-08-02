@@ -11,12 +11,12 @@ import LineaContextProvider from "../../contexts/lineaContext";
 import MarcaList from "../../components/marcas/marcaList/marcaList";
 import MarcaForm from "../../components/marcas/marcaForm/marcaForm";
 import MarcaContextProvider from "../../contexts/marcaContext";
-import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
-import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
-import ProveedorContextProvider from "../../contexts/proveedorContext";
-import GrupoList from "../../components/grupos/grupoList/grupoList";
-import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
-import GrupoContextProvider from "../../contexts/grupoContext";
+// import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
+// import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
+// import ProveedorContextProvider from "../../contexts/proveedorContext";
+// import GrupoList from "../../components/grupos/grupoList/grupoList";
+// import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
+// import GrupoContextProvider from "../../contexts/grupoContext";
 
 
 import { Layout } from "antd";
