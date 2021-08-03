@@ -82,7 +82,7 @@ const FormMarca = (props) => {
   };
 
   useEffect(() => {
-
+    console.log("EL EDITMARCA EN USEEFFECT: " + JSON.stringify(editMarca))
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
@@ -92,7 +92,9 @@ const FormMarca = (props) => {
       setId(editMarca.id);
       
     } else {
+
       findMarca(codigo);
+
     }
   })
 
@@ -105,8 +107,8 @@ const FormMarca = (props) => {
     // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
 
-    console.log("EL ID QUE TRAE: " + id);
-    console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
+    // console.log("EL ID QUE TRAE: " + id);
+    // console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
 
     if (id) {
 
@@ -114,51 +116,34 @@ const FormMarca = (props) => {
       let array1 = editMarca.lineas_nn.map(x=>x.id); // LINEAS INICIALES (BD)
       let array2 = values.lineas_nn_in; // LINEAS DE FORM
 
-      console.log("como el array1: " + array1);
-      console.log("como el array2: " + array2);
-      console.log("C1: ", array2.filter(x => !array1.includes(x)));
+      // console.log("como el array1: " + array1);
+      // console.log("como el array2: " + array2);
+      // console.log("C1: ", array2.filter(x => !array1.includes(x)));
 
       // SETTING LINEAS_MARCAS TO CREATE OR UPDATE
       let temp_toCreateMarcaLineasN = array2.filter(x => !array1.includes(x));
       let toCreateMarcaLineasN = temp_toCreateMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id })) // SET FORMAT JSON
       
       // SETTING LINEAS_MARCAS TO DELETE (SOFTDELETE)
-      console.log("C2: ", array1.filter(x => !array2.includes(x)))
+      // console.log("C2: ", array1.filter(x => !array2.includes(x)))
       let toDeleteMarcaLineasN = array1.filter(x => !array2.includes(x));
 
-      console.log("LO QUE ESTABA AL INICIO (CONTEXT): " + array1);
-      console.log("LO QUE ESTA EN EL FORMULARIO: " + array2);
-      console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.lineas_nn_in.length);
+      // console.log("LO QUE ESTABA AL INICIO (CONTEXT): " + array1);
+      // console.log("LO QUE ESTA EN EL FORMULARIO: " + array2);
+      // console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.lineas_nn_in.length);
       // console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.lineas_nn.length);
 
       // let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
       let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
 
-      console.log("EL JSON LINEAS_MARCAS A MANDAR: " + JSON.stringify(jsonLineasMarcas))
+      // console.log("EL JSON LINEAS_MARCAS A MANDAR: " + JSON.stringify(jsonLineasMarcas))
 
       data = await updateMarca([values, jsonLineasMarcas]);
-      console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
+      // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
 
     } else {
 
       values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
-      console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR:", JSON.stringify(values));
-
-      // console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR:", JSON.stringify(values));
-      //+ "LENGTH = " + values.lineas_nn_in.length
-      // if (values.lineas_nn_in && values.lineas_nn_in.length > 0){
-
-      //   let arrayLineasToCreate = values.lineas_nn_in; // LINEAS DE FORM
-      //   let toCreateMarcaLineasN = arrayLineasToCreate.map(x => ({ fk_linea_id:x })) // SET FORMAT JSON
-
-      //   console.log("SI TIENE EL LINEAS_NN_IN EL arrayLineasToCreate: " + arrayLineasToCreate)
-      //   console.log("EL OBJECTe: " + JSON.stringify(toCreateMarcaLineasN))
-
-      // } else {
-      //   console.log("NO TIENE NADA EN LINEAS_NN_IN")
-      // }
-      
-
       data = await createMarca(values);
 
     }
@@ -194,8 +179,7 @@ const FormMarca = (props) => {
   };
 
   const handleFormValuesChange = async (changedValues) => {
-    console.log("ONCHANGE", form.getFieldsValue());
-
+    // console.log("ONCHANGE", form.getFieldsValue());
     formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
   };
 

@@ -12,7 +12,7 @@ const FormLinea = (props) => {
 
   const { createLinea, updateLinea, findLinea, editLinea } = useContext(LineaContext);
   let history = useHistory();
-  console.log("LO QUE ESTA EN EDIT LINEA: " + JSON.stringify(editLinea))
+  // console.log("LO QUE ESTA EN EDIT LINEA: " + JSON.stringify(editLinea))
   let { codigo, operacion } = useParams();
   let formHasChanges = false;
   const [crud, setCrud] = useState(
@@ -73,15 +73,19 @@ const FormLinea = (props) => {
   };
 
   useEffect(() => {
-
+    // console.log("EL EDITLINEA EN USEEFFECT: " + JSON.stringify(editLinea))
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
 
     if (editLinea) {
+
       setId(editLinea.id);
+
     } else {
+
       findLinea(codigo);
+
     }
   })
 
@@ -130,7 +134,7 @@ const FormLinea = (props) => {
 
     } else {
       values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
-      // console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR:", JSON.stringify(values));
+      console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR EN UNO NUEVO:", JSON.stringify(values));
       data = await createLinea(values);
 
     }
