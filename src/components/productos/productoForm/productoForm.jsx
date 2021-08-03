@@ -1396,7 +1396,7 @@ const FormProducto = (props) => {
                 {infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
                   <Form.Item
                     label="Tipo de Hebra"
-                    name={["atributos_js", "pb_tipo_hebra"]}
+                    name={["atributos_js", "tipo_hebra"]}
                     rules={
                       crud
                         ? [
