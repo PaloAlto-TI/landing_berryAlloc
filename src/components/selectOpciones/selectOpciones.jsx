@@ -224,9 +224,12 @@ const SelectOpciones = (props) => {
       labelInValue={tipo ==="tipo" ? true : false}
       showSearch
       disabled={readOnly}
-      mode={typeTransaction ? typeTransaction.mode : "simple"}
+      mode={typeTransaction ? typeTransaction.mode :null}
+     // mode="-"
       style={typeTransaction ? typeTransaction.mode === "multiple" ? { width: 1100 } : { width: 200 }  : { width: 200 }}
+      //
       placeholder={ typeTransaction ? "Seleccione " + typeTransaction.placeHoldertext : "Seleccione " + tipo}
+     // placeholder={ typeTransaction ? typeTransaction.placeHoldertext ?"Seleccione " + typeTransaction.placeHoldertext : "Seleccione " + tipo : "null" }
     
       optionFilterProp="children"
       onChange={handleChange}
