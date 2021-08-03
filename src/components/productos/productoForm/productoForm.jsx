@@ -1279,6 +1279,108 @@ const FormProducto = (props) => {
                       )}
                     </Form.Item>
 
+                  { infoTecnicaLinea === "60d4c0477f7255b5e8cca2b7" ? (
+                  <div>
+                  <Form.Item
+                        label="Uso"
+                        name={["atributos_js", "uso"]}
+                        rules={
+                          crud
+                            ? [
+                                {
+                                  required: true,
+                                  message: "Por favor, ingrese el/los uso(s)!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {crud ? (
+                          <Radio.Group
+                            onChange={onChangeUsoCesped}
+                            value={usoCesped}
+                            disabled={!crud}
+                          >
+                            <Radio value={"DECORATIVO"}>DECORATIVO</Radio>
+                            <Radio value={"DEPORTIVO"}>DEPORTIVO</Radio>
+                          </Radio.Group>
+                        ) : (
+                          <Input className="input-type" readOnly={!crud} />
+                        )}
+                      </Form.Item>
+                      <Form.Item
+                        label="Aplicación"
+                        name={["atributos_js", "aplicacion"]}
+                        rules={
+                          crud
+                            ? [
+                                {
+                                  required: true,
+                                  message: "Por favor, ingrese la aplicación!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {crud ? (
+                          <Checkbox.Group options={plainOptions} />
+                        ) : (
+                          <Input className="input-type" readOnly={!crud} />
+                        )}
+                      </Form.Item>
+                      <Form.Item
+                        label="Rango de Altura de Hebra"
+                        name={["atributos_js", "rango_altura_hebra"]}
+                        rules={
+                          crud
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el rango de altura de la hebra!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {crud ? (
+                          <Radio.Group
+                            onChange={onChangeRangoAlturaHebra}
+                            value={rangoAlturaHebra}
+                            disabled={!crud}
+                            de
+                          >
+                            <Radio value={"5 mm - 11 mm"}>5 mm - 11 mm</Radio>
+                            <Radio value={"18 mm - 45 mm"}>18 mm - 45 mm</Radio>
+                          </Radio.Group>
+                        ) : (
+                          <Input className="input-type" readOnly={!crud} />
+                        )}
+                      </Form.Item>
+                      <Form.Item
+                        label="Altura de Hebra"
+                        name={["atributos_js", "altura_hebra"]}
+                        rules={
+                          crud
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese la altura de la hebra!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        <InputNumber
+                          min={0}
+                          precision={0}
+                          readOnly={!crud}
+                          formatter={(value) => `${value} mm`}
+                          parser={(value) => value.replace(" mm", "")}
+                        />
+                      </Form.Item> </div>) : null }
+
                     {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
                     infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
                     infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
@@ -1555,7 +1657,7 @@ const FormProducto = (props) => {
 
                   </Col>
                 </Row>
-                <Divider />
+                {/* <Divider /> */}
                 
                 {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
                 infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
@@ -1570,105 +1672,6 @@ const FormProducto = (props) => {
                 ) : infoTecnicaLinea === "60d4c0477f7255b5e8cca2b7" ? (
                   <Row>
                     <Col span={12}>
-                      <Form.Item
-                        label="Uso"
-                        name={["atributos_js", "uso"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message: "Por favor, ingrese el/los uso(s)!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <Radio.Group
-                            onChange={onChangeUsoCesped}
-                            value={usoCesped}
-                            disabled={!crud}
-                          >
-                            <Radio value={"DECORATIVO"}>DECORATIVO</Radio>
-                            <Radio value={"DEPORTIVO"}>DEPORTIVO</Radio>
-                          </Radio.Group>
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                      <Form.Item
-                        label="Aplicación"
-                        name={["atributos_js", "aplicacion"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message: "Por favor, ingrese la aplicación!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <Checkbox.Group options={plainOptions} />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                      <Form.Item
-                        label="Rango de Altura de Hebra"
-                        name={["atributos_js", "rango_altura_hebra"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el rango de altura de la hebra!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <Radio.Group
-                            onChange={onChangeRangoAlturaHebra}
-                            value={rangoAlturaHebra}
-                            disabled={!crud}
-                            de
-                          >
-                            <Radio value={"5 mm - 11 mm"}>5 mm - 11 mm</Radio>
-                            <Radio value={"18 mm - 45 mm"}>18 mm - 45 mm</Radio>
-                          </Radio.Group>
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                      <Form.Item
-                        label="Altura de Hebra"
-                        name={["atributos_js", "altura_hebra"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese la altura de la hebra!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber
-                          min={0}
-                          precision={0}
-                          readOnly={!crud}
-                          formatter={(value) => `${value} mm`}
-                          parser={(value) => value.replace(" mm", "")}
-                        />
-                      </Form.Item>
                       <Form.Item
                         label="Puntadas cada 10 cm"
                         name={["atributos_js", "puntadas_10cm"]}
@@ -1703,8 +1706,6 @@ const FormProducto = (props) => {
                       >
                         <InputNumber min={0} precision={0} readOnly={!crud} />
                       </Form.Item>
-                    </Col>
-                    <Col span={12}>
                       <Form.Item
                         label="Filamentos por Puntada"
                         name={["atributos_js", "filamentos_puntada"]}
@@ -1722,6 +1723,9 @@ const FormProducto = (props) => {
                       >
                         <InputNumber min={0} precision={0} readOnly={!crud} />
                       </Form.Item>
+                    
+                    </Col>
+                    <Col span={12}>
                       <Form.Item
                         label="Filamentos por m2"
                         name={["atributos_js", "filamentos_m2"]}
