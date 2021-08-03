@@ -5,7 +5,20 @@ import SideMenu from "../../components/menu/sidemenu";
 import ProductoList from "../../components/productos/productoList/productoList";
 import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
+import LineaList from "../../components/lineas/lineaList/lineaList";
+import LineaForm from "../../components/lineas/lineaForm/lineaForm";
+import LineaContextProvider from "../../contexts/lineaContext";
+import MarcaList from "../../components/marcas/marcaList/marcaList";
+import MarcaForm from "../../components/marcas/marcaForm/marcaForm";
+import MarcaContextProvider from "../../contexts/marcaContext";
 import { SesionContext } from "../../../src/contexts/sesionContext";
+// import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
+// import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
+// import ProveedorContextProvider from "../../contexts/proveedorContext";
+// import GrupoList from "../../components/grupos/grupoList/grupoList";
+// import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
+// import GrupoContextProvider from "../../contexts/grupoContext";
+
 
 import { Layout } from "antd";
 import "./home.css";
@@ -16,6 +29,7 @@ import {
   useRouteMatch
 } from "react-router-dom";
 
+<<<<<<< HEAD
 
 
 
@@ -34,11 +48,15 @@ const Sesion= async()=>{
 //console.log("SESION: "+Sesion());
   
   
+=======
+const Home = () => {
+
+>>>>>>> PRODUCTOS_PA_MC
   let { path } = useRouteMatch();
-  
+
   return (
     <>
-      <Header />
+    <Header />
       <main>
         <SideMenu />
         <Router>
@@ -57,11 +75,51 @@ const Sesion= async()=>{
                   </span>
                 </Layout>
               </Route>
-              <Route path="*">
-                <p>404 NOT FOUND</p>
-              </Route>
             </Switch>
           </ProductoContextProvider>
+          <LineaContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/lineas`}>
+              <LineaList />
+          </Route>
+          <Route path={`${path}/lineas/:codigo?/:operacion?`}>
+              <LineaForm />
+          </Route>
+          </Switch>
+            </LineaContextProvider>
+          <MarcaContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/marcas`}>
+              <MarcaList />
+          </Route>
+          <Route path={`${path}/marcas/:codigo?/:operacion?`}>
+              <MarcaForm />
+          </Route>
+          </Switch>
+          </MarcaContextProvider>
+          {/* <ProveedorContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/proveedores`}>
+              <ProveedorList />
+          </Route>
+          <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
+              <ProveedorForm />
+          </Route>
+          </Switch>
+          </ProveedorContextProvider>
+          <GrupoContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/grupos`}>
+              <GrupoList />
+          </Route>
+          <Route path={`${path}/grupos/:codigo?/:operacion?`}>
+              <GrupoForm />
+          </Route>
+          </Switch>
+          </GrupoContextProvider> */}
+            {/*<Route path="*">
+              <p>404 NOT FOUND</p>
+  </Route>*/}
         </Router>
       </main>
       <Footer />

@@ -10,17 +10,21 @@ export class ProveedorService {
         return axios.get(baseUrl+"proveedor"+proveedor._id).then(res => res.data.data);
     }
 
+    get_proveedores_marcas_nn(){
+        return axios.get( baseUrl + "proveedores_marcas_nn" ).then( res => res.data.data );
+      }
+
     create(proveedor){
         return axios.post(baseUrl+"proveedor/", proveedor).then(res => res.data);
     }
 
 
     update(proveedor){
-        return axios.put(baseUrl+"proveedor/"+proveedor._id, proveedor).then(res => res.data);
+        return axios.put(baseUrl+"proveedor/"+proveedor.id, proveedor).then(res => res.data);
     }
 
     softDelete(proveedor){
-        return axios.put(baseUrl+"delete-proveedor/"+proveedor._id, proveedor).then(res => res.data);
+        return axios.put(baseUrl+"delete-proveedor/"+proveedor.id, proveedor).then(res => res.data);
     }
     
 }
