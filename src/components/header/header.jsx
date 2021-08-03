@@ -51,7 +51,7 @@ function valid()
 {
    if(sesions._usuario[0].rol.nombre)
    {
-    return JSON.stringify(sesions._usuario[0].rol.nombre)
+    return (sesions._usuario[0].rol.nombre.toUpperCase())
    }
    else {
      return "NO HAY"
@@ -76,7 +76,7 @@ function valid()
     <header className="main-header">
       { localStorage.getItem("user") === null ? logOut():
       <Row>
-      <Col span={8} className="labels-header">{ sesions ? valid() :null }</Col>
+      <Col span={8} className="labels-header">{ sesions ? valid() :"PALO ALTO - Especialista en Pisos" }</Col>
 
       {/* <Col span={8} className="labels-header">PALO ALTO - Especialista en Pisos</Col> */}
       <Col span={8}></Col>

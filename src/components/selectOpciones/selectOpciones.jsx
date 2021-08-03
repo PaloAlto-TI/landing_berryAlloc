@@ -33,7 +33,6 @@ const SelectOpciones = (props) => {
   const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow, typeTransaction } =
     props;
   const [opciones, setOpciones] = useState([]);
-   // console.log("los props: " + JSON.stringify(props));
   console.log("MIS PROPS",props);
   useEffect(() => {
     let cancel = false;
@@ -215,12 +214,14 @@ const SelectOpciones = (props) => {
 
   return (
     <Select
+    //placeholder={"HOLA MUNDO"}
       labelInValue={tipo ==="tipo" ? true : false}
       showSearch
       disabled={readOnly}
       mode={typeTransaction ? typeTransaction.mode : "simple"}
       style={typeTransaction ? typeTransaction.mode === "multiple" ? { width: 1100 } : { width: 200 }  : { width: 200 }}
       placeholder={ typeTransaction ? "Seleccione " + typeTransaction.placeHoldertext : "Seleccione " + tipo}
+    
       optionFilterProp="children"
       onChange={handleChange}
       onFocus={onFocus}

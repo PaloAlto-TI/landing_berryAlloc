@@ -5,13 +5,7 @@ import { Modal } from 'antd';
 import { DeleteFilled, EditFilled} from "@ant-design/icons";
 
 const CrudButton = (props) => {
-<<<<<<< HEAD
   const { record, softDelete, setRowState, typeTransaction } = props;
-=======
-
-  
-  const { record, softDelete, setRowState } = props;
->>>>>>> master
   let { path } = useRouteMatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -68,10 +62,11 @@ const CrudButton = (props) => {
     record["permiso"] = true;
     // console.log("ENTRA  EL TYPE AL EDITAR DEL CRUD CON " + JSON.stringify(typeTransaction));
     // console.log("ENTRA EL RECORD AL EDITAR DEL CRUD CON " + JSON.stringify(record));
-    //--------------------------------Cambio Master---------------------------------------
+  //---------------------------Master.------------------------------------------
     history.push(`${path}/${record.codigo_interno}/editar`);
-    //-------------------------------------------------------------------
-  }
+  
+    //}
+    //---------------------------Master.------------------------------------------
 
     if (typeTransaction === null || typeTransaction === undefined){
 
