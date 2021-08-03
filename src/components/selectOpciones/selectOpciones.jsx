@@ -4,6 +4,7 @@ import { LineaMarcaService } from "../../services/lineaMarcaService";
 import { MedidaService } from "../../services/medidaService";
 import { paises } from "../../utils/paises";
 import { LineaService } from "../../services/lineaService";
+import { MarcaService } from "../../services/marcaService";
 import { GrupoMarcaService } from "../../services/grupoMarcaService";
 import { ProveedorMarcaService } from "../../services/proveedorMarcaService";
 import { ColorGrupoService } from "../../services/colorGrupoService";
@@ -43,7 +44,12 @@ const SelectOpciones = (props) => {
       if (tipo === "línea") {
         const lineaService = new LineaService();
         lineaService.getAll().then((data) => {
-          // console.log("LAS LINEAS QUE SACA EL SELECTOPTION: " + JSON.stringify(data))
+          if (cancel) return;
+          setOpciones(data);
+        });
+      } else if (tipo === "marcas") {
+        const marcaService = new MarcaService();
+        marcaService.getAll().then((data) => {
           if (cancel) return;
           setOpciones(data);
         });

@@ -12,13 +12,7 @@ const MarcaList = () => {
   const { /*marcas,*/ marcas_lineas_nn, setPermiso, setEditMarca, isEmpty, softDeleteMarca } = useContext(MarcaContext);
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LAS MARCAS SIN LINEAS: " + JSON.stringify(marcas));
-  
-  console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
-  // console.log("EL IEMPTY: " + isEmpty)
-  // marcas_lineas_nn.length > 0 || isEmpty ? 
-  //   marcas_lineas_nn.lineas_nn = "SSS";
-  //   console.log("PASA EL LENGHT ");
-  //  : console.log("no pasa");
+  // console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
   
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
@@ -41,13 +35,7 @@ const MarcaList = () => {
       dataIndex: "lineas_nn",
       key: "lineas_nn",
       className: "longText",
-      /* sorter: {
-        compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
-      }, */
       showSorterTooltip: false,
-      /*dataIndex: render: (_, record) => (
-        : record.name
-      )*/
       render: (lineasMarca, record) => (
         <p>
           {lineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
@@ -135,6 +123,7 @@ const MarcaList = () => {
   }
 
   useEffect(() => {
+    console.log("LAS MARCAS EN LIST : " + JSON.stringify(marcas_lineas_nn))
     setEditMarca(null);
     setPermiso(false);
 
