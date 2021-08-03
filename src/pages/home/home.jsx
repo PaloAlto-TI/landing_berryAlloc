@@ -29,7 +29,6 @@ import {
   useRouteMatch
 } from "react-router-dom";
 
-<<<<<<< HEAD
 
 
 
@@ -48,10 +47,6 @@ const Sesion= async()=>{
 //console.log("SESION: "+Sesion());
   
   
-=======
-const Home = () => {
-
->>>>>>> PRODUCTOS_PA_MC
   let { path } = useRouteMatch();
 
   return (
