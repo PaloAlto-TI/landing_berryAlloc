@@ -98,35 +98,31 @@ const FormLinea = (props) => {
     // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
 
-    console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
+    // console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
   
     if (id) {
       values["id"] = id;
       let array1 = editLinea.marcas_nn.map(x=>x.id); // MARCAS INICIALES (BD)
       let array2 = values.marcas_nn_in; // LINEAS DE FORM
 
-      console.log("como el array1: " + array1);
-      console.log("como el array2: " + array2);
-      console.log("C1: ", array2.filter(x => !array1.includes(x)));
+      // console.log("como el array1: " + array1);
+      // console.log("como el array2: " + array2);
+      // console.log("C1: ", array2.filter(x => !array1.includes(x)));
 
       // SETTING LINEAS_MARCAS TO CREATE OR UPDATE
       let temp_toCreateMarcaLineasN = array2.filter(x => !array1.includes(x));
       let toCreateMarcaLineasN = temp_toCreateMarcaLineasN.map(x => ({ fk_marca_id:x , fk_linea_id:id })) // SET FORMAT JSON
       
       // SETTING LINEAS_MARCAS TO DELETE (SOFTDELETE)
-      console.log("C2: ", array1.filter(x => !array2.includes(x)))
+      // console.log("C2: ", array1.filter(x => !array2.includes(x)))
       let toDeleteMarcaLineasN = array1.filter(x => !array2.includes(x));
-
-      console.log("LO QUE ESTABA AL INICIO (CONTEXT): " + array1);
-      console.log("LO QUE ESTA EN EL FORMULARIO: " + array2);
-      console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.marcas_nn_in.length);
       
       let jsonLineasMarcas = {id_linea: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
 
-      console.log("EL JSON LINEAS_MARCAS A MANDAR: " + JSON.stringify(jsonLineasMarcas))
+      // console.log("EL JSON LINEAS_MARCAS A MANDAR: " + JSON.stringify(jsonLineasMarcas))
 
       data = await updateLinea([values, jsonLineasMarcas]);
-      console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
+      // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
 
       // console.log("LA DATA ANTES DE LLAMAR A UPDATE CONTEXT: " + JSON.stringify(values));
       /// data = await updateLinea(values);
@@ -134,7 +130,7 @@ const FormLinea = (props) => {
 
     } else {
       values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
-      console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR EN UNO NUEVO:", JSON.stringify(values));
+      // console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR EN UNO NUEVO:", JSON.stringify(values));
       data = await createLinea(values);
 
     }

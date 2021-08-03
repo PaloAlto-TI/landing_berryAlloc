@@ -11,10 +11,6 @@ export class LineaService {
       return axios.get( baseUrl + "linea/" + id).then( res => res.data);
     }
 
-    /*get_marcas_lineas_nn(){
-      return axios.get( baseUrl + "marcas_lineas_nn" ).then( res => res.data.data );
-    }*/
-
     get_lineas_marcas_nn(){
       return axios.get( baseUrl + "lineas_marcas_nn" ).then( res => res.data.data );
     }

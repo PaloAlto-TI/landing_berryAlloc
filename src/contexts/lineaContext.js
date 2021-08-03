@@ -20,7 +20,7 @@ const LineaContextProvider = (props) => {
 
   const createLinea = async (linea) => {
     const data = await lineaService.create(linea);
-    console.log("LO QUE VUELVE DE CREAR LINEA A NIVELL DE CONTEXT")
+    // console.log("LO QUE VUELVE DE CREAR LINEA A NIVELL DE CONTEXT")
     if (data.message === "OK CREATE") {
       lineaService.getAll().then((data) => setLineas(data));
     }
@@ -52,7 +52,7 @@ const LineaContextProvider = (props) => {
   const updateLinea = async(linea) => {
     // console.log("VA HACER EL AWAIT DEL UPDATE LINEA DEL CONTEXT: ", linea);
     const data = await lineaService.update(linea);
-    console.log("LA DATA QUE REGRESA DE UPDATELINEA : ", JSON.stringify(data));
+    // console.log("LA DATA QUE REGRESA DE UPDATELINEA : ", JSON.stringify(data));
     if (data.message === "OK UPDATE") {
       lineaService.getAll().then((data) => setLineas(data));
       lineaService.get_lineas_marcas_nn().then((data) => set_lineas_marcas_nn(data)); // PREGUNTAR SI VA ESTO O CÓMO DEBERÍA IR
