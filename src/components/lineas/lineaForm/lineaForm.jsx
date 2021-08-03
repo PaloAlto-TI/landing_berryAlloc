@@ -1,35 +1,31 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Redirect, useParams/*, useRouteMatch*/ } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import { Form, Input, Button, message, Row, Col, Divider } from "antd";
 import { useHistory } from "react-router";
 import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design/icons";
 import { LineaContext } from "../../../contexts/lineaContext";
+import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./lineaForm.css";
 const { TextArea } = Input;
 
 const FormLinea = (props) => {
 
   const { createLinea, updateLinea, findLinea, editLinea } = useContext(LineaContext);
-  // let { path } = useRouteMatch();
-  // console.log("EL PATH A NIVEL PRINCIPAL: ", path);
   let history = useHistory();
+  console.log("LO QUE ESTA EN EDIT LINEA: " + JSON.stringify(editLinea))
   let { codigo, operacion } = useParams();
-  // console.log("El codigo de params: ", codigo);
-  // console.log("La operacion de params: ", operacion);
   let formHasChanges = false;
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
   );
 
   const [id, setId] = useState(null);
-  // const [show, setShow] = useState(null);
   const [form] = Form.useForm();
   let initialValues = {
     descripcion: ''
   };
 
   function cancelConfirm() {
-
     if (formHasChanges !== null) {
        if (formHasChanges === true) {
         if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
@@ -42,22 +38,24 @@ const FormLinea = (props) => {
       if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
         history.push("/home/lineas/");
       }
-
     }
   }
 
   function goBackHistory() {
     history.push("/home/lineas/")
-    // window.history.back();
   }
 
-  // console.log("EL EDITLINEA: + " + editLinea);
   // console.log("EL CODIGO: + " + pseudo);
   // console.log("EL HISTORY: + " + JSON.stringify(history));
   // console.log("EL LOCATION: + " + JSON.stringify(location));
   // console.log("lOS PROPS DE lINEA: " + JSON.stringify(props));
-
   // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
+  // 02/08/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. 
+  const typeTransactionSelect = {
+    mode: "multiple",
+    placeHoldertext: "Marcas"
+  };
 
   const layout = {
     labelCol: {
@@ -81,14 +79,9 @@ const FormLinea = (props) => {
     }
 
     if (editLinea) {
-
       setId(editLinea.id);
-      // console.log("ENTRA EN EDIT LINEA DE USEEFFECT Y DESPUES DEL SETID QUEDA: " + id);
-
     } else {
-      
       findLinea(codigo);
-    
     }
   })
 
@@ -100,12 +93,39 @@ const FormLinea = (props) => {
 
     // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
+
+    console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
   
     if (id) {
-      
       values["id"] = id;
+      let array1 = editLinea.marcas_nn.map(x=>x.id); // MARCAS INICIALES (BD)
+      let array2 = values.marcas_nn_in; // LINEAS DE FORM
+
+      console.log("como el array1: " + array1);
+      console.log("como el array2: " + array2);
+      console.log("C1: ", array2.filter(x => !array1.includes(x)));
+
+      // SETTING LINEAS_MARCAS TO CREATE OR UPDATE
+      let temp_toCreateMarcaLineasN = array2.filter(x => !array1.includes(x));
+      let toCreateMarcaLineasN = temp_toCreateMarcaLineasN.map(x => ({ fk_marca_id:x , fk_linea_id:id })) // SET FORMAT JSON
+      
+      // SETTING LINEAS_MARCAS TO DELETE (SOFTDELETE)
+      console.log("C2: ", array1.filter(x => !array2.includes(x)))
+      let toDeleteMarcaLineasN = array1.filter(x => !array2.includes(x));
+
+      console.log("LO QUE ESTABA AL INICIO (CONTEXT): " + array1);
+      console.log("LO QUE ESTA EN EL FORMULARIO: " + array2);
+      console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.marcas_nn_in.length);
+      
+      let jsonLineasMarcas = {id_linea: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
+
+      console.log("EL JSON LINEAS_MARCAS A MANDAR: " + JSON.stringify(jsonLineasMarcas))
+
+      data = await updateLinea([values, jsonLineasMarcas]);
+      console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
+
       // console.log("LA DATA ANTES DE LLAMAR A UPDATE CONTEXT: " + JSON.stringify(values));
-      data = await updateLinea(values);
+      /// data = await updateLinea(values);
       // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
 
     } else {
@@ -116,7 +136,7 @@ const FormLinea = (props) => {
     }
 
     if (data.message.includes("OK")) {
-      message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] +  " CON ÉXITO", 4).then((t) => history.push("/home/lineas/"));
+      message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] +  " CON ÉXITO", 2).then((t) => history.push("/home/lineas/"));
     } else {
       message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
@@ -210,7 +230,22 @@ const FormLinea = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <br /><br /><br />
+            <br /><br />
+            <Divider className="titleFont" orientation="left" >MARCAS DE LA LÍNEA</Divider>
+            <br />
+            <Row >
+              <Col span={9}>
+                <Form.Item
+                  label="Marca"
+                  name={"marcas_nn_in"}
+                  >
+                  <SelectOpciones
+                    tipo="marcas"
+                    readOnly={!crud}
+                    typeTransaction={typeTransactionSelect} />
+                </Form.Item>
+              </Col>
+            </Row>
             <Row>
                 {crud ? (
                   <Col md={18} xs={15}>
@@ -245,8 +280,6 @@ const FormLinea = (props) => {
               </Col>
               }
             </Row>
-            <br />
-            <Divider className="titleFont" orientation="left" >MARCAS DE LA LÍNEA</Divider>
           </Form>
         </> : null
     );

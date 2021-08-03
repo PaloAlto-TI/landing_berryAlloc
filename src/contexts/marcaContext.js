@@ -14,8 +14,6 @@ const MarcaContextProvider = (props) => {
 
   // 28/07/2021 - OBSERVACIÓN: LA VARIABLE: marcasVW01 y el método: setMarcasVW01 deben nombrarse de mejor manera para guardar co-relación 
   // con lo que se está definiendo
-  /// console.log("LA VARIABLE marcas: " + JSON.stringify(marcas))
-  // console.log("LA VARIABLE marcas_lineas_id: " + JSON.stringify(marcas_lineas_nn))
   
   useEffect(() => {
     marcaService.getAll().then((data) => setMarcas(data));
@@ -24,7 +22,6 @@ const MarcaContextProvider = (props) => {
 
   const createMarca = async(marca) => {
     const data = await marcaService.create(marca);
-    // console.log("PASOO UN ERROR EN CREAR MARCAS: " + JSON.stringify(data));
     if (data.message === "OK CREATE") {
       marcaService.getAll().then((data) => setMarcas(data));
     }
@@ -33,7 +30,6 @@ const MarcaContextProvider = (props) => {
 
   const softDeleteMarca = async(marca) => {
     const data = await marcaService.softDelete(marca);
-
     if (data.message === "OK SOFTDELETE") {
       marcaService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setMarcas(data)});
     }
@@ -42,22 +38,13 @@ const MarcaContextProvider = (props) => {
   };
 
   const findMarca = (id) => {
-    // console.log("EL ID PARA FINDMARCA: " + id);
-    // const marca = marcas.find((m) => m.id === id)
-    // console.log("LO QUE VA A MAPEAR EN FINDMARCA: " + marcas_lineas_nn.length);
-    const marca = marcas_lineas_nn.find((m) => m.id === id);
 
+    const marca = marcas_lineas_nn.find((m) => m.id === id);
     if (marca){
       marca.lineas_nn_in = marca.lineas_nn.map(x=>x.id)
       setEditMarca(marca);
     }
 
-    /*
-    const marca = marcas_lineas_nn.find((m) => m.id === id);
-    if(marca){
-      marca.newList = marcas_lineas_nn.lineas_nn.map(x=>x.id)
-    }
-    */
   };
 
   const updateMarca = async(marca) => {
@@ -66,6 +53,7 @@ const MarcaContextProvider = (props) => {
     // console.log("LA DATA QUE REGRESA DE UPDATEMARCA : ", JSON.stringify(data));
     if (data.message === "OK UPDATE") {
       marcaService.getAll().then((data) => setMarcas(data));
+      marcaService.get_marcas_lineas_nn().then((data) => set_marcas_lineas_nn(data)); // PREGUNTAR SI VA ESTO O CÓMO DEBERÍA IR
     }
 
     setEditMarca(null);

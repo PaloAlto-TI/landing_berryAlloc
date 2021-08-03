@@ -13,7 +13,7 @@ const MarcaList = () => {
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LAS MARCAS SIN LINEAS: " + JSON.stringify(marcas));
   
-  console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
+  // console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
   // console.log("EL IEMPTY: " + isEmpty)
   // marcas_lineas_nn.length > 0 || isEmpty ? 
   //   marcas_lineas_nn.lineas_nn = "SSS";

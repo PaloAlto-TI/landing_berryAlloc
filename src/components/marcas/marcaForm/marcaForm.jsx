@@ -4,11 +4,9 @@ import { Form, Input, Button, message, Row, Col, Divider } from "antd";
 import { useHistory } from "react-router";
 import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design/icons";
 import { MarcaContext } from "../../../contexts/marcaContext";
-import { Select } from "antd";
-import "./marcaForm.css";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
+import "./marcaForm.css";
 const { TextArea } = Input;
-const { Option } = Select;
 
 const FormMarca = (props) => {
 
@@ -27,32 +25,13 @@ const FormMarca = (props) => {
   );
 
   const [id, setId] = useState(null);
-  // const [tempS, setTempS] = useState(["60faeee1a412169c92c778c2"]);
-  // const [selectedLineaId, setSelectedLineaId] = useState(undefined);
-  // const [opcionesLineaId, setOpcionesLineaId] = useState([]);
-  
-  // var lineasList = [];
-
   // const [show, setShow] = useState(null);
   const [form] = Form.useForm();
   let initialValues = {
     descripcion: ''
   };
 
-  // var lineasList = editMarca.map(function (opcion) {
-  //   return (
-  //     <Option key={opcion.id} value={opcion.id}>
-  //       {opcion.nombre.toUpperCase()}
-  //     </Option>
-  //   );
-  // });
-
-  //  var lineasList = <Option key="60faeee1a412169c92c778c2" value="60faeee1a412169c92c778c2">
-  //         {"Hola "}
-  //       </Option>;
-
   function cancelConfirm() {
-
     if (formHasChanges !== null) {
       if (formHasChanges === true) {
         if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
@@ -79,7 +58,6 @@ const FormMarca = (props) => {
   // console.log("EL LOCATION: + " + JSON.stringify(location));
   // console.log("lOS PROPS DE MARCA: " + JSON.stringify(props));
   // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-
 
   // 29/07/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. 
 
@@ -109,45 +87,18 @@ const FormMarca = (props) => {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
 
-    // console.log("EL EDITMARCA EN USEEFFECT DE MARCAFORM: " + JSON.stringify(editMarca));
-
     if (editMarca) {
 
-      // console.log("LINEAS NN:  " + JSON.stringify(editMarca.lineas_nn));
-      
       setId(editMarca.id);
-      // editMarca.newList = editMarca.lineas_nn.map(x=>x.id)
       
-      // console.log("LINEAS NN (LENGTH):  " + JSON.stringify(editMarca.lineas_nn).length);
-
-      //  console.log("XYZ: " + JSON.stringify(editMarca) )
-      // editMarca.lineas_nn = [{id: "60faeee1a412169c92c778c2", nombre: "MATERIAL DE EXHIBICIÓN"}]
-
-      
-      // editMarca.newList = editMarca.lineas_nn.map(x=>x.id)
-      
-      // console.log("EL NEWLISYT: " + editMarca.newList)
-      // if (selectedLineaId) {
-        
-        // ineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
-        // setSelectedLineaId(editMarca.lineas_nn.map(x=>x.id))
-      //}
-    // console.log("ENTRA EN EDIT MARCA DE USEEFFECT Y DESPUES DEL SETID QUEDA: " + id);
-    
     } else {
-      // console.log("ENTRA AL FIND MARCA: " + codigo)
       findMarca(codigo);
-
     }
-
-    // if (show === null) { setShow(crud); }
   })
 
   const onFinish = async (values) => {
 
     let data = null;
-    // let dataNN = null;
-
     let messagesOnFinish = operacion === "editar" ? ["EDITAR", "EDITÓ"] : ["CREAR", "CREÓ"];
     delete values.permiso;
 
@@ -162,7 +113,6 @@ const FormMarca = (props) => {
       values["id"] = id;
       let array1 = editMarca.lineas_nn.map(x=>x.id); // LINEAS INICIALES (BD)
       let array2 = values.lineas_nn_in; // LINEAS DE FORM
-      // let array2 = values.lineas_nn; // LINEAS DE FORM
 
       console.log("como el array1: " + array1);
       console.log("como el array2: " + array2);
@@ -170,15 +120,11 @@ const FormMarca = (props) => {
 
       // SETTING LINEAS_MARCAS TO CREATE OR UPDATE
       let temp_toCreateMarcaLineasN = array2.filter(x => !array1.includes(x));
-      // let arrx = toCreateMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id })) // SET FORMAT JSON
       let toCreateMarcaLineasN = temp_toCreateMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id })) // SET FORMAT JSON
       
       // SETTING LINEAS_MARCAS TO DELETE (SOFTDELETE)
       console.log("C2: ", array1.filter(x => !array2.includes(x)))
       let toDeleteMarcaLineasN = array1.filter(x => !array2.includes(x));
-
-      // let arry = toDeleteMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id }))
-      // let arry = toDeleteMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id }))
 
       console.log("LO QUE ESTABA AL INICIO (CONTEXT): " + array1);
       console.log("LO QUE ESTA EN EL FORMULARIO: " + array2);
@@ -188,20 +134,31 @@ const FormMarca = (props) => {
       // let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
       let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
 
-    //   console.log("EL JSON : " + JSON.stringify(jsonLineasMarcas))
-
-      // console.log("EL ARRAY OBJ: " + valuesArrObj)
-
       console.log("EL JSON LINEAS_MARCAS A MANDAR: " + JSON.stringify(jsonLineasMarcas))
 
       data = await updateMarca([values, jsonLineasMarcas]);
-      // dataNN = await updateMarcaLineas(jsonLineasMarcas);
-
       console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
 
     } else {
+
       values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
       console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR:", JSON.stringify(values));
+
+      // console.log("LO QUE TRAE DEL FORMULARIO Y VA A GUARDAR:", JSON.stringify(values));
+      //+ "LENGTH = " + values.lineas_nn_in.length
+      // if (values.lineas_nn_in && values.lineas_nn_in.length > 0){
+
+      //   let arrayLineasToCreate = values.lineas_nn_in; // LINEAS DE FORM
+      //   let toCreateMarcaLineasN = arrayLineasToCreate.map(x => ({ fk_linea_id:x })) // SET FORMAT JSON
+
+      //   console.log("SI TIENE EL LINEAS_NN_IN EL arrayLineasToCreate: " + arrayLineasToCreate)
+      //   console.log("EL OBJECTe: " + JSON.stringify(toCreateMarcaLineasN))
+
+      // } else {
+      //   console.log("NO TIENE NADA EN LINEAS_NN_IN")
+      // }
+      
+
       data = await createMarca(values);
 
     }
@@ -210,15 +167,13 @@ const FormMarca = (props) => {
     if (data.message.includes("OK")) {
 
       // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
-
       if (Object.keys(data.data).length > 0){
-
-        message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] + " CON ÉXITO", 4).then((t) => history.push("/home/marcas/"));
+        message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] 
+        + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
       
       } else {
-
         console.log("MENSAJE DE VALIDACION DE OBJECTS EN DATA RES: " + values.nombre)
-      
+        // history.push("/home/marcas/");
       }
 
     } else {
@@ -226,12 +181,6 @@ const FormMarca = (props) => {
       // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
       message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA MARCA - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
-
-
-    /// console.log("LA DATA QUE RETORNA EL FORMULARIO EN stringify: " + JSON.stringify(data));
-    //  console.log("LA DATA ERROR Q RETORNA: " + JSON.stringify(data.errorDetails));
-    // console.log("EL DATA.MESSAGE: " + JSON.stringify(data.message));
-    // console.log("EL DATA.DATA: " + JSON.stringify(data.data));
   }
 
   const onFinishFailed = (errorInfo) => {
@@ -250,13 +199,10 @@ const FormMarca = (props) => {
     formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
   };
 
-  // console.log("EL ROL DEL USER ID: " + JSON.parse(localStorage.getItem("user")).rol);
-
   if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
     return (
       editMarca || codigo === "nuevo" ?
         <>
-        {/*"ddd" + editMarca.newList ? editMarca.newList : null*/}
           <Form
             {...layout}
             form={form}
@@ -329,24 +275,14 @@ const FormMarca = (props) => {
                 <Form.Item
                   label="Línea"
                   name={"lineas_nn_in"}
-                  // name={"lineas_nn"}
                   >
-                    {/* <Select
-                        mode="multiple"
-                        allowClear
-                        placeholder="Seleccione Línea"
-                        readOnly={!crud}
-                      >
-                        {opcionesLineaId}
-                      </Select> editMarca.lineas_nn.map*/ }
-                  {<SelectOpciones
+                  <SelectOpciones
                     tipo="línea"
                     readOnly={!crud}
-                    typeTransaction={typeTransactionSelect} />}
+                    typeTransaction={typeTransactionSelect} />
                 </Form.Item>
               </Col>
             </Row>
-
             <Row>
               {crud ? (
                 <Col md={18} xs={15}>
