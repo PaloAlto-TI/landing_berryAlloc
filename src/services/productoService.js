@@ -3,9 +3,11 @@ import {baseUrl} from "../utils/constantes";
 export class ProductoService {
 
    
-    getProductos(){
-        return axios.get(baseUrl+"vista").then(res => res.data.data);
+    getProductos(id){
+        console.log("EL OBJETO", id);
+        return axios.post(baseUrl+"vista", id).then(res => res.data.data);
     }
+    
     getProducto(producto){
         return axios.get(baseUrl+"producto/"+producto.id).then(res => res.data.data);
     }

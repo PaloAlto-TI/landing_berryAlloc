@@ -28,14 +28,9 @@ import {
   Route,
   useRouteMatch
 } from "react-router-dom";
-
-
-
-
-
-const Home =  () => {
-
-
+import { ConfigProvider } from 'antd';
+import es_ES from 'antd/es/locale/es_ES';
+const Home = () => {
   
 // const Sesion= async()=>{
 
@@ -58,7 +53,9 @@ const Home =  () => {
           <ProductoContextProvider Provider>
             <Switch>
               <Route exact path={`${path}/productos`}>
+              <ConfigProvider locale={es_ES}>
                 <ProductoList />
+                </ConfigProvider>
               </Route>
               <Route path={`${path}/productos/:codigo?/:operacion?`}>
                 <ProductoForm />
