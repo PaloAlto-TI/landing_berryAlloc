@@ -1,5 +1,3 @@
-
-
 import axios from "axios"
 import {baseUrl} from "../utils/constantes";
 
@@ -10,7 +8,6 @@ export class GrupoService {
     }
 
     getOne(id){
-      console.log("EL ID:",id);
       return axios.get( baseUrl + "grupo/" + id).then( res => res.data);
     }
 
@@ -19,11 +16,11 @@ export class GrupoService {
     }
 
     update(grupo){
-      return axios.put( baseUrl + "grupo/" + grupo._id, grupo).then( res => res.data)
+      return axios.put( baseUrl + "grupo/" + grupo.id, grupo).then( res => res.data)
     }
 
     softDelete(grupo){
-      return axios.put( baseUrl + "delete-grupo/"+ grupo._id, grupo).then(res => res.data);
+      return axios.put( baseUrl + "delete-grupo/"+ grupo.id, grupo).then(res => res.data);
   }
 
 }

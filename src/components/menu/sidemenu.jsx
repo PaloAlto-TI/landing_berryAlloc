@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import './sidemenu.css';
 import { Menu } from 'antd';
 import { AppstoreOutlined, DollarCircleOutlined,  MenuOutlined, HighlightOutlined, HomeOutlined, LineChartOutlined, FundOutlined, WechatOutlined, BarcodeOutlined } from '@ant-design/icons';
-import { useHistory } from "react-router";
+// import { useHistory } from "react-router";
 import { Row, Col, Drawer } from 'antd';
 import { useRouteMatch } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 const SideMenu = () => {
-
-  let { path} = useRouteMatch();
-  let history = useHistory();
-
+let { path} = useRouteMatch();
+  // let history = useHistory();
   const [visible, setVisible] = useState(false);
 
   const showDrawer = () => {
@@ -21,14 +19,15 @@ const SideMenu = () => {
   const onClose = () => {
     setVisible(false);
   };
-
+// onClick={e => { history.push(`${path}`); window.location.reload(); }}
   return (
     <>
       <Row>
-          <Col span={6} className="icons-submenu">
-            <MenuOutlined onClick={showDrawer}/>
+          <Col span={2} className="icons-submenu" onClick={showDrawer}>
+            <MenuOutlined/>
+            &nbsp;&nbsp;Menú
           </Col>
-          <Col span={18}></Col>
+          <Col span={22}></Col>
       </Row>
       <Drawer
       title="PRODUCTOS - PALO ALTO"
@@ -40,12 +39,12 @@ const SideMenu = () => {
         <Menu
           style={{ width: "100%" }}
           mode="inline">
-          <Menu.Item key="1" icon={<HomeOutlined />} onClick={e => { history.push(`${path}`); window.location.reload(); }}>INICIO</Menu.Item>
-          <Menu.Item key="2" icon={<HighlightOutlined />}>LÍNEAS</Menu.Item>
-          <Menu.Item key="3" icon={<FundOutlined />}>MARCAS</Menu.Item>
-          <Menu.Item key="4" icon={<WechatOutlined />}>GRUPOS</Menu.Item>
-          <Menu.Item key="5" icon={<DollarCircleOutlined />}>PROVEEDORES</Menu.Item>
-          <Menu.Item key="6" icon={<BarcodeOutlined />} onClick={e => { history.push(`${path}/productos`); window.location.reload() }}>PRODUCTOS</Menu.Item>
+          <Menu.Item key="1" icon={<HomeOutlined />}><a href={`${path}`}>INICIO</a></Menu.Item>
+          <Menu.Item key="2" icon={<HighlightOutlined />}><a href={`${path}/lineas`}>LÍNEAS</a></Menu.Item>
+          <Menu.Item key="3" icon={<FundOutlined />}><a href={`${path}/marcas`}>MARCAS</a></Menu.Item>
+          <Menu.Item key="4" icon={<WechatOutlined />}><a href={`${path}/grupos`}>GRUPOS</a></Menu.Item>
+          <Menu.Item key="5" icon={<DollarCircleOutlined />}><a href={`${path}/proveedores`}>PROVEEDORES</a></Menu.Item>
+          <Menu.Item key="6" icon={<BarcodeOutlined />}><a href={`${path}/productos`}>PRODUCTOS</a></Menu.Item>
           <SubMenu key="sub1" icon={<LineChartOutlined />} title="REPORTES">
             <Menu.Item key="7">VENTAS</Menu.Item>
             <Menu.Item key="8">STOCKS</Menu.Item>
