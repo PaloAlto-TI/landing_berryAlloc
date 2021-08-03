@@ -226,7 +226,7 @@ const SelectOpciones = (props) => {
       disabled={readOnly}
       mode={typeTransaction ? typeTransaction.mode :null}
      // mode="-"
-      style={typeTransaction ? typeTransaction.mode === "multiple" ? { width: 1100 } : { width: 200 }  : { width: 200 }}
+      style={typeTransaction ? typeTransaction.mode === "multiple" ? { width: 1100 } : { width: 200 }  : { width: 250 }}
       //
       placeholder={ typeTransaction ? "Seleccione " + typeTransaction.placeHoldertext : "Seleccione " + tipo}
      // placeholder={ typeTransaction ? typeTransaction.placeHoldertext ?"Seleccione " + typeTransaction.placeHoldertext : "Seleccione " + tipo : "null" }
