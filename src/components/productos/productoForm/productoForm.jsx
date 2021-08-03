@@ -892,104 +892,7 @@ const FormProducto = (props) => {
               >
                 <Row>
                   <Col span={12}>
-                    <Form.Item
-                      label={
-                        infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                        infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
-                        infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                        infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                        infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
-                        infoTecnicaLinea !== "60d4c04b894c18b5e810e025"
-                          ? "Garantía Residencial (años)"
-                          : "Garantía (años)"
-                      }
-                      name={["atributos_js", "garantia_residencial"]}
-                      rules={
-                        crud
-                          ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese la garantía!",
-                              },
-                            ]
-                          : []
-                      }
-                    >
-                      {crud ? (
-                        <SelectOpciones
-                          tipo="garantía"
-                          readOnly={!crud}
-                          setShow={setShow}
-                        />
-                      ) : (
-                        <Input className="input-type" readOnly={!crud} />
-                      )}
-                    </Form.Item>
-
-                    {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                    infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
-                    infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
-                    infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
-                    infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                    infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                    infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                    infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
-                    infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
-                      <Form.Item
-                        label="Garantía Comercial (años)"
-                        name={["atributos_js", "garantia_comercial"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el tiempo de garantía!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="garantía"
-                            readOnly={!crud}
-                            setShow={setShow}
-                          />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    ) : null}
-
-                    {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
-                      <Form.Item
-                        label="Garantía Industrial (años)"
-                        name={["atributos_js", "garantia3"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el tiempo de garantía!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="garantía"
-                            readOnly={!crud}
-                            setShow={setShow}
-                          />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    ) : null}
-
+                  
                     <Form.Item
                       label="Formato"
                       name={["atributos_js", "formato"]}
@@ -1035,8 +938,6 @@ const FormProducto = (props) => {
                         />
                       </Form.Item>
                     ) : null}
-                  </Col>
-                  <Col span={12}>
                     {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
                     infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
                     infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
@@ -1065,7 +966,6 @@ const FormProducto = (props) => {
                         )}
                       </Form.Item>
                     ) : null}
-
                     {infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
                     infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
                     infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
@@ -1285,7 +1185,14 @@ const FormProducto = (props) => {
                       </div>
                     ) : null}
 
-                    {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                  
+                    
+                    
+                  </Col>
+                  <Col span={12}>
+                  
+
+                  {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
                       infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68") ||
                     infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
                       <Form.Item
@@ -1312,10 +1219,7 @@ const FormProducto = (props) => {
                         />
                       </Form.Item>
                     ) : null}
-                  </Col>
-                </Row>
-                <Divider />
-                {infoTecnicaLinea !== "60d4c04663852fb5e8ad40d7" &&
+                    {infoTecnicaLinea !== "60d4c04663852fb5e8ad40d7" &&
                 infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
                 infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" ? (
                   <Form.Item
@@ -1341,6 +1245,104 @@ const FormProducto = (props) => {
                     />
                   </Form.Item>
                 ) : null}
+                <Form.Item
+                      label={
+                        infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                        infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
+                        infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                        infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                        infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                        infoTecnicaLinea !== "60d4c04b894c18b5e810e025"
+                          ? "Garantía Residencial (años)"
+                          : "Garantía (años)"
+                      }
+                      name={["atributos_js", "garantia_residencial"]}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese la garantía!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <SelectOpciones
+                          tipo="garantía"
+                          readOnly={!crud}
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+
+                    {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                    infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
+                    infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
+                    infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
+                    infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                    infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                    infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                    infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
+                    infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
+                      <Form.Item
+                        label="Garantía Comercial (años)"
+                        name={["atributos_js", "garantia_comercial"]}
+                        rules={
+                          crud
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el tiempo de garantía!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {crud ? (
+                          <SelectOpciones
+                            tipo="garantía"
+                            readOnly={!crud}
+                            setShow={setShow}
+                          />
+                        ) : (
+                          <Input className="input-type" readOnly={!crud} />
+                        )}
+                      </Form.Item>
+                    ) : null}
+
+                    {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
+                      <Form.Item
+                        label="Garantía Industrial (años)"
+                        name={["atributos_js", "garantia3"]}
+                        rules={
+                          crud
+                            ? [
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el tiempo de garantía!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {crud ? (
+                          <SelectOpciones
+                            tipo="garantía"
+                            readOnly={!crud}
+                            setShow={setShow}
+                          />
+                        ) : (
+                          <Input className="input-type" readOnly={!crud} />
+                        )}
+                      </Form.Item>
+                    ) : null}
+
                 {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
                 infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
                 infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
@@ -1391,13 +1393,36 @@ const FormProducto = (props) => {
                     </Form.Item>
                   </div>
                 ) : null}
-
+                {infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
+                  <Form.Item
+                    label="Tipo de Hebra"
+                    name={["atributos_js", "pb_tipo_hebra"]}
+                    rules={
+                      crud
+                        ? [
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el tipo de hebra!",
+                            },
+                          ]
+                        : []
+                    }
+                  >
+                    {crud ? (
+                      <Radio.Group disabled={!crud}>
+                        <Radio value={"TEJIDA"}>TEJIDA</Radio>
+                        <Radio value={"HORIZONTAL"}>HORIZONTAL</Radio>
+                      </Radio.Group>
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
+                  </Form.Item>):null}
                 {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
                 infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
                 infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
                 infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
-                  <Row>
-                    <Col span={12}>
+                 <div>
                       <Form.Item
                         label="Biseles"
                         name={["atributos_js", "biseles"]}
@@ -1525,6 +1550,20 @@ const FormProducto = (props) => {
                           <Input className="input-type" readOnly={!crud} />
                         )}
                       </Form.Item>
+                      </div>
+                ):null}
+
+                  </Col>
+                </Row>
+                <Divider />
+                
+                {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+                  <Row>
+                    <Col span={12}>
+                     
                     </Col>
                     <Col span={12}></Col>
                   </Row>
@@ -1829,30 +1868,7 @@ const FormProducto = (props) => {
                     </Col>
                   </Row>
                 ) : infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
-                  <Form.Item
-                    label="Tipo de Hebra"
-                    name={["atributos_js", "pb_tipo_hebra"]}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el tipo de hebra!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <Radio.Group disabled={!crud}>
-                        <Radio value={"TEJIDA"}>TEJIDA</Radio>
-                        <Radio value={"HORIZONTAL"}>HORIZONTAL</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
+                  null
                 ) : infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
                   <Row>
                     <Col span={12}>
