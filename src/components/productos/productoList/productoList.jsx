@@ -35,7 +35,7 @@ const ProductoList = () => {
   const [filterAll, setFilterAll] = useState(false)
   const [dataSource, setDataSource] = useState([]);
   const [rowState, setRowState] = useState(true);
-  const [click, setClick] = useState(0.66)
+  const [click, setClick] = useState(0.75)
   console.log("path");
   const [filteredInfo, setFilteredInfo] = useState([]);
   // const size = useWindowSize();
@@ -134,6 +134,7 @@ const ProductoList = () => {
                 setClick={setClick}
               />
             ),
+            width: '15%'
           },
           {
             title: "ACCIONES",
@@ -146,7 +147,10 @@ const ProductoList = () => {
                 setRowState={setRowState}
               />
             ),
+            width: '10%'
+
           },
+
         ]
       : [
           {
