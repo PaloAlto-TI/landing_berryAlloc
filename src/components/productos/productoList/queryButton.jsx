@@ -9,7 +9,7 @@ const QueryButton = (props) => {
     const [stock, setStock] = useState("CONSULTAR")
     return (
         stock === "CONSULTAR" ?
-        <Button icon={<SearchOutlined />} onClick={() => {new ProductoService().getStock(props.record.codigo_interno).then(data => setStock(data)); setClick(0.82) }}>
+        <Button icon={<SearchOutlined />} onClick={() => {new ProductoService().getStock(props.record.codigo_interno).then(data => setStock(data)) }}>
             {stock}
         </Button> : <p>{stock}</p>
     )
