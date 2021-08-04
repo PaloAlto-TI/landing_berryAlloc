@@ -23,7 +23,11 @@ const ProductoContextProvider = (props) => {
   const filterProductos = async (id) => {
     setProductos([]);
     setIsEmpty(false);
-    productoService.getProductos({ linea_id : id}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    if (id === "all"){
+      productoService.getAllProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    }else{
+      productoService.getProductos({ linea_id : id}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    }
   }
 
   const createProducto = async (producto) => {
