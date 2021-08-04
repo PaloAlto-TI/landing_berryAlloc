@@ -35,7 +35,7 @@ export class ProductoService {
             headers: { 
               'Authorization': 'ciyHIwfTzH2dUrKrlIzArbpbTKw7UmR2dclnHA1fllY'
             }
-          }).then(res => res.data[0].cantidad_stock);
+          }).then(res => res.data[0] ? res.data[0].cantidad_stock : "N/A");
     }
     
 }
