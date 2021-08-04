@@ -37,6 +37,10 @@ import { tiposFilamento } from "../../../utils/tipoFilamento";
 import { MarcaService } from "../../../services/marcaService";
 import { ProductoProductoTipoService } from "../../../services/productoProductoTipoService";
 import { ProductoTipoService } from "../../../services/productoTipoService";
+import { Typography } from 'antd';
+import { ProductoService } from "../../../services/productoService";
+
+const { Title } = Typography;
 const { TextArea } = Input;
 const { Panel } = Collapse;
 const { Option } = Select;
@@ -60,7 +64,7 @@ const FormProducto = (props) => {
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [selectedGrupoId, setSelectedGrupoId] = useState(undefined);
-
+  const [stock, setStock] = useState(null)
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
   const [generacionClick, setGeneracionClick] = useState(undefined);
@@ -170,7 +174,10 @@ const FormProducto = (props) => {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
 
+    if (!stock && editProducto){
+      new ProductoService().getStock(editProducto.codigo_interno).then(data => setStock(data))
 
+    }    
 
     if (editProducto) {
       console.log("EDITPRODUCTO!", editProducto);
@@ -2443,6 +2450,7 @@ const FormProducto = (props) => {
             <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
               <Row>
                 <Col span={12}>
+                  
                   <Form.Item
                     label="Método ABC"
                     name={["atributos_js", "metodo_abc"]}
@@ -3093,7 +3101,9 @@ const FormProducto = (props) => {
                         </Row>
                       </Space>
                     </Form.Item>
+
                   ) : null}
+                    {!crud ? <Row><Col span={11}><Title level={5}>Stock General:</Title></Col><Col span={10}><Title level={5}>{stock}</Title></Col></Row>: null}
                 </Col>
               </Row>
             </Panel>
