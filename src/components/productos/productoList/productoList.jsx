@@ -278,6 +278,7 @@ const ProductoList = () => {
       <SelectOpciones tipo="línea" onChange={(e) => {filterProductos(e); setSelectedLineaId(e); setSelectedMarcaId(null); setSelectedGrupoId(null); setFiltro(null); setValue(null)}} value={selectedLineaId} />
       <SelectOpciones tipo="marca" filter={selectedLineaId} onChange={(e) =>  {setSelectedMarcaId(e); setSelectedGrupoId(null); setDataSource(null); filtrarM(e)}} value={selectedMarcaId}/>
       <SelectOpciones tipo="grupo" filter={selectedMarcaId} filter2={selectedLineaId} onChange={(e) => {setSelectedGrupoId(e); filtrarG(e)}} value={selectedGrupoId}/>
+      
       <br />
       <br />
       {productos.length > 0 || isEmpty ? (
