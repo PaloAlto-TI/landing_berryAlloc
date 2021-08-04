@@ -67,6 +67,7 @@ const ProductoList = () => {
                 a.codigo_interno.localeCompare(b.codigo_interno),
             },
             showSorterTooltip: false,
+            width: '10%'
           },
           {
             title: "NOMBRE",
@@ -76,6 +77,8 @@ const ProductoList = () => {
               compare: (a, b) => a.nombre.localeCompare(b.nombre),
             },
             showSorterTooltip: false,
+            width: '35%'
+
             // render:(text)=><Link to='/inicio'>{text}</Link>
           },
           {
@@ -162,6 +165,8 @@ const ProductoList = () => {
                 a.codigo_interno.localeCompare(b.codigo_interno),
             },
             showSorterTooltip: false,
+            width: '10%'
+
           },
           {
             title: "NOMBRE",
@@ -171,6 +176,8 @@ const ProductoList = () => {
               compare: (a, b) => a.nombre.localeCompare(b.nombre),
             },
             showSorterTooltip: false,
+            width: '35%'
+
             // render:(text)=><Link to='/inicio'>{text}</Link>
           },
           {
@@ -218,6 +225,19 @@ const ProductoList = () => {
               </p>
             ),
           },
+          
+          {
+            title: "STOCK GENERAL",
+            dataIndex: "",
+            key: "y",
+            render: (_, record) => (
+              <QueryButton
+                record={record}
+                setClick={setClick}
+              />
+            ),
+            width: '15%'
+          }
         ];
 
   let history = useHistory();
