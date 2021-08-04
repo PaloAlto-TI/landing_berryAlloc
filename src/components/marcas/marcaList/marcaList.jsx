@@ -12,7 +12,7 @@ const MarcaList = () => {
   const { /*marcas,*/ marcas_lineas_nn, setPermiso, setEditMarca, isEmpty, softDeleteMarca } = useContext(MarcaContext);
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LAS MARCAS SIN LINEAS: " + JSON.stringify(marcas));
-  // console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
+  console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
   
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);

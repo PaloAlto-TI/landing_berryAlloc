@@ -11,9 +11,9 @@ import LineaContextProvider from "../../contexts/lineaContext";
 import MarcaList from "../../components/marcas/marcaList/marcaList";
 import MarcaForm from "../../components/marcas/marcaForm/marcaForm";
 import MarcaContextProvider from "../../contexts/marcaContext";
-// import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
-// import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
-// import ProveedorContextProvider from "../../contexts/proveedorContext";
+import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
+import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
+import ProveedorContextProvider from "../../contexts/proveedorContext";
 // import GrupoList from "../../components/grupos/grupoList/grupoList";
 // import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
 // import GrupoContextProvider from "../../contexts/grupoContext";
@@ -75,7 +75,7 @@ const Home = () => {
           </Route>
           </Switch>
           </MarcaContextProvider>
-          {/* <ProveedorContextProvider Provider>
+          <ProveedorContextProvider Provider>
           <Switch>
           <Route exact path={`${path}/proveedores`}>
               <ProveedorList />
@@ -85,7 +85,7 @@ const Home = () => {
           </Route>
           </Switch>
           </ProveedorContextProvider>
-          <GrupoContextProvider Provider>
+          {/* <GrupoContextProvider Provider>
           <Switch>
           <Route exact path={`${path}/grupos`}>
               <GrupoList />

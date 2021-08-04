@@ -15,6 +15,9 @@ const ProveedorList = () => {
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
     const [rowState, setRowState] = useState(true);
 
+    // console.log("LAS PROVEEDORES SIN MARCAS: " + JSON.stringify(proveedores));
+    // console.log("LAS PROVEEDORES CON MARCAS: " + JSON.stringify(proveedores_marcas_nn));
+
     const columns = [
         {
           title: "NOMBRE",
@@ -24,32 +27,7 @@ const ProveedorList = () => {
             compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
           showSorterTooltip: true,
-          width: '15%'
-        },
-        {
-          title: "MARCAS",
-          dataIndex: "marcas_nn",
-          key: "marcas_nn",
-          className: "longText",
-          showSorterTooltip: false,
-
-          render: (proveedoresMarca, record) => (
-            <p>
-              {proveedoresMarca.length > 0 ? proveedoresMarca.map(x=>x.nombre).join(", ") : 'N/A' }
-            </p>
-          ),
           width: '30%'
-        },
-        {
-          title: "PSEUDÓNIMO",
-          dataIndex: "pseudo",
-          key: "pseudo",
-          align: "center",
-          sorter: {
-            compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
-          },
-          showSorterTooltip: false,
-          width: '15%'
         },
         {
           title: "DESCRIPCIÓN",
@@ -61,6 +39,20 @@ const ProveedorList = () => {
           },
           showSorterTooltip: false,
           width: '35%'
+        },
+        {
+          title: "MARCAS",
+          dataIndex: "proveedor_marcas_nn",
+          key: "proveedor_marcas_nn",
+          className: "longText",
+          showSorterTooltip: false,
+
+          render: (proveedorMarca, record) => (
+            <p>
+              {proveedorMarca.length > 0 ? proveedorMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+            </p>
+          ),
+          width: '30%'
         },
         {
           title: "ACCIONES",

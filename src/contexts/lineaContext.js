@@ -23,6 +23,7 @@ const LineaContextProvider = (props) => {
     // console.log("LO QUE VUELVE DE CREAR LINEA A NIVELL DE CONTEXT")
     if (data.message === "OK CREATE") {
       lineaService.getAll().then((data) => setLineas(data));
+      lineaService.get_lineas_marcas_nn().then((data) => set_lineas_marcas_nn(data)); // PREGUNTAR SI VA ESTO O CÓMO DEBERÍA IR
     }
     return data;
   }
@@ -31,6 +32,7 @@ const LineaContextProvider = (props) => {
      const data = await lineaService.softDelete(linea);
      if (data.message === "OK SOFTDELETE") {
       lineaService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setLineas(data)});
+      
     }
     setEditLinea(null);
     // console.log("El ultimo mensaje del SOFTDELETE : ", data.message);
