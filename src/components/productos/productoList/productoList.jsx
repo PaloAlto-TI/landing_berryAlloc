@@ -35,7 +35,7 @@ const ProductoList = () => {
   const [filterAll, setFilterAll] = useState(false)
   const [dataSource, setDataSource] = useState([]);
   const [rowState, setRowState] = useState(true);
-  const [stock, setStock] = useState(false)
+  const [click, setClick] = useState(0.66)
   console.log("path");
   const [filteredInfo, setFilteredInfo] = useState([]);
   // const size = useWindowSize();
@@ -131,6 +131,7 @@ const ProductoList = () => {
             render: (_, record) => (
               <QueryButton
                 record={record}
+                setClick={setClick}
               />
             ),
           },
@@ -372,7 +373,7 @@ const ProductoList = () => {
                 console.log(event);
 
                 if (JSON.parse(localStorage.getItem("user")).rol === 2) {
-                  if (event.clientX < window.innerWidth * 0.66 && rowState) {
+                  if (event.clientX < window.innerWidth * click && rowState) {
                     // record["permiso"] = false;
                     // history.push(`${path}/${record.codigo_interno}/ver`, record);
 
