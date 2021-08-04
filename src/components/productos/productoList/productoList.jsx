@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Spin } from "antd";
+import { Col, Row, Spin } from "antd";
 import { Button } from "antd";
 import { Table } from "antd";
 import { PlusOutlined, SmileOutlined } from "@ant-design/icons";
@@ -11,6 +11,7 @@ import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import "./productoList.css";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
+import Checkbox from "antd/lib/checkbox/Checkbox";
 
 const ProductoList = () => {
   const {
@@ -20,14 +21,17 @@ const ProductoList = () => {
     isEmpty,
     softDeleteProducto,
     editProducto,
-    filterProductos
+    filterProductos,
   } = useContext(ProductoContext);
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
-  const [selectedLineaId, setSelectedLineaId] = useState(!editProducto ? "60d4c046e600f1b5e85d075c" : editProducto.fk_linea_id)
-  const [selectedMarcaId, setSelectedMarcaId] = useState(null)
-  const [selectedGrupoId, setSelectedGrupoId] = useState(null)
-  const [filtro, setFiltro] = useState(null)
+  const [selectedLineaId, setSelectedLineaId] = useState(
+    !editProducto ? "60d4c046e600f1b5e85d075c" : editProducto.fk_linea_id
+  );
+  const [selectedMarcaId, setSelectedMarcaId] = useState(null);
+  const [selectedGrupoId, setSelectedGrupoId] = useState(null);
+  const [filtro, setFiltro] = useState(null);
+  const [filterAll, setFilterAll] = useState(false)
   const [dataSource, setDataSource] = useState([]);
   const [rowState, setRowState] = useState(true);
   console.log("path");
@@ -41,7 +45,7 @@ const ProductoList = () => {
 
   useEffect(() => {
     setEditProducto(null);
-    console.log("LOS PRODUCTOS",productos);
+    console.log("LOS PRODUCTOS", productos);
     setPermiso(false);
     if (!value && !filtro ) {
       setDataSource(productos);
@@ -202,7 +206,7 @@ const ProductoList = () => {
   let history = useHistory();
 
   function handleClick() {
-    filterProductos("60d4c046e600f1b5e85d075c")
+    filterProductos("60d4c046e600f1b5e85d075c");
     setPermiso(true);
     let record = {
       permiso: true,
@@ -232,14 +236,11 @@ const ProductoList = () => {
   const filtrarM = (e) => {
     setFiltro(e);
 
-    const filteredData = productos.filter(
-      (entry) =>
-        entry.fk_marca_id === e
-    );
+    const filteredData = productos.filter((entry) => entry.fk_marca_id === e);
 
     console.log("FILTRADOS X MARCA", filteredData);
-    
-    setDataSource(filteredData)
+
+    setDataSource(filteredData);
   };
 
   const filtrarG = (e) => {
@@ -247,38 +248,103 @@ const ProductoList = () => {
 
     const filteredData = productos.filter(
       (entry) =>
-        entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId 
+        entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId
     );
 
     console.log("FILTRADOS X GRUPO", filteredData);
-    
-    setDataSource(filteredData)
+
+    setDataSource(filteredData);
   };
 
-  
+  const filtroGlobal =  (e) => {
+    if (e.target.checked){
+      filterProductos("all");
+      setSelectedLineaId(null)
+      setSelectedMarcaId(null)
+      setSelectedGrupoId(null)
+    }else{
+      console.log("AQUI!!!!")
+      setSelectedLineaId("60d4c046e600f1b5e85d075c")
+      filterProductos("60d4c046e600f1b5e85d075c");
+    }
+
+    setFilterAll(e.target.checked);
+    setFiltro(null);
+  }
 
   return (
     <div>
-      {JSON.parse(localStorage.getItem("user")).rol === 2 && (
-        <Button
-          type="primary"
-          className="success"
-          icon={<PlusOutlined />}
-          onClick={handleClick}
-        >
-          Nuevo
-        </Button>
-      )}
-      <Search
-        placeholder="Buscar producto..."
-        value={value}
-        onChange={(e) => filtrarB(e)}
-        style={{ width: 200 }}
-      />
-      <SelectOpciones tipo="línea" onChange={(e) => {filterProductos(e); setSelectedLineaId(e); setSelectedMarcaId(null); setSelectedGrupoId(null); setFiltro(null); setValue(null)}} value={selectedLineaId} />
-      <SelectOpciones tipo="marca" filter={selectedLineaId} onChange={(e) =>  {setSelectedMarcaId(e); setSelectedGrupoId(null); setDataSource(null); filtrarM(e)}} value={selectedMarcaId}/>
-      <SelectOpciones tipo="grupo" filter={selectedMarcaId} filter2={selectedLineaId} onChange={(e) => {setSelectedGrupoId(e); filtrarG(e)}} value={selectedGrupoId}/>
       <br />
+
+      <Row>
+        <Col span={3}>
+          {JSON.parse(localStorage.getItem("user")).rol === 2 && (
+            <Button
+              type="primary"
+              className="success"
+              icon={<PlusOutlined />}
+              onClick={handleClick}
+            >
+              Nuevo
+            </Button>
+          )}
+        </Col>
+        <Col span={4}>
+          <Search
+            placeholder="Buscar producto..."
+            value={value}
+            onChange={(e) => filtrarB(e)}
+            style={{ width: 200 }}
+          />
+        </Col>
+        <Col span={5}>
+          <SelectOpciones
+            tipo="línea"
+            onChange={(e) => {
+              filterProductos(e);
+              setSelectedLineaId(e);
+              setSelectedMarcaId(null);
+              setSelectedGrupoId(null);
+              setFiltro(null);
+              setValue(null);
+              setFilterAll(false);
+            }}
+            value={selectedLineaId}
+          />
+        </Col>
+        <Col span={5}>
+          <SelectOpciones
+            tipo="marca"
+            filter={selectedLineaId}
+            onChange={(e) => {
+              setSelectedMarcaId(e);
+              setSelectedGrupoId(null);
+              setDataSource(null);
+              filtrarM(e);
+            }}
+            value={selectedMarcaId}
+          />
+        </Col>
+        <Col span={5}>
+          <SelectOpciones
+            tipo="grupo"
+            filter={selectedMarcaId}
+            filter2={selectedLineaId}
+            onChange={(e) => {
+              setSelectedGrupoId(e);
+              filtrarG(e);
+            }}
+            value={selectedGrupoId}
+          />
+        </Col>
+        <Col span={2}>
+
+              
+        <Checkbox onChange={(e)=>filtroGlobal(e)  } checked={filterAll}>Todos</Checkbox>
+        </Col>
+
+      </Row>
+
       <br />
       {productos.length > 0 || isEmpty ? (
         <Table

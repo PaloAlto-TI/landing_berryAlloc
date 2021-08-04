@@ -3,6 +3,10 @@ import {baseUrl} from "../utils/constantes";
 export class ProductoService {
 
    
+    getAllProductos(){
+        return axios.get(baseUrl+"vista-all").then(res => res.data.data);
+    }
+
     getProductos(id){
         console.log("EL OBJETO", id);
         return axios.post(baseUrl+"vista", id).then(res => res.data.data);
