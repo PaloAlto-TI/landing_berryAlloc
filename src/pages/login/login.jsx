@@ -13,6 +13,7 @@ import { UsuarioService } from "../../services/usuarioService";
 
  import { SesionService } from "../../services/sesionService";
  import { SesionContext } from "../../../src/contexts/sesionContext";
+import { Redirect } from "react-router-dom";
 
 const Login = () => {
   let history = useHistory();
@@ -50,9 +51,9 @@ const Login = () => {
 
   //--------------------------------------------     
 
-  function handleClick() {
-    history.push("/home");
-  }
+  // function handleClick() {
+    
+  // }
 
   const ResponseGoogle = async (response) => {
     // console.log(response);
@@ -97,7 +98,7 @@ const Login = () => {
       //console.log("Entra en el bucle2");
       //console.log("Entra en el bucle3: "+JSON.stringify(objeto));
       await sesionService.create(objeto);
-      console.log("google:" + localStorage.getItem('token'));
+      //console.log("google:" + localStorage.getItem('token'));
       setMoved(true);
      
      
@@ -116,7 +117,7 @@ const Login = () => {
 
       message.success('Permiso Concedido');
 
-      handleClick();
+      history.push("/home");
     }
     else {
       message.error('Usuario no Registrado');
@@ -164,7 +165,7 @@ const Login = () => {
 
         </div>
 
-        : handleClick()
+        : <Redirect to="/home" />
     }
 
   </div>);

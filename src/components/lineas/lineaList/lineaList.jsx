@@ -106,6 +106,7 @@ const LineaList = () => {
     if (!value) {
       setDataSource(lineas)
     }
+    console.log(dataSource)
   })
 
   return (
