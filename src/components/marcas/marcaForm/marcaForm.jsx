@@ -28,6 +28,7 @@ const FormMarca = (props) => {
   const [id, setId] = useState(null);
   // const [show, setShow] = useState(null);
   const [form] = Form.useForm();
+  
   let initialValues = {
     descripcion: ''
   };
