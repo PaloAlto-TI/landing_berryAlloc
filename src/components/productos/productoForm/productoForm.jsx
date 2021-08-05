@@ -73,6 +73,7 @@ const FormProducto = (props) => {
   const [rangoAlturaHebra, setRangoAlturaHebra] = useState(undefined);
   const [metodoABC, setMetodoABC] = useState(undefined);
   const [nombre, setNombre] = useState(undefined)
+  const [nombreEdit, setNombreEdit] = useState(false)
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
   );
@@ -307,10 +308,7 @@ const FormProducto = (props) => {
   };
 
   const handleFormValuesChange = async (changedValues) => {
-    if (form.getFieldValue("fk_productotipo_id")){
-
-      console.log("EXHIBICION", form.getFieldValue("fk_productotipo_id").value)
-    }
+  
     console.log("COLOR", form.getFieldsValue());
 
     console.log("FORMULARIO", form.getFieldsValue());
@@ -333,10 +331,15 @@ const FormProducto = (props) => {
       setUnidadMedida(changedValues[formFieldName]);
     }
 
-    if (formFieldName === "nombre" && form.getFieldValue("fk_productotipo_id") ){
-      setNombre(changedValues[formFieldName]);
+    if (formFieldName === "fk_productotipo_id"){
+      console.log("tipo!!!", form.getFieldValue("fk_productotipo_id").label)
+      console.log("nombre!!!!", form.getFieldValue("nombre"));
+      setNombre(form.getFieldValue("nombre"));
+      setNombreEdit(true)
+
     }
 
+ 
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
       setSelectedGrupoId(null);
@@ -479,7 +482,7 @@ const FormProducto = (props) => {
           nombre:
             form.getFieldValue("nombre").substring(0, index) +
             " " +
-            form.getFieldValue("fk_productotipo_id").label,
+            form.getFieldValue("fk_productotipo_id").label ,
         });
       }
     }
@@ -869,7 +872,7 @@ const FormProducto = (props) => {
                         : []
                     }
                   >
-                    <Input className="input-type" readOnly={form.getFieldValue("nombre") && form.getFieldValue("fk_productotipo_id") ? selectedLineaId === "60faeee1a412169c92c778c2" && form.getFieldValue("nombre").includes(form.getFieldValue("fk_productotipo_id").label) ? false :true : true} />
+                    <Input className="input-type" onChange={(e)=> { console.log("valor", e.target.value); console.log("nombre",nombre); if (e.target.value.includes(nombre)) {setNombreEdit(true)}else{form.setFieldsValue({nombre: form.getFieldValue("nombre") + form.getFieldValue("fk_productotipo_id").label});}}} readOnly={ nombreEdit ? selectedLineaId === "60faeee1a412169c92c778c2" ? false :true : true} />
                   </Form.Item>
 
                   {/* <Form.Item
