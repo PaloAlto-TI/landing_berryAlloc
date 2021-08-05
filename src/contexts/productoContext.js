@@ -45,7 +45,7 @@ const ProductoContextProvider = (props) => {
   const softDeleteProducto = (producto) => {
     productoService
       .softDeleteProducto(producto)
-      .then(() => {productoService.getAllProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+      .then(() => {productoService.getProductos({ linea_id : producto.fk_linea_id}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
     });
       // .then(() => {setProductos(productos.filter((p) => p.id !== producto.id))});
 
