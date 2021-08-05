@@ -12,6 +12,7 @@ import Search from "antd/lib/input/Search";
 import "./productoList.css";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import Checkbox from "antd/lib/checkbox/Checkbox";
+import QueryButton from "./queryButton";
 
 const ProductoList = () => {
   const {
@@ -34,6 +35,7 @@ const ProductoList = () => {
   const [filterAll, setFilterAll] = useState(false)
   const [dataSource, setDataSource] = useState([]);
   const [rowState, setRowState] = useState(true);
+  const [click, setClick] = useState(0.75)
   console.log("path");
   const [filteredInfo, setFilteredInfo] = useState([]);
   // const size = useWindowSize();
@@ -65,6 +67,7 @@ const ProductoList = () => {
                 a.codigo_interno.localeCompare(b.codigo_interno),
             },
             showSorterTooltip: false,
+            width: '10%'
           },
           {
             title: "NOMBRE",
@@ -74,6 +77,8 @@ const ProductoList = () => {
               compare: (a, b) => a.nombre.localeCompare(b.nombre),
             },
             showSorterTooltip: false,
+            width: '35%'
+
             // render:(text)=><Link to='/inicio'>{text}</Link>
           },
           {
@@ -123,6 +128,18 @@ const ProductoList = () => {
           },
 
           {
+            title: "STOCK GENERAL",
+            dataIndex: "",
+            key: "y",
+            render: (_, record) => (
+              <QueryButton
+                record={record}
+                setClick={setClick}
+              />
+            ),
+            width: '15%'
+          },
+          {
             title: "ACCIONES",
             dataIndex: "",
             key: "x",
@@ -133,7 +150,10 @@ const ProductoList = () => {
                 setRowState={setRowState}
               />
             ),
+            width: '10%'
+
           },
+
         ]
       : [
           {
@@ -145,6 +165,8 @@ const ProductoList = () => {
                 a.codigo_interno.localeCompare(b.codigo_interno),
             },
             showSorterTooltip: false,
+            width: '10%'
+
           },
           {
             title: "NOMBRE",
@@ -154,6 +176,8 @@ const ProductoList = () => {
               compare: (a, b) => a.nombre.localeCompare(b.nombre),
             },
             showSorterTooltip: false,
+            width: '35%'
+
             // render:(text)=><Link to='/inicio'>{text}</Link>
           },
           {
@@ -201,6 +225,19 @@ const ProductoList = () => {
               </p>
             ),
           },
+          
+          {
+            title: "STOCK GENERAL",
+            dataIndex: "",
+            key: "y",
+            render: (_, record) => (
+              <QueryButton
+                record={record}
+                setClick={setClick}
+              />
+            ),
+            width: '15%'
+          }
         ];
 
   let history = useHistory();
@@ -360,7 +397,7 @@ const ProductoList = () => {
                 console.log(event);
 
                 if (JSON.parse(localStorage.getItem("user")).rol === 2) {
-                  if (event.clientX < window.innerWidth * 0.8 && rowState) {
+                  if (event.clientX < window.innerWidth * click && rowState) {
                     // record["permiso"] = false;
                     // history.push(`${path}/${record.codigo_interno}/ver`, record);
 
