@@ -49,13 +49,20 @@ const Header = () => {
   
 function valid()
 {
-   if(sesions._usuario[0].rol.nombre)
-   {
-    return (sesions._usuario[0].rol.nombre.toUpperCase())
-   }
-   else {
-     return "NO HAY"
-   }
+  //  if(sesions._usuario[0].rol.nombre)
+  //  {
+  //   return (sesions._usuario[0].rol.nombre.toUpperCase())
+  //  }
+  //  else {
+  //    return "NO HAY"
+  //  }
+  if(sesions._usuario[0].rol===2)
+  {
+   return ("COMPRAS")
+  }
+  else {
+    return "ASESOR"
+  }
 
 
 };

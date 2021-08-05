@@ -12,6 +12,7 @@ import MarcaList from "../../components/marcas/marcaList/marcaList";
 import MarcaForm from "../../components/marcas/marcaForm/marcaForm";
 import MarcaContextProvider from "../../contexts/marcaContext";
 import { SesionContext } from "../../../src/contexts/sesionContext";
+
 // import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
 // import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
 // import ProveedorContextProvider from "../../contexts/proveedorContext";
@@ -30,6 +31,9 @@ import {
 } from "react-router-dom";
 import { ConfigProvider } from 'antd';
 import es_ES from 'antd/es/locale/es_ES';
+import SubgrupoForm from "../../components/subgrupo/subgrupoForm/subgrupoForm";
+import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoList";
+import SubgrupoContextProvider from "../../contexts/subgrupoContext";
 const Home = () => {
   
 // const Sesion= async()=>{
@@ -89,6 +93,21 @@ const Home = () => {
           </Route>
           </Switch>
           </MarcaContextProvider>
+          
+          <SubgrupoContextProvider>
+          <Switch>
+         
+          <Route exact path={`${path}/subgrupo`}>
+              {/* <SubgrupoForm /> */}
+              <SubgrupoList/>
+         </Route>
+          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              <SubgrupoForm /> 
+          </Route> 
+         
+          </Switch>
+          </SubgrupoContextProvider>
+          
           {/* <ProveedorContextProvider Provider>
           <Switch>
           <Route exact path={`${path}/proveedores`}>
