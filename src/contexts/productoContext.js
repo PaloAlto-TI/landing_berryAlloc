@@ -35,7 +35,7 @@ const ProductoContextProvider = (props) => {
 
     console.log("err:", data);
     if (data.message === "OK CREATE") {
-      productoService.getProductos().then((data) => setProductos(data));
+      productoService.getAllProductos().then((data) => setProductos(data));
       // setProductos([...productos, data.data]);
     }
 
@@ -45,7 +45,7 @@ const ProductoContextProvider = (props) => {
   const softDeleteProducto = (producto) => {
     productoService
       .softDeleteProducto(producto)
-      .then(() => {productoService.getProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+      .then(() => {productoService.getAllProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
     });
       // .then(() => {setProductos(productos.filter((p) => p.id !== producto.id))});
 
