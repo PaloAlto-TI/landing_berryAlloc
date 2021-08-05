@@ -42,14 +42,14 @@ const ProductoContextProvider = (props) => {
     return data.message;
   };
 
-  const softDeleteProducto = (producto) => {
-    productoService
-      .softDeleteProducto(producto)
-      .then(() => {productoService.getProductos({ linea_id : producto.fk_linea_id}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
-    });
+  const softDeleteProducto = async (producto) => {
+    const data = await productoService
+      .softDeleteProducto(producto);
+
+    productoService.getProductos({ linea_id : producto.fk_linea_id}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)})
       // .then(() => {setProductos(productos.filter((p) => p.id !== producto.id))});
 
-     
+    return data;
 
   };
 
