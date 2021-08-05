@@ -334,7 +334,7 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_productotipo_id"){
       console.log("tipo!!!", form.getFieldValue("fk_productotipo_id").label)
       console.log("nombre!!!!", form.getFieldValue("nombre"));
-      setNombre(form.getFieldValue("nombre"));
+      setNombre(form.getFieldValue("nombre").substring(0, form.getFieldValue("nombre").lastIndexOf(" ") )+ " "+ form.getFieldValue("fk_productotipo_id").label);
       setNombreEdit(true)
 
     }
@@ -473,11 +473,11 @@ const FormProducto = (props) => {
         index = form.getFieldValue("nombre").lastIndexOf(" DE");
       }
 
-      if (form.getFieldValue("fk_productotipo_id").label === "MADERA") {
+      if (formFieldName === "fk_productotipo_id" && form.getFieldValue("fk_productotipo_id").label === "MADERA") {
         form.setFieldsValue({
           nombre: form.getFieldValue("nombre").substring(0, index) + " ",
         });
-      } else {
+      } else if (formFieldName === "fk_productotipo_id") {
         form.setFieldsValue({
           nombre:
             form.getFieldValue("nombre").substring(0, index) +
@@ -872,7 +872,7 @@ const FormProducto = (props) => {
                         : []
                     }
                   >
-                    <Input className="input-type" onChange={(e)=> { console.log("valor", e.target.value); console.log("nombre",nombre); if (e.target.value.includes(nombre)) {setNombreEdit(true)}else{form.setFieldsValue({nombre: form.getFieldValue("nombre") + form.getFieldValue("fk_productotipo_id").label});}}} readOnly={ nombreEdit ? selectedLineaId === "60faeee1a412169c92c778c2" ? false :true : true} />
+                    <Input className="input-type" onChange={(e)=> { console.log("valor", e.target.value); console.log("nombre",nombre); if (e.target.value.includes(nombre)) {setNombreEdit(true)}else{ form.setFieldsValue({nombre: form.getFieldValue("nombre") + form.getFieldValue("fk_productotipo_id").label});}}} readOnly={ nombreEdit ? selectedLineaId === "60faeee1a412169c92c778c2" ? false :true : true} />
                   </Form.Item>
 
                   {/* <Form.Item
