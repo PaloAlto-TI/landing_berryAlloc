@@ -20,7 +20,8 @@ const CrudButton = (props) => {
 
   const handleOk = async() => {
     setRowState(true);
-    softDelete(record);
+    await softDelete(record);
+    message.info("Producto " + record.nombre + " eliminado");
     setIsModalVisible(false);
     // // console.log("ENTRA AL ELIMINAR EN HANDLEOK LINEA CON TYPE: " + JSON.stringify(typeTransaction))
     // // 21/07/2021 - OBSERVACION: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUÉ TIPO DE ELIMINADO LÓGICO SE DEBE HACER. 
