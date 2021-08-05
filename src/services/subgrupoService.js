@@ -7,7 +7,7 @@ export class SubgrupoService {
         return axios.get(baseUrl+"subgrupos").then(res => res.data.data);
     }
     getOne(subgrupo){
-        return axios.get(baseUrl+"subgrupo"+subgrupo._id).then(res => res.data.data);
+        return axios.get(baseUrl+"subgrupo"+subgrupo.id).then(res => res.data.data);
     }
 
     create(subgrupo){
@@ -16,11 +16,11 @@ export class SubgrupoService {
 
 
     update(subgrupo){
-        return axios.put(baseUrl+"subgrupo/"+subgrupo._id, subgrupo).then(res => res.data);
+        return axios.put(baseUrl+"subgrupo/"+subgrupo.id, subgrupo).then(res => res.data);
     }
 
     softDelete(subgrupo){
-        return axios.put(baseUrl+"delete-subgrupo/"+subgrupo._id, subgrupo).then(res => res.data);
+        return axios.put(baseUrl+"delete-subgrupo/"+subgrupo.id, subgrupo).then(res => res.data);
     }
     
 }

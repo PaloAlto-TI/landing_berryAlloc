@@ -20,6 +20,7 @@ const FormMarca = (props) => {
   // console.log("El codigo de params: ", codigo);
   // console.log("La operacion de params: ", operacion);
   let formHasChanges = false;
+  
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
   );

@@ -34,7 +34,7 @@ const SelectOpciones = (props) => {
   const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow, typeTransaction } =
     props;
   const [opciones, setOpciones] = useState([]);
-  console.log("MIS PROPS",props);
+ // console.log("MIS PROPS",props);
   useEffect(() => {
     let cancel = false;
 
