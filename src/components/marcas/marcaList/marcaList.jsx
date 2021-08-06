@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Spin, Button, Table } from "antd";
+import { Spin, Button, Table, Divider } from "antd";
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import CrudButton from "../../crudButton/crudButton";
 import { MarcaContext } from "../../../contexts/marcaContext";
@@ -206,6 +206,9 @@ const MarcaList = () => {
 
   return (
     <div>
+       <br />
+      <Divider>MARCAS</Divider>
+          <br />
       {JSON.parse(localStorage.getItem("user")).rol?
       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
       :null}

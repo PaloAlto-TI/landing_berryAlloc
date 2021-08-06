@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Spin, Button, Table } from "antd";
+import { Spin, Button, Table, Divider } from "antd";
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import CrudButton from "../../crudButton/crudButton";
 import { GrupoContext } from "../../../contexts/grupoContext";
@@ -218,6 +218,9 @@ const GrupoList = () => {
 
   return (
     <div>
+       <br />
+      <Divider>GRUPOS</Divider>
+          <br />
       {JSON.parse(localStorage.getItem("user")).rol===2?
       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
     :null}

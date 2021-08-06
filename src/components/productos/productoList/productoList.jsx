@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Row, Spin } from "antd";
+import { Col, Divider, Row, Spin } from "antd";
 import { Button } from "antd";
 import { Table } from "antd";
 import { PlusOutlined, SmileOutlined } from "@ant-design/icons";
@@ -323,7 +323,8 @@ const ProductoList = () => {
   return (
     <div>
       <br />
-
+      <Divider>PRODUCTOS</Divider>
+          <br />
       <Row>
         <Col span={3}>
           {JSON.parse(localStorage.getItem("user")).rol === 2 && (

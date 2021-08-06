@@ -1,4 +1,4 @@
-import { Table,Spin } from 'antd';
+import { Table,Spin, Divider } from 'antd';
 import React,{ useContext, useEffect, useState } from 'react'
 import CrudButton from '../../crudButton/crudButton';
 import { SubgrupoContext } from "../../../contexts/subgrupoContext";
@@ -131,7 +131,13 @@ export const SubgrupoList = () => {
     
     return (
 
+      
         <div>
+                
+      <br />
+      <Divider>SUBGRUPOS</Divider>
+          <br />
+
           <>
           {JSON.parse(localStorage.getItem("user")).rol === 2 ?
   <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
