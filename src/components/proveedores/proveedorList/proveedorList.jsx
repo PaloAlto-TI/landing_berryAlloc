@@ -18,7 +18,7 @@ const ProveedorList = () => {
     // console.log("LAS PROVEEDORES SIN MARCAS: " + JSON.stringify(proveedores));
     // console.log("LAS PROVEEDORES CON MARCAS: " + JSON.stringify(proveedores_marcas_nn));
 
-    const columns = [
+    const columns1 = [
         {
           title: "NOMBRE",
           dataIndex: "nombre",
@@ -69,6 +69,45 @@ const ProveedorList = () => {
           ),
           width: '5%'
         },
+      ];  
+
+      const columns2 = [
+        {
+          title: "NOMBRE",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
+          showSorterTooltip: true,
+          width: '30%'
+        },
+        {
+          title: "DESCRIPCIÓN",
+          dataIndex: "descripcion",
+          key: "descripcion",
+          className: "longText",
+          sorter: {
+            compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+          },
+          showSorterTooltip: false,
+          width: '35%'
+        },
+        {
+          title: "MARCAS",
+          dataIndex: "proveedor_marcas_nn",
+          key: "proveedor_marcas_nn",
+          className: "longText",
+          showSorterTooltip: false,
+
+          render: (proveedorMarca, record) => (
+            <p>
+              {proveedorMarca.length > 0 ? proveedorMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+            </p>
+          ),
+          width: '30%'
+        },
+     
       ];  
 
     let { path } = useRouteMatch();
@@ -122,7 +161,10 @@ const ProveedorList = () => {
 
     return (
         <div>
+          {JSON.parse(localStorage.getItem("user")).rol === 2?
           <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+          :null
+          }
           <Search
             placeholder="Buscar Proveedor..."
             value={value}
@@ -134,7 +176,7 @@ const ProveedorList = () => {
           {proveedores_marcas_nn.length > 0 || isEmpty ? (
             <Table
               locale={{ emptyText: 'No hay datos' }}
-              columns={columns}
+              columns={JSON.parse(localStorage.getItem("user")).rol === 2?columns1:columns2}
               dataSource={dataSource}
               rowKey='id'
               onChange={handleChange}

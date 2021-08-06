@@ -18,8 +18,7 @@ const GrupoList = () => {
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LOS GRUPOS SIN MARCAS: " + JSON.stringify(grupos));
   // console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
-
-  const columns = [
+  const columns1 = [
     {
       title: "NOMBRE",
       dataIndex: "nombre",
@@ -96,6 +95,69 @@ const GrupoList = () => {
     },
   ]
 
+  const columns2 = [
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: true,
+      width: '15%'
+    },
+    {
+      title: "PSEUDÓNIMO",
+      dataIndex: "pseudo",
+      key: "pseudo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+      },
+      showSorterTooltip: false,
+      width: '10%'
+    },
+    {
+      title: "SUBGRUPO",
+      dataIndex: "sub",
+      key: "sub",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.sub.localeCompare(b.sub),
+      },
+      showSorterTooltip: false,
+      width: '15%'
+    },
+    {
+      title: "DESCRIPCIÓN",
+      dataIndex: "descripcion",
+      key: "descripcion",
+      className: "longText",
+      sorter: {
+        compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+      },
+      showSorterTooltip: false,
+      width: '25%'
+    },
+    {
+      title: "MARCAS",
+      dataIndex: "grupo_marcas_nn",
+      key: "grupo_marcas_nn",
+      className: "longText",
+      showSorterTooltip: false,
+      sorter: {
+        compare: (a, b) => a.grupo_marcas_nn.localeCompare(b.grupo_marcas_nn),
+      },
+      render: (grupoMarca, record) => (
+        <p>
+          {grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+        </p>
+      ),
+      width: '30%'
+    },
+    
+  ]
+
    let { path } = useRouteMatch();
    let history = useHistory()
 
@@ -150,7 +212,9 @@ const GrupoList = () => {
 
   return (
     <div>
+      {JSON.parse(localStorage.getItem("user")).rol===2?
       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+    :null}
       <Search
         placeholder="Buscar Grupo..."
         value={value}
@@ -162,7 +226,7 @@ const GrupoList = () => {
       {grupo_marcas_nn.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
-          columns={columns}
+          columns={JSON.parse(localStorage.getItem("user")).rol===2?columns1:columns2}
           dataSource={dataSource}
           rowKey='id'
           onChange={handleChange}
