@@ -68,7 +68,7 @@ const ProductoContextProvider = (props) => {
 
     console.log("err:", data);
     if (data.message === "OK UPDATE") {
-      productoService.getProductos().then((data) => setProductos(data));
+      productoService.getProductos({linea_id : producto.fk_linea_id}).then((data) => setProductos(data));
       //setProductos(productos.map((p) => (p.id === producto.id ? data.data : p)))
     }
 
