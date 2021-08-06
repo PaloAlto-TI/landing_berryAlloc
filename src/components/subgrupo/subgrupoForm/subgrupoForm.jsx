@@ -152,7 +152,7 @@ const SubgrupoForm = () => {
                     </Form.Item>
                 </Col>
             </Row >
-            <Divider className="titleFont" orientation="left" >GRUPOS ASIGNADOS A SUBGRUPO</Divider>
+            {/* <Divider className="titleFont" orientation="left" >GRUPOS ASIGNADOS A SUBGRUPO</Divider>
 
             <Row >
                 <Col span={12}>
@@ -167,7 +167,7 @@ const SubgrupoForm = () => {
                         />
                     </Form.Item>
                 </Col>
-            </Row>
+            </Row> */}
 
             <Row >
             {crud ? (

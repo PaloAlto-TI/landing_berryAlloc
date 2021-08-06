@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Table,Spin } from 'antd';
 import React,{ useContext, useEffect, useState } from 'react'
 import CrudButton from '../../crudButton/crudButton';
 import { SubgrupoContext } from "../../../contexts/subgrupoContext";
@@ -6,7 +6,8 @@ import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import { Button } from 'antd/lib/radio';
 import Search from 'antd/lib/input/Search';
-import { PlusOutlined } from '@ant-design/icons';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+
 
 
 export const SubgrupoList = () => {
@@ -18,7 +19,7 @@ export const SubgrupoList = () => {
     }
 
   });
-
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const [value, setValue] = useState(null);
 
     let { path } = useRouteMatch();
@@ -146,6 +147,7 @@ export const SubgrupoList = () => {
       
     
       <br /><br />
+      { subgrupos.length > 0 ?
             <Table
              dataSource={dataSource} 
 
@@ -168,6 +170,8 @@ export const SubgrupoList = () => {
                 };
               }}
              />
+             :<Spin indicator={antIcon} /> }
+             
         </div>
     )
 }
