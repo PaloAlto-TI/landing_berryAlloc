@@ -19,36 +19,41 @@ const CrudButton = (props) => {
   };
 
   const handleOk = async() => {
+
+    setRowState(true);
+    let data = await softDelete(record);
+    message.info(data.nombre + " ha sido eliminado");
+    setIsModalVisible(false);
     // console.log("ENTRA AL ELIMINAR EN HANDLEOK LINEA CON TYPE: " + JSON.stringify(typeTransaction))
     // 21/07/2021 - OBSERVACION: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUÉ TIPO DE ELIMINADO LÓGICO SE DEBE HACER. 
     // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
     
-    let dataSoftDelete = null;
-    setRowState(true);
+//     let dataSoftDelete = null;
+//     setRowState(true);
     
-    // record.pseudo = null;// PRUEBA PARA NUEVO TIPO DE ERROR
-    console.log("record"+record)
-    dataSoftDelete = await softDelete(record);
+//     // record.pseudo = null;// PRUEBA PARA NUEVO TIPO DE ERROR
+//     console.log("record"+record)
+//     dataSoftDelete = await softDelete(record);
     
-    console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete)); 
-    console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete));
-///-------------------------------------------------------REVISAR CON QUE DELETE NOS QUEDAMSO------------------------
-if(dataSoftDelete){
-    if (dataSoftDelete.message.includes("OK")) {
-      message.info(JSON.stringify(dataSoftDelete.message) + " -  LA ELIMINACIÓN DE " + (typeTransaction === null || typeTransaction === undefined ? 
-        "REGISTRO" : typeTransaction.labelCrudSingle) + ": "  + JSON.stringify(dataSoftDelete.data.nombre) + " SE REALIZÓ CON ÉXITO", 15);
-      // message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] +  " CON ÉXITO", 4).then((t) => history.goBack());
-    } else {
-      message.error("ERROR AL MOMENTO DE ELIMINAR " + typeTransaction.labelCrudSingle, 15);
-      // message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
-    }
-  }else{
-    setRowState(true);
-    await softDelete(record);
-    message.info(record.nombre + " eliminado existosamente");
-    setIsModalVisible(false);
-  }
-    setIsModalVisible(false);
+//     console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete)); 
+//     console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete));
+// ///-------------------------------------------------------REVISAR CON QUE DELETE NOS QUEDAMSO------------------------
+// if(dataSoftDelete){
+//     if (dataSoftDelete.message.includes("OK")) {
+//       message.info(JSON.stringify(dataSoftDelete.message) + " -  LA ELIMINACIÓN DE " + (typeTransaction === null || typeTransaction === undefined ? 
+//         "REGISTRO" : typeTransaction.labelCrudSingle) + ": "  + JSON.stringify(dataSoftDelete.data.nombre) + " SE REALIZÓ CON ÉXITO", 15);
+//       // message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] +  " CON ÉXITO", 4).then((t) => history.goBack());
+//     } else {
+//       message.error("ERROR AL MOMENTO DE ELIMINAR " + typeTransaction.labelCrudSingle, 15);
+//       // message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
+//     }
+//   }else{
+//     setRowState(true);
+//     await softDelete(record);
+//     message.info(record.nombre + " eliminado existosamente");
+//     setIsModalVisible(false);
+//   }
+//     setIsModalVisible(false);
 
   };
 
