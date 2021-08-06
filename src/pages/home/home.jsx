@@ -17,9 +17,12 @@ import ProveedorContextProvider from "../../contexts/proveedorContext";
 import GrupoList from "../../components/grupos/grupoList/grupoList";
 import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
 import GrupoContextProvider from "../../contexts/grupoContext";
+<<<<<<< HEAD
 import ModeloList from "../../components/modelo/modeloList/modeloList";
 import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
 import ModeloContextProvider from "../../contexts/modeloContext";
+=======
+>>>>>>> INDEX3
 
 
 import { Layout } from "antd";
@@ -94,6 +97,7 @@ const Home = () => {
           </Route>
           </Switch>
           </MarcaContextProvider>
+<<<<<<< HEAD
           
           <SubgrupoContextProvider>
           <Switch>
@@ -130,6 +134,9 @@ const Home = () => {
           </GrupoContextProvider>
           
           {/* <ProveedorContextProvider Provider>
+=======
+          <ProveedorContextProvider Provider>
+>>>>>>> INDEX3
           <Switch>
           <Route exact path={`${path}/proveedores`}>
               <ProveedorList />
