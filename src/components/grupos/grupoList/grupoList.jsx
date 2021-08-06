@@ -130,6 +130,7 @@ const GrupoList = () => {
   const filtrar = (e) => {
     const currValue = e.target.value;
     setValue(currValue);
+    console.log();
     const filteredData = grupo_marcas_nn.filter(entry =>
       entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase())
       );
@@ -142,6 +143,7 @@ const GrupoList = () => {
     setPermiso(false);
 
     if (!value) {
+      console.log(grupo_marcas_nn)
       setDataSource(grupo_marcas_nn)
     }
   })
