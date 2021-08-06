@@ -9,204 +9,190 @@ import Search from "antd/lib/input/Search";
 import './grupoList.css';
 
 const GrupoList = () => {
-//   const { /*marcas,*/ marcas_lineas_nn, setPermiso, setEditMarca, isEmpty, softDeleteMarca } = useContext(MarcaContext);
-//   // const [filteredInfo, setFilteredInfo] = useState([]);
-//   // console.log("LAS MARCAS SIN LINEAS: " + JSON.stringify(marcas));
-  
-//   // console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
-//   // console.log("EL IEMPTY: " + isEmpty)
-//   // marcas_lineas_nn.length > 0 || isEmpty ? 
-//   //   marcas_lineas_nn.lineas_nn = "SSS";
-//   //   console.log("PASA EL LENGHT ");
-//   //  : console.log("no pasa");
-  
-//   const [value, setValue] = useState(null);
-//   const [dataSource, setDataSource] = useState([]);
-//   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-//   const [rowState, setRowState] = useState(true);
+  const { /*grupos,*/ grupo_marcas_nn, setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
+  const [value, setValue] = useState(null);
+  const [dataSource, setDataSource] = useState([]);
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const [rowState, setRowState] = useState(true);
 
-//   const columns = [
-//     {
-//       title: "NOMBRE",
-//       dataIndex: "nombre",
-//       key: "nombre",
-//       sorter: {
-//         compare: (a, b) => a.nombre.localeCompare(b.nombre),
-//       },
-//       showSorterTooltip: true,
-//       width: '15%'
-//     },
-//     {
-//       title: "MARCA",
-//       dataIndex: "lineas_nn",
-//       key: "lineas_nn",
-//       className: "longText",
-//       /* sorter: {
-//         compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
-//       }, */
-//       showSorterTooltip: false,
-//       /*dataIndex: render: (_, record) => (
-//         : record.name
-//       )*/
-//       render: (lineasMarca, record) => (
-//         <p>
-//           {lineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
-//         </p>
-//       ),
-//       width: '30%'
-//     },
-//     {
-//       title: "PSEUDÓNIMO",
-//       dataIndex: "pseudo",
-//       key: "pseudo",
-//       align: "center",
-//       sorter: {
-//         compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
-//       },
-//       showSorterTooltip: false,
-//       width: '15%'
-//     },
-//     {
-//       title: "DESCRIPCIÓN",
-//       dataIndex: "descripcion",
-//       key: "descripcion",
-//       className: "longText",
-//       sorter: {
-//         compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
-//       },
-//       showSorterTooltip: false,
-//       width: '35%'
-//     },
-//     {
-//       title: "ACCIONES",
-//       dataIndex: "",
-//       align: "center",
-//       key: "x",
-//       render: (_, record) => (
-//         <CrudButton
-//           record={record}
-//           softDelete={softDeleteMarca}
-//           typeTransaction={typeTransactionData}
-//           setRowState={setRowState} 
-//         />
-//       ),
-//       width: '5%'
-//     },
-//   ]
+  // const [filteredInfo, setFilteredInfo] = useState([]);
+  // console.log("LOS GRUPOS SIN MARCAS: " + JSON.stringify(grupos));
+  console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
 
-//   let { path } = useRouteMatch();
-//   let history = useHistory();
+  const columns = [
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: true,
+      width: '15%'
+    },
+    {
+      title: "PSEUDÓNIMO",
+      dataIndex: "pseudo",
+      key: "pseudo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+      },
+      showSorterTooltip: false,
+      width: '10%'
+    },
+    // 06/08/2021 - OBSERVACIÓN: ANALIZAR SI SE DEBE VER UNA MANERA DE QUE PUEDA BUSCAR POR LOS ANIDADOS -MC 
+    {
+      title: "SUBGRUPO",
+      dataIndex: "fk_subgrupo",
+      key: "fk_subgrupo",
+      // className: "longText",
+      showSorterTooltip: false,
+      sorter: {
+        compare: (a, b) => a.fk_subgrupo.localeCompare(b.fk_subgrupo),
+      },
+      render: (subgrupoGrupo, record) => (
+        <p>
+          {subgrupoGrupo? subgrupoGrupo.nombre : 'N/A' }
+        </p>
+      ),
+      width: '15%'
+    },
+    {
+      title: "DESCRIPCIÓN",
+      dataIndex: "descripcion",
+      key: "descripcion",
+      className: "longText",
+      sorter: {
+        compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+      },
+      showSorterTooltip: false,
+      width: '25%'
+    },
+    {
+      title: "MARCAS",
+      dataIndex: "grupo_marcas_nn",
+      key: "grupo_marcas_nn",
+      className: "longText",
+      showSorterTooltip: false,
+      sorter: {
+        compare: (a, b) => a.grupo_marcas_nn.localeCompare(b.grupo_marcas_nn),
+      },
+      render: (grupoMarca, record) => (
+        <p>
+          {grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+        </p>
+      ),
+      width: '30%'
+    },
+    {
+      title: "ACCIONES",
+      dataIndex: "",
+      align: "center",
+      key: "x",
+      render: (_, record) => (
+        <CrudButton
+          record={record}
+          softDelete={softDeleteGrupo}
+          typeTransaction={typeTransactionData}
+          setRowState={setRowState} 
+        />
+      ),
+      width: '5%'
+    },
+  ]
 
-//   const typeTransactionData = {
-//     tableNamePSQL: "marca",
-//     byIdPSQL: true,
-//     byInternalCodePSQL: false,
-//     dependenciesPSQL: false,
-//     labelCrudPlural: "MARCAS",
-//     labelCrudSingle: "MARCA"
-//   };
+   let { path } = useRouteMatch();
+   let history = useHistory()
 
-//   const handleChange = (pagination, filters, sorter) => {
-//     // setFilteredInfo(filters); No se usa a nivel de Línea porque no tiene un filtro directo a nivel de tabla
-//   };
+   const typeTransactionData = {
+     tableNamePSQL: "grupo",
+     byIdPSQL: true,
+     byInternalCodePSQL: false,
+     dependenciesPSQL: false,
+     labelCrudPlural: "GRUPOS",
+     labelCrudSingle: "GRUPO"
+   };
 
-//   function handleClick() {
-//     setPermiso(true);
-//     let record = {
-//       permiso: true,
-//       nuevo: true,
-//     };
-//     history.push(`${path}/nuevo`, record);
-//   }
+  const handleChange = (pagination, filters, sorter) => {
+    // setFilteredInfo(filters); No se usa a nivel de Grupo porque no tiene un filtro directo a nivel de tabla
+  };
 
-//   function ver(record) {
-//     record["permiso"] = false;
-//     // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
-//     history.push(`${path}/${record.id}/ver`, record);
-//   }
+  function handleClick() {
+    setPermiso(true);
+    let record = {
+      permiso: true,
+      nuevo: true,
+    };
+    history.push(`${path}/nuevo`, record);
+  }
 
-//   const filtrar = (e) => {
-//     const currValue = e.target.value;
-//     setValue(currValue);
-//     // const filteredData = marcas.filter(entry => //-- Estaba antes de cambiar a nn
-//     const filteredData = marcas_lineas_nn.filter(entry =>
-//       entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase()));
-//     setDataSource(filteredData);
-//   }
+  function ver(record) {
+    record["permiso"] = false;
+    // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
+    history.push(`${path}/${record.id}/ver`, record);
+  }
 
-//   useEffect(() => {
-//     setEditMarca(null);
-//     setPermiso(false);
+  const filtrar = (e) => {
+    const currValue = e.target.value;
+    setValue(currValue);
+    const filteredData = grupo_marcas_nn.filter(entry =>
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase())
+      );
+    setDataSource(filteredData);
+  }
 
-//     // if (marcas_lineas_nn.length > 0 && isEmpty === false){
+  useEffect(() => {
+    
+    setEditGrupo(null);
+    setPermiso(false);
 
-//     //   let values = [{id:"2222",name:"qwerty"},{id:"3333",name:"asdfg"}]
-//     //   let values_mapped = values.map(txt => txt.name);
+    if (!value) {
+      setDataSource(grupo_marcas_nn)
+    }
+  })
 
-//     //   console.log("EL MAPEADO LET: " + values_mapped );
+  return (
+    <div>
+      <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+      <Search
+        placeholder="Buscar Grupo..."
+        value={value}
+        onChange={e => filtrar(e)}
+        style={{ width: 200 }}
+      />
+      <br /><br />
 
-//     //   // console.log("DATA MAPPED XXX= " + JSON.stringify(marcas_lineas_nn));
+      {grupo_marcas_nn.length > 0 || isEmpty ? (
+        <Table
+          locale={{ emptyText: 'No hay datos' }}
+          columns={columns}
+          dataSource={dataSource}
+          rowKey='id'
+          onChange={handleChange}
+          pagination={{ defaultPageSize: 30 }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                if (JSON.parse(localStorage.getItem("user")).rol === 2) {
+                  if (event.clientX < window.innerWidth * 0.8 && rowState) {
+                    // record["permiso"] = false;
+                    // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                    ver(record);
+                  }
+                } else {
+                  ver(record);
+                }
+              },
+            };
+          }}
+        />
+      ) : (
+        <Spin indicator={antIcon} />
+      )}
+    </div>
+  );
 
-//     //   let tempMarcasLinea = marcas_lineas_nn.map(marcas_map => marcas_map.lineas_nn);
-
-//     //   let tempMarcasLinea2 = tempMarcasLinea.map(x => x.nombre);
-
-//     //   console.log("DATA MAPPED LENGTH= " + JSON.stringify(tempMarcasLinea.length));
-
-//     //   console.log("DATA MAPPED = " + JSON.stringify(tempMarcasLinea));
-//     //   console.log("DATA MAPPED 2 = " + JSON.stringify(tempMarcasLinea2));
-
-//     // }
-
-//     if (!value) {
-//       setDataSource(marcas_lineas_nn)
-//     }
-//   })
-
-//   return (
-//     <div>
-//       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
-//       <Search
-//         placeholder="Buscar Marca..."
-//         value={value}
-//         onChange={e => filtrar(e)}
-//         style={{ width: 200 }}
-//       />
-//       <br /><br />
-
-//       {marcas_lineas_nn.length > 0 || isEmpty ? (
-//         <Table
-//           locale={{ emptyText: 'No hay datos' }}
-//           columns={columns}
-//           dataSource={dataSource}
-//           rowKey='id'
-//           onChange={handleChange}
-//           pagination={{ defaultPageSize: 30 }}
-//           onRow={(record, rowIndex) => {
-//             return {
-//               onClick: (event) => {
-//                 if (JSON.parse(localStorage.getItem("user")).rol === 2) {
-//                   if (event.clientX < window.innerWidth * 0.8 && rowState) {
-//                     // record["permiso"] = false;
-//                     // history.push(`${path}/${record.codigo_interno}/ver`, record);
-//                     ver(record);
-//                   }
-//                 } else {
-//                   ver(record);
-//                 }
-//               },
-//             };
-//           }}
-//         />
-//       ) : (
-//         <Spin indicator={antIcon} />
-//       )}
-//     </div>
-//   );
-
-return (
-    <div>HOLA SOY GRUPOS</div>
-)
 }
 
 export default GrupoList;

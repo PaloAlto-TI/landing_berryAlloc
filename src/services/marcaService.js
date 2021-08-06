@@ -16,7 +16,7 @@ export class MarcaService {
     }
 
     create(marca){
-      return axios.post( baseUrl + "marca", marca).then( res => res.data).catch(error => error.response.data);;
+      return axios.post( baseUrl + "marca", marca).then( res => res.data).catch(error => error.response.data);
     }
 
     update(marca){

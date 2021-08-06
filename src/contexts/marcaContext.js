@@ -24,6 +24,7 @@ const MarcaContextProvider = (props) => {
     const data = await marcaService.create(marca);
     if (data.message === "OK CREATE") {
       marcaService.getAll().then((data) => setMarcas(data));
+      marcaService.get_marcas_lineas_nn().then((data) => set_marcas_lineas_nn(data));
     }
     return data;
   }
