@@ -27,12 +27,12 @@ const CrudButton = (props) => {
     setRowState(true);
     
     // record.pseudo = null;// PRUEBA PARA NUEVO TIPO DE ERROR
-    console.log("record"+record)
+    //console.log("record"+JSON.stringify(record))
     dataSoftDelete = await softDelete(record);
     
     console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete)); 
-    console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete));
-///-------------------------------------------------------REVISAR CON QUE DELETE NOS QUEDAMSO------------------------
+    //console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete));
+//-------------------------------------------------------REVISAR CON QUE DELETE NOS QUEDAMSO------------------------
 if(dataSoftDelete){
     if (dataSoftDelete.message.includes("OK")) {
       message.info(JSON.stringify(dataSoftDelete.message) + " -  LA ELIMINACIÓN DE " + (typeTransaction === null || typeTransaction === undefined ? 
@@ -44,10 +44,12 @@ if(dataSoftDelete){
     }
   }else{
     setRowState(true);
-    await softDelete(record);
-    message.info(record.nombre + " eliminado existosamente");
-    setIsModalVisible(false);
+   let data= await softDelete(record);
+   //console.log("datas jksdnfksd "+data)
+    message.info(record.nombre + " ha sido eliminado");
+    //setIsModalVisible(false);
   }
+
     setIsModalVisible(false);
 
   };

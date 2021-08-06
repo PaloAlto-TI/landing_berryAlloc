@@ -123,7 +123,8 @@ const MarcaList = () => {
   }
 
   useEffect(() => {
-    console.log("LAS MARCAS EN LIST : " + JSON.stringify(marcas_lineas_nn))
+    //console.log("LAS MARCAS EN LIST : " + JSON.stringify(marcas_lineas_nn))
+    
     setEditMarca(null);
     setPermiso(false);
 

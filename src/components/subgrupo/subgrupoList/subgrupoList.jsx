@@ -12,9 +12,12 @@ import { PlusOutlined } from '@ant-design/icons';
 export const SubgrupoList = () => {
   useEffect(() => {
     setEditSubgrupo(null);
+    if(!value)
+    {
+      setDataSource(subgrupos)
+    }
 
-
-  },[]);
+  });
 
   const [value, setValue] = useState(null);
 
@@ -23,7 +26,7 @@ export const SubgrupoList = () => {
     const {  subgrupos,setPermiso, softDeleteSubgrupo,setEditSubgrupo } = useContext(SubgrupoContext);
     const [rowState, setRowState] = useState(true);
     const [dataSource, setDataSource] = useState([]);
-    const columns = [
+    const columns1 = [
         {
           title: "NOMBRE",
           dataIndex: "nombre",
@@ -58,6 +61,33 @@ export const SubgrupoList = () => {
           ),
         },
       ]
+
+      //.................................................
+      const columns2 = [
+        {
+          title: "NOMBRE",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
+          showSorterTooltip: false
+        },
+       
+        {
+          title: "DESCRIPCIÓN",
+          dataIndex: "descripcion",
+          key: "descripcion",
+          className: "longText",
+          sorter: {
+            compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+          },
+          showSorterTooltip: false
+        },
+      
+      ]
+      //.................................................
+
       const typeTransactionData = {
         tableNamePSQL: "subgrupo",
         byIdPSQL: true,
@@ -75,12 +105,20 @@ export const SubgrupoList = () => {
         history.push(`${path}/${record.id}/ver`, record);
 
       }
+
       const filtrar = (e) => {
         const currValue = e.target.value;
         setValue(currValue);
         // const filteredData = marcas.filter(entry => //-- Estaba antes de cambiar a nn
-        const filteredData = null;
+        const filteredData = subgrupos.filter((response)=>
+        response.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
+        response.descripcion.toLowerCase().includes(currValue.toLowerCase())
+        
+        );
+        setDataSource(filteredData);
+
       }
+
       function handleClick() {
         setPermiso(true);
         let record = {
@@ -93,17 +131,25 @@ export const SubgrupoList = () => {
     return (
 
         <div>
+          <>
+          {JSON.parse(localStorage.getItem("user")).rol === 2 ?
   <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+  :null}
+
+  </>
       <Search
         placeholder="Buscar Marca..."
         value={value}
-       // onChange={e => filtrar(e)}
+        onChange={e => filtrar(e)}
         style={{ width: 200 }}
       />
+      
+    
       <br /><br />
             <Table
-             dataSource={subgrupos} 
-             columns={columns}
+             dataSource={dataSource} 
+
+             columns={JSON.parse(localStorage.getItem("user")).rol === 2?columns1:columns2}
              rowKey="id" 
              onRow={(record, rowIndex) => {
                 return {

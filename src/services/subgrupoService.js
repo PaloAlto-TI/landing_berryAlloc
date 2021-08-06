@@ -20,6 +20,7 @@ export class SubgrupoService {
     }
 
     softDelete(subgrupo){
+       // console.log("entra en delete "+JSON.stringify(subgrupo));
         return axios.put(baseUrl+"delete-subgrupo/"+subgrupo.id, subgrupo).then(res => res.data);
     }
     
