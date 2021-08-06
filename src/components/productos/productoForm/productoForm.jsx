@@ -281,6 +281,13 @@ const FormProducto = (props) => {
     delete values.permiso;
     // if (values["fk_color_id"]){
 
+    if (values.medidas){
+
+      values.nombre = values.nombre + " " + values.medidas;
+
+      delete values.medidas;
+
+    }
     //   values["fk_color_id"] = JSON.parse(values["fk_color_id"]).id;
     // }
     values["precio"] = parseFloat(values["precio"]).toFixed(2);
@@ -898,7 +905,6 @@ function cancelConfirm() {
                   </Form.Item>
                   <Form.Item
                     label="Nombre"
-                    name="nombre"
                     rules={
                       crud
                         ? [
@@ -910,7 +916,14 @@ function cancelConfirm() {
                         : []
                     }
                   >
-                    <Input className="input-type" onChange={(e)=> { console.log("valor", e.target.value); console.log("nombre",nombre); if (e.target.value.includes(nombre)) {setNombreEdit(true)}else{ form.setFieldsValue({nombre: form.getFieldValue("nombre") + form.getFieldValue("fk_productotipo_id").label});}}} readOnly={ nombreEdit ? selectedLineaId === "60faeee1a412169c92c778c2" ? false :true : true} />
+                  <Form.Item>
+                    <Input name="nombre" className="input-type" readOnly={true} />
+                  </Form.Item>
+                  { selectedLineaId === "60faeee1a412169c92c778c2" ?
+                  <Form.Item>
+                    <Input placeholder="Ingrese las medidas" name="medidas" className="input-type" />
+                  </Form.Item>
+                  : null}
                   </Form.Item>
 
                   {/* <Form.Item
