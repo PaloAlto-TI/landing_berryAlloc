@@ -61,7 +61,7 @@ const FormMarca = (props) => {
   // console.log("lOS PROPS DE MARCA: " + JSON.stringify(props));
   // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
-  // 29/07/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. 
+  // 29/07/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. -MC
 
   const typeTransactionSelect = {
     mode: "multiple",
@@ -84,7 +84,7 @@ const FormMarca = (props) => {
   };
 
   useEffect(() => {
-    console.log("EL EDITMARCA EN USEEFFECT: " + JSON.stringify(editMarca))
+    
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
@@ -106,7 +106,7 @@ const FormMarca = (props) => {
     let messagesOnFinish = operacion === "editar" ? ["EDITAR", "EDITÓ"] : ["CREAR", "CREÓ"];
     delete values.permiso;
 
-    // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
+    // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA - MC
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
 
     // console.log("EL ID QUE TRAE: " + id);
@@ -164,7 +164,7 @@ const FormMarca = (props) => {
       }
 
     } else {
-      // 01/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted
+      // 01/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted -MC
       // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
       message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA MARCA - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
@@ -174,7 +174,7 @@ const FormMarca = (props) => {
     // console.log("onFinishFailed - Error al guardar la Linea: " + errorInfo.errorFields, errorInfo);
     // console.log("BRINCA EL ONFINISHFAILED"); // OBSER
 
-    // 21/07/2021 - OBSERVACIÓN: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUE TIPO DE ELIMINADO LÓGICO SE DEBE HACER. 
+    // 21/07/2021 - OBSERVACIÓN: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUE TIPO DE ELIMINADO LÓGICO SE DEBE HACER. - MC
     // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
     // console.log("ENTRA AL ELIMINAR EN HANDLEOK LINEA CON RECORD: " + JSON.stringify(record))
     message.warning("ERROR AL GUARDAR LA MARCA");
