@@ -19,6 +19,11 @@ const CrudButton = (props) => {
   };
 
   const handleOk = async() => {
+
+    // setRowState(true);
+    // let data = await softDelete(record);
+    // message.info(data.nombre + " ha sido eliminado");
+    // setIsModalVisible(false);
     // console.log("ENTRA AL ELIMINAR EN HANDLEOK LINEA CON TYPE: " + JSON.stringify(typeTransaction))
     // 21/07/2021 - OBSERVACION: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUÉ TIPO DE ELIMINADO LÓGICO SE DEBE HACER. 
     // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
