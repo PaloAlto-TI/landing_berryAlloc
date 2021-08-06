@@ -17,12 +17,9 @@ import ProveedorContextProvider from "../../contexts/proveedorContext";
 import GrupoList from "../../components/grupos/grupoList/grupoList";
 import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
 import GrupoContextProvider from "../../contexts/grupoContext";
-<<<<<<< HEAD
 import ModeloList from "../../components/modelo/modeloList/modeloList";
 import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
 import ModeloContextProvider from "../../contexts/modeloContext";
-=======
->>>>>>> INDEX3
 
 
 import { Layout } from "antd";
@@ -97,46 +94,7 @@ const Home = () => {
           </Route>
           </Switch>
           </MarcaContextProvider>
-<<<<<<< HEAD
-          
-          <SubgrupoContextProvider>
-          <Switch>
-         
-          <Route exact path={`${path}/subgrupo`}>
-              {/* <SubgrupoForm /> */}
-              <SubgrupoList/>
-         </Route>
-          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
-              <SubgrupoForm /> 
-          </Route> 
-         
-          </Switch>
-          </SubgrupoContextProvider>
-          <ProveedorContextProvider>
-          <Switch>
-          <Route exact path={`${path}/proveedores`}>
-              <ProveedorList />
-          </Route>
-          <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
-              <ProveedorForm />
-          </Route>
-          </Switch>
-          </ProveedorContextProvider>
-          <GrupoContextProvider >
-          <Switch>
-          <Route exact path={`${path}/grupos`}>
-              <GrupoList />
-          </Route>
-          <Route path={`${path}/grupos/:codigo?/:operacion?`}>
-              <GrupoForm />
-          </Route>
-          </Switch>
-          </GrupoContextProvider>
-          
-          {/* <ProveedorContextProvider Provider>
-=======
           <ProveedorContextProvider Provider>
->>>>>>> INDEX3
           <Switch>
           <Route exact path={`${path}/proveedores`}>
               <ProveedorList />

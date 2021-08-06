@@ -253,7 +253,6 @@ const FormGrupo = (props) => {
                   ] : []}
                 >
                   {/* {crud ? ( */}
-<<<<<<< HEAD
                   <SelectOpciones
                     tipo="línea"
                     readOnly={crud ? false : true}
@@ -263,21 +262,10 @@ const FormGrupo = (props) => {
                     
                     // <Input className="input-type" readOnly={!crud} />
                   )}*/}
-=======
-                      <SelectOpciones
-                        tipo="línea"
-                        readOnly={crud?false:true}
-                        // setShow={setShow}
-                      />
-                    {/* ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )} */}
->>>>>>> INDEX3
                 </Form.Item>
               </Col>
               <Col span={10}>
                 <Form.Item
-<<<<<<< HEAD
                   label="Subgrupo"
                   //name={!crud ? "fk_subgrupo_id" : "subgrupo"}
                   name="fk_subgrupo_id"
@@ -298,28 +286,6 @@ const FormGrupo = (props) => {
                     <Input className="input-type" readOnly={!crud} />
                   )} */}
                 </Form.Item>
-=======
-                    label="Subgrupo"
-                   // name={crud ? "fk_subgrupo_id" : "subgrupo"} 
-                     name="fk_subgrupo_id"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese el Nombre del Subgrupo!!",
-                      },
-                    ]}
-                  >
-                    {/* {crud ? ( */}
-                      <SelectOpciones
-                        tipo="subgrupo"
-                        readOnly={crud?false:true}
-                        typeTransaction={typeTransactionSelect}
-                      />
-                    {/* ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )} */}
-                  </Form.Item>
->>>>>>> INDEX3
               </Col>
             </Row>
 
@@ -339,7 +305,6 @@ const FormGrupo = (props) => {
                     },
                   ]}
                 >
-<<<<<<< HEAD
 
                   <SelectOpciones
                     tipo="marcas"
@@ -349,19 +314,6 @@ const FormGrupo = (props) => {
                   // setShow={setShow}
                   />
 
-=======
-                  {/* {crud ? ( */}
-                      <SelectOpciones
-                        tipo="marcas"
-                        readOnly={crud?false:true}
-                        filter={selectedLineaId}
-                        typeTransaction={typeTransactionSelectMarca}
-                        // setShow={setShow}
-                      />
-                    {/* ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )} */}
->>>>>>> INDEX3
                 </Form.Item>
               </Col>
               <Col span={18}>
