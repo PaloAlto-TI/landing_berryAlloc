@@ -5,12 +5,22 @@ import React,{ useContext, useEffect, useState }  from 'react'
 import SelectOpciones from '../../selectOpciones/selectOpciones'
 import { SubgrupoContext } from "../../../contexts/subgrupoContext";
 import { useHistory } from "react-router";
+import { CloseSquareOutlined, RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 
 
 const SubgrupoForm = () => {
+    let formHasChanges = false;
     const [id, setId] = useState(null);
     let { codigo, operacion } = useParams();
     let history = useHistory();
+    const {  subgrupos,updateSubgrupo, createSubgrupo,findSubgrupo,editSubgrupo } = useContext(SubgrupoContext);
+    const [crud, setCrud] = useState(
+        operacion === "editar" || codigo === "nuevo" ? true : false
+      );
+     
+      let initialValues = {
+        descripcion: ''
+      };
 
     useEffect(async () => {
         console.log("EL EDITMARCA EN USEEFFECT: " + JSON.stringify(editSubgrupo))
@@ -33,12 +43,10 @@ const SubgrupoForm = () => {
     
     });
      
-  const [crud, setCrud] = useState(
-    operacion === "editar" || codigo === "nuevo" ? true : false
-  );
-  
 
-    const {  subgrupos,updateSubgrupo, createSubgrupo,findSubgrupo,editSubgrupo } = useContext(SubgrupoContext);
+ 
+
+   
 
     const onFinish = async (values) => {
 
@@ -63,10 +71,42 @@ const SubgrupoForm = () => {
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
-    let initialValues = {
-        descripcion: ''
-      };
+  //..................................................................................
+  const tailLayout = {
+    wrapperCol: {
+      offset: 8,
+      span: 16,
+    },
+  };
 
+    function cancelConfirm() {
+        if (formHasChanges !== null) {
+          if (formHasChanges === true) {
+            if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
+              history.push("/home/subgrupo");
+            }
+          } else {
+            history.push("/home/subgrupo/");
+          }
+        } else {
+          if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
+            history.push("/home/subgrupo/");
+          }
+        }
+      }
+      
+   
+      function goBackHistory() {
+        history.push("/home/subgrupo")
+      }
+      const handleFormValuesChange = async (changedValues) => {
+        // console.log("ONCHANGE", form.getFieldsValue());
+        
+        formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
+    
+        const formFieldName = Object.keys(changedValues)[0];
+      };
+//_-------------------------------------------------------------------------------------------
       
       if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
 
@@ -79,6 +119,7 @@ const SubgrupoForm = () => {
             labelCol={{ span: 8 }}
             wrapperCol={{ span: 16 }}
             initialValues={editSubgrupo ? editSubgrupo : initialValues}
+            onValuesChange={handleFormValuesChange}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
         >
@@ -129,13 +170,38 @@ const SubgrupoForm = () => {
             </Row>
 
             <Row >
-                <Col span={18}>
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="GUARDAR">
-                            GUARDAR
-                        </Button>
-                    </Form.Item>
+            {crud ? (
+                <Col md={18} xs={15}>
+                  <Form.Item {...tailLayout}>
+                    <Button
+                      icon={<SaveOutlined />}
+                      type="primary"
+                      htmlType="submit"
+                    >
+                      GUARDAR
+                    </Button>
+                    &nbsp;&nbsp;
+                    <Button
+                      className="button button3"
+                      icon={<CloseSquareOutlined />}
+                      type="default"
+                      onClick={cancelConfirm}
+                    >
+                      CANCELAR
+                    </Button>
+                  </Form.Item>
                 </Col>
+              ) :
+                <Col md={24} xs={15}>
+                  <Button
+                    icon={<RollbackOutlined />}
+                    type="primary"
+                    onClick={goBackHistory}
+                  >
+                    REGRESAR
+                  </Button>
+                </Col>
+              }
             </Row >
 
     

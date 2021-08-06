@@ -18,8 +18,10 @@ import "./productoForm.css";
 import {
   CheckCircleFilled,
   CloseCircleFilled,
+  CloseSquareOutlined,
   LoadingOutlined,
   PushpinFilled,
+  RollbackOutlined,
   SaveOutlined,
 } from "@ant-design/icons";
 import { ColorService } from "../../../services/colorService";
@@ -46,6 +48,7 @@ const { Panel } = Collapse;
 const { Option } = Select;
 
 const FormProducto = (props) => {
+  let formHasChanges = false;
   // console.log(props);
   // const location = useLocation();
   let { path } = useRouteMatch();
@@ -306,9 +309,11 @@ const FormProducto = (props) => {
     console.log("Failed:", errorInfo);
     message.warning("Error al guardar producto...");
   };
-
+//--------------------------------------------------------------------------------
   const handleFormValuesChange = async (changedValues) => {
-  
+      formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
+    
+       // const formFieldName = Object.keys(changedValues)[0];
     console.log("COLOR", form.getFieldsValue());
 
     console.log("FORMULARIO", form.getFieldsValue());
@@ -605,7 +610,7 @@ const FormProducto = (props) => {
     //   // }
     // }
   };
-
+//----------------------------------------------------------------------------------------------------
   const onChangeTipoInventario = (e) => {
     setTipoInventario(e.target.value);
   };
@@ -635,7 +640,40 @@ const FormProducto = (props) => {
   };
 
   const plainOptions = ["INTERIOR", "EXTERIOR"];
+//-----------------------------------------------------------
 
+function cancelConfirm() {
+  if (formHasChanges !== null) {
+    if (formHasChanges === true) {
+      if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
+        history.push("/home/productos");
+      }
+    } else {
+      history.push("/home/productos/");
+    }
+  } else {
+    if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
+      history.push("/home/productos/");
+    }
+  }
+}
+
+
+
+      
+   
+      function goBackHistory() {
+        history.push("/home/productos")
+      }
+      // const handleFormValuesChange = async (changedValues) => {
+      //   // console.log("ONCHANGE", form.getFieldsValue());
+        
+      //   formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
+    
+      //   const formFieldName = Object.keys(changedValues)[0];
+      // };
+
+//---------------------------------------------
   if (
     JSON.parse(localStorage.getItem("user")).rol === 2 ||
     operacion === "ver"
@@ -3169,19 +3207,38 @@ const FormProducto = (props) => {
           </Collapse>
           <br />
           <Row>
-            <Col md={18} xs={15}>
-              {crud ? (
-                <Form.Item {...tailLayout}>
+          {crud ? (
+                <Col md={18} xs={15}>
+                  <Form.Item {...tailLayout}>
+                    <Button
+                      icon={<SaveOutlined />}
+                      type="primary"
+                      htmlType="submit"
+                    >
+                      GUARDAR
+                    </Button>
+                    &nbsp;&nbsp;
+                    <Button
+                      className="button button3"
+                      icon={<CloseSquareOutlined />}
+                      type="default"
+                      onClick={cancelConfirm}
+                    >
+                      CANCELAR
+                    </Button>
+                  </Form.Item>
+                </Col>
+              ) :
+                <Col md={24} xs={15}>
                   <Button
-                    icon={<SaveOutlined />}
+                    icon={<RollbackOutlined />}
                     type="primary"
-                    htmlType="submit"
+                    onClick={goBackHistory}
                   >
-                    GUARDAR
+                    REGRESAR
                   </Button>
-                </Form.Item>
-              ) : null}
-            </Col>
+                </Col>
+              }
           </Row>
         </Form>
         <Spin
