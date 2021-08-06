@@ -67,6 +67,8 @@ const SubgrupoForm = () => {
         descripcion: ''
       };
 
+      
+      if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
 
     return (
         <>
@@ -142,7 +144,11 @@ const SubgrupoForm = () => {
 :null}
 </>
 
-    )
+    )}
+    else
+    {
+        return <Redirect to="/home" />;
+    }
 }
 
 export default SubgrupoForm

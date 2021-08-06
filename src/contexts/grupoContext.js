@@ -7,22 +7,25 @@ const GrupoContextProvider = (props) => {
 
   const grupoService = new GrupoService();
   const [grupos, setGrupos] = useState([]);
-  // const [marcas_lineas_nn, set_marcas_lineas_nn] = useState([]);
+  const [grupo_marcas_nn, set_grupo_marcas_nn] = useState([]);
   const [editGrupo, setEditGrupo] = useState(null);
   const [permiso, setPermiso] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
-
-  useEffect(() => {
-    grupoService.getAll().then((data) => setGrupos(data));
-    // gruposService.get_marcas_lineas_nn().then((data) => set_marcas_lineas_nn(data));
+  useEffect(async() => {
+    await grupoService.getAll().then((data) => setGrupos(data));
+    console.log("useeffect");
+   await grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
   }, []);
 
   const createGrupo = async(grupo) => {
+    console.log("LO QUE VIENE PAARA CREAR GRUPO EM CONTEXT: " + grupo)
+
     const data = await grupoService.create(grupo);
     
     if (data.message === "OK CREATE") {
         grupoService.getAll().then((data) => setGrupos(data));
+        grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
     }
     return data;
   }
@@ -32,27 +35,38 @@ const GrupoContextProvider = (props) => {
 
     if (data.message === "OK SOFTDELETE") {
         grupoService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setGrupos(data)});
+        grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
     }
     setEditGrupo(null);
     return data;
   };
 
   const findGrupo = (id) => {
-    // const marca = marcas_lineas_nn.find((m) => m.id === id);
-    const grupo = grupos.find((g) => g.id === id);
+    // console.log("LO QUE VA A MAPPEAR: " + JSON.stringify(grupo_marcas_nn))
+    const grupo = grupo_marcas_nn.find((g) => g.id === id);
+    // console.log("ACA SE DEBE ASIGNAR EL FK_LINEA_ID PARA EL FRONT Y TENGO: " + JSON.stringify(grupo_marcas_nn))
+    if (grupo){
+      // console.log("EL LENGTH= " + grupo.grupo_marcas_nn.length)
+      grupo.grupo_marcas_nn_in = grupo.grupo_marcas_nn.map(x=>x.id)
 
-    // if (grupo){
-    //   marca.lineas_nn_in = marca.lineas_nn.map(x=>x.id)
-    //   setEditMarca(marca);
-    // }
+      // console.log("LO QUE YA LE QUIERO ASIGNAR A FKLI: " + grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id)
 
-    /*
-    const marca = marcas_lineas_nn.find((m) => m.id === id);
-    if(marca){
-      marca.newList = marcas_lineas_nn.lineas_nn.map(x=>x.id)
+      if (grupo.grupo_marcas_nn.length > 0){
+        grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id ?
+        grupo.fk_linea_id = grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id 
+        : grupo.fk_linea_id = '';
+      } else {
+        grupo.fk_linea_id = '';
+      }
+      // grupo.fk_linea_id = grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
+      // editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
+
+      // ACA SE DEBE DEFINIR DE MEJOR MANERA LA ASIGNACION DEL FK_LINEA_ID
+      // editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
+      setEditGrupo(grupo);
     }
-    */
     setEditGrupo(grupo);
+
   };
 
   const updateGrupo = async(grupo) => {
@@ -61,6 +75,7 @@ const GrupoContextProvider = (props) => {
     
     if (data.message === "OK UPDATE") {
         grupoService.getAll().then((data) => setGrupos(data));
+        grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
     }
 
     setEditGrupo(null);
@@ -75,7 +90,7 @@ const GrupoContextProvider = (props) => {
         softDeleteGrupo,
         editGrupo,
         grupos,
-        // marcas_lineas_nn,
+        grupo_marcas_nn,
         permiso,
         setPermiso,
         setEditGrupo,

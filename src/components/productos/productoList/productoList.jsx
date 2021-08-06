@@ -85,6 +85,7 @@ const ProductoList = () => {
             title: "TIPO DE INVENTARIO",
             dataIndex: "tipo_inventario",
             key: "tipo_inventario",
+            align:'center',
             sorter: {
               compare: (a, b) =>
                 a.tipo_inventario.localeCompare(b.tipo_inventario),
@@ -114,6 +115,7 @@ const ProductoList = () => {
             sorter: {
               compare: (a, b) => a.precio - b.precio,
             },
+            align:'center',
             showSorterTooltip: false,
             render: (text, record) => (
               <p
@@ -137,6 +139,7 @@ const ProductoList = () => {
                 setClick={setClick}
               />
             ),
+            align:'center',
             width: '15%'
           },
           {
@@ -195,6 +198,7 @@ const ProductoList = () => {
             filteredValue: filteredInfo.tipo_inventario || null,
             onFilter: (value, record) => record.tipo_inventario.includes(value),
             ellipsis: true,
+            align:'center',
             showSorterTooltip: false,
             render: (text, record) =>
               record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
@@ -213,6 +217,7 @@ const ProductoList = () => {
             sorter: {
               compare: (a, b) => a.precio - b.precio,
             },
+            align:'center',
             showSorterTooltip: false,
             render: (text, record) => (
               <p
@@ -225,6 +230,7 @@ const ProductoList = () => {
               </p>
             ),
           },
+
           
           {
             title: "STOCK GENERAL",
@@ -236,6 +242,7 @@ const ProductoList = () => {
                 setClick={setClick}
               />
             ),
+            align : 'center',
             width: '15%'
           }
         ];

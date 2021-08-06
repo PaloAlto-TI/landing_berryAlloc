@@ -10,16 +10,20 @@ export class SubgrupoService {
         return axios.get(baseUrl+"subgrupo"+subgrupo.id).then(res => res.data.data);
     }
 
-    create(subgrupo){
-        return axios.post(baseUrl+"subgrupo/", subgrupo).then(res => res.data);
+    get_subgrupo_marcas_nn(){
+        return axios.get( baseUrl + "subgrupo_marcas_nn" ).then( res => res.data.data );
     }
 
+    create(subgrupo){
+        return axios.post(baseUrl+"subgrupo/", subgrupo).then(res => res.data).catch(error => error.response.data);
+    }
 
     update(subgrupo){
         return axios.put(baseUrl+"subgrupo/"+subgrupo.id, subgrupo).then(res => res.data);
     }
 
     softDelete(subgrupo){
+       // console.log("entra en delete "+JSON.stringify(subgrupo));
         return axios.put(baseUrl+"delete-subgrupo/"+subgrupo.id, subgrupo).then(res => res.data);
     }
     
