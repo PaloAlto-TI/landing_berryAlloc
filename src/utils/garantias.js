@@ -1,5 +1,9 @@
 export const garantias = [
   {
+    id: 0,
+    nombre: "0",
+  },
+  {
     id: 1,
     nombre: "1",
   },
