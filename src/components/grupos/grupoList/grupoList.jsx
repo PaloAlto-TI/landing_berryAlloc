@@ -17,7 +17,7 @@ const GrupoList = () => {
 
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LOS GRUPOS SIN MARCAS: " + JSON.stringify(grupos));
-  // console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
+  console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
 
   const columns = [
     {
@@ -41,15 +41,21 @@ const GrupoList = () => {
       showSorterTooltip: false,
       width: '10%'
     },
+    // 06/08/2021 - OBSERVACIÓN: ANALIZAR SI SE DEBE VER UNA MANERA DE QUE PUEDA BUSCAR POR LOS ANIDADOS -MC 
     {
       title: "SUBGRUPO",
-      dataIndex: "sub",
-      key: "sub",
-      align: "center",
-      sorter: {
-        compare: (a, b) => a.sub.localeCompare(b.sub),
-      },
+      dataIndex: "fk_subgrupo",
+      key: "fk_subgrupo",
+      // className: "longText",
       showSorterTooltip: false,
+      sorter: {
+        compare: (a, b) => a.fk_subgrupo.localeCompare(b.fk_subgrupo),
+      },
+      render: (subgrupoGrupo, record) => (
+        <p>
+          {subgrupoGrupo? subgrupoGrupo.nombre : 'N/A' }
+        </p>
+      ),
       width: '15%'
     },
     {
@@ -123,8 +129,8 @@ const GrupoList = () => {
 
   function ver(record) {
     record["permiso"] = false;
-    alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
-    // history.push(`${path}/${record.id}/ver`, record);
+    // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
+    history.push(`${path}/${record.id}/ver`, record);
   }
 
   const filtrar = (e) => {

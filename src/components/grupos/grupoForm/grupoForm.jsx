@@ -390,6 +390,7 @@ const FormGrupo = (props) => {
                 </Col>
               }
             </Row>
+            <br></br>
           </Form>
         </> : null
     );

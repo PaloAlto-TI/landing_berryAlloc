@@ -98,8 +98,8 @@ const ProveedorList = () => {
     
     function ver(record) {
       record["permiso"] = false;
-      alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
-      // history.push(`${path}/${record.id}/ver`, record);
+      // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
+      history.push(`${path}/${record.id}/ver`, record);
     }
     
     const filtrar = (e) => {

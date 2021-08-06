@@ -49,7 +49,8 @@ const GrupoContextProvider = (props) => {
       grupo.grupo_marcas_nn_in = grupo.grupo_marcas_nn.map(x=>x.id)
 
       // console.log("LO QUE YA LE QUIERO ASIGNAR A FKLI: " + grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id)
-
+      // 06/08/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR DE MEJOR MANERA LA ASIGNACION DEL FK_LINEA_ID -MC
+      
       if (grupo.grupo_marcas_nn.length > 0){
         grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id ?
         grupo.fk_linea_id = grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id 
@@ -57,11 +58,20 @@ const GrupoContextProvider = (props) => {
       } else {
         grupo.fk_linea_id = '';
       }
+
+      // console.log("LO QUE QUEDO va a mapear: " +  JSON.stringify(grupo.fk_subgrupo)) 
+
+      if (grupo.fk_subgrupo){
+        grupo.fk_subgrupo_nombre = grupo.fk_subgrupo.nombre 
+      } else {
+        grupo.fk_subgrupo_nombre = 'www';
+      }
+
+      console.log("LO QUE QUEDO EN SUBGRUPO NAME: " +  grupo.fk_subgrupo_nombre)
       // grupo.fk_linea_id = grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
       // editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
-
-      // ACA SE DEBE DEFINIR DE MEJOR MANERA LA ASIGNACION DEL FK_LINEA_ID
       // editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
+
       setEditGrupo(grupo);
     }
     setEditGrupo(grupo);
