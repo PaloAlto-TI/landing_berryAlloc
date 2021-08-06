@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import './sidemenu.css';
 import { Menu } from 'antd';
-import { AppstoreOutlined, DollarCircleOutlined,  MenuOutlined, HighlightOutlined, HomeOutlined, LineChartOutlined, FundOutlined, WechatOutlined, BarcodeOutlined } from '@ant-design/icons';
+import { StarOutlined,FormatPainterOutlined, DollarCircleOutlined,  MenuOutlined, HighlightOutlined, HomeOutlined, /*LineChartOutlined,*/ FundOutlined, WechatOutlined, BarcodeOutlined } from '@ant-design/icons';
 // import { useHistory } from "react-router";
 import { Row, Col, Drawer } from 'antd';
 import { useRouteMatch } from 'react-router-dom';
 
-const { SubMenu } = Menu;
+// const { SubMenu } = Menu;
 const SideMenu = () => {
 let { path} = useRouteMatch();
   // let history = useHistory();
@@ -45,7 +45,10 @@ let { path} = useRouteMatch();
           <Menu.Item key="4" icon={<WechatOutlined />}><a href={`${path}/grupos`}>GRUPOS</a></Menu.Item>
           <Menu.Item key="5" icon={<DollarCircleOutlined />}><a href={`${path}/proveedores`}>PROVEEDORES</a></Menu.Item>
           <Menu.Item key="6" icon={<BarcodeOutlined />}><a href={`${path}/productos`}>PRODUCTOS</a></Menu.Item>
-          <SubMenu key="sub1" icon={<LineChartOutlined />} title="REPORTES">
+          <Menu.Item key="8" icon={<FormatPainterOutlined />}><a href={`${path}/modelos`}>MODELO</a></Menu.Item>
+          <Menu.Item key="7" icon={<StarOutlined />}><a href={`${path}/subgrupo`}>SUBGRUPO</a></Menu.Item>
+
+          {/* <SubMenu key="sub1" icon={<LineChartOutlined />} title="REPORTES">
             <Menu.Item key="7">VENTAS</Menu.Item>
             <Menu.Item key="8">STOCKS</Menu.Item>
             <Menu.Item key="9">PROMOCIONES</Menu.Item>
@@ -53,7 +56,7 @@ let { path} = useRouteMatch();
           <SubMenu key="sub2" icon={<AppstoreOutlined />} title="PERSONAS">
             <Menu.Item key="10">CLIENTES</Menu.Item>
             <Menu.Item key="11">COTIZAR</Menu.Item>
-          </SubMenu>
+          </SubMenu> */}
         </Menu>
     </Drawer>
     </>

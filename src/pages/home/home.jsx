@@ -17,6 +17,9 @@ import ProveedorContextProvider from "../../contexts/proveedorContext";
 import GrupoList from "../../components/grupos/grupoList/grupoList";
 import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
 import GrupoContextProvider from "../../contexts/grupoContext";
+import ModeloList from "../../components/modelo/modeloList/modeloList";
+import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
+import ModeloContextProvider from "../../contexts/modeloContext";
 
 
 import { Layout } from "antd";
@@ -95,6 +98,16 @@ const Home = () => {
           </Route>
           </Switch>
           </GrupoContextProvider>
+          <ModeloContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/modelos`}>
+              <ModeloList />
+          </Route>
+          <Route path={`${path}/modelos/:codigo?/:operacion?`}>
+              <ModeloForm />
+          </Route>
+          </Switch>
+          </ModeloContextProvider>
             {/*<Route path="*">
               <p>404 NOT FOUND</p>
   </Route>*/}
