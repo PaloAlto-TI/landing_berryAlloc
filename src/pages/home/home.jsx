@@ -105,6 +105,26 @@ const Home = () => {
          
           </Switch>
           </SubgrupoContextProvider>
+          <ProveedorContextProvider>
+          <Switch>
+          <Route exact path={`${path}/proveedores`}>
+              <ProveedorList />
+          </Route>
+          <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
+              <ProveedorForm />
+          </Route>
+          </Switch>
+          </ProveedorContextProvider>
+          <GrupoContextProvider >
+          <Switch>
+          <Route exact path={`${path}/grupos`}>
+              <GrupoList />
+          </Route>
+          <Route path={`${path}/grupos/:codigo?/:operacion?`}>
+              <GrupoForm />
+          </Route>
+          </Switch>
+          </GrupoContextProvider>
           
           {/* <ProveedorContextProvider Provider>
           <Switch>
