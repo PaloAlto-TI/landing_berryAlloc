@@ -107,7 +107,7 @@ const ProveedorList = () => {
       setValue(currValue);
       // const filteredData = marcas_lineas_nn.filter(entry =>
       const filteredData = proveedores_marcas_nn.filter(entry =>
-        entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase()));
+        entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.descripcion.toLowerCase().includes(currValue.toLowerCase()));
       setDataSource(filteredData);
     }
     

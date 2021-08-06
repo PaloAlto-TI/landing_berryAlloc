@@ -73,7 +73,7 @@ const CrudButton = (props) => {
         case true:
           return history.push(`${path}/${record.id}/editar`, record);
         default:
-          return history.push(`${path}/${record.codigo_interno}/editar`, record);
+          return history.push(`${path}/${record.codigo_interno}/editar`);
         } 
     }
 

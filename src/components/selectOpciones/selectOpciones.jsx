@@ -6,6 +6,7 @@ import { paises } from "../../utils/paises";
 import { LineaService } from "../../services/lineaService";
 import { MarcaService } from "../../services/marcaService";
 import { GrupoMarcaService } from "../../services/grupoMarcaService";
+import { SubgrupoService } from "../../services/subgrupoService";
 import { ProveedorMarcaService } from "../../services/proveedorMarcaService";
 import { ColorGrupoService } from "../../services/colorGrupoService";
 import { resistenciasAbrasion } from "../../utils/resistenciasAbrasion";
@@ -39,8 +40,6 @@ const SelectOpciones = (props) => {
     let cancel = false;
 
     async function fetch() {
-      // console.log("EL FILTER: " + filter);
-
       if (tipo === "línea") {
         const lineaService = new LineaService();
         lineaService.getAll().then((data) => {
@@ -49,10 +48,26 @@ const SelectOpciones = (props) => {
         });
       } else if (tipo === "marcas") {
         const marcaService = new MarcaService();
-        marcaService.getAll().then((data) => {
-          if (cancel) return;
-          setOpciones(data);
-        });
+        const lineaMarcaService = new LineaMarcaService();
+
+        if (typeTransaction){
+          if (typeTransaction.hasFilter){
+            lineaMarcaService.getAll().then((data) => {
+            if (cancel) return;
+            setOpciones(data.filter((p) => p.linea_id === filter));
+          });
+          } else {
+            marcaService.getAll().then((data) => {
+              if (cancel) return;
+              setOpciones(data);
+            });
+          }
+        } else {
+          marcaService.getAll().then((data) => {
+            if (cancel) return;
+            setOpciones(data);
+          });
+        }
       } else if (tipo === "marca" && filter) {
         const lineaMarcaService = new LineaMarcaService();
         lineaMarcaService.getAll().then((data) => {
@@ -155,14 +170,13 @@ const SelectOpciones = (props) => {
         setOpciones(resistenciasDeslizamiento);
       } else if (tipo === "resistencia a la abrasión") {
         setOpciones(resistenciasAbrasionPorcelanato);
-      } //  else if (tipo === "lineas_nn") {
-      //   const lineaService = new LineaService();
-      //   lineaService.getAll().then((data) => {
-      //     // console.log("LAS LINEAS QUE SACA EL SELECTOPTION: " + JSON.stringify(data))
-      //     if (cancel) return;
-      //     setOpciones(data);
-      //   });
-      // }
+      } else if (tipo === "subgrupo") {
+        const subgrupoService = new SubgrupoService();
+        subgrupoService.getAll().then((data) => {
+          if (cancel) return;
+          setOpciones(data);
+        });
+      }
       else {
         setOpciones([]);
       }
