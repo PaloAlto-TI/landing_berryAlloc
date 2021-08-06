@@ -16,6 +16,7 @@ const FormGrupo = (props) => {
   let history = useHistory();
   let { codigo, operacion } = useParams();
 
+
   let formHasChanges = false;
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
@@ -77,13 +78,15 @@ const FormGrupo = (props) => {
   };
 
   useEffect(() => {
+
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
     // console.log("EN EN USEEFFECT EL EDIITGRUPO CON: " + JSON.stringify(editGrupo) + "Y LA LINEA SELECTED: " + selectedLineaId)
 
     if (editGrupo) {
-      // console.log("QUIERO SETEAR CON ESTO:  "+ editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id)
+      //  console.log("QUIERO SETEAR CON ESTO:  "+ editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id)
+      console.log("QUIERO SETEAR CON ESTO:  " + JSON.stringify(editGrupo));
 
       if (!selectedLineaId) {
         // setSelectedLineaId(editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id);
@@ -110,7 +113,7 @@ const FormGrupo = (props) => {
     if (id) {
 
       values["id"] = id;
-      let array1 = editGrupo.grupo_marcas_nn.map(x=>x.id); // MARCAS INICIALES (BD)
+      let array1 = editGrupo.grupo_marcas_nn.map(x => x.id); // MARCAS INICIALES (BD)
       let array2 = values.grupo_marcas_nn_in; // MARCAS DE FORM
 
       // 05/08/2021 - OBSERVACIÓN: Tener en cuenta si se cambia de Línea en el formulario qué pasa con las ingresadas anteriormente. -MC
@@ -119,11 +122,11 @@ const FormGrupo = (props) => {
       // let temp_toCreateProveedorMarcasN = array2.filter(x => !array1.includes(x));
       // let toCreateProveedorMarcasN = temp_toCreateProveedorMarcasN.map(x => ({ fk_marca_id:x , fk_proveedor_id:id })) // SET FORMAT JSON
       let temp_toCreateGrupoMarcasN = array2.filter(x => !array1.includes(x));
-      let toCreateGrupoMarcasN = temp_toCreateGrupoMarcasN.map(x => ({ fk_marca_id:x , fk_linea_id:values.fk_linea_id, fk_grupo_id:id })) // SET FORMAT JSON
-      
+      let toCreateGrupoMarcasN = temp_toCreateGrupoMarcasN.map(x => ({ fk_marca_id: x, fk_linea_id: values.fk_linea_id, fk_grupo_id: id })) // SET FORMAT JSON
+
       // SETTING LINEAS_MARCAS TO DELETE (SOFTDELETE)
       let toDeleteGrupoMarcasN = array1.filter(x => !array2.includes(x));
-      let jsonGruposMarcas = {id_grupo: id, fk_linea_id: values.fk_linea_id,  grupo_marcas_create: toCreateGrupoMarcasN, grupo_marcas_delete: toDeleteGrupoMarcasN};
+      let jsonGruposMarcas = { id_grupo: id, fk_linea_id: values.fk_linea_id, grupo_marcas_create: toCreateGrupoMarcasN, grupo_marcas_delete: toDeleteGrupoMarcasN };
       // console.log("EL JSON GRUPOS_MARCAS A MANDAR: " + JSON.stringify(jsonGruposMarcas))
 
       data = await updateGrupo([values, jsonGruposMarcas]);
@@ -134,16 +137,16 @@ const FormGrupo = (props) => {
       data = await createGrupo(values);
     }
 
-    if (data.message.includes("OK")) 
+    if (data.message.includes("OK"))
       // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
-      if (Object.keys(data.data).length > 0){
-        message.info(JSON.stringify(data.message) + " -  EL GRUPO: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] 
-        + " CON ÉXITO", 2).then((t) => history.push("/home/grupos/"));
+      if (Object.keys(data.data).length > 0) {
+        message.info(JSON.stringify(data.message) + " -  EL GRUPO: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1]
+          + " CON ÉXITO", 2).then((t) => history.push("/home/grupos/"));
 
       } else {
         console.log("MENSAJE DE VALIDACION DE OBJECTS EN DATA RES: " + values.nombre)
-      
-    } else {
+
+      } else {
       // 05/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted - MC
       // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
       message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " EL GRUPO - \n" + JSON.stringify(data.errorDetails.description), 15);
@@ -151,7 +154,7 @@ const FormGrupo = (props) => {
   }
 
   const onFinishFailed = (errorInfo) => {
-    
+
     // 04/08/2021 - OBSERVACIÓN: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUE TIPO DE ELIMINADO LÓGICO SE DEBE HACER. -MC
     // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
     message.warning("ERROR AL GUARDAR EL GRUPO");
@@ -159,7 +162,7 @@ const FormGrupo = (props) => {
 
   const handleFormValuesChange = async (changedValues) => {
     // console.log("ONCHANGE", form.getFieldsValue());
-    
+
     formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
 
     const formFieldName = Object.keys(changedValues)[0];
@@ -170,9 +173,9 @@ const FormGrupo = (props) => {
 
       // const lineaService = new LineaService();
       // const linea = await lineaService.getOne(changedValues[formFieldName]);
-      
+
       // console.log("LO QUE ME DVUELVE DE LINEA SERVICE EN CHANGES: " + JSON.stringify(linea))
-      
+
       /*form.setFieldsValue({ codigo_interno: linea.pseudo });
       if (changedValues[formFieldName] === "60d4c04b894c18b5e810e025") {
       } else {
@@ -234,61 +237,67 @@ const FormGrupo = (props) => {
               </Col>
             </Row>
             <br />
+            {/* //----------------------------LINEA---------------------------------- */}
             <Row>
               <Col span={12}>
                 <Form.Item
                   label="Línea"
                   // name={crud ? "grupo_marcas_nn_in" : "linea"} 
-                 // name={["grupo_marcas_nn_in",]}
+                  // name={["grupo_marcas_nn_in",]}
                   name="fk_linea_id"
                   rules={crud ? [
                     {
                       required: true,
                       message: "Por favor, seleccione una Línea!",
                     },
-                  ]: []}
+                  ] : []}
                 >
-                  {crud ? (
-                      <SelectOpciones
-                        tipo="línea"
-                        readOnly={!crud}
-                        // setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
+                  {/* {crud ? ( */}
+                  <SelectOpciones
+                    tipo="línea"
+                    readOnly={crud ? false : true}
+                  // setShow={setShow}
+                  />
+                  {/* ) : (
+                    
+                    // <Input className="input-type" readOnly={!crud} />
+                  )}*/}
                 </Form.Item>
               </Col>
               <Col span={10}>
                 <Form.Item
-                    label="Subgrupo"
-                    name={crud ? "fk_subgrupo_id" : "subgrupo"} 
-                    // name="subgrupo"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Por favor, ingrese el Nombre del Subgrupo!!",
-                      },
-                    ]}
-                  >
-                    {crud ? (
-                      <SelectOpciones
-                        tipo="subgrupo"
-                        readOnly={!crud}
-                        typeTransaction={typeTransactionSelect}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
+                  label="Subgrupo"
+                  //name={!crud ? "fk_subgrupo_id" : "subgrupo"}
+                  name="fk_subgrupo_id"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor, ingrese el Nombre del Subgrupo!!",
+                    },
+                  ]}
+                >
+                  {/* {crud ? ( */}
+                  <SelectOpciones
+                    tipo="subgrupo"
+                    readOnly={!crud}
+                    typeTransaction={typeTransactionSelect}
+                  />
+                  {/* ) : (
+                    <Input className="input-type" readOnly={!crud} />
+                  )} */}
+                </Form.Item>
               </Col>
             </Row>
+
+
             <br />
-            <Row>
+            {/* <Row> */}
               <Col span={12}>
                 <Form.Item
+                
                   label="Marcas"
-                  name={crud ? "grupo_marcas_nn_in" : "marca"}
+                  //name={crud ? "grupo_marcas_nn_in" : "marca"}
+                  name="grupo_marcas_nn_in"
                   rules={[
                     {
                       required: true,
@@ -296,34 +305,19 @@ const FormGrupo = (props) => {
                     },
                   ]}
                 >
-                  {crud ? (
-                      <SelectOpciones
-                        tipo="marcas"
-                        readOnly={!crud}
-                        filter={selectedLineaId}
-                        typeTransaction={typeTransactionSelectMarca}
-                        // setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
+
+                  <SelectOpciones
+                    tipo="marcas"
+                    readOnly={!crud}
+                    filter={selectedLineaId}
+                    typeTransaction={typeTransactionSelectMarca}
+                  // setShow={setShow}
+                  />
+
                 </Form.Item>
               </Col>
-              <Col span={10}>
-              {/* <Form.Item
-                  label="Descripción"
-                  name="descripcion"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la descripción del Grupo",
-                    },
-                  ]}
-                >
-                  <TextArea rows={3} readOnly={!crud} placeholder="Descripción del Grupo, esta descripción se visualizará en la página web." />
-                </Form.Item> */}
-              </Col>
-            </Row>
+
+            {/* </Row> */}
             <Row justify="start">
               <Col span={18}>
                 <Form.Item
@@ -339,7 +333,7 @@ const FormGrupo = (props) => {
                   <TextArea rows={6} readOnly={!crud} placeholder="Descripción del Grupo, esta descripción se visualizará en la página web." />
                 </Form.Item>
               </Col>
-                </Row>
+            </Row>
             <br /><br />
             {/* <Divider className="titleFont" orientation="left" >MARCAS DEL GRUPO</Divider>
             <br />
@@ -390,6 +384,7 @@ const FormGrupo = (props) => {
                 </Col>
               }
             </Row>
+            <br></br>
           </Form>
         </> : null
     );
