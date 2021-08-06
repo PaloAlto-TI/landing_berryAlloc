@@ -316,6 +316,8 @@ const FormGrupo = (props) => {
 
                 </Form.Item>
               </Col>
+              <Col span={18}>
+              </Col>
 
             {/* </Row> */}
             <Row justify="start">
