@@ -58,7 +58,7 @@ function valid()
   //  }
   if(sesions._usuario[0].rol===2)
   {
-   return ("COMPRAS")
+   return ("VENTAS")
   }
   else {
     return "ASESOR"

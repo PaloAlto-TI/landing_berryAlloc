@@ -94,6 +94,7 @@ const Home = () => {
           </Route>
           </Switch>
           </MarcaContextProvider>
+<<<<<<< HEAD
           
           <SubgrupoContextProvider>
           <Switch>
@@ -142,6 +143,9 @@ const Home = () => {
           </ModeloContextProvider>
           
           {/* <ProveedorContextProvider Provider>
+=======
+          <ProveedorContextProvider Provider>
+>>>>>>> INDEX5
           <Switch>
           <Route exact path={`${path}/proveedores`}>
               <ProveedorList />
@@ -170,7 +174,23 @@ const Home = () => {
               <ModeloForm />
           </Route>
           </Switch>
+        
+
+
           </ModeloContextProvider>
+
+
+          <SubgrupoContextProvider>
+          <Switch>
+          <Route exact path={`${path}/subgrupo`}>
+              <SubgrupoList />
+          </Route>
+          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              <SubgrupoForm />
+          </Route>
+          </Switch>
+          </SubgrupoContextProvider>
+
             {/*<Route path="*">
               <p>404 NOT FOUND</p>
   </Route>*/}
