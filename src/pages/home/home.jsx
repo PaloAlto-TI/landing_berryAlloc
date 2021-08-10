@@ -123,7 +123,23 @@ const Home = () => {
               <ModeloForm />
           </Route>
           </Switch>
+        
+
+
           </ModeloContextProvider>
+
+
+          <SubgrupoContextProvider>
+          <Switch>
+          <Route exact path={`${path}/subgrupo`}>
+              <SubgrupoList />
+          </Route>
+          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              <SubgrupoForm />
+          </Route>
+          </Switch>
+          </SubgrupoContextProvider>
+
             {/*<Route path="*">
               <p>404 NOT FOUND</p>
   </Route>*/}
