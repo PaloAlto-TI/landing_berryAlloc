@@ -905,6 +905,7 @@ function cancelConfirm() {
                   </Form.Item>
                   <Form.Item
                     label="Nombre"
+                    name="nombre"
                     rules={
                       crud
                         ? [
@@ -916,14 +917,10 @@ function cancelConfirm() {
                         : []
                     }
                   >
-                  <Form.Item>
+              
                     <Input name="nombre" className="input-type" readOnly={true} />
-                  </Form.Item>
-                  { selectedLineaId === "60faeee1a412169c92c778c2" ?
-                  <Form.Item>
-                    <Input placeholder="Ingrese las medidas" name="medidas" className="input-type" />
-                  </Form.Item>
-                  : null}
+         
+               
                   </Form.Item>
 
                   {/* <Form.Item
