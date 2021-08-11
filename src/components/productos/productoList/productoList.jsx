@@ -260,6 +260,7 @@ const ProductoList = () => {
   }
 
   function ver(record) {
+    filterProductos(record.fk_linea_id);
     record["permiso"] = false;
     history.push(`${path}/${record.codigo_interno}/ver`, record);
   }
@@ -412,7 +413,6 @@ const ProductoList = () => {
                   if (event.clientX < window.innerWidth * click && rowState) {
                     // record["permiso"] = false;
                     // history.push(`${path}/${record.codigo_interno}/ver`, record);
-
                     ver(record);
                   }
                 } else {

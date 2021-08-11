@@ -3,8 +3,6 @@ import {baseUrl} from "../utils/constantes";
 const { REACT_APP_API_KEY, REACT_APP_CONTIFICO_KEY } = process.env;
 export class ProductoService {
     
-    
-    
     getAllProductos(){
         return axios.get(baseUrl+"vista-all", {
             headers: {
@@ -14,6 +12,7 @@ export class ProductoService {
     }
 
     getProductos(id){
+      
         console.log("EL OBJETO", id);
         return axios.post(baseUrl+"vista", id, {
             headers: {
