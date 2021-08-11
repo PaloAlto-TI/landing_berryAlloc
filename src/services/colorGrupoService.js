@@ -1,9 +1,14 @@
 import axios from "axios"
 import {baseUrl} from "../utils/constantes";
+const { REACT_APP_API_KEY } = process.env;
 
 export class ColorGrupoService {
 
     getAll(){
-        return axios.get( baseUrl + "color-grupo-vista" ).then( res => res.data.data );
+        return axios.get( baseUrl + "color-grupo-vista" , {
+            headers: {
+              Authorization: `Bearer ${REACT_APP_API_KEY}`,
+            },
+          } ).then( res => res.data.data );
     }
 }
