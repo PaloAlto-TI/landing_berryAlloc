@@ -94,58 +94,7 @@ const Home = () => {
           </Route>
           </Switch>
           </MarcaContextProvider>
-<<<<<<< HEAD
-          
-          <SubgrupoContextProvider>
-          <Switch>
-         
-          <Route exact path={`${path}/subgrupo`}>
-              {/* <SubgrupoForm /> */}
-              <SubgrupoList/>
-         </Route>
-          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
-              <SubgrupoForm /> 
-          </Route> 
-         
-          </Switch>
-          </SubgrupoContextProvider>
-          <ProveedorContextProvider>
-          <Switch>
-          <Route exact path={`${path}/proveedores`}>
-              <ProveedorList />
-          </Route>
-          <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
-              <ProveedorForm />
-          </Route>
-          </Switch>
-          </ProveedorContextProvider>
-          <GrupoContextProvider >
-          <Switch>
-          <Route exact path={`${path}/grupos`}>
-              <GrupoList />
-          </Route>
-          <Route path={`${path}/grupos/:codigo?/:operacion?`}>
-              <GrupoForm />
-          </Route>
-          </Switch>
-          </GrupoContextProvider>
-          
-
-          <ModeloContextProvider >
-          <Switch>
-          <Route exact path={`${path}/modelos`}>
-              <ModeloList />
-          </Route>
-          <Route path={`${path}/modelos/:codigo?/:operacion?`}>
-              <ModeloForm />
-          </Route>
-          </Switch>
-          </ModeloContextProvider>
-          
-          {/* <ProveedorContextProvider Provider>
-=======
           <ProveedorContextProvider Provider>
->>>>>>> INDEX5
           <Switch>
           <Route exact path={`${path}/proveedores`}>
               <ProveedorList />
