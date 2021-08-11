@@ -129,6 +129,18 @@ const Home = () => {
           </Switch>
           </GrupoContextProvider>
           
+
+          <ModeloContextProvider >
+          <Switch>
+          <Route exact path={`${path}/modelos`}>
+              <ModeloList />
+          </Route>
+          <Route path={`${path}/modelos/:codigo?/:operacion?`}>
+              <ModeloForm />
+          </Route>
+          </Switch>
+          </ModeloContextProvider>
+          
           {/* <ProveedorContextProvider Provider>
           <Switch>
           <Route exact path={`${path}/proveedores`}>

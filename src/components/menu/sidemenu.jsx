@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './sidemenu.css';
 import { Menu } from 'antd';
-import { StarOutlined,FormatPainterOutlined, DollarCircleOutlined,  MenuOutlined, HighlightOutlined, HomeOutlined, /*LineChartOutlined,*/ FundOutlined, WechatOutlined, BarcodeOutlined } from '@ant-design/icons';
+import { StarOutlined,FormatPainterOutlined, DollarCircleOutlined,  MenuOutlined, HighlightOutlined, HomeOutlined, LineChartOutlined, FundOutlined, WechatOutlined, BarcodeOutlined } from '@ant-design/icons';
 // import { useHistory } from "react-router";
 import { Row, Col, Drawer } from 'antd';
 import { useRouteMatch } from 'react-router-dom';
