@@ -125,33 +125,35 @@ const ModeloList = () => {
           />
           <br /><br />
     
-          {modelos.length > 0 || isEmpty ? (
-            <Table
-              locale={{ emptyText: 'No hay datos' }}
-              columns={columns}
-              dataSource={dataSource}
-              rowKey='id'
-              onChange={handleChange}
-              pagination={{ defaultPageSize: 30 }}
-              onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    if (JSON.parse(localStorage.getItem("user")).rol === 2) {
-                      if (event.clientX < window.innerWidth * 0.8 && rowState) {
-                        // record["permiso"] = false;
-                        // history.push(`${path}/${record.codigo_interno}/ver`, record);
-                        ver(record);
-                      }
-                    } else {
-                      ver(record);
-                    }
-                  },
-                };
-              }}
-            />
-          ) : (
+          {/* {modelos.length > 0 || isEmpty || dataSource?  */}
+          {modelos.length>0?
+                 <Table
+                 locale={{ emptyText: 'No hay datos' }}
+                 columns={columns}
+                 dataSource={dataSource}
+                 rowKey='id'
+                 onChange={handleChange}
+                 pagination={{ defaultPageSize: 30 }}
+                 onRow={(record, rowIndex) => {
+                   return {
+                     onClick: (event) => {
+                       if (JSON.parse(localStorage.getItem("user")).rol === 2) {
+                         if (event.clientX < window.innerWidth * 0.8 && rowState) {
+                           // record["permiso"] = false;
+                           // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                           ver(record);
+                         }
+                       } else {
+                         ver(record);
+                       }
+                     },
+                   };
+                 }}
+               />
+              : 
+     
             <Spin indicator={antIcon} />
-          )}
+          }
         </div>
       );
 }

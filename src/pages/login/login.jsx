@@ -62,7 +62,7 @@ const Login = () => {
     let res2;
 
     const res1 = (data) => { res2 = data; }
-    //console.log(response);
+    console.log(response);
     await usuarioService.getAll().then(data => res1(data));
 
     let usuarioCheck_1 = res2.find((u) => u.correo === response.profileObj.email);
