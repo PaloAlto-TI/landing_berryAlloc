@@ -94,54 +94,7 @@ const Home = () => {
           </Route>
           </Switch>
           </MarcaContextProvider>
-          
-          <SubgrupoContextProvider>
-          <Switch>
-         
-          <Route exact path={`${path}/subgrupo`}>
-              {/* <SubgrupoForm /> */}
-              <SubgrupoList/>
-         </Route>
-          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
-              <SubgrupoForm /> 
-          </Route> 
-         
-          </Switch>
-          </SubgrupoContextProvider>
-          <ProveedorContextProvider>
-          <Switch>
-          <Route exact path={`${path}/proveedores`}>
-              <ProveedorList />
-          </Route>
-          <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
-              <ProveedorForm />
-          </Route>
-          </Switch>
-          </ProveedorContextProvider>
-          <GrupoContextProvider >
-          <Switch>
-          <Route exact path={`${path}/grupos`}>
-              <GrupoList />
-          </Route>
-          <Route path={`${path}/grupos/:codigo?/:operacion?`}>
-              <GrupoForm />
-          </Route>
-          </Switch>
-          </GrupoContextProvider>
-          
-
-          <ModeloContextProvider >
-          <Switch>
-          <Route exact path={`${path}/modelos`}>
-              <ModeloList />
-          </Route>
-          <Route path={`${path}/modelos/:codigo?/:operacion?`}>
-              <ModeloForm />
-          </Route>
-          </Switch>
-          </ModeloContextProvider>
-          
-          {/* <ProveedorContextProvider Provider>
+          <ProveedorContextProvider Provider>
           <Switch>
           <Route exact path={`${path}/proveedores`}>
               <ProveedorList />
@@ -170,7 +123,23 @@ const Home = () => {
               <ModeloForm />
           </Route>
           </Switch>
+        
+
+
           </ModeloContextProvider>
+
+
+          <SubgrupoContextProvider>
+          <Switch>
+          <Route exact path={`${path}/subgrupo`}>
+              <SubgrupoList />
+          </Route>
+          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              <SubgrupoForm />
+          </Route>
+          </Switch>
+          </SubgrupoContextProvider>
+
             {/*<Route path="*">
               <p>404 NOT FOUND</p>
   </Route>*/}
