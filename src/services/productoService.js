@@ -1,6 +1,6 @@
 import axios from "axios";
 import {baseUrl} from "../utils/constantes";
-const { REACT_APP_API_KEY, REACT_APP_CONTIFICO_KEY } = process.env;
+let { REACT_APP_API_KEY, REACT_APP_CONTIFICO_KEY, REACT_APP_TEST } = process.env;
 export class ProductoService {
     
     getAllProductos(){
@@ -12,7 +12,9 @@ export class ProductoService {
     }
 
     getProductos(id){
-      
+
+        // REACT_APP_TEST = Math.floor((Math.random() * 3) + 1);
+        // console.log("ENTORNO!!!!",REACT_APP_TEST);
         console.log("EL OBJETO", id);
         return axios.post(baseUrl+"vista", id, {
             headers: {
