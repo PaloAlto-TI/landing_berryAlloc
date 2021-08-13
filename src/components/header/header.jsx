@@ -61,7 +61,7 @@ function valid()
    return ("VENTAS")
   }
   else {
-    return "ASESOR"
+    return "PALO ALTO"
   }
 
 

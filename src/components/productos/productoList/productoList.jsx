@@ -415,8 +415,11 @@ const ProductoList = () => {
 
                     ver(record);
                   }
-                } else {
+                } else 
+                {
+                  if (event.clientX < window.innerWidth * click && rowState) {
                   ver(record);
+                }
                 }
               },
             };

@@ -65,6 +65,40 @@ const ModeloList = () => {
         },
       ];  
 
+      const columns2 = [
+        {
+          title: "NOMBRE",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
+          showSorterTooltip: true,
+          width: '30%'
+        },
+        {
+          title: "PSEUDÓNIMO",
+          dataIndex: "pseudo",
+          key: "pseudo",
+          sorter: {
+            compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+          },
+          showSorterTooltip: false,
+          width: '15%'
+        },
+        {
+            title: "CÓDIGO",
+            dataIndex: "codigo",
+            key: "codigo",
+            sorter: {
+              compare: (a, b) => a.codigo.localeCompare(b.codigo),
+            },
+            showSorterTooltip: false,
+            width: '30%'
+          },
+   
+      ]; 
+
     let { path } = useRouteMatch();
     let history = useHistory();
 
@@ -129,7 +163,7 @@ const ModeloList = () => {
           {modelos.length>0?
                  <Table
                  locale={{ emptyText: 'No hay datos' }}
-                 columns={columns}
+                 columns={JSON.parse(localStorage.getItem("user")).rol === 2?columns:columns2}
                  dataSource={dataSource}
                  rowKey='id'
                  onChange={handleChange}
