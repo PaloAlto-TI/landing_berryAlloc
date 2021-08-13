@@ -13,6 +13,7 @@ import { UsuarioService } from "../../services/usuarioService";
 
  import { SesionService } from "../../services/sesionService";
  import { SesionContext } from "../../../src/contexts/sesionContext";
+import { Redirect } from "react-router-dom";
 
 const Login = () => {
   let history = useHistory();
@@ -50,9 +51,9 @@ const Login = () => {
 
   //--------------------------------------------     
 
-  function handleClick() {
-    history.push("/home");
-  }
+  // function handleClick() {
+    
+  // }
 
   const ResponseGoogle = async (response) => {
     // console.log(response);
@@ -61,7 +62,7 @@ const Login = () => {
     let res2;
 
     const res1 = (data) => { res2 = data; }
-    //console.log(response);
+    console.log(response);
     await usuarioService.getAll().then(data => res1(data));
 
     let usuarioCheck_1 = res2.find((u) => u.correo === response.profileObj.email);
@@ -97,7 +98,7 @@ const Login = () => {
       //console.log("Entra en el bucle2");
       //console.log("Entra en el bucle3: "+JSON.stringify(objeto));
       await sesionService.create(objeto);
-      console.log("google:" + localStorage.getItem('token'));
+      //console.log("google:" + localStorage.getItem('token'));
       setMoved(true);
      
      
@@ -116,7 +117,7 @@ const Login = () => {
 
       message.success('Permiso Concedido');
 
-      handleClick();
+      history.push("/home");
     }
     else {
       message.error('Usuario no Registrado');
@@ -148,7 +149,7 @@ const Login = () => {
 
           <div className="botonGoogle">
             <GoogleLogin
-              clientId="610747110294-o2cruk32qs9j2mi3o9ob1b7dpu4ib35u.apps.googleusercontent.com"
+              clientId="278026949237-vk2iq2u1hqikrvfq5993u88dfcje6up0.apps.googleusercontent.com"
               buttonText="Google"
               render={(renderProps) => (
                 <Button className='googleButton' color='primary' onClick={renderProps.onClick} disabled={renderProps.disabled}  >
@@ -164,7 +165,7 @@ const Login = () => {
 
         </div>
 
-        : handleClick()
+        : <Redirect to="/home" />
     }
 
   </div>);

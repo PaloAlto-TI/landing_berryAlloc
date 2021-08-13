@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Spin, Button, Table } from "antd";
+import { Spin, Button, Table, Divider } from "antd";
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import CrudButton from "../../crudButton/crudButton";
 import { MarcaContext } from "../../../contexts/marcaContext";
@@ -12,20 +12,16 @@ const MarcaList = () => {
   const { /*marcas,*/ marcas_lineas_nn, setPermiso, setEditMarca, isEmpty, softDeleteMarca } = useContext(MarcaContext);
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LAS MARCAS SIN LINEAS: " + JSON.stringify(marcas));
-  
+
+  // 05/08/2021 - OBSERVACIÓN: No esta mostrando el SUBGRUPO en el listado, pendiente de hacer y definir -MC
+      
   console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
-  // console.log("EL IEMPTY: " + isEmpty)
-  // marcas_lineas_nn.length > 0 || isEmpty ? 
-  //   marcas_lineas_nn.lineas_nn = "SSS";
-  //   console.log("PASA EL LENGHT ");
-  //  : console.log("no pasa");
   
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const [rowState, setRowState] = useState(true);
-
-  const columns = [
+  const columns1 = [
     {
       title: "NOMBRE",
       dataIndex: "nombre",
@@ -41,13 +37,7 @@ const MarcaList = () => {
       dataIndex: "lineas_nn",
       key: "lineas_nn",
       className: "longText",
-      /* sorter: {
-        compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
-      }, */
       showSorterTooltip: false,
-      /*dataIndex: render: (_, record) => (
-        : record.name
-      )*/
       render: (lineasMarca, record) => (
         <p>
           {lineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
@@ -94,6 +84,55 @@ const MarcaList = () => {
     },
   ]
 
+  const columns2 = [
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: true,
+      width: '15%'
+    },
+    {
+      title: "LÍNEAS",
+      dataIndex: "lineas_nn",
+      key: "lineas_nn",
+      className: "longText",
+      showSorterTooltip: false,
+      render: (lineasMarca, record) => (
+        <p>
+          {lineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+        </p>
+      ),
+      width: '30%'
+    },
+    {
+      title: "PSEUDÓNIMO",
+      dataIndex: "pseudo",
+      key: "pseudo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+      },
+      showSorterTooltip: false,
+      width: '15%'
+    },
+    {
+      title: "DESCRIPCIÓN",
+      dataIndex: "descripcion",
+      key: "descripcion",
+      className: "longText",
+      sorter: {
+        compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+      },
+      showSorterTooltip: false,
+      width: '35%'
+    },
+   
+  ]
+
   let { path } = useRouteMatch();
   let history = useHistory();
 
@@ -135,6 +174,8 @@ const MarcaList = () => {
   }
 
   useEffect(() => {
+    //console.log("LAS MARCAS EN LIST : " + JSON.stringify(marcas_lineas_nn))
+    
     setEditMarca(null);
     setPermiso(false);
 
@@ -165,7 +206,12 @@ const MarcaList = () => {
 
   return (
     <div>
+       <br />
+      <Divider>MARCAS</Divider>
+          <br />
+      {JSON.parse(localStorage.getItem("user")).rol?
       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+      :null}
       <Search
         placeholder="Buscar Marca..."
         value={value}
@@ -177,7 +223,7 @@ const MarcaList = () => {
       {marcas_lineas_nn.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
-          columns={columns}
+          columns={JSON.parse(localStorage.getItem("user")).rol===2?columns1:columns2}
           dataSource={dataSource}
           rowKey='id'
           onChange={handleChange}

@@ -5,21 +5,17 @@ export const ProveedorContext = createContext();
 
 const ProveedorContextProvider = (props) => {
   
-  
   const proveedorService = new ProveedorService();
-  
   const [proveedores, setProveedores] = useState([]);
   const [proveedores_marcas_nn, set_proveedores_marcas_nn] = useState([]);
   const [editProveedor, setEditProveedor] = useState(null);
   const [permiso, setPermiso] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
-
   useEffect(() => {
     proveedorService.getAll().then((data) => setProveedores(data));
     proveedorService.get_proveedores_marcas_nn().then((data) => set_proveedores_marcas_nn(data));
   }, []);
-
 
   // const createProveedor = (proveedor) => {
   //   proveedorService
@@ -28,10 +24,14 @@ const ProveedorContextProvider = (props) => {
   // };
 
   const createProveedor = async(proveedor) => {
+    
+    // console.log("LO QUE VIENE PAARA CREAR PROVEEDOR EM CONTEXT")
     const data = await proveedorService.create(proveedor);
     
+
     if (data.message === "OK CREATE") {
       proveedorService.getAll().then((data) => setProveedores(data));
+      proveedorService.get_proveedores_marcas_nn().then((data) => set_proveedores_marcas_nn(data));
     }
     return data;
   }
@@ -42,47 +42,36 @@ const ProveedorContextProvider = (props) => {
 
     if (data.message === "OK SOFTDELETE") {
       proveedorService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setProveedores(data)});
+      proveedorService.get_proveedores_marcas_nn().then((data) => set_proveedores_marcas_nn(data));
     }
     setEditProveedor(null);
     return data;
   };
 
-  // const findProveedor = (id) => {
-  //   const proveedor = proveedores.find((p) => p._id === id);
-
-  //   setEditProveedor(proveedor);
-  // };
-
   const findProveedor = (id) => {
-    // console.log("EL ID PARA FINDMARCA: " + id);
-    // const marca = marcas.find((m) => m.id === id)
-    // console.log("LO QUE VA A MAPEAR EN FINDMARCA: " + marcas_lineas_nn.length);
+    
     const proveedor = proveedores_marcas_nn.find((p) => p.id === id);
-
     if (proveedor){
-      proveedor.marcas_nn_in = proveedor.marcas_nn.map(x=>x.id)
+      proveedor.proveedor_marcas_nn_in = proveedor.proveedor_marcas_nn.map(x=>x.id)
       setEditProveedor(proveedor);
     }
 
-    /*
-    const marca = marcas_lineas_nn.find((m) => m.id === id);
-    if(marca){
-      marca.newList = marcas_lineas_nn.lineas_nn.map(x=>x.id)
-    }
-    */
   };
 
+  const updateProveedor = async(proveedor) => {
 
-  const updateProveedor = (proveedor) => {
-    proveedorService
-      .updateProveedor(proveedor)
-      .then((data) =>
-        setProveedores(
-          proveedores.map((p) => (p._id === proveedor._id ? data : proveedor))
-        )
-      );
+    // console.log("LO QUE VIENE AL UPPDATEPROVEEDOR CONTEXT",proveedor)
+    const data = await proveedorService.update(proveedor);
+    // const data = await marcaService.update(marca);
+    // console.log("LA DATA QUE REGRESA DE UPDATEPROVEEDOR : ", JSON.stringify(data));
+
+    if (data.message === "OK UPDATE") {
+      proveedorService.getAll().then((data) => setProveedores(data));
+      proveedorService.get_proveedores_marcas_nn().then((data) => set_proveedores_marcas_nn(data)); // PREGUNTAR SI VA ESTO O CÓMO DEBERÍA IR
+    }
 
     setEditProveedor(null);
+    return data;
   };
 
   return (

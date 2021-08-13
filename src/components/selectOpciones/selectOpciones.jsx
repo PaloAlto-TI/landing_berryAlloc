@@ -4,7 +4,9 @@ import { LineaMarcaService } from "../../services/lineaMarcaService";
 import { MedidaService } from "../../services/medidaService";
 import { paises } from "../../utils/paises";
 import { LineaService } from "../../services/lineaService";
+import { MarcaService } from "../../services/marcaService";
 import { GrupoMarcaService } from "../../services/grupoMarcaService";
+import { SubgrupoService } from "../../services/subgrupoService";
 import { ProveedorMarcaService } from "../../services/proveedorMarcaService";
 import { ColorGrupoService } from "../../services/colorGrupoService";
 import { resistenciasAbrasion } from "../../utils/resistenciasAbrasion";
@@ -25,6 +27,7 @@ import { oloresPegamentos } from "../../utils/oloresPegamentos";
 import { adherenciasPegamentos } from "../../utils/adherenciasPegamentos";
 import { resistenciasDeslizamiento } from "../../utils/resistenciasDeslizamiento";
 import { resistenciasAbrasionPorcelanato } from "../../utils/resistenciasAbrasionPorcelanato";
+import { ProductoTipoService } from "../../services/productoTipoService";
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
@@ -32,21 +35,41 @@ const SelectOpciones = (props) => {
   const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow, typeTransaction } =
     props;
   const [opciones, setOpciones] = useState([]);
-  // console.log("los props: " + JSON.stringify(props));
-
+ // console.log("MIS PROPS",props);
   useEffect(() => {
     let cancel = false;
 
     async function fetch() {
-      // console.log("EL FILTER: " + filter);
-
+      console.log(" tipo . "+tipo)
       if (tipo === "línea") {
         const lineaService = new LineaService();
         lineaService.getAll().then((data) => {
-          // console.log("LAS LINEAS QUE SACA EL SELECTOPTION: " + JSON.stringify(data))
           if (cancel) return;
           setOpciones(data);
         });
+      } else if (tipo === "marcas") {
+        const marcaService = new MarcaService();
+        const lineaMarcaService = new LineaMarcaService();
+
+        if (typeTransaction){
+          if (typeTransaction.hasFilter){
+            lineaMarcaService.getAll().then((data) => {
+            if (cancel) return;
+            setOpciones(data.filter((p) => p.linea_id === filter));
+          });
+          } else {
+            
+            marcaService.getAll().then((data) => {
+              if (cancel) return;
+              setOpciones(data);
+            });
+          }
+        } else {
+          marcaService.getAll().then((data) => {
+            if (cancel) return;
+            setOpciones(data);
+          });
+        }
       } else if (tipo === "marca" && filter) {
         const lineaMarcaService = new LineaMarcaService();
         lineaMarcaService.getAll().then((data) => {
@@ -78,11 +101,7 @@ const SelectOpciones = (props) => {
               )
             );
           } else {
-            setOpciones(
-              data.filter(
-                (p) => p.grupo_id === filter
-              )
-            );
+            setOpciones(data.filter((p) => p.grupo_id === filter));
           }
         });
         setShow(false);
@@ -111,7 +130,13 @@ const SelectOpciones = (props) => {
           });
           // setShow(false);
         }
-      } else if (tipo === "procedencia") {
+      }else if(tipo === "tipo"){ 
+        const productoTipoService = new ProductoTipoService();
+        productoTipoService.getAll().then((data) => {
+          if (cancel) return;
+          setOpciones(data);
+        });
+      }else if (tipo === "procedencia") {
         setOpciones(paises);
       } else if (tipo === "resistencia a la abrasion") {
         setOpciones(resistenciasAbrasion);
@@ -149,14 +174,13 @@ const SelectOpciones = (props) => {
         setOpciones(resistenciasDeslizamiento);
       } else if (tipo === "resistencia a la abrasión") {
         setOpciones(resistenciasAbrasionPorcelanato);
-      } //  else if (tipo === "lineas_nn") {
-      //   const lineaService = new LineaService();
-      //   lineaService.getAll().then((data) => {
-      //     // console.log("LAS LINEAS QUE SACA EL SELECTOPTION: " + JSON.stringify(data))
-      //     if (cancel) return;
-      //     setOpciones(data);
-      //   });
-      // }
+      } else if (tipo === "subgrupo") {
+        const subgrupoService = new SubgrupoService();
+        subgrupoService.getAll().then((data) => {
+          if (cancel) return;
+          setOpciones(data);
+        });
+      }
       else {
         setOpciones([]);
       }
@@ -169,8 +193,8 @@ const SelectOpciones = (props) => {
   }, [filter]);
 
   function handleChange(value) {
-    // console.log("HARA EL HANDLECHANGE CON: " + value)
-    onChange(value);
+    console.log("VALORES CON LABEL",value);
+      onChange(value);
   }
 
   function onBlur() {
@@ -201,14 +225,28 @@ const SelectOpciones = (props) => {
     }
   });
 
+  const strForSearch = (str) => {
+    return str
+      ? str
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+      : str;
+  };
+
   return (
     <Select
-      // labelInValue={tipo ==="color" ? true : false}
+    //placeholder={"HOLA MUNDO"}
+      labelInValue={tipo ==="tipo" ? true : false}
       showSearch
       disabled={readOnly}
-      mode={typeTransaction ? typeTransaction.mode : "simple"}
-      style={typeTransaction ? typeTransaction.mode === "multiple" ? { width: 1100 } : { width: 200 }  : { width: 200 }}
+      mode={typeTransaction ? typeTransaction.mode :null}
+     // mode="-"
+      style={typeTransaction ? typeTransaction.mode === "multiple" ? { width: 1100 } : { width: 200 }  : { width: 250 }}
+      //
       placeholder={ typeTransaction ? "Seleccione " + typeTransaction.placeHoldertext : "Seleccione " + tipo}
+     // placeholder={ typeTransaction ? typeTransaction.placeHoldertext ?"Seleccione " + typeTransaction.placeHoldertext : "Seleccione " + tipo : "null" }
+    
       optionFilterProp="children"
       onChange={handleChange}
       onFocus={onFocus}
@@ -216,9 +254,15 @@ const SelectOpciones = (props) => {
       value={opcionesList.length > 0 ? value : null}
       onSearch={onSearch}
       notFoundContent="No hay coincidencias"
-      filterOption={(input, option) =>
-        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-      }
+      filterOption={(input, option) => {
+        if (option.props.value) {
+          return strForSearch(option.props.children).includes(
+            strForSearch(input)
+          );
+        } else {
+          return false;
+        }
+      }}
     >
       {opcionesList}
     </Select>

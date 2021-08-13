@@ -18,13 +18,11 @@ export class ProveedorService {
         return axios.post(baseUrl+"proveedor/", proveedor).then(res => res.data);
     }
 
-
     update(proveedor){
-        return axios.put(baseUrl+"proveedor/"+proveedor.id, proveedor).then(res => res.data);
+        return axios.put(baseUrl+"proveedor/"+proveedor[0].id, proveedor).then(res => res.data).catch(error => error.response.data);
     }
 
     softDelete(proveedor){
-        return axios.put(baseUrl+"delete-proveedor/"+proveedor.id, proveedor).then(res => res.data);
+        return axios.put(baseUrl+"delete-proveedor/"+proveedor.id, proveedor).then(res => res.data).catch(error => error.response.data);
     }
-    
 }

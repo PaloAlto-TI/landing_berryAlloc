@@ -3,15 +3,13 @@ import { Redirect, useParams } from "react-router-dom";
 import { Form, Input, Button, message, Row, Col, Divider } from "antd";
 import { useHistory } from "react-router";
 import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design/icons";
-import { ProveedorContext } from "../../../contexts/proveedorContext";
+import { ModeloContext } from "../../../contexts/modeloContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
-import "./proveedorForm.css";
-const { TextArea } = Input;
+import "./modeloForm.css";
 
-const FormProveedor = (props) => {
+const FormModelo = (props) => {
 
-  const { createProveedor, updateProveedor, findProveedor, editProveedor } = useContext(ProveedorContext);
-
+  const { createModelo, updateModelo, findModelo, editModelo } = useContext(ModeloContext);
   let history = useHistory();
   let { codigo, operacion } = useParams();
 
@@ -22,28 +20,26 @@ const FormProveedor = (props) => {
 
   const [id, setId] = useState(null);
   const [form] = Form.useForm();
-  let initialValues = {
-    descripcion: ''
-  };
+  let initialValues = {};
 
   function cancelConfirm() {
     if (formHasChanges !== null) {
       if (formHasChanges === true) {
         if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
-          history.push("/home/proveedores/");
+          history.push("/home/modelos/");
         }
       } else {
-        history.push("/home/proveedores/");
+        history.push("/home/modelos/");
       }
     } else {
       if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
-        history.push("/home/proveedores/");
+        history.push("/home/modelos/");
       }
     }
   }
 
   function goBackHistory() {
-    history.push("/home/proveedores/")
+    history.push("/home/modelos/")
   }
 
   //04/08/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. 
@@ -72,14 +68,14 @@ const FormProveedor = (props) => {
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
+    
+    if (editModelo) {
 
-    if (editProveedor) {
-
-      setId(editProveedor.id);
+      setId(editModelo.id);
       
     } else {
 
-      findProveedor(codigo);
+      findModelo(codigo);
 
     }
   })
@@ -93,11 +89,16 @@ const FormProveedor = (props) => {
     // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
 
-    // console.log("EL ID QUE TRAE: " + id);
-    // console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
+    console.log("EL ID QUE TRAE: " + id);
+    console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
 
     if (id) {
 
+        values["id"] = id;
+        data = await updateModelo(values);
+        console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
+      // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
+/*
       values["id"] = id;
       let array1 = editProveedor.proveedor_marcas_nn.map(x=>x.id); // LINEAS INICIALES (BD)
       let array2 = values.proveedor_marcas_nn_in; // LINEAS DE FORM
@@ -114,11 +115,11 @@ const FormProveedor = (props) => {
 
       data = await updateProveedor([values, jsonProveedoresMarcas]);
       // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
-
+*/
     } else {
 
       values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
-      data = await createProveedor(values);
+      data = await createModelo(values);
 
     }
 
@@ -126,8 +127,8 @@ const FormProveedor = (props) => {
 
       // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
       if (Object.keys(data.data).length > 0){
-        message.info(JSON.stringify(data.message) + " -  EL PROVEEDOR: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] 
-        + " CON ÉXITO", 2).then((t) => history.push("/home/proveedores/"));
+        message.info(JSON.stringify(data.message) + " -  EL MODELO: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] 
+        + " CON ÉXITO", 2).then((t) => history.push("/home/modelos/"));
       
       } else {
         console.log("MENSAJE DE VALIDACION DE OBJECTS EN DATA RES: " + values.nombre)
@@ -136,7 +137,7 @@ const FormProveedor = (props) => {
     } else {
       // 01/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted
       // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
-      message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " EL PROVEEDOR - \n" + JSON.stringify(data.errorDetails.description), 15);
+      message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " EL MODELO - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
   }
 
@@ -144,7 +145,7 @@ const FormProveedor = (props) => {
     
     // 04/08/2021 - OBSERVACIÓN: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUE TIPO DE ELIMINADO LÓGICO SE DEBE HACER. 
     // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
-    message.warning("ERROR AL GUARDAR EL PROVEEDOR");
+    message.warning("ERROR AL GUARDAR EL MODELO");
   };
 
   const handleFormValuesChange = async (changedValues) => {
@@ -154,18 +155,18 @@ const FormProveedor = (props) => {
 
   if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
     return (
-      editProveedor || codigo === "nuevo" ?
+      editModelo || codigo === "nuevo" ?
         <>
           <Form
             {...layout}
             form={form}
             name="customized_form_controls"
-            initialValues={editProveedor ? editProveedor : initialValues}
+            initialValues={editModelo ? editModelo : initialValues}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             onValuesChange={handleFormValuesChange}
           >
-            <Divider className="titleFont">PROVEEDOR</Divider>
+            <Divider className="titleFont">MODELO</Divider>
             <br />
             <Row>
               <Col span={10}>
@@ -175,38 +176,60 @@ const FormProveedor = (props) => {
                   rules={[
                     {
                       required: true,
-                      message: "Por favor, ingrese el Nombre del Proveedor!!",
+                      message: "Por favor, ingrese el Nombre del Modelo!!",
                     },
                   ]}
                 >
                   <Input
                     readOnly={!crud}
-                    placeholder="Ej: BerryAlloc"
+                    placeholder="Ej: JAVA LIGHT GREY"
                     className="input-type"
                   />
                 </Form.Item>
               </Col>
               <Col span={12}>
               <Form.Item
-                  label="Descripción"
-                  name="descripcion"
+                  label="Pseudónimo"
+                  name="pseudo"
+                  rules={[
+                    { required: true, message: "Por favor, ingrese el Pseudónimo del Modelo!" },
+                    { max: 3, message: 'El Pseudónimo debe tener como máximo 3 caracteres' },
+                  ]}
+                >
+                  <Input
+                    readOnly={operacion === "editar" ? crud : !crud}
+                    placeholder="Ej: CS"
+                    className="input-type"
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  label="Código"
+                  name="codigo"
                   rules={[
                     {
                       required: true,
-                      message: "Por favor, ingrese la descripción del Proveedor.",
+                      message: "Por favor, ingrese el Código del Modelo!!",
                     },
                   ]}
                 >
-                  <TextArea rows={4} readOnly={!crud} placeholder="Descripción del Proveedor." />
+                  <Input
+                    readOnly={!crud}
+                    placeholder="Ej: 01"
+                    className="input-type"
+                  />
                 </Form.Item>
               </Col>
             </Row>
             <br /><br />
-            <Divider className="titleFont" orientation="left" >MARCAS DEL PROVEEDOR</Divider>
-            <br />
+            {/* <Divider className="titleFont" orientation="left" >GRUPOS DEL MODELO</Divider>
+            <br /> */}
             <Row >
               <Col span={9}>
-                <Form.Item
+                {/* <Form.Item
                   label="Marca"
                   name={"proveedor_marcas_nn_in"}
                   >
@@ -214,7 +237,7 @@ const FormProveedor = (props) => {
                     tipo="marcas"
                     readOnly={!crud}
                     typeTransaction={typeTransactionSelect} />
-                </Form.Item>
+                </Form.Item> */}
               </Col>
             </Row>
             <Row>
@@ -260,8 +283,8 @@ const FormProveedor = (props) => {
   }
 };
 
-const ProveedorForm = () => {
-  return <FormProveedor />;
+const ModeloForm = () => {
+  return <FormModelo />;
 };
 
-export default ProveedorForm;
+export default ModeloForm;

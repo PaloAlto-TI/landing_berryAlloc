@@ -11,6 +11,7 @@ import LineaContextProvider from "../../contexts/lineaContext";
 import MarcaList from "../../components/marcas/marcaList/marcaList";
 import MarcaForm from "../../components/marcas/marcaForm/marcaForm";
 import MarcaContextProvider from "../../contexts/marcaContext";
+<<<<<<< HEAD
 import { SesionContext } from "../../../src/contexts/sesionContext";
 // import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
 // import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
@@ -18,6 +19,17 @@ import { SesionContext } from "../../../src/contexts/sesionContext";
 // import GrupoList from "../../components/grupos/grupoList/grupoList";
 // import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
 // import GrupoContextProvider from "../../contexts/grupoContext";
+=======
+import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
+import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
+import ProveedorContextProvider from "../../contexts/proveedorContext";
+import GrupoList from "../../components/grupos/grupoList/grupoList";
+import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
+import GrupoContextProvider from "../../contexts/grupoContext";
+import ModeloList from "../../components/modelo/modeloList/modeloList";
+import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
+import ModeloContextProvider from "../../contexts/modeloContext";
+>>>>>>> SERVIDOR
 
 
 import { Layout } from "antd";
@@ -28,21 +40,19 @@ import {
   Route,
   useRouteMatch
 } from "react-router-dom";
-
-
-
-
-
-const Home =  () => {
-
-
+import { ConfigProvider } from 'antd';
+import es_ES from 'antd/es/locale/es_ES';
+import SubgrupoForm from "../../components/subgrupo/subgrupoForm/subgrupoForm";
+import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoList";
+import SubgrupoContextProvider from "../../contexts/subgrupoContext";
+const Home = () => {
   
-const Sesion= async()=>{
+// const Sesion= async()=>{
 
-  const { usuario} =  useContext(SesionContext);
+//   const { usuario} =  useContext(SesionContext);
 
-    return await usuario(); 
-}
+//     return await usuario(); 
+// }
 
 //console.log("SESION: "+Sesion());
   
@@ -58,7 +68,9 @@ const Sesion= async()=>{
           <ProductoContextProvider Provider>
             <Switch>
               <Route exact path={`${path}/productos`}>
+              <ConfigProvider locale={es_ES}>
                 <ProductoList />
+                </ConfigProvider>
               </Route>
               <Route path={`${path}/productos/:codigo?/:operacion?`}>
                 <ProductoForm />
@@ -92,7 +104,7 @@ const Sesion= async()=>{
           </Route>
           </Switch>
           </MarcaContextProvider>
-          {/* <ProveedorContextProvider Provider>
+          <ProveedorContextProvider Provider>
           <Switch>
           <Route exact path={`${path}/proveedores`}>
               <ProveedorList />
@@ -111,7 +123,33 @@ const Sesion= async()=>{
               <GrupoForm />
           </Route>
           </Switch>
-          </GrupoContextProvider> */}
+          </GrupoContextProvider>
+          <ModeloContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/modelos`}>
+              <ModeloList />
+          </Route>
+          <Route path={`${path}/modelos/:codigo?/:operacion?`}>
+              <ModeloForm />
+          </Route>
+          </Switch>
+        
+
+
+          </ModeloContextProvider>
+
+
+          <SubgrupoContextProvider>
+          <Switch>
+          <Route exact path={`${path}/subgrupo`}>
+              <SubgrupoList />
+          </Route>
+          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              <SubgrupoForm />
+          </Route>
+          </Switch>
+          </SubgrupoContextProvider>
+
             {/*<Route path="*">
               <p>404 NOT FOUND</p>
   </Route>*/}
