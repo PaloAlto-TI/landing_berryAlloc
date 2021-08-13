@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Spin, Button, Table } from "antd";
+import { Spin, Button, Table, Divider } from "antd";
 import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 import CrudButton from "../../crudButton/crudButton";
 import { ModeloContext } from "../../../contexts/modeloContext";
@@ -17,7 +17,7 @@ const ModeloList = () => {
     
     // console.log("LOS MODELOS CON GRUPOS: " + JSON.stringify(modelo_grupos_nn));
     
-    const columns = [
+    const columns1 = [
         {
           title: "NOMBRE",
           dataIndex: "nombre",
@@ -78,6 +78,54 @@ const ModeloList = () => {
         },
       ];  
 
+      const columns2 = [
+        {
+          title: "NOMBRE",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
+          showSorterTooltip: true,
+          width: '25%'
+        },
+        {
+          title: "PSEUDÓNIMO",
+          dataIndex: "pseudo",
+          key: "pseudo",
+          sorter: {
+            compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+          },
+          showSorterTooltip: false,
+          width: '15%'
+        },
+        {
+            title: "CÓDIGO",
+            dataIndex: "codigo",
+            key: "codigo",
+            sorter: {
+              compare: (a, b) => a.codigo.localeCompare(b.codigo),
+            },
+            showSorterTooltip: false,
+            width: '20%'
+        },
+        {
+          title: "GRUPOS",
+          dataIndex: "color_grupos_nn",
+          key: "color_grupos_nn",
+          className: "longText",
+          showSorterTooltip: false,
+          render: (gruposModelo, record) => (
+            <p>
+              {gruposModelo.length > 0 ? gruposModelo.map(x=>x.nombre).join(", ") : 'N/A' }
+            </p>
+          ),
+          width: '35%'
+        },
+      
+      ];  
+
+
     let { path } = useRouteMatch();
     let history = useHistory();
 
@@ -132,7 +180,12 @@ const ModeloList = () => {
 
     return (
         <div>
+           <br />
+      <Divider>MODELOS</Divider>
+          <br />
+          {JSON.parse(localStorage.getItem("user")).rol === 2?
           <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+          :null}
           <Search
             placeholder="Buscar Modelo..."
             value={value}
@@ -141,10 +194,10 @@ const ModeloList = () => {
           />
           <br /><br />
     
-          {modelo_grupos_nn.length > 0 || isEmpty ? (
+          {modelo_grupos_nn.length > 0 ? (
             <Table
               locale={{ emptyText: 'No hay datos' }}
-              columns={columns}
+              columns={JSON.parse(localStorage.getItem("user")).rol === 2?columns1:columns2}
               dataSource={dataSource}
               rowKey='id'
               onChange={handleChange}
