@@ -1,61 +1,61 @@
 import React, { createContext, useState, useEffect } from "react";
 import { ColorService } from "../services/colorService.js";
 
+
 export const ModeloContext = createContext();
 
 const ModeloContextProvider = (props) => {
+
   const colorService = new ColorService();
   const [modelos, setModelos] = useState([]);
+  const [modelo_grupos_nn, set_modelo_grupos_nn] = useState([]);
   const [editModelo, setEditModelo] = useState(null);
   const [permiso, setPermiso] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
+  // import { ColorService } from "../../../services/colorService";
 
   useEffect(() => {
     setIsEmpty(false)
-    // modeloService.getAll().then((data) => setModelos(data));
-    // console.log("la data de context" + JSON.stringify(modeloService.getAll()));
 
     colorService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setModelos(data)});
     if (modelos.length === 0){
       setIsEmpty(true);
     }
 
+    colorService.get_color_grupos_nn().then((data) => set_modelo_grupos_nn(data));
+
   }, []);
 
-//   const createModelo = async (modelo) => {
-//     const data = await colorService.create(modelo);
-//     console.log("err:", data);
-//     if (data.message === "OK CREATE") {
-//         colorService.getAll().then((data) => setModelos(data));
-//       // setProductos([...productos, data.data]);
-//     }
-//     return data.message;
-//   };
   const createModelo = async(modelo) => {
-    console.log("LO QUE VIENE PAARA CREAR MODELO EM CONTEXT: " + JSON.stringify(modelo))
+    console.log("LO QUE VIENE PARA CREAR MODELO EM CONTEXT: " + JSON.stringify(modelo))
 
     const data = await colorService.create(modelo);
     
     if (data.message === "OK CREATE") {
         colorService.getAll().then((data) => setModelos(data));
+        colorService.get_color_grupos_nn().then((data) => set_modelo_grupos_nn(data));
         // grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
     }
     return data;
   }
 
-  /*const findModelo = (id) => {
-    
-    const proveedor = proveedores_marcas_nn.find((p) => p.id === id);
-    if (proveedor){
-      proveedor.proveedor_marcas_nn_in = proveedor.proveedor_marcas_nn.map(x=>x.id)
-      setEditProveedor(proveedor);
-    }
-
-  };*/
   const findModelo = (id) => {
-    console.log("el id a buscar: " + id);
-    const modelo = modelos.find((m) => m.id === id);
-    setEditModelo(modelo);
+    const modelo = modelo_grupos_nn.find((m) => m.id === id);
+
+    if (modelo){
+
+      modelo.modelo_grupos_nn_in = modelo.color_grupos_nn.map(x=>x.id) // 10/08/2021 - OBSERVACIÓN: PENDIENTE CAMBIO DE NOMBRE DE LAS VARIABLES UNA VEZ QUE SE CAMBIE EL NOMBRE DE TABLA DE: COLOR A: MODELO
+
+      if (modelo.color_grupos_nn.length > 0){
+// fk_marca_id
+        modelo.color_grupos_nn[0].color_grupo.fk_marca_id ?
+        modelo.fk_marca_id = modelo.color_grupos_nn[0].color_grupo.fk_marca_id 
+        : modelo.fk_marca_id = '';
+      } else {
+        modelo.fk_marca_id = '';
+      }
+      setEditModelo(modelo);
+    }
   };
 
 /*
@@ -74,9 +74,10 @@ const ModeloContextProvider = (props) => {
     setEditProducto(producto);
   };
 */
+
 const updateModelo = async(modelo) => {
 
-    console.log("LO QUE VIENE AL UPPDATEMODELO CONTEXT",modelo)
+    console.log("LO QUE VIENE AL UPDATEMODELO CONTEXT",modelo)
     const data = await colorService.update(modelo);
     // const data = await marcaService.update(marca);
     console.log("LA DATA QUE REGRESA DE UPDATEMODELO : ", JSON.stringify(data));
@@ -97,6 +98,7 @@ const updateModelo = async(modelo) => {
         findModelo,
         updateModelo,
         // softDeleteModelo,
+        modelo_grupos_nn,
         editModelo,
         modelos,
         permiso,

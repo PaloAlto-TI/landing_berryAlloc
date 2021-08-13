@@ -12,9 +12,6 @@ const MarcaContextProvider = (props) => {
   const [permiso, setPermiso] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
-  // 28/07/2021 - OBSERVACIÓN: LA VARIABLE: marcasVW01 y el método: setMarcasVW01 deben nombrarse de mejor manera para guardar co-relación 
-  // con lo que se está definiendo
-  
   useEffect(() => {
     marcaService.getAll().then((data) => setMarcas(data));
     marcaService.get_marcas_lineas_nn().then((data) => set_marcas_lineas_nn(data));

@@ -18,7 +18,7 @@ const GrupoContextProvider = (props) => {
   }, []);
 
   const createGrupo = async(grupo) => {
-    console.log("LO QUE VIENE PAARA CREAR GRUPO EM CONTEXT: " + grupo)
+    console.log("LO QUE VIENE PARA CREAR GRUPO EM CONTEXT: " + grupo)
 
     const data = await grupoService.create(grupo);
     
@@ -64,10 +64,10 @@ const GrupoContextProvider = (props) => {
       if (grupo.fk_subgrupo){
         grupo.fk_subgrupo_nombre = grupo.fk_subgrupo.nombre 
       } else {
-        grupo.fk_subgrupo_nombre = 'www';
+        grupo.fk_subgrupo_nombre = '';
       }
 
-      console.log("LO QUE QUEDO EN SUBGRUPO NAME: " +  grupo.fk_subgrupo_nombre)
+      // console.log("LO QUE QUEDO EN SUBGRUPO NAME: " +  grupo.fk_subgrupo_nombre)
       // grupo.fk_linea_id = grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
       // editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
       // editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id

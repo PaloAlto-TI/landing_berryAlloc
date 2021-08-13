@@ -11,10 +11,13 @@ export class ColorService {
         return axios.get(baseUrl+"color/"+id).then(res => res.data);
     }
 
+    get_color_grupos_nn(){
+        return axios.get( baseUrl + "color_grupos_nn" ).then( res => res.data.data );
+    }
+
     create(color){
         return axios.post(baseUrl+"color/", color).then(res => res.data).catch(error => error.response.data);
     }
-
 
     update(color){
         return axios.put(baseUrl+"color/"+color.id, color).then(res => res.data).catch(error => error.response.data);;

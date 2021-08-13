@@ -17,7 +17,7 @@ const GrupoList = () => {
 
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LOS GRUPOS SIN MARCAS: " + JSON.stringify(grupos));
-  console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
+  // console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
 
   const columns = [
     {

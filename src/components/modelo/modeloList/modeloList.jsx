@@ -9,13 +9,13 @@ import Search from "antd/lib/input/Search";
 import './modeloList.css';
 
 const ModeloList = () => {
-    const { modelos, /*proveedores_marcas_nn,*/ setPermiso, setEditModelo, isEmpty/*, softDeleteModelo*/ } = useContext(ModeloContext);
+    const { /*modelos,*/ modelo_grupos_nn, setPermiso, setEditModelo, isEmpty/*, softDeleteModelo*/ } = useContext(ModeloContext);
     const [value, setValue] = useState(null);
     const [dataSource, setDataSource] = useState([]);
     const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
     const [rowState, setRowState] = useState(true);
     
-    // console.log("LOS MODELOS" + JSON.stringify(modelos));
+    // console.log("LOS MODELOS CON GRUPOS: " + JSON.stringify(modelo_grupos_nn));
     
     const columns = [
         {
@@ -26,7 +26,7 @@ const ModeloList = () => {
             compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
           showSorterTooltip: true,
-          width: '30%'
+          width: '25%'
         },
         {
           title: "PSEUDÓNIMO",
@@ -46,8 +46,21 @@ const ModeloList = () => {
               compare: (a, b) => a.codigo.localeCompare(b.codigo),
             },
             showSorterTooltip: false,
-            width: '30%'
-          },
+            width: '20%'
+        },
+        {
+          title: "GRUPOS",
+          dataIndex: "color_grupos_nn",
+          key: "color_grupos_nn",
+          className: "longText",
+          showSorterTooltip: false,
+          render: (gruposModelo, record) => (
+            <p>
+              {gruposModelo.length > 0 ? gruposModelo.map(x=>x.nombre).join(", ") : 'N/A' }
+            </p>
+          ),
+          width: '35%'
+        },
         {
           title: "ACCIONES",
           dataIndex: "",
@@ -98,9 +111,11 @@ const ModeloList = () => {
     
     const filtrar = (e) => {
       const currValue = e.target.value;
-      console.log("EL CUURR VALUE: " + currValue)
+      // console.log("EL CUURR VALUE: " + currValue)
       setValue(currValue);
-      const filteredData = modelos.filter(entry =>
+      /*const filteredData = modelos.filter(entry =>
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()));*/
+      const filteredData = modelo_grupos_nn.filter(entry =>
       entry.nombre.toLowerCase().includes(currValue.toLowerCase()));
       setDataSource(filteredData);
     }
@@ -110,7 +125,8 @@ const ModeloList = () => {
       setPermiso(false);
 
       if (!value) {
-        setDataSource(modelos)
+        // setDataSource(modelos)
+        setDataSource(modelo_grupos_nn)
       }
     })
 
@@ -125,7 +141,7 @@ const ModeloList = () => {
           />
           <br /><br />
     
-          {modelos.length > 0 || isEmpty ? (
+          {modelo_grupos_nn.length > 0 || isEmpty ? (
             <Table
               locale={{ emptyText: 'No hay datos' }}
               columns={columns}

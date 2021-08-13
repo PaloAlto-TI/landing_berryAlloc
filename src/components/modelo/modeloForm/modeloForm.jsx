@@ -9,7 +9,7 @@ import "./modeloForm.css";
 
 const FormModelo = (props) => {
 
-  const { createModelo, updateModelo, findModelo, editModelo } = useContext(ModeloContext);
+  const { createModelo, /*updateModelo,*/ findModelo, editModelo } = useContext(ModeloContext);
   let history = useHistory();
   let { codigo, operacion } = useParams();
 
@@ -18,7 +18,11 @@ const FormModelo = (props) => {
     operacion === "editar" || codigo === "nuevo" ? true : false
   );
 
+  // console.log("EL EDIT MODELO QUE TENGO: ", JSON.stringify(editModelo))
+
   const [id, setId] = useState(null);
+  const [selectedLineaId, setSelectedLineaId] = useState(undefined);
+  const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [form] = Form.useForm();
   let initialValues = {};
 
@@ -44,9 +48,14 @@ const FormModelo = (props) => {
 
   //04/08/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. 
 
-  const typeTransactionSelect = {
+  const typeTransactionSelectGrupo = {
     mode: "multiple",
-    placeHoldertext: "Marcas"
+    placeHoldertext: "Grupos",
+    hasFilter: true
+  };
+  const typeTransactionSelectMarca = {
+    placeHoldertext: "Marca",
+    hasFilter: true
   };
 
   const layout = {
@@ -70,14 +79,40 @@ const FormModelo = (props) => {
     }
     
     if (editModelo) {
+      // console.log("ENTRA AL EDIT MODELO DE USEEFFECT CON: " + JSON.stringify(editModelo))
 
-      setId(editModelo.id);
+      if (!selectedMarcaId && !selectedLineaId) { // OBSERVACIÓN 13/08/2021 SE DEBE CONTROLAR DESDE ACÁ LA CARGA DE LOS COMBOS DE LINEA Y MARCA, ESTO SE DEBE A QUE NO TODOS TIENS UNA MARCA, SOLO MATERIAL DE MARKETING
+        
+        /*console.log("ACA SE SETEA LA LINEA Y MARCA!!!! " + editModelo.fk_linea_id + "   EEE :  " + editModelo.fk_marca_id + " YYY EL DURO: " + editModelo.color_grupos_nn[0].id)
+        const grupoService = new GrupoMarcaService();
+        grupoService.getAll().then((data) => { 
+          // console.log("LA DATA DE GRUPO MARCA QUE ME TRAE: " + JSON.stringify(data))
+          // data.filter((gm) => gm.marca_id === editModelo.fk_marca_id && gm.id === editModelo.id)
+
+          console.log("LO QUE ME INTERESA SI TENGO EL  LINEA: " + JSON.stringify(data.filter((gm) => gm.marca_id === editModelo.fk_marca_id && gm.id === editModelo.color_grupos_nn[0].id)))
+          let tempLinea = JSON.stringify(data.filter((gm) => gm.marca_id === editModelo.fk_marca_id && gm.id === editModelo.color_grupos_nn[0].id)); 
+          
+          // console.log("MAPPING SOLO LINEA: " + JSON.stringify(data.filter((gm) => gm.marca_id === editModelo.fk_marca_id && gm.id === editModelo.color_grupos_nn[0].id))[0].linea_id)
+
+          let array1 = data.filter((gm) => gm.marca_id === editModelo.fk_marca_id && gm.id === editModelo.color_grupos_nn[0].id).map(x=>x.linea_id);  
+         console.log("LA RESPUESTA: " + array1)
+         editModelo.fk_linea_id = array1;
+         setSelectedLineaId(array1);
+
+        });*/
       
+        setSelectedLineaId(editModelo.fk_linea_id);
+        setSelectedMarcaId(editModelo.fk_marca_id);
+        setId(editModelo.id);
+
+      }
+
     } else {
 
       findModelo(codigo);
 
     }
+
   })
 
   const onFinish = async (values) => {
@@ -89,16 +124,16 @@ const FormModelo = (props) => {
     // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
 
-    console.log("EL ID QUE TRAE: " + id);
-    console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
+    // console.log("EL ID QUE TRAE: " + id);
+    // console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
 
     if (id) {
 
-        values["id"] = id;
-        data = await updateModelo(values);
-        console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
+        // values["id"] = id;
+        // data = await updateModelo(values);
+        // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
       // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
-/*
+    /*
       values["id"] = id;
       let array1 = editProveedor.proveedor_marcas_nn.map(x=>x.id); // LINEAS INICIALES (BD)
       let array2 = values.proveedor_marcas_nn_in; // LINEAS DE FORM
@@ -124,15 +159,14 @@ const FormModelo = (props) => {
     }
 
     if (data.message.includes("OK")) {
-
       // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
       if (Object.keys(data.data).length > 0){
         message.info(JSON.stringify(data.message) + " -  EL MODELO: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] 
         + " CON ÉXITO", 2).then((t) => history.push("/home/modelos/"));
       
-      } else {
-        console.log("MENSAJE DE VALIDACION DE OBJECTS EN DATA RES: " + values.nombre)
-      }
+       } else {
+         console.log("MENSAJE DE VALIDACION DE OBJECTS EN DATA RES: " + values.nombre)
+       }
 
     } else {
       // 01/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted
@@ -151,6 +185,26 @@ const FormModelo = (props) => {
   const handleFormValuesChange = async (changedValues) => {
     // console.log("ONCHANGE", form.getFieldsValue());
     formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
+
+    const formFieldName = Object.keys(changedValues)[0];
+
+    if (formFieldName === "fk_linea_id") {
+      // console.log("HAY CAMBIO EN LINEA, VA A: " + changedValues[formFieldName])
+      form.setFieldsValue({ modelo_grupos_nn_in: undefined });
+      setSelectedLineaId(changedValues[formFieldName]);
+      setSelectedMarcaId(null);
+
+      if (selectedLineaId !== "60d4c04b894c18b5e810e025"){
+        // console.log("SE VA A SETEAR LA LINEA FK CON ESTO: " + selectedLineaId)
+        form.setFieldsValue({ fk_marca_id: undefined });
+      }
+    }
+    if (formFieldName === "fk_marca_id") {
+      // console.log("HAY CAMBIO EN MARCA, VA CON: " + changedValues[formFieldName])
+      form.setFieldsValue({ modelo_grupos_nn_in: undefined });
+      setSelectedMarcaId(changedValues[formFieldName]);
+    }
+
   };
 
   if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
@@ -167,6 +221,7 @@ const FormModelo = (props) => {
             onValuesChange={handleFormValuesChange}
           >
             <Divider className="titleFont">MODELO</Divider>
+            {/*"SELECTED LINEA: " + selectedLineaId + " SELECTED MARCA: " + selectedMarcaId*/}
             <br />
             <Row>
               <Col span={10}>
@@ -224,22 +279,117 @@ const FormModelo = (props) => {
                 </Form.Item>
               </Col>
             </Row>
-            <br /><br />
-            {/* <Divider className="titleFont" orientation="left" >GRUPOS DEL MODELO</Divider>
-            <br /> */}
-            <Row >
-              <Col span={9}>
-                {/* <Form.Item
+            <br />
+            <Divider className="titleFont" orientation="left" >GRUPOS DEL MODELO</Divider>
+            <br />
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  label="Línea"
+                  // name={crud ? "grupo_marcas_nn_in" : "linea"} 
+                 // name={["grupo_marcas_nn_in",]}
+                  name="fk_linea_id"
+                  rules={crud ? [
+                    {
+                      required: true,
+                      message: "Por favor, seleccione una Línea!",
+                    },
+                  ]: []}
+                >
+                  {crud ? (
+                      <SelectOpciones
+                        tipo="línea"
+                        readOnly={!crud}
+                        // setShow={setShow}
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+              {selectedLineaId === "60d4c04b894c18b5e810e025" ? (
+              <Form.Item
                   label="Marca"
-                  name={"proveedor_marcas_nn_in"}
-                  >
-                  <SelectOpciones
-                    tipo="marcas"
-                    readOnly={!crud}
-                    typeTransaction={typeTransactionSelect} />
-                </Form.Item> */}
+                  name={crud ? "fk_marca_id" : "marca"}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Por favor, seleccione una Marca!",
+                    },
+                  ]}
+                >
+                  {crud ? (
+                      <SelectOpciones
+                        tipo="marcas"
+                        readOnly={!crud}
+                        filter={selectedLineaId}
+                        typeTransaction={typeTransactionSelectMarca}
+                        // setShow={setShow}
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
+                </Form.Item>
+                ): null }
               </Col>
             </Row>
+            <br />
+            <Row>
+              <Col span={10}>
+                <Form.Item
+                  label="Grupos"
+                  name={"modelo_grupos_nn_in"}
+                  // hidden={selectedLineaId && selectedLineaId !== "60d4c04b894c18b5e810e025" ?( false ): ( selectedMarcaId ? false : true )}
+                  rules={
+                    crud
+                      ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione un Grupo!",
+                          },
+                        ]
+                      : []
+                  }
+                  >
+                  <SelectOpciones
+                    tipo="grupos"
+                    readOnly={!crud}
+                    filter={selectedMarcaId}
+                    filter2={selectedLineaId}
+                    typeTransaction={typeTransactionSelectGrupo}
+                    disabled
+                  />
+                </Form.Item>
+                {/* <Form.Item
+                    label="Grupo"
+                    name={crud ? "fk_grupo_id" : "grupo"}
+                    rules={
+                      crud
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione un grupo!",
+                            },
+                          ]
+                        : []
+                    }
+                  >
+                    {crud ? (
+                      <SelectOpciones
+                        tipo="grupo"
+                        filter={selectedMarcaId}
+                        filter2={selectedLineaId}
+                        readOnly={!crud}
+                        // setShow={setShow}
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
+                  </Form.Item> */}
+              </Col>
+            </Row>
+            <br />
             <Row>
               {crud ? (
                 <Col md={18} xs={15}>
@@ -274,6 +424,7 @@ const FormModelo = (props) => {
                 </Col>
               }
             </Row>
+            <br />
           </Form>
         </> : null
     );

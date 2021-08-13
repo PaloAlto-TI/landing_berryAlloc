@@ -5,6 +5,7 @@ import { MedidaService } from "../../services/medidaService";
 import { paises } from "../../utils/paises";
 import { LineaService } from "../../services/lineaService";
 import { MarcaService } from "../../services/marcaService";
+import { GrupoService } from "../../services/grupoService";
 import { GrupoMarcaService } from "../../services/grupoMarcaService";
 import { SubgrupoService } from "../../services/subgrupoService";
 import { ProveedorMarcaService } from "../../services/proveedorMarcaService";
@@ -34,7 +35,6 @@ const SelectOpciones = (props) => {
   const { tipo, onChange, value, filter, filter2, filter3, readOnly, setShow, typeTransaction } =
     props;
   const [opciones, setOpciones] = useState([]);
-  // console.log("los props: " + JSON.stringify(props));
 
   useEffect(() => {
     let cancel = false;
@@ -46,6 +46,44 @@ const SelectOpciones = (props) => {
           if (cancel) return;
           setOpciones(data);
         });
+      } else if(tipo === "grupos") {
+        const grupoService = new GrupoService();
+        const grupoMarcaService = new GrupoMarcaService();
+        // console.log("FILTER-MARCA", filter);
+        // console.log("FILTER-LINEA", filter2);
+        if (typeTransaction){
+          if (typeTransaction.hasFilter){
+            // console.log("VA A COMPARAR CON ESTE FILTER2: " + filter2)
+            if (filter2 === "60d4c04b894c18b5e810e025"){
+              // console.log("ENTRA AL MATERIAL DE MARKETING FILTER2")
+              if (filter && filter2){
+
+                grupoMarcaService.getAll().then((data) => {
+                  if (cancel) return;
+                  setOpciones(data.filter((p) => p.marca_id === filter && p.linea_id === filter2));
+                });
+              } else {}
+            } else {
+                if (filter2){ 
+                  grupoService.getAll().then((data) => {
+                    if (cancel) return;
+                    setOpciones(data);
+                  });
+                } else {
+                  grupoMarcaService.getAll().then((data) => {
+                    if (cancel) return;
+                    setOpciones(data);
+                  });
+                }
+            }
+          } else {
+            grupoService.getAll().then((data) => {
+              if (cancel) return;
+              setOpciones(data);
+            });
+          }
+        } else { }
+        
       } else if (tipo === "marcas") {
         const marcaService = new MarcaService();
         const lineaMarcaService = new LineaMarcaService();

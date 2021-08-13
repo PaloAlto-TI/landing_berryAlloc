@@ -341,21 +341,6 @@ const FormGrupo = (props) => {
               </Col>
                 </Row>
             <br /><br />
-            {/* <Divider className="titleFont" orientation="left" >MARCAS DEL GRUPO</Divider>
-            <br />
-            <Row >
-              <Col span={9}>
-                <Form.Item
-                  label="Marca"
-                  name={"proveedor_marcas_nn_in"}
-                  >
-                  <SelectOpciones
-                    tipo="marcas"
-                    readOnly={!crud}
-                    typeTransaction={typeTransactionSelect} />
-                </Form.Item>
-              </Col>
-            </Row> */}
             <Row>
               {crud ? (
                 <Col md={18} xs={15}>
