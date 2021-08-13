@@ -222,7 +222,6 @@ const FormModelo = (props) => {
           >
             <Divider className="titleFont">MODELO</Divider>
             {/*"SELECTED LINEA: " + selectedLineaId + " SELECTED MARCA: " + selectedMarcaId*/}
-            {" EL CRUD: " + crud}
             <br />
             <Row>
               <Col span={10}>
