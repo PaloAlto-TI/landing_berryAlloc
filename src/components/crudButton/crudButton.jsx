@@ -8,8 +8,8 @@ const CrudButton = (props) => {
   const { record, softDelete, setRowState, typeTransaction } = props;
   let { path } = useRouteMatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
-
   // console.log("EL TIPO DE TRANSACTION: " + JSON.stringify(typeTransaction));
+  // console.log("RECORD: " + JSON.stringify(record));
   // console.log("EL SOFDELETE DE CRUDBUTTON: " + softDelete);
   // console.log("EL ROWSTATE = ", setRowState )
   
@@ -19,6 +19,11 @@ const CrudButton = (props) => {
   };
 
   const handleOk = async() => {
+
+    // setRowState(true);
+    // let data = await softDelete(record);
+    // message.info(data.nombre + " ha sido eliminado");
+    // setIsModalVisible(false);
     // console.log("ENTRA AL ELIMINAR EN HANDLEOK LINEA CON TYPE: " + JSON.stringify(typeTransaction))
     // 21/07/2021 - OBSERVACION: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUÉ TIPO DE ELIMINADO LÓGICO SE DEBE HACER. 
     // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
@@ -27,10 +32,13 @@ const CrudButton = (props) => {
     setRowState(true);
     
     // record.pseudo = null;// PRUEBA PARA NUEVO TIPO DE ERROR
+    //console.log("record"+JSON.stringify(record))
     dataSoftDelete = await softDelete(record);
     
-    // console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete));
-
+    console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete)); 
+    //console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete));
+//-------------------------------------------------------REVISAR CON QUE DELETE NOS QUEDAMSO------------------------
+if(dataSoftDelete){
     if (dataSoftDelete.message.includes("OK")) {
       message.info(JSON.stringify(dataSoftDelete.message) + " -  LA ELIMINACIÓN DE " + (typeTransaction === null || typeTransaction === undefined ? 
         "REGISTRO" : typeTransaction.labelCrudSingle) + ": "  + JSON.stringify(dataSoftDelete.data.nombre) + " SE REALIZÓ CON ÉXITO", 15);
@@ -39,6 +47,14 @@ const CrudButton = (props) => {
       message.error("ERROR AL MOMENTO DE ELIMINAR " + typeTransaction.labelCrudSingle, 15);
       // message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
+  }else{
+    setRowState(true);
+   let data= await softDelete(record);
+   //console.log("datas jksdnfksd "+data)
+    message.info(record.nombre + " ha sido eliminado");
+    //setIsModalVisible(false);
+  }
+
     setIsModalVisible(false);
 
   };
@@ -62,6 +78,11 @@ const CrudButton = (props) => {
     record["permiso"] = true;
     // console.log("ENTRA  EL TYPE AL EDITAR DEL CRUD CON " + JSON.stringify(typeTransaction));
     // console.log("ENTRA EL RECORD AL EDITAR DEL CRUD CON " + JSON.stringify(record));
+  //---------------------------Master.------------------------------------------
+    //history.push(`${path}/${record.codigo_interno}/editar`);
+  
+    //}
+    //---------------------------Master.------------------------------------------
 
     if (typeTransaction === null || typeTransaction === undefined){
 

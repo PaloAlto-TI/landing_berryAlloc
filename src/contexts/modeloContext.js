@@ -47,13 +47,14 @@ const ModeloContextProvider = (props) => {
       modelo.modelo_grupos_nn_in = modelo.color_grupos_nn.map(x=>x.id) // 10/08/2021 - OBSERVACIÓN: PENDIENTE CAMBIO DE NOMBRE DE LAS VARIABLES UNA VEZ QUE SE CAMBIE EL NOMBRE DE TABLA DE: COLOR A: MODELO
 
       if (modelo.color_grupos_nn.length > 0){
-// fk_marca_id
+        modelo.fk_linea_id = ''; // 12/08/2021 - OBSERVACIÓN: HAY QUE VALIDAR EL VALOR DE LA LINEA, POR  EL MOMENTO QUEDA ASÍ PERO SE DEBE ASIGANAR EL VALOR A TRAVÉS DE LA VISTA O LA DECISIÓN QUE SE TOME
         modelo.color_grupos_nn[0].color_grupo.fk_marca_id ?
         modelo.fk_marca_id = modelo.color_grupos_nn[0].color_grupo.fk_marca_id 
         : modelo.fk_marca_id = '';
       } else {
         modelo.fk_marca_id = '';
       }
+      
       setEditModelo(modelo);
     }
   };

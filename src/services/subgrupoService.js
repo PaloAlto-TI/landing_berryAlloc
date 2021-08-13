@@ -19,11 +19,12 @@ export class SubgrupoService {
     }
 
     update(subgrupo){
-        return axios.put(baseUrl+"subgrupo/"+subgrupo.id, subgrupo).then(res => res.data).catch(error => error.response.data);
+        return axios.put(baseUrl+"subgrupo/"+subgrupo.id, subgrupo).then(res => res.data);
     }
 
     softDelete(subgrupo){
-        return axios.put(baseUrl+"delete-subgrupo/"+subgrupo.id, subgrupo).then(res => res.data).catch(error => error.response.data);
+       // console.log("entra en delete "+JSON.stringify(subgrupo));
+        return axios.put(baseUrl+"delete-subgrupo/"+subgrupo.id, subgrupo).then(res => res.data);
     }
     
 }

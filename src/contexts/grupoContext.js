@@ -12,9 +12,10 @@ const GrupoContextProvider = (props) => {
   const [permiso, setPermiso] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
 
-  useEffect(() => {
-    grupoService.getAll().then((data) => setGrupos(data));
-    grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
+  useEffect(async() => {
+    await grupoService.getAll().then((data) => setGrupos(data));
+    console.log("useeffect");
+   await grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
   }, []);
 
   const createGrupo = async(grupo) => {

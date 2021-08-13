@@ -38,6 +38,9 @@ const MarcaContextProvider = (props) => {
   const findMarca = (id) => {
 
     const marca = marcas_lineas_nn.find((m) => m.id === id);
+
+
+    
     if (marca){
       marca.lineas_nn_in = marca.lineas_nn.map(x=>x.id)
       setEditMarca(marca);

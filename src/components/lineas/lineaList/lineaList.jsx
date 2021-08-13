@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Spin, Button, Table } from "antd";
+import { Spin, Button, Table, Divider } from "antd";
 import { PlusOutlined, /*SmileOutlined,*/ LoadingOutlined } from '@ant-design/icons';
 import CrudButton from "../../crudButton/crudButton";
 import { LineaContext } from "../../../contexts/lineaContext";
@@ -15,8 +15,7 @@ const LineaList = () => {
   const [dataSource, setDataSource] = useState([]);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const [rowState, setRowState] = useState(true);
-
-  const columns = [
+  const columns1 = [
     {
       title: "NOMBRE",
       dataIndex: "nombre",
@@ -59,6 +58,38 @@ const LineaList = () => {
         />
       ),
     },
+  ]
+  const columns2 = [
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: false
+    },
+    {
+      title: "PSEUDÓNIMO",
+      dataIndex: "pseudo",
+      key: "pseudo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+      },
+      showSorterTooltip: false
+    },
+    {
+      title: "DESCRIPCIÓN",
+      dataIndex: "descripcion",
+      key: "descripcion",
+      className: "longText",
+      sorter: {
+        compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+      },
+      showSorterTooltip: false
+    },
+    
   ]
 
   let { path } = useRouteMatch();
@@ -106,11 +137,18 @@ const LineaList = () => {
     if (!value) {
       setDataSource(lineas)
     }
+    console.log(dataSource)
   })
 
   return (
     <div>
+       <br />
+      <Divider>LÍNEAS</Divider>
+          <br />
+      {JSON.parse(localStorage.getItem("user")).rol === 2?
       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+      :null
+      }
       <Search
         placeholder="Buscar Línea..."
         value={value}
@@ -123,7 +161,7 @@ const LineaList = () => {
       {lineas.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
-          columns={columns}
+          columns={JSON.parse(localStorage.getItem("user")).rol === 2?columns1:columns2}
           dataSource={dataSource}
           rowKey='id'
           onChange={handleChange}

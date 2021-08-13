@@ -1,7 +1,7 @@
 export const paises= [
     {
-        "id":"EEUU",
-        "nombre":"EEUU"
+        "id":"ESTADOS UNIDOS",
+        "nombre":"ESTADOS UNIDOS"
     },
     {
         "id":"BÉLGICA",
@@ -22,5 +22,13 @@ export const paises= [
     {
         "id":"FRANCIA",
         "nombre":"FRANCIA"
+    },
+    {
+        "id":"NORUEGA",
+        "nombre":"NORUEGA"
+    },
+    {
+        "id":"N/A",
+        "nombre":"N/A"
     },
 ]

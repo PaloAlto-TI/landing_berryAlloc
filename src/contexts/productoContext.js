@@ -12,7 +12,7 @@ const ProductoContextProvider = (props) => {
 
   useEffect(() => {
     setIsEmpty(false)
-    productoService.getProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    productoService.getProductos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
     
     // if (productos.length === 0){
     //   setIsEmpty(true);
@@ -20,26 +20,36 @@ const ProductoContextProvider = (props) => {
 
   }, []);
 
+  const filterProductos = async (id) => {
+    setProductos([]);
+    setIsEmpty(false);
+    if (id === "all"){
+      productoService.getAllProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    }else{
+      productoService.getProductos({ linea_id : id}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    }
+  }
+
   const createProducto = async (producto) => {
     const data = await productoService.createProducto(producto);
 
     console.log("err:", data);
     if (data.message === "OK CREATE") {
-      productoService.getProductos().then((data) => setProductos(data));
+      productoService.getAllProductos().then((data) => setProductos(data));
       // setProductos([...productos, data.data]);
     }
 
     return data.message;
   };
 
-  const softDeleteProducto = (producto) => {
-    productoService
-      .softDeleteProducto(producto)
-      .then(() => {productoService.getProductos().then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
-    });
+  const softDeleteProducto = async (producto) => {
+    const data = await productoService
+      .softDeleteProducto(producto);
+
+    productoService.getProductos({ linea_id : producto.fk_linea_id}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)})
       // .then(() => {setProductos(productos.filter((p) => p.id !== producto.id))});
 
-     
+    return data;
 
   };
 
@@ -48,7 +58,7 @@ const ProductoContextProvider = (props) => {
 
     console.log(id);
     const producto = productos.find((p) => p.codigo_interno === id);
-
+    
     setEditProducto(producto);
   };
 
@@ -58,7 +68,7 @@ const ProductoContextProvider = (props) => {
 
     console.log("err:", data);
     if (data.message === "OK UPDATE") {
-      productoService.getProductos().then((data) => setProductos(data));
+      productoService.getProductos({linea_id : producto.fk_linea_id}).then((data) => setProductos(data));
       //setProductos(productos.map((p) => (p.id === producto.id ? data.data : p)))
     }
 
@@ -80,7 +90,8 @@ const ProductoContextProvider = (props) => {
         permiso,
         setPermiso,
         setEditProducto,
-        isEmpty
+        isEmpty,
+        filterProductos
       }}
     >
       {props.children}

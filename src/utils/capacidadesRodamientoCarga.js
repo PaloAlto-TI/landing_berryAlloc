@@ -7,5 +7,8 @@ export const capacidadesRodamientoCarga= [
         "id":"MODERADA",
         "nombre":"MODERADA"
     },
-
+    {
+        "id":"ALTA",
+        "nombre":"ALTA"
+    },
 ]

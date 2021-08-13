@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
 import SideMenu from "../../components/menu/sidemenu";
@@ -30,9 +30,23 @@ import {
   Route,
   useRouteMatch
 } from "react-router-dom";
-
+import { ConfigProvider } from 'antd';
+import es_ES from 'antd/es/locale/es_ES';
+import SubgrupoForm from "../../components/subgrupo/subgrupoForm/subgrupoForm";
+import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoList";
+import SubgrupoContextProvider from "../../contexts/subgrupoContext";
 const Home = () => {
+  
+// const Sesion= async()=>{
 
+//   const { usuario} =  useContext(SesionContext);
+
+//     return await usuario(); 
+// }
+
+//console.log("SESION: "+Sesion());
+  
+  
   let { path } = useRouteMatch();
 
   return (
@@ -44,7 +58,9 @@ const Home = () => {
           <ProductoContextProvider Provider>
             <Switch>
               <Route exact path={`${path}/productos`}>
+              <ConfigProvider locale={es_ES}>
                 <ProductoList />
+                </ConfigProvider>
               </Route>
               <Route path={`${path}/productos/:codigo?/:operacion?`}>
                 <ProductoForm />
@@ -107,7 +123,23 @@ const Home = () => {
               <ModeloForm />
           </Route>
           </Switch>
+        
+
+
           </ModeloContextProvider>
+
+
+          <SubgrupoContextProvider>
+          <Switch>
+          <Route exact path={`${path}/subgrupo`}>
+              <SubgrupoList />
+          </Route>
+          <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              <SubgrupoForm />
+          </Route>
+          </Switch>
+          </SubgrupoContextProvider>
+
             {/*<Route path="*">
               <p>404 NOT FOUND</p>
   </Route>*/}

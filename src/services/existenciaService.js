@@ -3,7 +3,7 @@ import {baseUrl} from "../utils/constantes";
 export class ExistenciaService {
 
     getAll(){
-        return axios.get(baseUrl+"existencias").then(res => res.data.data);
+        return axios.get(baseUrl+"existencias").then(res => res.data);
     }
 
     getOne(existencia){

@@ -4,11 +4,11 @@ export class EmpresaService {
 
 
     getAll(){
-        return axios.get(baseUrl+"empresas").then(res => res.data.data);
+        return axios.get(baseUrl+"empresas").then(res => res.data);
     }
 
     getOne(empresa){
-        return axios.get(baseUrl+"empresa/"+empresa._id).then(res => res.data.data);
+        return axios.get(baseUrl+"empresa/"+empresa._id).then(res => res.data);
     }
     
     create(empresa){
