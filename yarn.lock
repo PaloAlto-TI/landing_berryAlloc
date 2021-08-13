@@ -1252,7 +1252,7 @@
     "exec-sh" "^0.3.2"
     "minimist" "^1.2.0"
 
-"@craco/craco@^5.5.0":
+"@craco/craco@^5.5.0", "@craco/craco@^5.9.0":
   "integrity" "sha512-2Q8gIB4W0/nPiUxr9iAKUhGsFlXYN0/wngUdK1VWtfV2NtBv+yllNn2AjieaLbttgpQinuOYmDU65vocC0NMDg=="
   "resolved" "https://registry.npmjs.org/@craco/craco/-/craco-5.9.0.tgz"
   "version" "5.9.0"
