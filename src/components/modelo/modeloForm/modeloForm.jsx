@@ -222,6 +222,7 @@ const FormModelo = (props) => {
           >
             <Divider className="titleFont">MODELO</Divider>
             {/*"SELECTED LINEA: " + selectedLineaId + " SELECTED MARCA: " + selectedMarcaId*/}
+            {" EL CRUD: " + crud}
             <br />
             <Row>
               <Col span={10}>
@@ -284,28 +285,32 @@ const FormModelo = (props) => {
             <br />
             <Row>
               <Col span={10}>
-                <Form.Item
-                  label="Línea"
-                  // name={crud ? "grupo_marcas_nn_in" : "linea"} 
-                 // name={["grupo_marcas_nn_in",]}
-                  name="fk_linea_id"
-                  rules={crud ? [
-                    {
-                      required: true,
-                      message: "Por favor, seleccione una Línea!",
-                    },
-                  ]: []}
-                >
-                  {crud ? (
-                      <SelectOpciones
-                        tipo="línea"
-                        readOnly={!crud}
-                        // setShow={setShow}
-                      />
+              {crud ? (
+                      <Form.Item
+                      label="Línea"
+                      // name={crud ? "grupo_marcas_nn_in" : "linea"} 
+                     // name={["grupo_marcas_nn_in",]}
+                      name="fk_linea_id"
+                      rules={crud ? [
+                        {
+                          required: true,
+                          message: "Por favor, seleccione una Línea!",
+                        },
+                      ]: []}
+                    >
+                      {crud ? (
+                          <SelectOpciones
+                            tipo="línea"
+                            readOnly={!crud}
+                            // setShow={setShow}
+                          />
+                        ) : (
+                          <Input className="input-type" readOnly={!crud} />
+                        )}
+                    </Form.Item>
                     ) : (
-                      <Input className="input-type" readOnly={!crud} />
+                      null
                     )}
-                </Form.Item>
               </Col>
               <Col span={12}>
               {selectedLineaId === "60d4c04b894c18b5e810e025" ? (
