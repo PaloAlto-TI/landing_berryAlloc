@@ -11,15 +11,6 @@ import LineaContextProvider from "../../contexts/lineaContext";
 import MarcaList from "../../components/marcas/marcaList/marcaList";
 import MarcaForm from "../../components/marcas/marcaForm/marcaForm";
 import MarcaContextProvider from "../../contexts/marcaContext";
-<<<<<<< HEAD
-import { SesionContext } from "../../../src/contexts/sesionContext";
-// import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
-// import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
-// import ProveedorContextProvider from "../../contexts/proveedorContext";
-// import GrupoList from "../../components/grupos/grupoList/grupoList";
-// import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
-// import GrupoContextProvider from "../../contexts/grupoContext";
-=======
 import ProveedorList from "../../components/proveedores/proveedorList/proveedorList";
 import ProveedorForm from "../../components/proveedores/proveedorForm/proveedorForm";
 import ProveedorContextProvider from "../../contexts/proveedorContext";
@@ -29,7 +20,6 @@ import GrupoContextProvider from "../../contexts/grupoContext";
 import ModeloList from "../../components/modelo/modeloList/modeloList";
 import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
 import ModeloContextProvider from "../../contexts/modeloContext";
->>>>>>> SERVIDOR
 
 
 import { Layout } from "antd";
