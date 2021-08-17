@@ -355,18 +355,18 @@ const FormProducto = (props) => {
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
       setSelectedGrupoId(null);
-      if (
-        selectedLineaId === "60d4c04b894c18b5e810e025" ||
-        selectedLineaId === "60faeee1a412169c92c778c2"
-      ) {
+      // if (
+      //   selectedLineaId === "60d4c04b894c18b5e810e025" ||
+      //   selectedLineaId === "60faeee1a412169c92c778c2"
+      // ) {
         form.setFieldsValue({ nombre: undefined });
         const marcaService = new MarcaService();
         const marca = await marcaService.getOne(changedValues[formFieldName]);
         form.setFieldsValue({
           codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 2) + marca.pseudo,
+            form.getFieldValue("codigo_interno").substring(0, 3) + "-" + marca.pseudo,
         });
-      }
+      // }
 
       form.setFieldsValue({ fk_color_id: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
@@ -405,13 +405,15 @@ const FormProducto = (props) => {
       // if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
       //   console.log("si entra!!!!!")
       form.setFieldsValue({ codigo_interno: linea.pseudo });
-      if (
-        changedValues[formFieldName] === "60d4c04b894c18b5e810e025" ||
-        changedValues[formFieldName] === "60faeee1a412169c92c778c2"
-      ) {
-      } else {
-        form.setFieldsValue({ nombre: linea.pseudo });
-      }
+      form.setFieldsValue({ nombre: undefined });
+
+      // if (
+      //   changedValues[formFieldName] === "60d4c04b894c18b5e810e025" ||
+      //   changedValues[formFieldName] === "60faeee1a412169c92c778c2"
+      // ) {
+      // } else {
+      //   form.setFieldsValue({ nombre: linea.pseudo });
+      // }
 
       if (changedValues[formFieldName] === "60d4c0476e8514b5e8c66fd5") {
         form.setFieldsValue({
@@ -505,47 +507,46 @@ const FormProducto = (props) => {
         form.getFieldValue("fk_color_id")
       );
 
-      if (selectedLineaId !== "60d4c04b894c18b5e810e025") {
-        if (selectedLineaId === "60faeee1a412169c92c778c2") {
-          form.setFieldsValue({
-            nombre:
-              form.getFieldValue("nombre").split(" ")[0] +
-              " " +
-              color2.nombre +
-              " ",
-          });
-        } else {
-          form.setFieldsValue({
-            codigo_interno:
-              form.getFieldValue("codigo_interno").split("-")[0] +
-              "-" +
-              color2.codigo,
-          });
+      // if (selectedLineaId !== "60d4c04b894c18b5e810e025") {
+      //   if (selectedLineaId === "60faeee1a412169c92c778c2") {
+      //     form.setFieldsValue({
+      //       nombre:
+      //         form.getFieldValue("nombre").split(" ")[0] +
+      //         " " +
+      //         color2.nombre +
+      //         " ",
+      //     });
+      //   } else {
+      //     form.setFieldsValue({
+      //       codigo_interno:
+      //         form.getFieldValue("codigo_interno").split("-")[0] +
+      //         "-" +
+      //         color2.codigo,
+      //     });
 
-          form.setFieldsValue({
-            nombre:
-              form.getFieldValue("nombre").split(" ")[0] +
-              " " +
-              form.getFieldValue("nombre").split(" ")[1] +
-              " " +
-              color2.nombre,
-          });
-        }
-      } else {
+      //     form.setFieldsValue({
+      //       nombre:
+      //         form.getFieldValue("nombre").split(" ")[0] +
+      //         " " +
+      //         form.getFieldValue("nombre").split(" ")[1] +
+      //         " " +
+      //         color2.nombre,
+      //     });
+      //   }
+      // } else {
         form.setFieldsValue({
           codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 6) +
-            color2.pseudo +
-            "-" +
-            color2.codigo,
+            form.getFieldValue("codigo_interno").substring(0, 11) + "-" + color2.codigo,
         });
 
-        form.setFieldsValue({
-          nombre:
-            form.getFieldValue("nombre").split(" ")[0] + " " + color2.nombre,
-        });
-      }
-    }
+        form.setFieldsValue({ nombre: form.getFieldValue("nombre").replace(form.getFieldValue("nombre").split(form.getFieldValue("fk_grupo_id").label)[1], '')  + " " + color2.nombre });
+
+    //     form.setFieldsValue({
+    //       nombre:
+    //         form.getFieldValue("nombre").split(" ")[0] + " " + color2.nombre,
+    //     });
+    //   }
+     }
 
     if (formFieldName === "fk_grupo_id") {
       if (form.getFieldValue("fk_grupo_id") === "60d617738d422eca134f6685") {
@@ -560,47 +561,50 @@ const FormProducto = (props) => {
       setinfoTecnicaGrupo(form.getFieldValue("fk_grupo_id"));
       form.setFieldsValue({ fk_color_id: undefined });
 
-      setSelectedGrupoId(changedValues[formFieldName]);
+      setSelectedGrupoId(changedValues[formFieldName].value);
       // form.setFieldsValue({ color: undefined });
       const grupoService = new GrupoService();
-      const grupo = await grupoService.getOne(changedValues[formFieldName]);
+      const grupo = await grupoService.getOne(changedValues[formFieldName].value);
       // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
 
-      if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
+      // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
         form.setFieldsValue({
           codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 3) + grupo.pseudo,
+            form.getFieldValue("codigo_interno").substring(0, 7) + "-" + grupo.pseudo,
         });
-      } else if (
-        selectedLineaId === "60d4c04b894c18b5e810e025" ||
-        selectedLineaId === "60faeee1a412169c92c778c2"
-      ) {
-        form.setFieldsValue({
-          codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 4) + grupo.pseudo,
-        });
-      } else {
-        form.setFieldsValue({
-          codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 2) + grupo.pseudo,
-        });
-      }
+      // } else if (
+      //   selectedLineaId === "60d4c04b894c18b5e810e025" ||
+      //   selectedLineaId === "60faeee1a412169c92c778c2"
+      // ) {
+      //   form.setFieldsValue({
+      //     codigo_interno:
+      //       form.getFieldValue("codigo_interno").substring(0, 4) + grupo.pseudo,
+      //   });
+      // } else {
+      //   form.setFieldsValue({
+      //     codigo_interno:
+      //       form.getFieldValue("codigo_interno").substring(0, 2) + grupo.pseudo,
+      //   });
+      // }
 
-      if (
-        selectedLineaId !== "60d4c04b894c18b5e810e025" &&
-        selectedLineaId !== "60faeee1a412169c92c778c2"
-      ) {
-        form.setFieldsValue({
-          nombre:
-            form.getFieldValue("nombre").split(" ")[0] + " " + grupo.pseudo,
-        });
-      } else {
-        form.setFieldsValue({
-          nombre: grupo.nombre + " ",
-        });
-      }
+      // if (
+      //   selectedLineaId !== "60d4c04b894c18b5e810e025" &&
+      //   selectedLineaId !== "60faeee1a412169c92c778c2"
+      // ) {
+      //   form.setFieldsValue({
+      //     nombre:
+      //       form.getFieldValue("nombre").split(" ")[0] + " " + grupo.pseudo,
+      //   });
+      // } else {
+      //   form.setFieldsValue({
+      //     nombre: grupo.nombre + " ",
+      //   });
+      // }
 
       // }
+
+      form.setFieldsValue({ nombre: form.getFieldValue("fk_grupo_id").label });
+
     }
 
     // if (formFieldName === "fk_linea_id") {

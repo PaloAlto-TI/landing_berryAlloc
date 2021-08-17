@@ -237,7 +237,7 @@ const SelectOpciones = (props) => {
   return (
     <Select
     //placeholder={"HOLA MUNDO"}
-      labelInValue={tipo ==="tipo" ? true : false}
+      labelInValue={tipo ==="tipo" || tipo ==="grupo" ? true : false}
       showSearch
       disabled={readOnly}
       mode={typeTransaction ? typeTransaction.mode :null}
