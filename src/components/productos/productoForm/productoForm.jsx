@@ -539,7 +539,7 @@ const FormProducto = (props) => {
             form.getFieldValue("codigo_interno").substring(0, 11) + "-" + color2.codigo,
         });
 
-        form.setFieldsValue({ nombre: form.getFieldValue("nombre").replace(form.getFieldValue("nombre").split(form.getFieldValue("fk_grupo_id").label)[1], '')  + " " + color2.nombre });
+        form.setFieldsValue({ nombre:  form.getFieldValue("fk_grupo_id").label +  " " + color2.nombre });
 
     //     form.setFieldsValue({
     //       nombre:
