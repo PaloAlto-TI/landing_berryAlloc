@@ -7,10 +7,13 @@ import { useRouteMatch } from "react-router-dom";
 import { Button } from 'antd/lib/radio';
 import Search from 'antd/lib/input/Search';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { SesionContext } from '../../../contexts/sesionContext';
 
 
 
 export const SubgrupoList = () => {
+  var {setMoved,sesions} =  useContext(SesionContext);
+
   useEffect(() => {
     setEditSubgrupo(null);
     if(!value)
@@ -139,9 +142,9 @@ export const SubgrupoList = () => {
           <br />
 
           <>
-          {JSON.parse(localStorage.getItem("user")).rol === 2 ?
+          {sesions?sesions._usuario[0].rol ===2 ?
   <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
-  :null}
+  :null:null}
 
   </>
       <Search
@@ -157,12 +160,14 @@ export const SubgrupoList = () => {
             <Table
              dataSource={dataSource} 
 
-             columns={JSON.parse(localStorage.getItem("user")).rol === 2?columns1:columns2}
+             columns={sesions?sesions._usuario[0].rol ===2?columns1:columns2:null}
              rowKey="id" 
              onRow={(record, rowIndex) => {
                 return {
                   onClick: (event) => {
-                    if (JSON.parse(localStorage.getItem("user")).rol === 2) {
+                    if(sesions){
+
+                    if (sesions._usuario[0].rol ===2) {
                       if (event.clientX < window.innerWidth * 0.7 && rowState) {
                           console.log("hola")
                         // record["permiso"] = false;
@@ -172,6 +177,7 @@ export const SubgrupoList = () => {
                     } else {
                       ver(record);
                     }
+                  }
                   },
                 };
               }}

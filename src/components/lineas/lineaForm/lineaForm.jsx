@@ -6,10 +6,10 @@ import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design
 import { LineaContext } from "../../../contexts/lineaContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./lineaForm.css";
+import { SesionContext } from "../../../contexts/sesionContext";
 const { TextArea } = Input;
-
 const FormLinea = (props) => {
-
+  var {setMoved,sesions} =  useContext(SesionContext);
   const { createLinea, updateLinea, findLinea, editLinea } = useContext(LineaContext);
   let history = useHistory();
   // console.log("LO QUE ESTA EN EDIT LINEA: " + JSON.stringify(editLinea))
@@ -161,8 +161,9 @@ const FormLinea = (props) => {
   };
 
   // console.log("EL ROL DEL USER ID: " + JSON.parse(localStorage.getItem("user")).rol);
-
-  if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
+  
+if(sesions){
+  if (sesions._usuario[0].rol ===2 || operacion === "ver") {
     return (
       editLinea || codigo === "nuevo" ?
         <>
@@ -287,6 +288,7 @@ const FormLinea = (props) => {
   } else {
     return <Redirect to="/home" />;
   }
+}
 };
 
 const LineaForm = () => {

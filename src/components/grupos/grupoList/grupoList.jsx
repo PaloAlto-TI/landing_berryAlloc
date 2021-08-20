@@ -7,8 +7,11 @@ import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './grupoList.css';
+import { SesionContext } from "../../../contexts/sesionContext";
 
 const GrupoList = () => {
+  var {setMoved,sesions} =  useContext(SesionContext);
+
   const { /*grupos,*/ grupo_marcas_nn, setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
@@ -221,9 +224,9 @@ const GrupoList = () => {
        <br />
       <Divider>GRUPOS</Divider>
           <br />
-      {JSON.parse(localStorage.getItem("user")).rol===2?
+      {sesions?sesions._usuario[0].rol ===2?
       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
-    :null}
+    :null:null}
       <Search
         placeholder="Buscar Grupo..."
         value={value}
@@ -235,7 +238,7 @@ const GrupoList = () => {
       {grupo_marcas_nn.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
-          columns={JSON.parse(localStorage.getItem("user")).rol===2?columns1:columns2}
+          columns={sesions?sesions._usuario[0].rol ===2?columns1:columns2:null}
           dataSource={dataSource}
           rowKey='id'
           onChange={handleChange}
@@ -243,7 +246,8 @@ const GrupoList = () => {
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
-                if (JSON.parse(localStorage.getItem("user")).rol === 2) {
+                if(sesions){
+                if (sesions._usuario[0].rol ===2) {
                   if (event.clientX < window.innerWidth * 0.8 && rowState) {
                     // record["permiso"] = false;
                     // history.push(`${path}/${record.codigo_interno}/ver`, record);
@@ -252,6 +256,7 @@ const GrupoList = () => {
                 } else {
                   ver(record);
                 }
+              }
               },
             };
           }}

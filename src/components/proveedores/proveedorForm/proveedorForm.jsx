@@ -6,9 +6,11 @@ import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design
 import { ProveedorContext } from "../../../contexts/proveedorContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./proveedorForm.css";
+import { SesionContext } from "../../../contexts/sesionContext";
 const { TextArea } = Input;
 
 const FormProveedor = (props) => {
+  var {setMoved,sesions} =  useContext(SesionContext);
 
   const { createProveedor, updateProveedor, findProveedor, editProveedor } = useContext(ProveedorContext);
 
@@ -151,8 +153,8 @@ const FormProveedor = (props) => {
     // console.log("ONCHANGE", form.getFieldsValue());
     formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
   };
-
-  if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
+if(sesions){
+  if (sesions._usuario[0].rol ===2|| operacion === "ver") {
     return (
       editProveedor || codigo === "nuevo" ?
         <>
@@ -258,6 +260,7 @@ const FormProveedor = (props) => {
   } else {
     return <Redirect to="/home" />;
   }
+}
 };
 
 const ProveedorForm = () => {

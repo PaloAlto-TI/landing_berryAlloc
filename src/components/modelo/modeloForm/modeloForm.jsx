@@ -6,8 +6,11 @@ import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design
 import { ModeloContext } from "../../../contexts/modeloContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./modeloForm.css";
+import { SesionContext } from "../../../contexts/sesionContext";
 
 const FormModelo = (props) => {
+  var {setMoved,sesions} =  useContext(SesionContext);
+
 
   const { createModelo, /*updateModelo,*/ findModelo, editModelo } = useContext(ModeloContext);
   let history = useHistory();
@@ -206,8 +209,8 @@ const FormModelo = (props) => {
     }
 
   };
-
-  if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
+if(sesions){
+  if (sesions._usuario[0].rol ===2 || operacion === "ver") {
     return (
       editModelo || codigo === "nuevo" ?
         <>
@@ -436,6 +439,7 @@ const FormModelo = (props) => {
   } else {
     return <Redirect to="/home" />;
   }
+}
 };
 
 const ModeloForm = () => {

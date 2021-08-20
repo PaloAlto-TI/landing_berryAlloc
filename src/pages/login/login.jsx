@@ -17,7 +17,7 @@ import { Redirect } from "react-router-dom";
 
 const Login = () => {
   let history = useHistory();
-  const {setMoved} =  useContext(SesionContext);
+  const {setMoved,sesions} =  useContext(SesionContext);
   const sesionService = new SesionService();
   //------------------------------------------------
   // const [sesionState, setSesionState] = useState({
@@ -71,6 +71,8 @@ const Login = () => {
 
     // console.log("usuariocheck:"+usuarioCheck_1);
     //console.log("usuarioresponse:"+JSON.stringify(response));
+
+    
     if (usuarioCheck_1 && usuarioCheck_1.active === true) {
 
       let objeto={
@@ -93,13 +95,14 @@ const Login = () => {
         "token": response.tokenObj.access_token
       };
       //console.log("Entra en el bucle1");
-      await localStorage.setItem('user', JSON.stringify(usuarioCheck_1));
+      //await localStorage.setItem('user', JSON.stringify(usuarioCheck_1));
       await localStorage.setItem('token', response.tokenObj.access_token);
       //console.log("Entra en el bucle2");
       //console.log("Entra en el bucle3: "+JSON.stringify(objeto));
       await sesionService.create(objeto);
       //console.log("google:" + localStorage.getItem('token'));
       setMoved(true);
+     
      
      
       //------------------------------------------------------------------------

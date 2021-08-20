@@ -81,18 +81,18 @@ function valid()
 
   return (
     <header className="main-header">
-      { localStorage.getItem("user") === null ? logOut():
+      { sesions?
       <Row>
       <Col span={8} className="labels-header">{ sesions ? valid() :"PALO ALTO - Especialista en Pisos" }</Col>
 
       {/* <Col span={8} className="labels-header">PALO ALTO - Especialista en Pisos</Col> */}
       <Col span={8}></Col>
       <Col span={8} className="icons-end-header"><Dropdown overlay={menu} placement="bottomLeft">
-        <Button icon={<UserOutlined />}>{userName.nombre}</Button>
+        <Button icon={<UserOutlined />}>{sesions._usuario[0].nombre}</Button>
         </Dropdown>
       </Col>
     </Row>
-    
+    :null
     }
     </header>
   );

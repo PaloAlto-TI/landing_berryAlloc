@@ -7,16 +7,19 @@ import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './marcaList.css';
+import { SesionContext } from "../../../contexts/sesionContext";
 
 const MarcaList = () => {
+  var { setMoved, sesions } = useContext(SesionContext);
+
   const { /*marcas,*/ marcas_lineas_nn, setPermiso, setEditMarca, isEmpty, softDeleteMarca } = useContext(MarcaContext);
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LAS MARCAS SIN LINEAS: " + JSON.stringify(marcas));
 
   // 05/08/2021 - OBSERVACIÓN: No esta mostrando el SUBGRUPO en el listado, pendiente de hacer y definir -MC
-      
+
   console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
-  
+
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -40,7 +43,7 @@ const MarcaList = () => {
       showSorterTooltip: false,
       render: (lineasMarca, record) => (
         <p>
-          {lineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+          {lineasMarca.length > 0 ? lineasMarca.map(x => x.nombre).join(", ") : 'N/A'}
         </p>
       ),
       width: '30%'
@@ -77,7 +80,7 @@ const MarcaList = () => {
           record={record}
           softDelete={softDeleteMarca}
           typeTransaction={typeTransactionData}
-          setRowState={setRowState} 
+          setRowState={setRowState}
         />
       ),
       width: '5%'
@@ -103,7 +106,7 @@ const MarcaList = () => {
       showSorterTooltip: false,
       render: (lineasMarca, record) => (
         <p>
-          {lineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+          {lineasMarca.length > 0 ? lineasMarca.map(x => x.nombre).join(", ") : 'N/A'}
         </p>
       ),
       width: '30%'
@@ -130,7 +133,7 @@ const MarcaList = () => {
       showSorterTooltip: false,
       width: '35%'
     },
-   
+
   ]
 
   let { path } = useRouteMatch();
@@ -175,7 +178,7 @@ const MarcaList = () => {
 
   useEffect(() => {
     //console.log("LAS MARCAS EN LIST : " + JSON.stringify(marcas_lineas_nn))
-    
+
     setEditMarca(null);
     setPermiso(false);
 
@@ -206,12 +209,12 @@ const MarcaList = () => {
 
   return (
     <div>
-       <br />
+      <br />
       <Divider>MARCAS</Divider>
-          <br />
-      {JSON.parse(localStorage.getItem("user")).rol?
-      <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
-      :null}
+      <br />
+      {sesions ? sesions._usuario[0].rol === 2 ?
+        <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+        : null : null}
       <Search
         placeholder="Buscar Marca..."
         value={value}
@@ -223,7 +226,7 @@ const MarcaList = () => {
       {marcas_lineas_nn.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
-          columns={JSON.parse(localStorage.getItem("user")).rol===2?columns1:columns2}
+          columns={sesions ? sesions._usuario[0].rol === 2 ? columns1 : columns2 : null}
           dataSource={dataSource}
           rowKey='id'
           onChange={handleChange}
@@ -231,14 +234,16 @@ const MarcaList = () => {
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
-                if (JSON.parse(localStorage.getItem("user")).rol === 2) {
-                  if (event.clientX < window.innerWidth * 0.8 && rowState) {
-                    // record["permiso"] = false;
-                    // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                if (sesions) {
+                  if (sesions._usuario[0].rol ===2) {
+                    if (event.clientX < window.innerWidth * 0.8 && rowState) {
+                      // record["permiso"] = false;
+                      // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                      ver(record);
+                    }
+                  } else {
                     ver(record);
                   }
-                } else {
-                  ver(record);
                 }
               },
             };

@@ -13,8 +13,11 @@ import "./productoList.css";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import Checkbox from "antd/lib/checkbox/Checkbox";
 import QueryButton from "./queryButton";
+import { SesionContext } from "../../../contexts/sesionContext";
 
 const ProductoList = () => {
+  var { setMoved, sesions } = useContext(SesionContext);
+
   const {
     productos,
     setPermiso,
@@ -49,203 +52,203 @@ const ProductoList = () => {
     setEditProducto(null);
     console.log("LOS PRODUCTOS", productos);
     setPermiso(false);
-    if (!value && !filtro ) {
+    if (!value && !filtro) {
       setDataSource(productos);
     }
   });
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const columns =
-    JSON.parse(localStorage.getItem("user")).rol === 2
-      ? [
-          {
-            title: "CÓDIGO",
-            dataIndex: "codigo_interno",
-            key: "codigo_interno",
-            sorter: {
-              compare: (a, b) =>
-                a.codigo_interno.localeCompare(b.codigo_interno),
-            },
-            showSorterTooltip: false,
-            width: '10%'
+    sesions ? sesions._usuario[0].rol === 2
+      && [
+        {
+          title: "CÓDIGO",
+          dataIndex: "codigo_interno",
+          key: "codigo_interno",
+          sorter: {
+            compare: (a, b) =>
+              a.codigo_interno.localeCompare(b.codigo_interno),
           },
-          {
-            title: "NOMBRE",
-            dataIndex: "nombre",
-            key: "nombre",
-            sorter: {
-              compare: (a, b) => a.nombre.localeCompare(b.nombre),
-            },
-            showSorterTooltip: false,
-            width: '35%'
+          showSorterTooltip: false,
+          width: '10%'
+        },
+        {
+          title: "NOMBRE",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
+          showSorterTooltip: false,
+          width: '35%'
 
-            // render:(text)=><Link to='/inicio'>{text}</Link>
+          // render:(text)=><Link to='/inicio'>{text}</Link>
+        },
+        {
+          title: "TIPO DE INVENTARIO",
+          dataIndex: "tipo_inventario",
+          key: "tipo_inventario",
+          align: 'center',
+          sorter: {
+            compare: (a, b) =>
+              a.tipo_inventario.localeCompare(b.tipo_inventario),
           },
-          {
-            title: "TIPO DE INVENTARIO",
-            dataIndex: "tipo_inventario",
-            key: "tipo_inventario",
-            align:'center',
-            sorter: {
-              compare: (a, b) =>
-                a.tipo_inventario.localeCompare(b.tipo_inventario),
-            },
-            filters: [
-              { text: "PERMANENTE", value: "PERMANENTE" },
-              { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
-            ],
-            filteredValue: filteredInfo.tipo_inventario || null,
-            onFilter: (value, record) => record.tipo_inventario.includes(value),
-            ellipsis: true,
-            showSorterTooltip: false,
-            render: (text, record) =>
-              record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
-                <p style={{ color: "blue" }}>
-                  {" "}
-                  <SmileOutlined /> {text}
-                </p>
-              ) : (
-                <p style={{ color: "black" }}>{text}</p>
-              ),
-          },
-          {
-            title: "PRECIO",
-            dataIndex: "precio",
-            key: "precio",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align:'center',
-            showSorterTooltip: false,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {"$" + text}
+          filters: [
+            { text: "PERMANENTE", value: "PERMANENTE" },
+            { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
+          ],
+          filteredValue: filteredInfo.tipo_inventario || null,
+          onFilter: (value, record) => record.tipo_inventario.includes(value),
+          ellipsis: true,
+          showSorterTooltip: false,
+          render: (text, record) =>
+            record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
+              <p style={{ color: "blue" }}>
+                {" "}
+                <SmileOutlined /> {text}
               </p>
+            ) : (
+              <p style={{ color: "black" }}>{text}</p>
             ),
+        },
+        {
+          title: "PRECIO",
+          dataIndex: "precio",
+          key: "precio",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
           },
+          align: 'center',
+          showSorterTooltip: false,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {"$" + text}
+            </p>
+          ),
+        },
 
-          {
-            title: "STOCK GENERAL",
-            dataIndex: "",
-            key: "y",
-            render: (_, record) => (
-              <QueryButton
-                record={record}
-                setClick={setClick}
-              />
-            ),
-            align:'center',
-            width: '15%'
-          },
-          {
-            title: "ACCIONES",
-            dataIndex: "",
-            key: "x",
-            render: (_, record) => (
-              <CrudButton
-                record={record}
-                softDelete={softDeleteProducto}
-                setRowState={setRowState}
-              />
-            ),
-            width: '10%'
+        {
+          title: "STOCK GENERAL",
+          dataIndex: "",
+          key: "y",
+          render: (_, record) => (
+            <QueryButton
+              record={record}
+              setClick={setClick}
+            />
+          ),
+          align: 'center',
+          width: '15%'
+        },
+        {
+          title: "ACCIONES",
+          dataIndex: "",
+          key: "x",
+          render: (_, record) => (
+            <CrudButton
+              record={record}
+              softDelete={softDeleteProducto}
+              setRowState={setRowState}
+            />
+          ),
+          width: '10%'
 
-          },
+        },
 
-        ]
+      ]
       : [
-          {
-            title: "CÓDIGO",
-            dataIndex: "codigo_interno",
-            key: "codigo_interno",
-            sorter: {
-              compare: (a, b) =>
-                a.codigo_interno.localeCompare(b.codigo_interno),
-            },
-            showSorterTooltip: false,
-            width: '10%'
+        {
+          title: "CÓDIGO",
+          dataIndex: "codigo_interno",
+          key: "codigo_interno",
+          sorter: {
+            compare: (a, b) =>
+              a.codigo_interno.localeCompare(b.codigo_interno),
+          },
+          showSorterTooltip: false,
+          width: '10%'
 
+        },
+        {
+          title: "NOMBRE",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
-          {
-            title: "NOMBRE",
-            dataIndex: "nombre",
-            key: "nombre",
-            sorter: {
-              compare: (a, b) => a.nombre.localeCompare(b.nombre),
-            },
-            showSorterTooltip: false,
-            width: '35%'
+          showSorterTooltip: false,
+          width: '35%'
 
-            // render:(text)=><Link to='/inicio'>{text}</Link>
+          // render:(text)=><Link to='/inicio'>{text}</Link>
+        },
+        {
+          title: "TIPO DE INVENTARIO",
+          dataIndex: "tipo_inventario",
+          key: "tipo_inventario",
+          sorter: {
+            compare: (a, b) =>
+              a.tipo_inventario.localeCompare(b.tipo_inventario),
           },
-          {
-            title: "TIPO DE INVENTARIO",
-            dataIndex: "tipo_inventario",
-            key: "tipo_inventario",
-            sorter: {
-              compare: (a, b) =>
-                a.tipo_inventario.localeCompare(b.tipo_inventario),
-            },
-            filters: [
-              { text: "PERMANENTE", value: "PERMANENTE" },
-              { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
-            ],
-            filteredValue: filteredInfo.tipo_inventario || null,
-            onFilter: (value, record) => record.tipo_inventario.includes(value),
-            ellipsis: true,
-            align:'center',
-            showSorterTooltip: false,
-            render: (text, record) =>
-              record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
-                <p style={{ color: "blue" }}>
-                  {" "}
-                  <SmileOutlined /> {text}
-                </p>
-              ) : (
-                <p style={{ color: "black" }}>{text}</p>
-              ),
-          },
-          {
-            title: "PRECIO",
-            dataIndex: "precio",
-            key: "precio",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align:'center',
-            showSorterTooltip: false,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {"$" + text}
+          filters: [
+            { text: "PERMANENTE", value: "PERMANENTE" },
+            { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
+          ],
+          filteredValue: filteredInfo.tipo_inventario || null,
+          onFilter: (value, record) => record.tipo_inventario.includes(value),
+          ellipsis: true,
+          align: 'center',
+          showSorterTooltip: false,
+          render: (text, record) =>
+            record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
+              <p style={{ color: "blue" }}>
+                {" "}
+                <SmileOutlined /> {text}
               </p>
+            ) : (
+              <p style={{ color: "black" }}>{text}</p>
             ),
+        },
+        {
+          title: "PRECIO",
+          dataIndex: "precio",
+          key: "precio",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
           },
+          align: 'center',
+          showSorterTooltip: false,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {"$" + text}
+            </p>
+          ),
+        },
 
-          
-          {
-            title: "STOCK GENERAL",
-            dataIndex: "",
-            key: "y",
-            render: (_, record) => (
-              <QueryButton
-                record={record}
-                setClick={setClick}
-              />
-            ),
-            align : 'center',
-            width: '15%'
-          }
-        ];
+
+        {
+          title: "STOCK GENERAL",
+          dataIndex: "",
+          key: "y",
+          render: (_, record) => (
+            <QueryButton
+              record={record}
+              setClick={setClick}
+            />
+          ),
+          align: 'center',
+          width: '15%'
+        }
+      ];
 
   let history = useHistory();
 
@@ -300,13 +303,13 @@ const ProductoList = () => {
     setDataSource(filteredData);
   };
 
-  const filtroGlobal =  (e) => {
-    if (e.target.checked){
+  const filtroGlobal = (e) => {
+    if (e.target.checked) {
       filterProductos("all");
       setSelectedLineaId(null)
       setSelectedMarcaId(null)
       setSelectedGrupoId(null)
-    }else{
+    } else {
       console.log("AQUI!!!!")
       setSelectedLineaId("60d4c046e600f1b5e85d075c")
       filterProductos("60d4c046e600f1b5e85d075c");
@@ -324,10 +327,10 @@ const ProductoList = () => {
     <div>
       <br />
       <Divider>PRODUCTOS</Divider>
-          <br />
+      <br />
       <Row>
         <Col span={3}>
-          {JSON.parse(localStorage.getItem("user")).rol === 2 && (
+          {sesions ? sesions._usuario[0].rol === 2 ?
             <Button
               type="primary"
               className="success"
@@ -336,7 +339,8 @@ const ProductoList = () => {
             >
               Nuevo
             </Button>
-          )}
+            : null : null
+          }
         </Col>
         <Col span={4}>
           <Search
@@ -388,8 +392,8 @@ const ProductoList = () => {
         </Col>
         <Col span={2}>
 
-              
-        <Checkbox onChange={(e)=>filtroGlobal(e)  } checked={filterAll}>Todos</Checkbox>
+
+          <Checkbox onChange={(e) => filtroGlobal(e)} checked={filterAll}>Todos</Checkbox>
         </Col>
 
       </Row>
@@ -407,16 +411,17 @@ const ProductoList = () => {
             return {
               onClick: (event) => {
                 console.log(event);
+                if (sesions) {
+                  if (sesions._usuario[0].rol ===2) {
+                    if (event.clientX < window.innerWidth * click && rowState) {
+                      // record["permiso"] = false;
+                      // history.push(`${path}/${record.codigo_interno}/ver`, record);
 
-                if (JSON.parse(localStorage.getItem("user")).rol === 2) {
-                  if (event.clientX < window.innerWidth * click && rowState) {
-                    // record["permiso"] = false;
-                    // history.push(`${path}/${record.codigo_interno}/ver`, record);
-
+                      ver(record);
+                    }
+                  } else {
                     ver(record);
                   }
-                } else {
-                  ver(record);
                 }
               },
             };

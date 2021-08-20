@@ -7,9 +7,11 @@ import { GrupoContext } from "../../../contexts/grupoContext";
 // import { LineaService } from "../../../services/lineaService";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./grupoForm.css";
+import { SesionContext } from "../../../contexts/sesionContext";
 const { TextArea } = Input;
 
 const FormGrupo = (props) => {
+  var {setMoved,sesions} =  useContext(SesionContext);
 
   const { createGrupo, updateGrupo, findGrupo, editGrupo } = useContext(GrupoContext);
 
@@ -184,8 +186,8 @@ const FormGrupo = (props) => {
     }
 
   };
-
-  if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
+if(sesions){
+  if (sesions._usuario[0].rol ===2|| operacion === "ver") {
     return (
       editGrupo || codigo === "nuevo" ?
         <>
@@ -379,6 +381,7 @@ const FormGrupo = (props) => {
   } else {
     return <Redirect to="/home" />;
   }
+}
 };
 
 const GrupoForm = () => {

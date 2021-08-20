@@ -41,6 +41,7 @@ import { ProductoProductoTipoService } from "../../../services/productoProductoT
 import { ProductoTipoService } from "../../../services/productoTipoService";
 import { Typography } from "antd";
 import { ProductoService } from "../../../services/productoService";
+import { SesionContext } from "../../../contexts/sesionContext";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -48,6 +49,8 @@ const { Panel } = Collapse;
 const { Option } = Select;
 
 const FormProducto = (props) => {
+  var {setMoved,sesions} =  useContext(SesionContext);
+
   let formHasChanges = false;
   // console.log(props);
   // const location = useLocation();
@@ -681,8 +684,9 @@ function cancelConfirm() {
       // };
 
 //---------------------------------------------
-  if (
-    JSON.parse(localStorage.getItem("user")).rol === 2 ||
+if(sesions) {
+if (
+  sesions._usuario[0].rol ===2 ||
     operacion === "ver"
   ) {
     return editProducto || codigo === "nuevo" ? (
@@ -3263,6 +3267,7 @@ function cancelConfirm() {
   } else {
     return <Redirect to="/home" />;
   }
+}
 };
 
 const ProductoForm = () => {

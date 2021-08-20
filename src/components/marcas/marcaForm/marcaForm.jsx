@@ -6,9 +6,11 @@ import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design
 import { MarcaContext } from "../../../contexts/marcaContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./marcaForm.css";
+import { SesionContext } from "../../../contexts/sesionContext";
 const { TextArea } = Input;
 
 const FormMarca = (props) => {
+  var {setMoved,sesions} =  useContext(SesionContext);
 
   const { createMarca, updateMarca, findMarca, editMarca } = useContext(MarcaContext);
   // let { path } = useRouteMatch();
@@ -184,8 +186,8 @@ const FormMarca = (props) => {
     // console.log("ONCHANGE", form.getFieldsValue());
     formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
   };
-
-  if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
+if(sesions){
+  if (sesions._usuario[0].rol ===2 || operacion === "ver") {
     return (
       editMarca || codigo === "nuevo" ?
         <>
@@ -310,6 +312,7 @@ const FormMarca = (props) => {
   } else {
     return <Redirect to="/home" />;
   }
+}
 };
 
 const MarcaForm = () => {

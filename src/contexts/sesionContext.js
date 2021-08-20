@@ -29,7 +29,7 @@ const SesionContextProvider = (props) => {
       let data = await usuario(tok);
 
       
-      //console.log("prueba data "+JSON.stringify(sesions));
+      console.log("prueba data "+JSON.stringify(sesions));
       //console.log("Entra en effect service1 " + JSON.stringify(sesions));
 
       if (!sesions) {
