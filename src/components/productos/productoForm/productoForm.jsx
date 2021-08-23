@@ -180,7 +180,7 @@ const FormProducto = (props) => {
 
     if (!stock && editProducto) {
       new ProductoService()
-        .getStock(editProducto.codigo_interno)
+        .getStock(editProducto.codigo_temporal)
         .then((data) => setStock(data));
     }
 
@@ -364,7 +364,7 @@ const FormProducto = (props) => {
         const marca = await marcaService.getOne(changedValues[formFieldName]);
         form.setFieldsValue({
           codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 3) + "-" + marca.pseudo,
+            form.getFieldValue("codigo_interno").substring(0, 3) + "-" + marca.codigo,
         });
       // }
 
@@ -404,7 +404,7 @@ const FormProducto = (props) => {
       const linea = await lineaService.getOne(changedValues[formFieldName]);
       // if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
       //   console.log("si entra!!!!!")
-      form.setFieldsValue({ codigo_interno: linea.pseudo });
+      form.setFieldsValue({ codigo_interno: linea.codigo });
       form.setFieldsValue({ nombre: undefined });
 
       // if (
@@ -412,7 +412,7 @@ const FormProducto = (props) => {
       //   changedValues[formFieldName] === "60faeee1a412169c92c778c2"
       // ) {
       // } else {
-      //   form.setFieldsValue({ nombre: linea.pseudo });
+      //   form.setFieldsValue({ nombre: linea.codigo });
       // }
 
       if (changedValues[formFieldName] === "60d4c0476e8514b5e8c66fd5") {
@@ -476,7 +476,7 @@ const FormProducto = (props) => {
       form.setFieldsValue({
         codigo_interno:
           form.getFieldValue("codigo_interno").substring(0, 6) +
-          productoTipo.pseudo +
+          productoTipo.codigo +
           "-" +
           f_secuencial,
       });
@@ -570,7 +570,7 @@ const FormProducto = (props) => {
       // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
         form.setFieldsValue({
           codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 7) + "-" + grupo.pseudo,
+            form.getFieldValue("codigo_interno").substring(0, 7) + "-" + grupo.codigo,
         });
       // } else if (
       //   selectedLineaId === "60d4c04b894c18b5e810e025" ||
@@ -578,12 +578,12 @@ const FormProducto = (props) => {
       // ) {
       //   form.setFieldsValue({
       //     codigo_interno:
-      //       form.getFieldValue("codigo_interno").substring(0, 4) + grupo.pseudo,
+      //       form.getFieldValue("codigo_interno").substring(0, 4) + grupo.codigo,
       //   });
       // } else {
       //   form.setFieldsValue({
       //     codigo_interno:
-      //       form.getFieldValue("codigo_interno").substring(0, 2) + grupo.pseudo,
+      //       form.getFieldValue("codigo_interno").substring(0, 2) + grupo.codigo,
       //   });
       // }
 
@@ -593,7 +593,7 @@ const FormProducto = (props) => {
       // ) {
       //   form.setFieldsValue({
       //     nombre:
-      //       form.getFieldValue("nombre").split(" ")[0] + " " + grupo.pseudo,
+      //       form.getFieldValue("nombre").split(" ")[0] + " " + grupo.codigo,
       //   });
       // } else {
       //   form.setFieldsValue({
@@ -612,8 +612,8 @@ const FormProducto = (props) => {
     //   const linea = await lineaService.getOne(changedValues[formFieldName]);
     //   // if(form.getFieldValue("fk_linea_id") === "60d4c046e600f1b5e85d075c" ){
     //   //   console.log("si entra!!!!!")
-    //   form.setFieldsValue({ codigo_interno: linea.pseudo });
-    //   form.setFieldsValue({ nombre: linea.pseudo });
+    //   form.setFieldsValue({ codigo_interno: linea.codigo });
+    //   form.setFieldsValue({ nombre: linea.codigo });
 
     //   // }else{
     //   //   form.setFieldsValue({ codigo_interno: ""})
