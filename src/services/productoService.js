@@ -74,6 +74,8 @@ export class ProductoService {
     }
 
     getStock(id){
+
+      
         return axios.get("https://api.contifico.com/sistema/api/v1/producto/?codigo=" +id, {
             headers: { 
               Authorization: REACT_APP_CONTIFICO_KEY

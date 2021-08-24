@@ -13,7 +13,7 @@ const QueryButton = (props) => {
 
     return (
         stock === "CONSULTAR" && !isLoading  ?
-        <Button icon={<SearchOutlined />} onClick={() => {  setIsLoading(true); new ProductoService().getStock(props.record.codigo_temporal).then(data => {setStock(data); setIsLoading(false)}) }}>
+        <Button icon={<SearchOutlined />} onClick={() => {  setIsLoading(true); new ProductoService().getStock(props.record.codigo_temporal ? props.record.codigo_temporal : 'N/A').then(data => {setStock(data); setIsLoading(false)}) }}>
             {stock}
         </Button> : isLoading ?  <Spin indicator={antIcon} /> : <p>{stock}</p>
     )

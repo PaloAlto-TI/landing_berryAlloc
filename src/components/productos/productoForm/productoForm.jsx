@@ -179,7 +179,7 @@ const FormProducto = (props) => {
   //   }
   // }, [infoTecnicaLinea]);
 
-  useEffect(() => {
+  useEffect(async() => {
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
@@ -198,6 +198,9 @@ const FormProducto = (props) => {
         setSelectedGrupoId(editProducto.fk_grupo_id);
         setUnidadMedida(editProducto.fk_unidad_medida_id);
         setId(editProducto.id);
+        const grupoService = new GrupoService();
+        const grupo = await grupoService.getOne(editProducto.fk_grupo_id);
+        setSelectedGrupoName(grupo.nombre);
       }
 
       if (!crud && editProducto.atributos_js) {
@@ -559,7 +562,7 @@ const FormProducto = (props) => {
       if (form.getFieldValue("modelo")===''){
         form.setFieldsValue({modelo: null})
       }
-
+      
         form.setFieldsValue({ nombre: selectedGrupoName + " " + (form.getFieldValue("modelo") === null ? '' : form.getFieldValue("modelo")) });
       
 
@@ -828,7 +831,7 @@ const FormProducto = (props) => {
                     {crud ? (
                       !newModelo ? (
                         <Space>
-                          <Form.Item name={crud ? "modelo" : "color"} >
+                          <Form.Item name={crud ? "modelo" : "modelo"} >
                             <SelectOpciones
                               tipo="color"
                               filter={selectedGrupoId}
@@ -848,8 +851,8 @@ const FormProducto = (props) => {
                         </Space>
                       ) : (
                         <Space>
-                          <Form.Item name={crud ? "modelo" : "color"}>
-                            <Input placeholder="Ingrese el modelo nuevo" />
+                          <Form.Item name={crud ? "modelo" : "modelo"}>
+                            <Input placeholder="Ingrese el modelo" />
                           </Form.Item>
                           <Form.Item>
 
@@ -863,7 +866,10 @@ const FormProducto = (props) => {
                         </Space>
                       )
                     ) : (
+                      <Form.Item name={crud ? "modelo" : "modelo"} >
                       <Input className="input-type" readOnly={!crud} />
+                      </Form.Item>
+                    
                     )}
                   </Form.Item>
                 </Col>
@@ -919,7 +925,7 @@ const FormProducto = (props) => {
                     )}
                   </Form.Item>
 
-                  {selectedLineaId === "60faeee1a412169c92c778c2" ? (
+                  {/* {selectedLineaId === "60faeee1a412169c92c778c2" ? (
                     <Form.Item
                       label="Tipo"
                       name={"fk_productotipo_id"}
@@ -944,7 +950,7 @@ const FormProducto = (props) => {
                         <Input className="input-type" readOnly={!crud} />
                       )}
                     </Form.Item>
-                  ) : null}
+                  ) : null} */}
 
                   <Form.Item
                     label="Código Interno"

@@ -35,7 +35,7 @@ const ProductoContextProvider = (props) => {
 
     console.log("err:", data);
     if (data.message === "OK CREATE") {
-      productoService.getAllProductos().then((data) => setProductos(data));
+      productoService.getProductos({ linea_id : producto.fk_linea_id}).then((data) => setProductos(data));
       // setProductos([...productos, data.data]);
     }
 
