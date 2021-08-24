@@ -291,10 +291,9 @@ const ProductoList = () => {
   const filtrarG = (e) => {
     setFiltro(e);
 
-   
     const filteredData = productos.filter(
       (entry) =>
-        entry.fk_grupo_id === e.value && entry.fk_marca_id === selectedMarcaId
+        entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId
     );
 
     console.log("FILTRADOS X GRUPO", filteredData);

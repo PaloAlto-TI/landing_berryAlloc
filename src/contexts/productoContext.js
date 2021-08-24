@@ -53,6 +53,12 @@ const ProductoContextProvider = (props) => {
 
   };
 
+  const getSerialModelo = async (id) => {
+    const data = await productoService.getSerialModelo(id);
+
+    return data[0].serial;
+  }
+
   const findProducto = (id) => {
 
 
@@ -91,7 +97,8 @@ const ProductoContextProvider = (props) => {
         setPermiso,
         setEditProducto,
         isEmpty,
-        filterProductos
+        filterProductos, 
+        getSerialModelo
       }}
     >
       {props.children}

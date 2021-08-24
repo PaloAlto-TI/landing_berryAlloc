@@ -10,6 +10,23 @@ export class ProductoService {
             },
           }).then(res => res.data.data);
     }
+    
+    getModelos(){
+      return axios.get(baseUrl+"modelos", {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+      }).then(res => res.data.data);
+    }
+
+
+    getSerialModelo(id){
+      return axios.get(baseUrl+"codigo-modelo/"+id, {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+      }).then(res => res.data.data);
+    }
 
     getProductos(id){
 

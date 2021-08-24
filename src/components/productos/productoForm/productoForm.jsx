@@ -19,10 +19,13 @@ import {
   CheckCircleFilled,
   CloseCircleFilled,
   CloseSquareOutlined,
+  EditOutlined,
   LoadingOutlined,
+  PlusOutlined,
   PushpinFilled,
   RollbackOutlined,
   SaveOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { ColorService } from "../../../services/colorService";
 import { GrupoService } from "../../../services/grupoService";
@@ -55,7 +58,7 @@ const FormProducto = (props) => {
 
   console.log("path", path);
   // console.log(props);
-  const { createProducto, updateProducto, findProducto, editProducto } =
+  const { createProducto, updateProducto, findProducto, editProducto, getSerialModelo } =
     useContext(ProductoContext);
 
   let history = useHistory();
@@ -67,6 +70,9 @@ const FormProducto = (props) => {
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [selectedGrupoId, setSelectedGrupoId] = useState(undefined);
+  const [selectedGrupoName, setSelectedGrupoName] = useState(undefined);
+  const [selectedModeloCodigo, setSelectedModeloCodigo] = useState(undefined);
+  const [newModelo, setNewModelo] = useState(false);
   const [stock, setStock] = useState(null);
   const [tipoInventario, setTipoInventario] = useState(undefined);
   const [tipoProducto, setTipoProducto] = useState(undefined);
@@ -75,8 +81,8 @@ const FormProducto = (props) => {
   const [usoCesped, setUsoCesped] = useState(undefined);
   const [rangoAlturaHebra, setRangoAlturaHebra] = useState(undefined);
   const [metodoABC, setMetodoABC] = useState(undefined);
-  const [nombre, setNombre] = useState(undefined)
-  const [nombreEdit, setNombreEdit] = useState(false)
+  const [nombre, setNombre] = useState(undefined);
+  const [nombreEdit, setNombreEdit] = useState(false);
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
   );
@@ -279,16 +285,14 @@ const FormProducto = (props) => {
     let data = null;
 
     delete values.permiso;
-    // if (values["fk_color_id"]){
+    // if (values["modelo"]){
 
-    if (values.medidas){
-
+    if (values.medidas) {
       values.nombre = values.nombre + " " + values.medidas;
 
       delete values.medidas;
-
     }
-    //   values["fk_color_id"] = JSON.parse(values["fk_color_id"]).id;
+    //   values["modelo"] = JSON.parse(values["modelo"]).id;
     // }
     values["precio"] = parseFloat(values["precio"]).toFixed(2);
     values["costo"] = parseFloat(values["costo"]).toFixed(2);
@@ -316,11 +320,12 @@ const FormProducto = (props) => {
     console.log("Failed:", errorInfo);
     message.warning("Error al guardar producto...");
   };
-//--------------------------------------------------------------------------------
+  //--------------------------------------------------------------------------------
   const handleFormValuesChange = async (changedValues) => {
-      formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
-    
-       // const formFieldName = Object.keys(changedValues)[0];
+    formHasChanges =
+      operacion === "editar" || codigo === "nuevo" ? true : false;
+
+    // const formFieldName = Object.keys(changedValues)[0];
     console.log("COLOR", form.getFieldsValue());
 
     console.log("FORMULARIO", form.getFieldsValue());
@@ -343,15 +348,19 @@ const FormProducto = (props) => {
       setUnidadMedida(changedValues[formFieldName]);
     }
 
-    if (formFieldName === "fk_productotipo_id"){
-      console.log("tipo!!!", form.getFieldValue("fk_productotipo_id").label)
+    if (formFieldName === "fk_productotipo_id") {
+      console.log("tipo!!!", form.getFieldValue("fk_productotipo_id").label);
       console.log("nombre!!!!", form.getFieldValue("nombre"));
-      setNombre(form.getFieldValue("nombre").substring(0, form.getFieldValue("nombre").lastIndexOf(" ") )+ " "+ form.getFieldValue("fk_productotipo_id").label);
-      setNombreEdit(true)
-
+      setNombre(
+        form
+          .getFieldValue("nombre")
+          .substring(0, form.getFieldValue("nombre").lastIndexOf(" ")) +
+          " " +
+          form.getFieldValue("fk_productotipo_id").label
+      );
+      setNombreEdit(true);
     }
 
- 
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
       setSelectedGrupoId(null);
@@ -359,16 +368,18 @@ const FormProducto = (props) => {
       //   selectedLineaId === "60d4c04b894c18b5e810e025" ||
       //   selectedLineaId === "60faeee1a412169c92c778c2"
       // ) {
-        form.setFieldsValue({ nombre: undefined });
-        const marcaService = new MarcaService();
-        const marca = await marcaService.getOne(changedValues[formFieldName]);
-        form.setFieldsValue({
-          codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 3) + "-" + marca.codigo,
-        });
+      form.setFieldsValue({ nombre: undefined });
+      const marcaService = new MarcaService();
+      const marca = await marcaService.getOne(changedValues[formFieldName]);
+      form.setFieldsValue({
+        codigo_interno:
+          form.getFieldValue("codigo_interno").substring(0, 3) +
+          "-" +
+          marca.codigo,
+      });
       // }
 
-      form.setFieldsValue({ fk_color_id: undefined });
+      form.setFieldsValue({ modelo: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
       form.setFieldsValue({ fk_proveedor_id: undefined });
       // form.setFieldsValue({ atributos_js: {"general": atributosJs , "especifico": {}} });
@@ -392,7 +403,7 @@ const FormProducto = (props) => {
       setSelectedLineaId(changedValues[formFieldName]);
       setSelectedMarcaId(null);
       setSelectedGrupoId(null);
-      form.setFieldsValue({ fk_color_id: undefined });
+      form.setFieldsValue({ modelo: undefined });
       form.setFieldsValue({ nombre: undefined });
       form.setFieldsValue({ fk_grupo_id: undefined });
       form.setFieldsValue({ fk_marca_id: undefined });
@@ -439,10 +450,10 @@ const FormProducto = (props) => {
 
     // }
 
-    // if (formFieldName === "fk_color_id") {
+    // if (formFieldName === "modelo") {
 
-    //   form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("-")[0]+"-"+JSON.parse(form.getFieldValue("fk_color_id").value).codigo})
-    //   form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+ " "+form.getFieldValue("nombre").split(" ")[1]+ " "+ form.getFieldValue("fk_color_id").label })
+    //   form.setFieldsValue({ codigo_interno: form.getFieldValue("codigo_interno").split("-")[0]+"-"+JSON.parse(form.getFieldValue("modelo").value).codigo})
+    //   form.setFieldsValue({ nombre: form.getFieldValue("nombre").split(" ")[0]+ " "+form.getFieldValue("nombre").split(" ")[1]+ " "+ form.getFieldValue("modelo").label })
 
     // }
 
@@ -457,11 +468,11 @@ const FormProducto = (props) => {
       const productoProductoTipoService = new ProductoProductoTipoService();
       const productoTipoService = new ProductoTipoService();
       const serial = await productoProductoTipoService.getSecuencia(
-        form.getFieldValue("fk_productotipo_id").value
+        form.getFieldValue("fk_productotipo_id")
       );
 
       const productoTipo = await productoTipoService.getOne(
-        form.getFieldValue("fk_productotipo_id").value
+        form.getFieldValue("fk_productotipo_id")
       );
 
       console.log("PRODUCTOTIPO", productoTipo);
@@ -487,7 +498,10 @@ const FormProducto = (props) => {
         index = form.getFieldValue("nombre").lastIndexOf(" DE");
       }
 
-      if (formFieldName === "fk_productotipo_id" && form.getFieldValue("fk_productotipo_id").label === "MADERA") {
+      if (
+        formFieldName === "fk_productotipo_id" &&
+        form.getFieldValue("fk_productotipo_id").label === "MADERA"
+      ) {
         form.setFieldsValue({
           nombre: form.getFieldValue("nombre").substring(0, index) + " ",
         });
@@ -496,17 +510,17 @@ const FormProducto = (props) => {
           nombre:
             form.getFieldValue("nombre").substring(0, index) +
             " " +
-            form.getFieldValue("fk_productotipo_id").label ,
+            form.getFieldValue("fk_productotipo_id").label,
         });
       }
     }
 
-    if (formFieldName === "fk_color_id") {
-      const colorService = new ColorService();
-      const color2 = await colorService.getOne(
-        form.getFieldValue("fk_color_id")
-      );
-
+    if (formFieldName === "modelo") {
+      // const colorService = new ColorService();
+      // const color2 = await colorService.getOne(
+      //   form.getFieldValue("modelo")
+      // );
+      
       // if (selectedLineaId !== "60d4c04b894c18b5e810e025") {
       //   if (selectedLineaId === "60faeee1a412169c92c778c2") {
       //     form.setFieldsValue({
@@ -534,19 +548,27 @@ const FormProducto = (props) => {
       //     });
       //   }
       // } else {
-        form.setFieldsValue({
-          codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 11) + "-" + color2.codigo,
-        });
+      // form.setFieldsValue({
+      //   codigo_interno:
+      //     form.getFieldValue("codigo_interno").substring(0, 11) +
+      //     "-" +
+      //     color2.codigo,
+      // });
+      console.log("MODELO!:", form.getFieldValue("modelo"))
 
-        form.setFieldsValue({ nombre:  form.getFieldValue("fk_grupo_id").label +  " " + color2.nombre });
+      if (form.getFieldValue("modelo")===''){
+        form.setFieldsValue({modelo: null})
+      }
 
-    //     form.setFieldsValue({
-    //       nombre:
-    //         form.getFieldValue("nombre").split(" ")[0] + " " + color2.nombre,
-    //     });
-    //   }
-     }
+        form.setFieldsValue({ nombre: selectedGrupoName + " " + (form.getFieldValue("modelo") === null ? '' : form.getFieldValue("modelo")) });
+      
+
+      //     form.setFieldsValue({
+      //       nombre:
+      //         form.getFieldValue("nombre").split(" ")[0] + " " + color2.nombre,
+      //     });
+      //   }
+    }
 
     if (formFieldName === "fk_grupo_id") {
       if (form.getFieldValue("fk_grupo_id") === "60d617738d422eca134f6685") {
@@ -559,19 +581,22 @@ const FormProducto = (props) => {
       }
 
       setinfoTecnicaGrupo(form.getFieldValue("fk_grupo_id"));
-      form.setFieldsValue({ fk_color_id: undefined });
+      form.setFieldsValue({ modelo: undefined });
 
-      setSelectedGrupoId(changedValues[formFieldName].value);
+      console.log("grupo", changedValues[formFieldName]);
+      setSelectedGrupoId(changedValues[formFieldName]);
       // form.setFieldsValue({ color: undefined });
       const grupoService = new GrupoService();
-      const grupo = await grupoService.getOne(changedValues[formFieldName].value);
+      const grupo = await grupoService.getOne(changedValues[formFieldName]);
       // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
-
+      const serial = await getSerialModelo(changedValues[formFieldName]);
       // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
-        form.setFieldsValue({
-          codigo_interno:
-            form.getFieldValue("codigo_interno").substring(0, 7) + "-" + grupo.codigo,
-        });
+      form.setFieldsValue({
+        codigo_interno:
+          form.getFieldValue("codigo_interno").substring(0, 7) +
+          "-" +
+          grupo.codigo + "-" +serial,
+      });
       // } else if (
       //   selectedLineaId === "60d4c04b894c18b5e810e025" ||
       //   selectedLineaId === "60faeee1a412169c92c778c2"
@@ -602,9 +627,8 @@ const FormProducto = (props) => {
       // }
 
       // }
-
-      form.setFieldsValue({ nombre: form.getFieldValue("fk_grupo_id").label });
-
+      setSelectedGrupoName(grupo.nombre);
+      form.setFieldsValue({ nombre: grupo.nombre });
     }
 
     // if (formFieldName === "fk_linea_id") {
@@ -621,7 +645,7 @@ const FormProducto = (props) => {
     //   // }
     // }
   };
-//----------------------------------------------------------------------------------------------------
+  //----------------------------------------------------------------------------------------------------
   const onChangeTipoInventario = (e) => {
     setTipoInventario(e.target.value);
   };
@@ -651,40 +675,44 @@ const FormProducto = (props) => {
   };
 
   const plainOptions = ["INTERIOR", "EXTERIOR"];
-//-----------------------------------------------------------
+  //-----------------------------------------------------------
 
-function cancelConfirm() {
-  if (formHasChanges !== null) {
-    if (formHasChanges === true) {
-      if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
-        history.push("/home/productos");
+  function cancelConfirm() {
+    if (formHasChanges !== null) {
+      if (formHasChanges === true) {
+        if (
+          window.confirm(
+            "¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN."
+          )
+        ) {
+          history.push("/home/productos");
+        }
+      } else {
+        history.push("/home/productos/");
       }
     } else {
-      history.push("/home/productos/");
-    }
-  } else {
-    if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
-      history.push("/home/productos/");
+      if (
+        window.confirm(
+          "¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN."
+        )
+      ) {
+        history.push("/home/productos/");
+      }
     }
   }
-}
 
+  function goBackHistory() {
+    history.push("/home/productos");
+  }
+  // const handleFormValuesChange = async (changedValues) => {
+  //   // console.log("ONCHANGE", form.getFieldsValue());
 
+  //   formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
 
-      
-   
-      function goBackHistory() {
-        history.push("/home/productos")
-      }
-      // const handleFormValuesChange = async (changedValues) => {
-      //   // console.log("ONCHANGE", form.getFieldsValue());
-        
-      //   formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
-    
-      //   const formFieldName = Object.keys(changedValues)[0];
-      // };
+  //   const formFieldName = Object.keys(changedValues)[0];
+  // };
 
-//---------------------------------------------
+  //---------------------------------------------
   if (
     JSON.parse(localStorage.getItem("user")).rol === 2 ||
     operacion === "ver"
@@ -786,7 +814,6 @@ function cancelConfirm() {
 
                   <Form.Item
                     label="Modelo"
-                    name={crud ? "fk_color_id" : "color"}
                     rules={
                       crud
                         ? [
@@ -799,14 +826,42 @@ function cancelConfirm() {
                     }
                   >
                     {crud ? (
-                      <SelectOpciones
-                        tipo="color"
-                        filter={selectedGrupoId}
-                        filter2={selectedMarcaId}
-                        filter3={selectedLineaId}
-                        readOnly={!crud}
-                        setShow={setShow}
-                      />
+                      !newModelo ? (
+                        <Space>
+                          <Form.Item name={crud ? "modelo" : "color"} >
+                            <SelectOpciones
+                              tipo="color"
+                              filter={selectedGrupoId}
+                              filter2={selectedMarcaId}
+                              filter3={selectedLineaId}
+                              readOnly={!crud}
+                              setShow={setShow}
+                            />
+                          </Form.Item>
+                          <Form.Item>
+                          <Button
+                            type="primary"
+                            icon={!newModelo ? <EditOutlined/> : <SearchOutlined/>}
+                            onClick={() => setNewModelo(!newModelo)}
+                          />
+                          </Form.Item>
+                        </Space>
+                      ) : (
+                        <Space>
+                          <Form.Item name={crud ? "modelo" : "color"}>
+                            <Input placeholder="Ingrese el modelo nuevo" />
+                          </Form.Item>
+                          <Form.Item>
+
+                          <Button
+                            type="primary"
+                            icon={!newModelo ? <PlusOutlined/> : <SearchOutlined/>}
+                            onClick={() => setNewModelo(!newModelo)}
+                          />
+                          </Form.Item>
+
+                        </Space>
+                      )
                     ) : (
                       <Input className="input-type" readOnly={!crud} />
                     )}
@@ -921,10 +976,11 @@ function cancelConfirm() {
                         : []
                     }
                   >
-              
-                    <Input name="nombre" className="input-type" readOnly={true} />
-         
-               
+                    <Input
+                      name="nombre"
+                      className="input-type"
+                      readOnly={true}
+                    />
                   </Form.Item>
 
                   {/* <Form.Item
@@ -950,102 +1006,76 @@ function cancelConfirm() {
                 </Col>
               </Row>
             </Panel>
-            {(selectedLineaId !== "60d4c04b894c18b5e810e025" && selectedLineaId !== "60faeee1a412169c92c778c2" &&  selectedLineaId !=="60d4c04a8e4f5ab5e8b93218"  && selectedLineaId !=="60ff0a8a5d3d71d21abba9d1") && (
-              <Panel
-                className="tecnica"
-                header="INFORMACIÓN TÉCNICA"
-                key="4"
-                extra={genExtra()}
-              >
-                <Row>
-                  <Col span={12}>
-                    <Form.Item
-                      label="Formato"
-                      name={["atributos_js", "formato"]}
-                      rules={
-                        crud
-                          ? [
-                              {
-                                required: true,
-                                message: "Por favor, seleccione el formato!",
-                              },
-                            ]
-                          : []
-                      }
-                    >
-                      {crud ? (
-                        <SelectOpciones tipo="formato" readOnly={!crud} />
-                      ) : (
-                        <Input className="input-type" readOnly={!crud} />
-                      )}
-                    </Form.Item>
-                    {infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                    infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                    infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+            {selectedLineaId !== "60d4c04b894c18b5e810e025" &&
+              selectedLineaId !== "60faeee1a412169c92c778c2" &&
+              selectedLineaId !== "60d4c04a8e4f5ab5e8b93218" &&
+              selectedLineaId !== "60ff0a8a5d3d71d21abba9d1" && (
+                <Panel
+                  className="tecnica"
+                  header="INFORMACIÓN TÉCNICA"
+                  key="4"
+                  extra={genExtra()}
+                >
+                  <Row>
+                    <Col span={12}>
                       <Form.Item
-                        label="Capa de Desgaste"
-                        name={["atributos_js", "capa_desgaste"]}
+                        label="Formato"
+                        name={["atributos_js", "formato"]}
                         rules={
                           crud
                             ? [
                                 {
                                   required: true,
-                                  message:
-                                    "Por favor, ingrese la capa de desgaste!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <Input
-                          // defaultValue={capaDesgaste}
-                          className="input-type"
-                          readOnly={true}
-                        />
-                      </Form.Item>
-                    ) : null}
-                    {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                    infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                    infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
-                      <Form.Item
-                        label="Composición"
-                        name={["atributos_js", "composicion"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione la composicion!",
+                                  message: "Por favor, seleccione el formato!",
                                 },
                               ]
                             : []
                         }
                       >
                         {crud ? (
-                          <Radio.Group disabled={!crud}>
-                            <Radio value={"HOMOGÉNEO"}>HOMOGÉNEO</Radio>
-                            <Radio value={"HETEROGÉNEO"}>HETEROGÉNEO</Radio>
-                          </Radio.Group>
+                          <SelectOpciones tipo="formato" readOnly={!crud} />
                         ) : (
                           <Input className="input-type" readOnly={!crud} />
                         )}
                       </Form.Item>
-                    ) : null}
-                    {infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                    infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                    infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
-                      <div>
+                      {infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
                         <Form.Item
-                          label="Resistencia al Agua"
-                          name={["atributos_js", "resistencia_agua"]}
+                          label="Capa de Desgaste"
+                          name={["atributos_js", "capa_desgaste"]}
                           rules={
                             crud
                               ? [
                                   {
                                     required: true,
                                     message:
-                                      "Por favor, si es resistente al agua o no!",
+                                      "Por favor, ingrese la capa de desgaste!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <Input
+                            // defaultValue={capaDesgaste}
+                            className="input-type"
+                            readOnly={true}
+                          />
+                        </Form.Item>
+                      ) : null}
+                      {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
+                        <Form.Item
+                          label="Composición"
+                          name={["atributos_js", "composicion"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la composicion!",
                                   },
                                 ]
                               : []
@@ -1053,165 +1083,371 @@ function cancelConfirm() {
                         >
                           {crud ? (
                             <Radio.Group disabled={!crud}>
-                              <Radio value={"SI"}>SI</Radio>
-                              <Radio value={"NO"}>NO</Radio>
+                              <Radio value={"HOMOGÉNEO"}>HOMOGÉNEO</Radio>
+                              <Radio value={"HETEROGÉNEO"}>HETEROGÉNEO</Radio>
                             </Radio.Group>
                           ) : (
                             <Input className="input-type" readOnly={!crud} />
                           )}
                         </Form.Item>
+                      ) : null}
+                      {infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                      infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
+                        <div>
+                          <Form.Item
+                            label="Resistencia al Agua"
+                            name={["atributos_js", "resistencia_agua"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, si es resistente al agua o no!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group disabled={!crud}>
+                                <Radio value={"SI"}>SI</Radio>
+                                <Radio value={"NO"}>NO</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Tono"
+                            name={["atributos_js", "tono"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message: "Por favor, seleccione el tono!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones tipo="tono" readOnly={!crud} />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Textura"
+                            name={["atributos_js", "textura"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione la textura!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group disabled={!crud}>
+                                <Radio value={"MADERADO"}>MADERADO</Radio>
+                                <Radio value={"NO MADERADO"}>NO MADERADO</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                        </div>
+                      ) : null}
+                      {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                      infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
+                      infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                      infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
                         <Form.Item
-                          label="Tono"
-                          name={["atributos_js", "tono"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message: "Por favor, seleccione el tono!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones tipo="tono" readOnly={!crud} />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Textura"
-                          name={["atributos_js", "textura"]}
+                          label="Clase Residencial"
+                          name={["atributos_js", "clase_residencial"]}
                           rules={
                             crud
                               ? [
                                   {
                                     required: true,
                                     message:
-                                      "Por favor, seleccione la textura!",
+                                      "Por favor, seleccione la clase residencial!",
                                   },
                                 ]
                               : []
                           }
                         >
                           {crud ? (
-                            <Radio.Group disabled={!crud}>
-                              <Radio value={"MADERADO"}>MADERADO</Radio>
-                              <Radio value={"NO MADERADO"}>NO MADERADO</Radio>
-                            </Radio.Group>
+                            <SelectOpciones
+                              tipo="clase residencial"
+                              readOnly={!crud}
+                            />
                           ) : (
                             <Input className="input-type" readOnly={!crud} />
                           )}
                         </Form.Item>
-                      </div>
-                    ) : null}
-                    {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                    infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
-                    infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                    infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                    infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
-                    infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
-                      <Form.Item
-                        label="Clase Residencial"
-                        name={["atributos_js", "clase_residencial"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione la clase residencial!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="clase residencial"
-                            readOnly={!crud}
-                          />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    ) : null}
+                      ) : null}
 
-                    {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                    infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
-                    infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
-                    infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
-                    infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                    infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                    infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                    infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
-                    infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
-                      <Form.Item
-                        label="Clase Comercial"
-                        name={["atributos_js", "clase_comercial"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione la clase comercial!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="clase comercial"
-                            readOnly={!crud}
-                          />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    ) : null}
-
-                    {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
-                      <Form.Item
-                        label="Clase Industrial"
-                        name={["atributos_js", "clase_industrial"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione la clase industrial!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="clase industrial"
-                            readOnly={!crud}
-                          />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    ) : null}
-
-                    {infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
-                      <div>
+                      {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                      infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
+                      infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
+                      infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
+                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                      infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
+                      infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
                         <Form.Item
-                          label="Largo"
-                          name={["atributos_js", "largo"]}
+                          label="Clase Comercial"
+                          name={["atributos_js", "clase_comercial"]}
                           rules={
                             crud
                               ? [
                                   {
                                     required: true,
                                     message:
-                                      "Por favor, ingrese la medida de largo!",
+                                      "Por favor, seleccione la clase comercial!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="clase comercial"
+                              readOnly={!crud}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+                      ) : null}
+
+                      {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
+                        <Form.Item
+                          label="Clase Industrial"
+                          name={["atributos_js", "clase_industrial"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la clase industrial!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="clase industrial"
+                              readOnly={!crud}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+                      ) : null}
+
+                      {infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
+                        <div>
+                          <Form.Item
+                            label="Largo"
+                            name={["atributos_js", "largo"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la medida de largo!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} mm`}
+                              parser={(value) => value.replace(" mm", "")}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="Ancho"
+                            name={["atributos_js", "ancho"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la medida de ancho!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} mm`}
+                              parser={(value) => value.replace(" mm", "")}
+                            />
+                          </Form.Item>
+                        </div>
+                      ) : null}
+
+                      {infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
+                        <div>
+                          <Form.Item
+                            label="Alimentación"
+                            name={["atributos_js", "alimentacion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el valor de la alimentación!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} V`}
+                              parser={(value) => value.replace(" V", "")}
+                            />
+                          </Form.Item>
+
+                          <Form.Item
+                            label="Longitud del Cable de Alimentación"
+                            name={[
+                              "atributos_js",
+                              "longitud_cable_alimentacion",
+                            ]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la longitud del cable de alimentación!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} m`}
+                              parser={(value) => value.replace(" m", "")}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="Potencia"
+                            name={["atributos_js", "potencia"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la potencia!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={2}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} W/m2`}
+                              parser={(value) => value.replace(" W/m2", "")}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="Presentación"
+                            name={["atributos_js", "presentacion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la presentación!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} m2`}
+                              parser={(value) => value.replace(" m2", "")}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="Corriente"
+                            name={["atributos_js", "corriente"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la corriente!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={2}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} A`}
+                              parser={(value) => value.replace(" A", "")}
+                            />
+                          </Form.Item>
+                        </div>
+                      ) : null}
+                    </Col>
+                    <Col span={12}>
+                      {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                        infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68") ||
+                      infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
+                        <Form.Item
+                          label="Espesor"
+                          name={["atributos_js", "espesor"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la medida de espesor!",
                                   },
                                 ]
                               : []
@@ -1225,90 +1461,19 @@ function cancelConfirm() {
                             parser={(value) => value.replace(" mm", "")}
                           />
                         </Form.Item>
+                      ) : null}
+                      {infoTecnicaLinea !== "60d4c04663852fb5e8ad40d7" &&
+                      infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" ? (
                         <Form.Item
-                          label="Ancho"
-                          name={["atributos_js", "ancho"]}
+                          label="Densidad"
+                          name={["atributos_js", "densidad"]}
                           rules={
                             crud
                               ? [
                                   {
                                     required: true,
-                                    message:
-                                      "Por favor, ingrese la medida de ancho!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <InputNumber
-                            min={0}
-                            precision={0}
-                            readOnly={!crud}
-                            formatter={(value) => `${value} mm`}
-                            parser={(value) => value.replace(" mm", "")}
-                          />
-                        </Form.Item>
-                      </div>
-                    ) : null}
-
-                    {infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
-                      <div>
-                        <Form.Item
-                          label="Alimentación"
-                          name={["atributos_js", "alimentacion"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el valor de la alimentación!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <InputNumber
-                            min={0}
-                            precision={0}
-                            readOnly={!crud}
-                            formatter={(value) => `${value} V`}
-                            parser={(value) => value.replace(" V", "")}
-                          />
-                        </Form.Item>
-
-                        <Form.Item
-                          label="Longitud del Cable de Alimentación"
-                          name={["atributos_js", "longitud_cable_alimentacion"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese la longitud del cable de alimentación!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <InputNumber
-                            min={0}
-                            precision={0}
-                            readOnly={!crud}
-                            formatter={(value) => `${value} m`}
-                            parser={(value) => value.replace(" m", "")}
-                          />
-                        </Form.Item>
-                        <Form.Item
-                          label="Potencia"
-                          name={["atributos_js", "potencia"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message: "Por favor, ingrese la potencia!",
+                                    message: "Por favor, ingrese la densidad!",
                                   },
                                 ]
                               : []
@@ -1318,151 +1483,486 @@ function cancelConfirm() {
                             min={0}
                             precision={2}
                             readOnly={!crud}
-                            formatter={(value) => `${value} W/m2`}
-                            parser={(value) => value.replace(" W/m2", "")}
+                            formatter={(value) => `${value} kg/m3`}
+                            parser={(value) => value.replace(" kg/m3", "")}
                           />
                         </Form.Item>
+                      ) : null}
+                      <Form.Item
+                        label={
+                          infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                          infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
+                          infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                          infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                          infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                          infoTecnicaLinea !== "60d4c04b894c18b5e810e025"
+                            ? "Garantía Residencial (años)"
+                            : "Garantía (años)"
+                        }
+                        name={["atributos_js", "garantia_residencial"]}
+                        rules={
+                          crud
+                            ? [
+                                {
+                                  required: true,
+                                  message: "Por favor, ingrese la garantía!",
+                                },
+                              ]
+                            : []
+                        }
+                      >
+                        {crud ? (
+                          <SelectOpciones
+                            tipo="garantía"
+                            readOnly={!crud}
+                            setShow={setShow}
+                          />
+                        ) : (
+                          <Input className="input-type" readOnly={!crud} />
+                        )}
+                      </Form.Item>
+
+                      {infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
+                        <div>
+                          <Form.Item
+                            label="Dimensión de la pantalla"
+                            name={["atributos_js", "dimension_pantalla"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione el tipo de hebra!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group disabled={!crud}>
+                                <Radio value={"72 X 54 MM"}>72 X 54 MM</Radio>
+                                <Radio value={"35 X 50 MM"}>35 X 50 MM</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Conexión"
+                            name={["atributos_js", "conexion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el tipo de conexión!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <Input
+                              // defaultValue="WI-FI"
+                              className="input-type"
+                              readOnly={true}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="Tipo de Sensor"
+                            name={["atributos_js", "tipo_sensor"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el tipo de sensor!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <Input
+                              // defaultValue="NTC 10K"
+                              className="input-type"
+                              readOnly={true}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="Color del Calefactor"
+                            name={["atributos_js", "color_calefactor"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione el color del calefactor!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group disabled={!crud}>
+                                <Radio value={"BLANCO"}>BLANCO</Radio>
+                                <Radio value={"NEGRO"}>NEGRO</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                        </div>
+                      ) : null}
+
+                      {infoTecnicaLinea === "60d4c0477f7255b5e8cca2b7" ? (
+                        <div>
+                          <Form.Item
+                            label="Uso"
+                            name={["atributos_js", "uso"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el/los uso(s)!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group
+                                onChange={onChangeUsoCesped}
+                                value={usoCesped}
+                                disabled={!crud}
+                              >
+                                <Radio value={"DECORATIVO"}>DECORATIVO</Radio>
+                                <Radio value={"DEPORTIVO"}>DEPORTIVO</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Aplicación"
+                            name={["atributos_js", "aplicacion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la aplicación!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Checkbox.Group options={plainOptions} />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Rango de Altura de Hebra"
+                            name={["atributos_js", "rango_altura_hebra"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione el rango de altura de la hebra!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group
+                                onChange={onChangeRangoAlturaHebra}
+                                value={rangoAlturaHebra}
+                                disabled={!crud}
+                                de
+                              >
+                                <Radio value={"5 mm - 11 mm"}>
+                                  5 mm - 11 mm
+                                </Radio>
+                                <Radio value={"18 mm - 45 mm"}>
+                                  18 mm - 45 mm
+                                </Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Altura de Hebra"
+                            name={["atributos_js", "altura_hebra"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la altura de la hebra!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} mm`}
+                              parser={(value) => value.replace(" mm", "")}
+                            />
+                          </Form.Item>{" "}
+                        </div>
+                      ) : null}
+
+                      {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                      infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
+                      infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
+                      infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
+                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                      infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
+                      infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
                         <Form.Item
-                          label="Presentación"
-                          name={["atributos_js", "presentacion"]}
+                          label="Garantía Comercial (años)"
+                          name={["atributos_js", "garantia_comercial"]}
                           rules={
                             crud
                               ? [
                                   {
                                     required: true,
                                     message:
-                                      "Por favor, ingrese la presentación!",
+                                      "Por favor, ingrese el tiempo de garantía!",
                                   },
                                 ]
                               : []
                           }
                         >
-                          <InputNumber
-                            min={0}
-                            precision={0}
-                            readOnly={!crud}
-                            formatter={(value) => `${value} m2`}
-                            parser={(value) => value.replace(" m2", "")}
-                          />
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="garantía"
+                              readOnly={!crud}
+                              setShow={setShow}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
                         </Form.Item>
+                      ) : null}
+
+                      {infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
+                        <div>
+                          <Form.Item
+                            label="Proceso de Fabricación"
+                            name={["atributos_js", "proceso_fabricacion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el proceso de fabricación!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <Input readOnly={true} defaultValue="MONOCOCCIÓN" />
+                          </Form.Item>
+                          <Form.Item
+                            label="Rectificado"
+                            name={["atributos_js", "rectificado"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione rectificado o no!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group disabled={!crud}>
+                                <Radio value={"SI"}>SI</Radio>
+                                <Radio value={"NO"}>NO</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Absorción de Agua"
+                            name={["atributos_js", "absorcion_agua"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el valor de absorción de agua!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <Input readOnly={true} defaultValue="<0.5%" />
+                          </Form.Item>
+
+                          <Form.Item
+                            label="Resistencia al Deslizamiento"
+                            name={["atributos_js", "resistencia_deslizamiento"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione la resistencia al deslizamiento!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones
+                                tipo="resistencia al deslizamiento"
+                                readOnly={!crud}
+                                setShow={setShow}
+                              />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Resistencia a la Abrasión"
+                            name={["atributos_js", "resistencia_abrasion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione la resistencia a la abrasión!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones
+                                tipo="resistencia a la abrasión"
+                                readOnly={!crud}
+                                setShow={setShow}
+                              />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                        </div>
+                      ) : null}
+
+                      {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
                         <Form.Item
-                          label="Corriente"
-                          name={["atributos_js", "corriente"]}
+                          label="Garantía Industrial (años)"
+                          name={["atributos_js", "garantia3"]}
                           rules={
                             crud
                               ? [
                                   {
                                     required: true,
-                                    message: "Por favor, ingrese la corriente!",
+                                    message:
+                                      "Por favor, ingrese el tiempo de garantía!",
                                   },
                                 ]
                               : []
                           }
                         >
-                          <InputNumber
-                            min={0}
-                            precision={2}
-                            readOnly={!crud}
-                            formatter={(value) => `${value} A`}
-                            parser={(value) => value.replace(" A", "")}
-                          />
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="garantía"
+                              readOnly={!crud}
+                              setShow={setShow}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
                         </Form.Item>
-                      </div>
-                    ) : null}
-                  </Col>
-                  <Col span={12}>
-                    {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68") ||
-                    infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
-                      <Form.Item
-                        label="Espesor"
-                        name={["atributos_js", "espesor"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese la medida de espesor!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber
-                          min={0}
-                          precision={0}
-                          readOnly={!crud}
-                          formatter={(value) => `${value} mm`}
-                          parser={(value) => value.replace(" mm", "")}
-                        />
-                      </Form.Item>
-                    ) : null}
-                    {infoTecnicaLinea !== "60d4c04663852fb5e8ad40d7" &&
-                    infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                    infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" ? (
-                      <Form.Item
-                        label="Densidad"
-                        name={["atributos_js", "densidad"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message: "Por favor, ingrese la densidad!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber
-                          min={0}
-                          precision={2}
-                          readOnly={!crud}
-                          formatter={(value) => `${value} kg/m3`}
-                          parser={(value) => value.replace(" kg/m3", "")}
-                        />
-                      </Form.Item>
-                    ) : null}
-                    <Form.Item
-                      label={
-                        infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                        infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
-                        infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                        infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                        infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
-                        infoTecnicaLinea !== "60d4c04b894c18b5e810e025"
-                          ? "Garantía Residencial (años)"
-                          : "Garantía (años)"
-                      }
-                      name={["atributos_js", "garantia_residencial"]}
-                      rules={
-                        crud
-                          ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese la garantía!",
-                              },
-                            ]
-                          : []
-                      }
-                    >
-                      {crud ? (
-                        <SelectOpciones
-                          tipo="garantía"
-                          readOnly={!crud}
-                          setShow={setShow}
-                        />
-                      ) : (
-                        <Input className="input-type" readOnly={!crud} />
-                      )}
-                    </Form.Item>
+                      ) : null}
 
-                    {infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
-                      <div>
+                      {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                      infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                      infoTecnicaLinea === "60d4c04880c445b5e8b87047" ? (
+                        <div>
+                          <Form.Item
+                            label="Core"
+                            name={["atributos_js", "core"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message: "Por favor, seleccione el core!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones tipo="core" readOnly={!crud} />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+
+                          <Form.Item
+                            label="Terminado"
+                            name={["atributos_js", "terminado"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione el terminado!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones
+                                tipo="terminado"
+                                readOnly={!crud}
+                              />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                        </div>
+                      ) : null}
+                      {infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
                         <Form.Item
-                          label="Dimensión de la pantalla"
-                          name={["atributos_js", "dimension_pantalla"]}
+                          label="Tipo de Hebra"
+                          name={["atributos_js", "tipo_hebra"]}
                           rules={
                             crud
                               ? [
@@ -1477,803 +1977,265 @@ function cancelConfirm() {
                         >
                           {crud ? (
                             <Radio.Group disabled={!crud}>
-                              <Radio value={"72 X 54 MM"}>72 X 54 MM</Radio>
-                              <Radio value={"35 X 50 MM"}>35 X 50 MM</Radio>
+                              <Radio value={"TEJIDA"}>TEJIDA</Radio>
+                              <Radio value={"HORIZONTAL"}>HORIZONTAL</Radio>
                             </Radio.Group>
                           ) : (
                             <Input className="input-type" readOnly={!crud} />
                           )}
                         </Form.Item>
-                        <Form.Item
-                          label="Conexión"
-                          name={["atributos_js", "conexion"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el tipo de conexión!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <Input
-                            // defaultValue="WI-FI"
-                            className="input-type"
-                            readOnly={true}
-                          />
-                        </Form.Item>
-                        <Form.Item
-                          label="Tipo de Sensor"
-                          name={["atributos_js", "tipo_sensor"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el tipo de sensor!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <Input
-                            // defaultValue="NTC 10K"
-                            className="input-type"
-                            readOnly={true}
-                          />
-                        </Form.Item>
-                        <Form.Item
-                          label="Color del Calefactor"
-                          name={["atributos_js", "color_calefactor"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el color del calefactor!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <Radio.Group disabled={!crud}>
-                              <Radio value={"BLANCO"}>BLANCO</Radio>
-                              <Radio value={"NEGRO"}>NEGRO</Radio>
-                            </Radio.Group>
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                      </div>
-                    ) : null}
-
-                    {infoTecnicaLinea === "60d4c0477f7255b5e8cca2b7" ? (
-                      <div>
-                        <Form.Item
-                          label="Uso"
-                          name={["atributos_js", "uso"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el/los uso(s)!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <Radio.Group
-                              onChange={onChangeUsoCesped}
-                              value={usoCesped}
-                              disabled={!crud}
-                            >
-                              <Radio value={"DECORATIVO"}>DECORATIVO</Radio>
-                              <Radio value={"DEPORTIVO"}>DEPORTIVO</Radio>
-                            </Radio.Group>
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Aplicación"
-                          name={["atributos_js", "aplicacion"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese la aplicación!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <Checkbox.Group options={plainOptions} />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Rango de Altura de Hebra"
-                          name={["atributos_js", "rango_altura_hebra"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el rango de altura de la hebra!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <Radio.Group
-                              onChange={onChangeRangoAlturaHebra}
-                              value={rangoAlturaHebra}
-                              disabled={!crud}
-                              de
-                            >
-                              <Radio value={"5 mm - 11 mm"}>5 mm - 11 mm</Radio>
-                              <Radio value={"18 mm - 45 mm"}>
-                                18 mm - 45 mm
-                              </Radio>
-                            </Radio.Group>
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Altura de Hebra"
-                          name={["atributos_js", "altura_hebra"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese la altura de la hebra!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <InputNumber
-                            min={0}
-                            precision={0}
-                            readOnly={!crud}
-                            formatter={(value) => `${value} mm`}
-                            parser={(value) => value.replace(" mm", "")}
-                          />
-                        </Form.Item>{" "}
-                      </div>
-                    ) : null}
-
-                    {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                    infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
-                    infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
-                    infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
-                    infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                    infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                    infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                    infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
-                    infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
-                      <Form.Item
-                        label="Garantía Comercial (años)"
-                        name={["atributos_js", "garantia_comercial"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el tiempo de garantía!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="garantía"
-                            readOnly={!crud}
-                            setShow={setShow}
-                          />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    ) : null}
-
-                    {infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
-                      <div>
-                        <Form.Item
-                          label="Proceso de Fabricación"
-                          name={["atributos_js", "proceso_fabricacion"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el proceso de fabricación!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <Input readOnly={true} defaultValue="MONOCOCCIÓN" />
-                        </Form.Item>
-                        <Form.Item
-                          label="Rectificado"
-                          name={["atributos_js", "rectificado"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione rectificado o no!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <Radio.Group disabled={!crud}>
-                              <Radio value={"SI"}>SI</Radio>
-                              <Radio value={"NO"}>NO</Radio>
-                            </Radio.Group>
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Absorción de Agua"
-                          name={["atributos_js", "absorcion_agua"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el valor de absorción de agua!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <Input readOnly={true} defaultValue="<0.5%" />
-                        </Form.Item>
-
-                        <Form.Item
-                          label="Resistencia al Deslizamiento"
-                          name={["atributos_js", "resistencia_deslizamiento"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la resistencia al deslizamiento!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones
-                              tipo="resistencia al deslizamiento"
-                              readOnly={!crud}
-                              setShow={setShow}
-                            />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Resistencia a la Abrasión"
-                          name={["atributos_js", "resistencia_abrasion"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la resistencia a la abrasión!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones
-                              tipo="resistencia a la abrasión"
-                              readOnly={!crud}
-                              setShow={setShow}
-                            />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                      </div>
-                    ) : null}
-
-                    {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
-                      <Form.Item
-                        label="Garantía Industrial (años)"
-                        name={["atributos_js", "garantia3"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el tiempo de garantía!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="garantía"
-                            readOnly={!crud}
-                            setShow={setShow}
-                          />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    ) : null}
-
-                    {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                    infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                    infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                    infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                    infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                    infoTecnicaLinea === "60d4c04880c445b5e8b87047" ? (
-                      <div>
-                        <Form.Item
-                          label="Core"
-                          name={["atributos_js", "core"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message: "Por favor, seleccione el core!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones tipo="core" readOnly={!crud} />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-
-                        <Form.Item
-                          label="Terminado"
-                          name={["atributos_js", "terminado"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el terminado!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones tipo="terminado" readOnly={!crud} />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                      </div>
-                    ) : null}
-                    {infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
-                      <Form.Item
-                        label="Tipo de Hebra"
-                        name={["atributos_js", "tipo_hebra"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el tipo de hebra!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <Radio.Group disabled={!crud}>
-                            <Radio value={"TEJIDA"}>TEJIDA</Radio>
-                            <Radio value={"HORIZONTAL"}>HORIZONTAL</Radio>
-                          </Radio.Group>
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    ) : null}
-                    {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                    infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                    infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                    infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
-                      <div>
-                        <Form.Item
-                          label="Biseles"
-                          name={["atributos_js", "biseles"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el número de biseles!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          <InputNumber
-                            min={0}
-                            precision={0}
-                            readOnly={!crud}
-                            // formatter={(value) => `${value} mm`}
-                            // parser={(value) => value.replace(" mm", "")}
-                          />
-                        </Form.Item>
-                        <Form.Item
-                          label="Resistencia a la Abrasión"
-                          name={["atributos_js", "resistencia_abrasion"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la resistencia a la abrasión!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones
-                              tipo="resistencia a la abrasion"
-                              readOnly={!crud}
-                            />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Sistema de Click"
-                          name={["atributos_js", "sistema_click"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el sistema de click!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones
-                              tipo="sistema de click"
-                              readOnly={!crud}
-                            />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Generación de Click "
-                          name={["atributos_js", "generacion_click"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione si la generación de click!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <Radio.Group
-                              onChange={onChangeGeneracionClick}
-                              value={generacionClick}
-                              disabled={!crud}
-                            >
-                              <Radio value={"3G"}>3G</Radio>
-                              <Radio value={"5G"}>5G</Radio>
-                            </Radio.Group>
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                        <Form.Item
-                          label="Subcapa Adherida"
-                          name={["atributos_js", "subcapa_adherida"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione si tiene subcapa adherida!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <Radio.Group
-                              onChange={onChangeTieneSubcapaAdherida}
-                              value={tieneSubcapaAdherida}
-                              disabled={!crud}
-                            >
-                              <Radio value={"SI"}>SI</Radio>
-                              <Radio value={"NO"}>NO</Radio>
-                            </Radio.Group>
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                      </div>
-                    ) : null}
-                  </Col>
-                </Row>
-                {/* <Divider /> */}
-
-                {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
-                  <Row>
-                    <Col span={12}></Col>
-                    <Col span={12}></Col>
-                  </Row>
-                ) : infoTecnicaLinea === "60d4c0477f7255b5e8cca2b7" ? (
-                  <Row>
-                    <Col span={12}>
-                      <Form.Item
-                        label="Puntadas cada 10 cm"
-                        name={["atributos_js", "puntadas_10cm"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el número de puntadas cada 10cm!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber min={0} precision={0} readOnly={!crud} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Puntadas por m2"
-                        name={["atributos_js", "puntadas_m2"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el número de puntadas por m2!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber min={0} precision={0} readOnly={!crud} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Filamentos por Puntada"
-                        name={["atributos_js", "filamentos_puntada"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el número de filamentos por puntada!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber min={0} precision={0} readOnly={!crud} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item
-                        label="Filamentos por m2"
-                        name={["atributos_js", "filamentos_m2"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese el número de filamentos por m2!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <InputNumber min={0} precision={0} readOnly={!crud} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Galga"
-                        name={["atributos_js", "galga"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese la medida de galga!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <Input
-                          suffix="''"
-                          className="input-type"
-                          readOnly={!crud}
-                        />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Tipo(s) de Filamento"
-                        name={["atributos_js", "tipo_filamento"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el tipo(s) de filamento!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <Select
-                            mode="multiple"
-                            allowClear
-                            placeholder="Seleccione tipo de filamento"
-                            readOnly={!crud}
+                      ) : null}
+                      {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                      infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+                        <div>
+                          <Form.Item
+                            label="Biseles"
+                            name={["atributos_js", "biseles"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el número de biseles!",
+                                    },
+                                  ]
+                                : []
+                            }
                           >
-                            {tiposFilamentoList}
-                          </Select>
-                        ) : (
-                          <TextArea readOnly={!crud} />
-                        )}
-                      </Form.Item>
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              // formatter={(value) => `${value} mm`}
+                              // parser={(value) => value.replace(" mm", "")}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="Resistencia a la Abrasión"
+                            name={["atributos_js", "resistencia_abrasion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione la resistencia a la abrasión!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones
+                                tipo="resistencia a la abrasion"
+                                readOnly={!crud}
+                              />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Sistema de Click"
+                            name={["atributos_js", "sistema_click"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione el sistema de click!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones
+                                tipo="sistema de click"
+                                readOnly={!crud}
+                              />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Generación de Click "
+                            name={["atributos_js", "generacion_click"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione si la generación de click!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group
+                                onChange={onChangeGeneracionClick}
+                                value={generacionClick}
+                                disabled={!crud}
+                              >
+                                <Radio value={"3G"}>3G</Radio>
+                                <Radio value={"5G"}>5G</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Subcapa Adherida"
+                            name={["atributos_js", "subcapa_adherida"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione si tiene subcapa adherida!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group
+                                onChange={onChangeTieneSubcapaAdherida}
+                                value={tieneSubcapaAdherida}
+                                disabled={!crud}
+                              >
+                                <Radio value={"SI"}>SI</Radio>
+                                <Radio value={"NO"}>NO</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                        </div>
+                      ) : null}
                     </Col>
                   </Row>
-                ) : infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ? (
-                  <Row>
-                    <Col span={12}>
-                      <Form.Item
-                        label="Material:"
-                        name={["atributos_js", "material"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message: "Por favor, seleccione el material!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones tipo="material" readOnly={!crud} />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item
-                        label="Color:"
-                        name={["atributos_js", "color"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el color de la subcapa",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="color de subcapa"
-                            readOnly={!crud}
-                            setShow={setShow}
-                          />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-                      <Form.Item
-                        label="Tipo de Esponja"
-                        name={["atributos_js", "tipo_esponja"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el tipo de esponja!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
-                          <Radio.Group disabled={!crud}>
-                            <Radio value={"EVA"}>EVA</Radio>
-                            <Radio value={"EPE"}>EPE</Radio>
-                          </Radio.Group>
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
+                  {/* <Divider /> */}
 
-                      {infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ||
-                      infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ||
-                      infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
+                  {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                  infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                  infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                  infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+                    <Row>
+                      <Col span={12}></Col>
+                      <Col span={12}></Col>
+                    </Row>
+                  ) : infoTecnicaLinea === "60d4c0477f7255b5e8cca2b7" ? (
+                    <Row>
+                      <Col span={12}>
                         <Form.Item
-                          label="Uso(s)"
-                          name={["atributos_js", "usos"]}
+                          label="Puntadas cada 10 cm"
+                          name={["atributos_js", "puntadas_10cm"]}
                           rules={
                             crud
                               ? [
                                   {
                                     required: true,
-                                    message: "Por favor, seleccione los usos!",
+                                    message:
+                                      "Por favor, ingrese el número de puntadas cada 10cm!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <InputNumber min={0} precision={0} readOnly={!crud} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Puntadas por m2"
+                          name={["atributos_js", "puntadas_m2"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el número de puntadas por m2!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <InputNumber min={0} precision={0} readOnly={!crud} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Filamentos por Puntada"
+                          name={["atributos_js", "filamentos_puntada"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el número de filamentos por puntada!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <InputNumber min={0} precision={0} readOnly={!crud} />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item
+                          label="Filamentos por m2"
+                          name={["atributos_js", "filamentos_m2"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el número de filamentos por m2!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <InputNumber min={0} precision={0} readOnly={!crud} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Galga"
+                          name={["atributos_js", "galga"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la medida de galga!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <Input
+                            suffix="''"
+                            className="input-type"
+                            readOnly={!crud}
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          label="Tipo(s) de Filamento"
+                          name={["atributos_js", "tipo_filamento"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el tipo(s) de filamento!",
                                   },
                                 ]
                               : []
@@ -2283,231 +2245,340 @@ function cancelConfirm() {
                             <Select
                               mode="multiple"
                               allowClear
-                              placeholder="Seleccione usos"
+                              placeholder="Seleccione tipo de filamento"
                               readOnly={!crud}
                             >
-                              {infoTecnicaLinea === "60d4c04a145bfab5e81b4626"
-                                ? subcapaList
-                                : infoTecnicaGrupo ===
-                                  "60d617738d422eca134f6685"
-                                ? termostatosList
-                                : infoTecnicaGrupo ===
-                                  "60d61771a442edca131848b6"
-                                ? cartuchosList
-                                : infoTecnicaGrupo ===
-                                  "60d61771f30664ca137cf63f"
-                                ? pegamentosList
-                                : infoTecnicaGrupo ===
-                                  "60d617724ce2a1ca13e92920"
-                                ? mallasCeramicaList
-                                : infoTecnicaGrupo ===
-                                  "60d617724cbea5ca130847e1"
-                                ? mallasPisosFlotantesList
-                                : []}
+                              {tiposFilamentoList}
                             </Select>
                           ) : (
-                            <TextArea
-                              // className="input-type"
-                              readOnly={!crud}
-                            />
+                            <TextArea readOnly={!crud} />
                           )}
                         </Form.Item>
-                      ) : null}
-                    </Col>
-                  </Row>
-                ) : infoTecnicaLinea ===
-                  "60d4c04851cbd1b5e83632d3" ? null : infoTecnicaLinea ===
-                  "60d4c04ba23e72b5e8f93e11" ? null : infoTecnicaLinea ===
-                  "60d4c0476e8514b5e8c66fd5" ? (
-                  <Form.Item
-                    label="Espesor de Capa de Madera"
-                    name={["atributos_js", "espesor_capa_madera"]}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el espesor de la capa de madera",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      precision={2}
-                      readOnly={!crud}
-                      formatter={(value) => `${value} mm`}
-                      parser={(value) => value.replace(" mm", "")}
-                    />
-                  </Form.Item>
-                ) : infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ? (
-                  <Row>
-                    <Col span={12}>
-                      <Form.Item
-                        label="Rodamiento de Carga"
-                        name={["atributos_js", "capacidad_rodamiento_carga"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione la capacidad de rodamiento de carga!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        {crud ? (
+                      </Col>
+                    </Row>
+                  ) : infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ? (
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item
+                          label="Material:"
+                          name={["atributos_js", "material"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el material!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <SelectOpciones tipo="material" readOnly={!crud} />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item
+                          label="Color:"
+                          name={["atributos_js", "color"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el color de la subcapa",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="color de subcapa"
+                              readOnly={!crud}
+                              setShow={setShow}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+                        <Form.Item
+                          label="Tipo de Esponja"
+                          name={["atributos_js", "tipo_esponja"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el tipo de esponja!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <Radio.Group disabled={!crud}>
+                              <Radio value={"EVA"}>EVA</Radio>
+                              <Radio value={"EPE"}>EPE</Radio>
+                            </Radio.Group>
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+
+                        {infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ||
+                        infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ||
+                        infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
+                          <Form.Item
+                            label="Uso(s)"
+                            name={["atributos_js", "usos"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione los usos!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Select
+                                mode="multiple"
+                                allowClear
+                                placeholder="Seleccione usos"
+                                readOnly={!crud}
+                              >
+                                {infoTecnicaLinea === "60d4c04a145bfab5e81b4626"
+                                  ? subcapaList
+                                  : infoTecnicaGrupo ===
+                                    "60d617738d422eca134f6685"
+                                  ? termostatosList
+                                  : infoTecnicaGrupo ===
+                                    "60d61771a442edca131848b6"
+                                  ? cartuchosList
+                                  : infoTecnicaGrupo ===
+                                    "60d61771f30664ca137cf63f"
+                                  ? pegamentosList
+                                  : infoTecnicaGrupo ===
+                                    "60d617724ce2a1ca13e92920"
+                                  ? mallasCeramicaList
+                                  : infoTecnicaGrupo ===
+                                    "60d617724cbea5ca130847e1"
+                                  ? mallasPisosFlotantesList
+                                  : []}
+                              </Select>
+                            ) : (
+                              <TextArea
+                                // className="input-type"
+                                readOnly={!crud}
+                              />
+                            )}
+                          </Form.Item>
+                        ) : null}
+                      </Col>
+                    </Row>
+                  ) : infoTecnicaLinea ===
+                    "60d4c04851cbd1b5e83632d3" ? null : infoTecnicaLinea ===
+                    "60d4c04ba23e72b5e8f93e11" ? null : infoTecnicaLinea ===
+                    "60d4c0476e8514b5e8c66fd5" ? (
+                    <Form.Item
+                      label="Espesor de Capa de Madera"
+                      name={["atributos_js", "espesor_capa_madera"]}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el espesor de la capa de madera",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        precision={2}
+                        readOnly={!crud}
+                        formatter={(value) => `${value} mm`}
+                        parser={(value) => value.replace(" mm", "")}
+                      />
+                    </Form.Item>
+                  ) : infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ? (
+                    <Row>
+                      <Col span={12}>
+                        <Form.Item
+                          label="Rodamiento de Carga"
+                          name={["atributos_js", "capacidad_rodamiento_carga"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la capacidad de rodamiento de carga!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="capacidad de rodamiento de carga"
+                              readOnly={!crud}
+                              setShow={setShow}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+
+                        {infoTecnicaGrupo === "60d61771f30664ca137cf63f" ? (
+                          <div>
+                            <Form.Item
+                              label="Tiempo de Trabajo"
+                              name={["atributos_js", "tiempo_trabajo"]}
+                              rules={
+                                crud
+                                  ? [
+                                      {
+                                        required: true,
+                                        message:
+                                          "Por favor, ingrese el tiempo de trabajo!",
+                                      },
+                                    ]
+                                  : []
+                              }
+                            >
+                              <InputNumber
+                                min={0}
+                                precision={0}
+                                readOnly={!crud}
+                                formatter={(value) => `${value} min`}
+                                parser={(value) => value.replace(" min", "")}
+                              />
+                            </Form.Item>
+                            <Form.Item
+                              label="Tiempo de Oreo"
+                              name={["atributos_js", "tiempo_oreo"]}
+                              rules={
+                                crud
+                                  ? [
+                                      {
+                                        required: true,
+                                        message:
+                                          "Por favor, ingrese el tiempo de oreo!",
+                                      },
+                                    ]
+                                  : []
+                              }
+                            >
+                              <InputNumber
+                                min={0}
+                                precision={0}
+                                readOnly={!crud}
+                                formatter={(value) => `${value} min`}
+                                parser={(value) => value.replace(" min", "")}
+                              />
+                            </Form.Item>
+                          </div>
+                        ) : null}
+                        <Form.Item
+                          label="Presentación"
+                          name={["atributos_js", "presentacion"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la presentacion!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <Input suffix="gal" readOnly={!crud} />
+                        </Form.Item>
+                      </Col>
+                      <Col span={12}>
+                        <Form.Item
+                          label="Color"
+                          name={["atributos_js", "color"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message: "Por favor, seleccione el color!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
                           <SelectOpciones
-                            tipo="capacidad de rodamiento de carga"
+                            tipo="color de pegamento"
                             readOnly={!crud}
                             setShow={setShow}
                           />
-                        ) : (
-                          <Input className="input-type" readOnly={!crud} />
-                        )}
-                      </Form.Item>
-
-                      {infoTecnicaGrupo === "60d61771f30664ca137cf63f" ? (
-                        <div>
-                          <Form.Item
-                            label="Tiempo de Trabajo"
-                            name={["atributos_js", "tiempo_trabajo"]}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el tiempo de trabajo!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            <InputNumber
-                              min={0}
-                              precision={0}
-                              readOnly={!crud}
-                              formatter={(value) => `${value} min`}
-                              parser={(value) => value.replace(" min", "")}
-                            />
-                          </Form.Item>
-                          <Form.Item
-                            label="Tiempo de Oreo"
-                            name={["atributos_js", "tiempo_oreo"]}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el tiempo de oreo!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            <InputNumber
-                              min={0}
-                              precision={0}
-                              readOnly={!crud}
-                              formatter={(value) => `${value} min`}
-                              parser={(value) => value.replace(" min", "")}
-                            />
-                          </Form.Item>
-                        </div>
-                      ) : null}
-                      <Form.Item
-                        label="Presentación"
-                        name={["atributos_js", "presentacion"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, ingrese la presentacion!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <Input suffix="gal" readOnly={!crud} />
-                      </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                      <Form.Item
-                        label="Color"
-                        name={["atributos_js", "color"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message: "Por favor, seleccione el color!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <SelectOpciones
-                          tipo="color de pegamento"
-                          readOnly={!crud}
-                          setShow={setShow}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="Olor"
-                        name={["atributos_js", "olor"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el tipo de olor!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <SelectOpciones
-                          tipo="olor"
-                          readOnly={!crud}
-                          setShow={setShow}
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        label="Adherencia"
-                        name={["atributos_js", "adherencia"]}
-                        rules={
-                          crud
-                            ? [
-                                {
-                                  required: true,
-                                  message:
-                                    "Por favor, seleccione el tipo adherencia!",
-                                },
-                              ]
-                            : []
-                        }
-                      >
-                        <SelectOpciones
-                          tipo="adherencia"
-                          readOnly={!crud}
-                          setShow={setShow}
-                        />
-                      </Form.Item>
-                    </Col>
-                  </Row>
-                ) : infoTecnicaLinea ===
-                  "60db4816d2a990117e29ad6b" ? null : null}
-              </Panel>
-            )}
+                        </Form.Item>
+                        <Form.Item
+                          label="Olor"
+                          name={["atributos_js", "olor"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el tipo de olor!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <SelectOpciones
+                            tipo="olor"
+                            readOnly={!crud}
+                            setShow={setShow}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          label="Adherencia"
+                          name={["atributos_js", "adherencia"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el tipo adherencia!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          <SelectOpciones
+                            tipo="adherencia"
+                            readOnly={!crud}
+                            setShow={setShow}
+                          />
+                        </Form.Item>
+                      </Col>
+                    </Row>
+                  ) : infoTecnicaLinea ===
+                    "60db4816d2a990117e29ad6b" ? null : null}
+                </Panel>
+              )}
             <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
               <Row>
                 <Col span={12}>
@@ -3221,38 +3292,38 @@ function cancelConfirm() {
           </Collapse>
           <br />
           <Row>
-          {crud ? (
-                <Col md={18} xs={15}>
-                  <Form.Item {...tailLayout}>
-                    <Button
-                      icon={<SaveOutlined />}
-                      type="primary"
-                      htmlType="submit"
-                    >
-                      GUARDAR
-                    </Button>
-                    &nbsp;&nbsp;
-                    <Button
-                      className="button button3"
-                      icon={<CloseSquareOutlined />}
-                      type="default"
-                      onClick={cancelConfirm}
-                    >
-                      CANCELAR
-                    </Button>
-                  </Form.Item>
-                </Col>
-              ) :
-                <Col md={24} xs={15}>
+            {crud ? (
+              <Col md={18} xs={15}>
+                <Form.Item {...tailLayout}>
                   <Button
-                    icon={<RollbackOutlined />}
+                    icon={<SaveOutlined />}
                     type="primary"
-                    onClick={goBackHistory}
+                    htmlType="submit"
                   >
-                    REGRESAR
+                    GUARDAR
                   </Button>
-                </Col>
-              }
+                  &nbsp;&nbsp;
+                  <Button
+                    className="button button3"
+                    icon={<CloseSquareOutlined />}
+                    type="default"
+                    onClick={cancelConfirm}
+                  >
+                    CANCELAR
+                  </Button>
+                </Form.Item>
+              </Col>
+            ) : (
+              <Col md={24} xs={15}>
+                <Button
+                  icon={<RollbackOutlined />}
+                  type="primary"
+                  onClick={goBackHistory}
+                >
+                  REGRESAR
+                </Button>
+              </Col>
+            )}
           </Row>
         </Form>
         <Spin
