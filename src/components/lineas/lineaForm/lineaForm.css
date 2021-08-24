@@ -15,3 +15,7 @@
   .button5 {background-color: #555555;} /* Black */
 
   .ant-divider-horizontal.ant-divider-with-text {font-size: 25px;}
+
+  .autogenInput {
+    background-color: #4CAF50;
+  }

@@ -178,6 +178,7 @@ const FormProducto = (props) => {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
 
+    console.log("useeffect editProducto: " + editProducto)
     if (!stock && editProducto) {
       new ProductoService()
         .getStock(editProducto.codigo_interno)

@@ -14,7 +14,7 @@ const GrupoContextProvider = (props) => {
 
   useEffect(async() => {
     await grupoService.getAll().then((data) => setGrupos(data));
-    console.log("useeffect");
+     // console.log("useeffect");
    await grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
   }, []);
 

@@ -26,7 +26,7 @@ const LineaList = () => {
       showSorterTooltip: false
     },
     {
-      title: "PSEUDÓNIMO",
+      title: "PSEUDÓNIMO", // OBSERVACIÓN: 16/08/2021 SE DEBE CAMBIAR POR EL CAMPO DE CODIGO
       dataIndex: "pseudo",
       key: "pseudo",
       align: "center",
@@ -44,6 +44,16 @@ const LineaList = () => {
         compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
       },
       showSorterTooltip: false
+    },
+    {
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
+      },
+      showSorterTooltip: true
     },
     {
       title: "ACCIONES",
@@ -89,6 +99,16 @@ const LineaList = () => {
       },
       showSorterTooltip: false
     },
+    {
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
+      },
+      showSorterTooltip: true
+    },
     
   ]
 
@@ -126,8 +146,14 @@ const LineaList = () => {
   const filtrar = (e) => {
     const currValue = e.target.value;
     setValue(currValue);
-    const filteredData = lineas.filter(entry =>
-      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase()));
+    // const filteredData = lineas.filter(entry =>
+    //   entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase()));
+    const filteredData = lineas.filter(
+      (entry) =>
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || 
+      entry.pseudo.toLowerCase().includes(currValue.toLowerCase()) ||
+      entry.descripcion.toLowerCase().includes(currValue.toLowerCase())
+      );
     setDataSource(filteredData);
   }
 
@@ -137,14 +163,13 @@ const LineaList = () => {
     if (!value) {
       setDataSource(lineas)
     }
-    console.log(dataSource)
+    // console.log(dataSource)
   })
 
   return (
     <div>
-       <br />
+      <br />
       <Divider>LÍNEAS</Divider>
-          <br />
       {JSON.parse(localStorage.getItem("user")).rol === 2?
       <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
       :null
@@ -157,7 +182,6 @@ const LineaList = () => {
       />
       <br />
       <br />
-
       {lineas.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}

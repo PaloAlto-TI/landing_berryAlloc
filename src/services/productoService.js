@@ -9,7 +9,6 @@ export class ProductoService {
     }
 
     getProductos(id){
-        console.log("EL OBJETO", id);
         return axios.post(baseUrl+"vista", id).then(res => res.data.data);
     }
     

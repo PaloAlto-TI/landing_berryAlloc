@@ -344,7 +344,7 @@ const FormModelo = (props) => {
                 <Form.Item
                   label="Grupos"
                   name={"modelo_grupos_nn_in"}
-                  hidden={(selectedLineaId === '' || selectedLineaId) && selectedLineaId !== "60d4c04b894c18b5e810e025" ?( false ): ( selectedMarcaId ? false : true )} // 12/08/2021 - OBSERVACIÓN: HAY QUE VALIDAR EL VALOR DE LA LINEA, POR  EL MOMENTO QUEDA ASÍ PERO SE DEBE ASIGANAR EL VALOR A TRAVÉS DE LA VISTA O LA DECISIÓN QUE SE TOME
+                  hidden={(selectedLineaId === '' || selectedLineaId) && selectedLineaId !== "60d4c04b894c18b5e810e025" ?( false ): ( selectedMarcaId ? false : true )} // 12/08/2021 - OBSERVACIÓN: HAY QUE VALIDAR EL VALOR DE LA LINEA, POR  EL MOMENTO QUEDA ASÍ PERO SE DEBE ASIGNAR EL VALOR A TRAVÉS DE LA VISTA O LA DECISIÓN QUE SE TOME
                   rules={
                     crud
                       ? [

@@ -68,6 +68,16 @@ const MarcaList = () => {
       width: '35%'
     },
     {
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
+      },
+      showSorterTooltip: true
+    },
+    {
       title: "ACCIONES",
       dataIndex: "",
       align: "center",
@@ -129,6 +139,16 @@ const MarcaList = () => {
       },
       showSorterTooltip: false,
       width: '35%'
+    },
+    {
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
+      },
+      showSorterTooltip: true
     },
    
   ]
