@@ -58,8 +58,13 @@ const FormProducto = (props) => {
 
   console.log("path", path);
   // console.log(props);
-  const { createProducto, updateProducto, findProducto, editProducto, getSerialModelo } =
-    useContext(ProductoContext);
+  const {
+    createProducto,
+    updateProducto,
+    findProducto,
+    editProducto,
+    getSerialModelo,
+  } = useContext(ProductoContext);
 
   let history = useHistory();
   let { codigo, operacion } = useParams();
@@ -179,9 +184,15 @@ const FormProducto = (props) => {
   //   }
   // }, [infoTecnicaLinea]);
 
-  useEffect(async() => {
+  useEffect(() => {
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
+    }
+
+    async function fetch() {
+      const grupoService = new GrupoService();
+      const grupo = await grupoService.getOne(editProducto.fk_grupo_id);
+      setSelectedGrupoName(grupo.nombre);
     }
 
     if (!stock && editProducto) {
@@ -198,9 +209,7 @@ const FormProducto = (props) => {
         setSelectedGrupoId(editProducto.fk_grupo_id);
         setUnidadMedida(editProducto.fk_unidad_medida_id);
         setId(editProducto.id);
-        const grupoService = new GrupoService();
-        const grupo = await grupoService.getOne(editProducto.fk_grupo_id);
-        setSelectedGrupoName(grupo.nombre);
+        fetch();
       }
 
       if (!crud && editProducto.atributos_js) {
@@ -523,7 +532,7 @@ const FormProducto = (props) => {
       // const color2 = await colorService.getOne(
       //   form.getFieldValue("modelo")
       // );
-      
+
       // if (selectedLineaId !== "60d4c04b894c18b5e810e025") {
       //   if (selectedLineaId === "60faeee1a412169c92c778c2") {
       //     form.setFieldsValue({
@@ -557,14 +566,20 @@ const FormProducto = (props) => {
       //     "-" +
       //     color2.codigo,
       // });
-      console.log("MODELO!:", form.getFieldValue("modelo"))
+      console.log("MODELO!:", form.getFieldValue("modelo"));
 
-      if (form.getFieldValue("modelo")===''){
-        form.setFieldsValue({modelo: null})
+      if (form.getFieldValue("modelo") === "") {
+        form.setFieldsValue({ modelo: null });
       }
-      
-        form.setFieldsValue({ nombre: selectedGrupoName + " " + (form.getFieldValue("modelo") === null ? '' : form.getFieldValue("modelo")) });
-      
+
+      form.setFieldsValue({
+        nombre:
+          selectedGrupoName +
+          " " +
+          (form.getFieldValue("modelo") === null
+            ? ""
+            : form.getFieldValue("modelo")),
+      });
 
       //     form.setFieldsValue({
       //       nombre:
@@ -598,7 +613,9 @@ const FormProducto = (props) => {
         codigo_interno:
           form.getFieldValue("codigo_interno").substring(0, 7) +
           "-" +
-          grupo.codigo + "-" +serial,
+          grupo.codigo +
+          "-" +
+          serial,
       });
       // } else if (
       //   selectedLineaId === "60d4c04b894c18b5e810e025" ||
@@ -831,7 +848,7 @@ const FormProducto = (props) => {
                     {crud ? (
                       !newModelo ? (
                         <Space>
-                          <Form.Item name={crud ? "modelo" : "modelo"} >
+                          <Form.Item name={crud ? "modelo" : "modelo"}>
                             <SelectOpciones
                               tipo="color"
                               filter={selectedGrupoId}
@@ -842,11 +859,17 @@ const FormProducto = (props) => {
                             />
                           </Form.Item>
                           <Form.Item>
-                          <Button
-                            type="primary"
-                            icon={!newModelo ? <EditOutlined/> : <SearchOutlined/>}
-                            onClick={() => setNewModelo(!newModelo)}
-                          />
+                            <Button
+                              type="primary"
+                              icon={
+                                !newModelo ? (
+                                  <EditOutlined />
+                                ) : (
+                                  <SearchOutlined />
+                                )
+                              }
+                              onClick={() => setNewModelo(!newModelo)}
+                            />
                           </Form.Item>
                         </Space>
                       ) : (
@@ -855,21 +878,24 @@ const FormProducto = (props) => {
                             <Input placeholder="Ingrese el modelo" />
                           </Form.Item>
                           <Form.Item>
-
-                          <Button
-                            type="primary"
-                            icon={!newModelo ? <PlusOutlined/> : <SearchOutlined/>}
-                            onClick={() => setNewModelo(!newModelo)}
-                          />
+                            <Button
+                              type="primary"
+                              icon={
+                                !newModelo ? (
+                                  <PlusOutlined />
+                                ) : (
+                                  <SearchOutlined />
+                                )
+                              }
+                              onClick={() => setNewModelo(!newModelo)}
+                            />
                           </Form.Item>
-
                         </Space>
                       )
                     ) : (
-                      <Form.Item name={crud ? "modelo" : "modelo"} >
-                      <Input className="input-type" readOnly={!crud} />
+                      <Form.Item name={crud ? "modelo" : "modelo"}>
+                        <Input className="input-type" readOnly={!crud} />
                       </Form.Item>
-                    
                     )}
                   </Form.Item>
                 </Col>

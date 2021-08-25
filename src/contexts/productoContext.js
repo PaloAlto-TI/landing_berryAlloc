@@ -12,7 +12,7 @@ const ProductoContextProvider = (props) => {
 
   useEffect(() => {
     setIsEmpty(false)
-    productoService.getProductos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
+    productoService.getProductos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data); console.log("AQUI!!",data)});
     
     // if (productos.length === 0){
     //   setIsEmpty(true);
