@@ -35,7 +35,7 @@ const ProductoContextProvider = (props) => {
 
   const createProducto = async (producto) => {
     const data = await productoService.createProducto(producto);
-
+    
     console.log("err:", data);
     if (data.message === "OK CREATE") {
       productoService.getProductos({ linea_id : producto.fk_linea_id}).then((data) => setProductos(data));

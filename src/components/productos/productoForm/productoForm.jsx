@@ -1117,6 +1117,7 @@ const FormProducto = (props) => {
                       ) : null}
                       {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
                       infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                      infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
                       infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
                         <Form.Item
                           label="Composición"
@@ -1145,6 +1146,7 @@ const FormProducto = (props) => {
                       ) : null}
                       {infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
                       infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                      infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
                       infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
                         <div>
                           <Form.Item
@@ -1222,6 +1224,8 @@ const FormProducto = (props) => {
                       infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
                       infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
                       infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                      infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
+                      infoTecnicaLinea !== "60d4c04880c445b5e8b87047" &&
                       infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
                         <Form.Item
                           label="Clase Residencial"
@@ -1255,9 +1259,7 @@ const FormProducto = (props) => {
                       infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
                       infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
                       infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                      infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
-                      infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
+                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ? (
                         <Form.Item
                           label="Clase Comercial"
                           name={["atributos_js", "clase_comercial"]}
@@ -2577,11 +2579,14 @@ const FormProducto = (props) => {
                               : []
                           }
                         >
+                        {crud ? (
                           <SelectOpciones
                             tipo="color de pegamento"
                             readOnly={!crud}
                             setShow={setShow}
-                          />
+                          />): (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
                         </Form.Item>
                         <Form.Item
                           label="Olor"
@@ -2598,11 +2603,15 @@ const FormProducto = (props) => {
                               : []
                           }
                         >
+                        {crud ? (
+
                           <SelectOpciones
                             tipo="olor"
                             readOnly={!crud}
                             setShow={setShow}
-                          />
+                          />): (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
                         </Form.Item>
                         <Form.Item
                           label="Adherencia"
@@ -2618,12 +2627,14 @@ const FormProducto = (props) => {
                                 ]
                               : []
                           }
-                        >
+                        >{crud ? (
                           <SelectOpciones
                             tipo="adherencia"
                             readOnly={!crud}
                             setShow={setShow}
-                          />
+                          />): (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
                         </Form.Item>
                       </Col>
                     </Row>
