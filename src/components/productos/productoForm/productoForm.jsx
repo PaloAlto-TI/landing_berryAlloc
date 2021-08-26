@@ -195,7 +195,7 @@ const FormProducto = (props) => {
       setSelectedGrupoName(grupo.nombre);
     }
 
-    if (!stock && editProducto) {
+    if (!stock && editProducto && !crud) {
       new ProductoService()
         .getStock(editProducto.codigo_temporal)
         .then((data) => setStock(data));
@@ -209,7 +209,9 @@ const FormProducto = (props) => {
         setSelectedGrupoId(editProducto.fk_grupo_id);
         setUnidadMedida(editProducto.fk_unidad_medida_id);
         setId(editProducto.id);
-        fetch();
+        if(crud){
+          fetch();
+        }
       }
 
       if (!crud && editProducto.atributos_js) {
@@ -848,9 +850,18 @@ const FormProducto = (props) => {
                     {crud ? (
                       !newModelo ? (
                         <Space>
-                          <Form.Item name={crud ? "modelo" : "modelo"}>
+                          <Form.Item name={crud ? "modelo" : "modelo"}  rules={
+                      crud
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, seleccione un modelo!",
+                            },
+                          ]
+                        : []
+                    }>
                             <SelectOpciones
-                              tipo="color"
+                              tipo="modelo"
                               filter={selectedGrupoId}
                               filter2={selectedMarcaId}
                               filter3={selectedLineaId}
@@ -874,7 +885,16 @@ const FormProducto = (props) => {
                         </Space>
                       ) : (
                         <Space>
-                          <Form.Item name={crud ? "modelo" : "modelo"}>
+                          <Form.Item name={crud ? "modelo" : "modelo"}  rules={
+                      crud
+                        ? [
+                            {
+                              required: true,
+                              message: "Por favor, ingrese un modelo!",
+                            },
+                          ]
+                        : []
+                    }>
                             <Input placeholder="Ingrese el modelo" />
                           </Form.Item>
                           <Form.Item>

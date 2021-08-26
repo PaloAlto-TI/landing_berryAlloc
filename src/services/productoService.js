@@ -39,6 +39,15 @@ export class ProductoService {
             },
           }).then(res => res.data.data);
     }
+
+    getOneProductos(id){
+
+      return axios.get(baseUrl+"vista/"+ id, {
+          headers: {
+            Authorization: `Bearer ${REACT_APP_API_KEY}`,
+          },
+        }).then(res => res.data.data);
+  }
     
     getProducto(producto){
         return axios.get(baseUrl+"producto/"+producto.id, {

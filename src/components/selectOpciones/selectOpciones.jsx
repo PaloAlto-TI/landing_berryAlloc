@@ -88,7 +88,7 @@ const SelectOpciones = (props) => {
             data.filter((p) => p.marca_id === filter && p.linea_id === filter2)
           );
         });
-      } else if (tipo === "color" && filter) {
+      } else if (tipo === "modelo" && filter) {
         console.log("FILTER-COLOR:", filter);
         console.log("FILTER-COLOR2:", filter2);
 

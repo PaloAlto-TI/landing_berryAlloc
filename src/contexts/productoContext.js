@@ -12,8 +12,11 @@ const ProductoContextProvider = (props) => {
 
   useEffect(() => {
     setIsEmpty(false)
-    productoService.getProductos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data); console.log("AQUI!!",data)});
-    
+
+    if (props.value){
+      productoService.getProductos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data);});
+    }
+
     // if (productos.length === 0){
     //   setIsEmpty(true);
     // }
@@ -59,13 +62,13 @@ const ProductoContextProvider = (props) => {
     return data[0].serial;
   }
 
-  const findProducto = (id) => {
 
+  const findProducto = async (id) => {
 
     console.log(id);
-    const producto = productos.find((p) => p.codigo_interno === id);
-    
-    setEditProducto(producto);
+    const producto = await productoService.getOneProductos(id).then((data) =>  setEditProducto(data[0]));
+
+
   };
 
   const updateProducto = async(producto) => {
@@ -98,7 +101,7 @@ const ProductoContextProvider = (props) => {
         setEditProducto,
         isEmpty,
         filterProductos, 
-        getSerialModelo
+        getSerialModelo,
       }}
     >
       {props.children}
