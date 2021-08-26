@@ -61,9 +61,9 @@ const Home = () => {
               </ConfigProvider>
             </Route>
             <Route path={`${path}/productos/:codigo?/:operacion?`}>
-            <ProductoContextProvider value={false} >
-              <ProductoForm />
-            </ProductoContextProvider>
+              <ProductoContextProvider value={false}>
+                <ProductoForm />
+              </ProductoContextProvider>
             </Route>
             <Route exact path={`${path}`}>
               <Layout
@@ -85,7 +85,69 @@ const Home = () => {
               </Layout>
             </Route>
           </Switch>
+          <LineaContextProvider Provider>
+            <Switch>
+              <Route exact path={`${path}/lineas`}>
+                <LineaList />
+              </Route>
+              <Route path={`${path}/lineas/:codigo?/:operacion?`}>
+                <LineaForm />
+              </Route>
+            </Switch>
+          </LineaContextProvider>
+          <MarcaContextProvider Provider>
+            <Switch>
+              <Route exact path={`${path}/marcas`}>
+                <MarcaList />
+              </Route>
+              <Route path={`${path}/marcas/:codigo?/:operacion?`}>
+                <MarcaForm />
+              </Route>
+            </Switch>
+          </MarcaContextProvider>
 
+          <SubgrupoContextProvider>
+            <Switch>
+              <Route exact path={`${path}/subgrupo`}>
+                {/* <SubgrupoForm /> */}
+                <SubgrupoList />
+              </Route>
+              <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+                <SubgrupoForm />
+              </Route>
+            </Switch>
+          </SubgrupoContextProvider>
+          <ProveedorContextProvider>
+            <Switch>
+              <Route exact path={`${path}/proveedores`}>
+                <ProveedorList />
+              </Route>
+              <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
+                <ProveedorForm />
+              </Route>
+            </Switch>
+          </ProveedorContextProvider>
+          <GrupoContextProvider>
+            <Switch>
+              <Route exact path={`${path}/grupos`}>
+                <GrupoList />
+              </Route>
+              <Route path={`${path}/grupos/:codigo?/:operacion?`}>
+                <GrupoForm />
+              </Route>
+            </Switch>
+          </GrupoContextProvider>
+
+          <ModeloContextProvider>
+            <Switch>
+              <Route exact path={`${path}/modelos`}>
+                <ModeloList />
+              </Route>
+              <Route path={`${path}/modelos/:codigo?/:operacion?`}>
+                <ModeloForm />
+              </Route>
+            </Switch>
+          </ModeloContextProvider>
 
           {/* <ProveedorContextProvider Provider>
           <Switch>
@@ -127,67 +189,4 @@ const Home = () => {
   );
 };
 
-// <LineaContextProvider Provider>
-// <Switch>
-//   <Route exact path={`${path}/lineas`}>
-//     <LineaList />
-//   </Route>
-//   <Route path={`${path}/lineas/:codigo?/:operacion?`}>
-//     <LineaForm />
-//   </Route>
-// </Switch>
-// </LineaContextProvider>
-// <MarcaContextProvider Provider>
-// <Switch>
-//   <Route exact path={`${path}/marcas`}>
-//     <MarcaList />
-//   </Route>
-//   <Route path={`${path}/marcas/:codigo?/:operacion?`}>
-//     <MarcaForm />
-//   </Route>
-// </Switch>
-// </MarcaContextProvider>
-
-// <SubgrupoContextProvider>
-// <Switch>
-//   <Route exact path={`${path}/subgrupo`}>
-//     {/* <SubgrupoForm /> */}
-//     <SubgrupoList />
-//   </Route>
-//   <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
-//     <SubgrupoForm />
-//   </Route>
-// </Switch>
-// </SubgrupoContextProvider>
-// <ProveedorContextProvider>
-// <Switch>
-//   <Route exact path={`${path}/proveedores`}>
-//     <ProveedorList />
-//   </Route>
-//   <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
-//     <ProveedorForm />
-//   </Route>
-// </Switch>
-// </ProveedorContextProvider>
-// <GrupoContextProvider>
-// <Switch>
-//   <Route exact path={`${path}/grupos`}>
-//     <GrupoList />
-//   </Route>
-//   <Route path={`${path}/grupos/:codigo?/:operacion?`}>
-//     <GrupoForm />
-//   </Route>
-// </Switch>
-// </GrupoContextProvider>
-
-// <ModeloContextProvider>
-// <Switch>
-//   <Route exact path={`${path}/modelos`}>
-//     <ModeloList />
-//   </Route>
-//   <Route path={`${path}/modelos/:codigo?/:operacion?`}>
-//     <ModeloForm />
-//   </Route>
-// </Switch>
-// </ModeloContextProvider>
 export default Home;
