@@ -42,7 +42,7 @@ const SelectOpciones = (props) => {
     let cancel = false;
 
     async function fetch() {
-      console.log(" tipo . "+tipo)
+      // console.log(" tipo . "+tipo)
       if (tipo === "línea") {
         const lineaService = new LineaService();
         lineaService.getAll().then((data) => {
@@ -233,7 +233,7 @@ const SelectOpciones = (props) => {
   }, [filter]);
 
   function handleChange(value) {
-    console.log("VALORES CON LABEL",value);
+    // console.log("VALORES CON LABEL",value);
       onChange(value);
   }
 

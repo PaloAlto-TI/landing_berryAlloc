@@ -23,17 +23,19 @@ const LineaList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '15%'
     },
     {
-      title: "PSEUDÓNIMO",
-      dataIndex: "pseudo",
-      key: "pseudo",
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
       align: "center",
       sorter: {
-        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '10%'
     },
     {
       title: "DESCRIPCIÓN",
@@ -43,7 +45,8 @@ const LineaList = () => {
       sorter: {
         compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '35%'
     },
     {
       title: "ACCIONES",
@@ -57,8 +60,9 @@ const LineaList = () => {
           setRowState={setRowState} 
         />
       ),
+      width: '5%'
     },
-  ]
+  ];
   const columns2 = [
     {
       title: "NOMBRE",
@@ -70,12 +74,12 @@ const LineaList = () => {
       showSorterTooltip: false
     },
     {
-      title: "PSEUDÓNIMO",
-      dataIndex: "pseudo",
-      key: "pseudo",
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
       align: "center",
       sorter: {
-        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
       },
       showSorterTooltip: false
     },
@@ -90,7 +94,7 @@ const LineaList = () => {
       showSorterTooltip: false
     },
     
-  ]
+  ];
 
   let { path } = useRouteMatch();
   let history = useHistory();
@@ -127,7 +131,7 @@ const LineaList = () => {
     const currValue = e.target.value;
     setValue(currValue);
     const filteredData = lineas.filter(entry =>
-      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase()));
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase()));
     setDataSource(filteredData);
   }
 
@@ -137,7 +141,7 @@ const LineaList = () => {
     if (!value) {
       setDataSource(lineas)
     }
-    console.log(dataSource)
+    // console.log(dataSource)
   })
 
   return (

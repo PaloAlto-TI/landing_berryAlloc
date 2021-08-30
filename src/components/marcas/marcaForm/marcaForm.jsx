@@ -5,6 +5,7 @@ import { useHistory } from "react-router";
 import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design/icons";
 import { MarcaContext } from "../../../contexts/marcaContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
+import { SecuencialesService } from "../../../services/secuencialesService";
 import "./marcaForm.css";
 const { TextArea } = Input;
 
@@ -13,7 +14,7 @@ const FormMarca = (props) => {
   const { createMarca, updateMarca, findMarca, editMarca } = useContext(MarcaContext);
   // let { path } = useRouteMatch();
   // console.log("EL PATH A NIVEL PRINCIPAL: ", path);
-  console.log("LO QUE ESTA EN EDIT MARCA: " + JSON.stringify(editMarca))
+  // console.log("LO QUE ESTA EN EDIT MARCA: " + JSON.stringify(editMarca))
 
   let history = useHistory();
   let { codigo, operacion } = useParams();
@@ -26,11 +27,12 @@ const FormMarca = (props) => {
   );
 
   const [id, setId] = useState(null);
-  // const [show, setShow] = useState(null);
   const [form] = Form.useForm();
+  const [codigoInterno, setCodigoInterno] = useState(null); // OBSERVACIÓN: 30/08/2021 LA VARIABLE SE DEBE CAMBIAR EN CUANTO SE DECIDA QUÉ NOMBRE VA A TENER EN LA BASE DE DATOS
   
   let initialValues = {
-    descripcion: ''
+    descripcion: '',
+    codigo: ''
   };
 
   function cancelConfirm() {
@@ -49,17 +51,19 @@ const FormMarca = (props) => {
     }
   }
 
+  const typeTransactionData = { // OBSERVACIÓN: 30/08/2021 ESTA VARIABLE SE DEBE TRAER POR PROPS, PERO COMO EL COMPONENTE QUE LA TRAE USAN TODAS LAS RAMAS QUEDA AL PENDIENTE EL CAMBIO
+    tableNamePSQL: "marca",
+    byIdPSQL: true,
+    byInternalCodePSQL: false,
+    dependenciesPSQL: false,
+    labelCrudPlural: "MARCAS",
+    labelCrudSingle: "MARCA"
+  };
+
   function goBackHistory() {
     history.push("/home/marcas/")
     // window.history.back();
   }
-
-  // console.log("EL EDITMARCA: + " + JSON.stringify(editMarca));
-  // console.log("EL CODIGO: + " + pseudo);
-  // console.log("EL HISTORY: + " + JSON.stringify(history));
-  // console.log("EL LOCATION: + " + JSON.stringify(location));
-  // console.log("lOS PROPS DE MARCA: " + JSON.stringify(props));
-  // const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   // 29/07/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. -MC
 
@@ -76,6 +80,7 @@ const FormMarca = (props) => {
       span: 16,
     },
   };
+
   const tailLayout = {
     wrapperCol: {
       offset: 8,
@@ -89,6 +94,10 @@ const FormMarca = (props) => {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }
 
+    if (initialValues.codigo === '' && codigoInterno && !editMarca) {
+      form.setFieldsValue({ codigo: codigoInterno[0].code_to_add })
+    }
+
     if (editMarca) {
 
       setId(editMarca.id);
@@ -97,6 +106,15 @@ const FormMarca = (props) => {
 
       findMarca(codigo);
 
+    }
+
+    if (!codigoInterno) {
+      const secuencialesService = new SecuencialesService();      
+      secuencialesService.getAll().then((data) => {
+        if (typeTransactionData) {
+          setCodigoInterno(data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL))
+        } // 30/08/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO O EL MANEJO DE UN CASO QUE NO SE ENCUENTRE UN CÓDIGO
+      });
     }
   })
 
@@ -118,10 +136,6 @@ const FormMarca = (props) => {
       let array1 = editMarca.lineas_nn.map(x=>x.id); // LINEAS INICIALES (BD)
       let array2 = values.lineas_nn_in; // LINEAS DE FORM
 
-      // console.log("como el array1: " + array1);
-      // console.log("como el array2: " + array2);
-      // console.log("C1: ", array2.filter(x => !array1.includes(x)));
-
       // SETTING LINEAS_MARCAS TO CREATE OR UPDATE
       let temp_toCreateMarcaLineasN = array2.filter(x => !array1.includes(x));
       let toCreateMarcaLineasN = temp_toCreateMarcaLineasN.map(x => ({ fk_linea_id:x , fk_marca_id:id })) // SET FORMAT JSON
@@ -129,11 +143,6 @@ const FormMarca = (props) => {
       // SETTING LINEAS_MARCAS TO DELETE (SOFTDELETE)
       // console.log("C2: ", array1.filter(x => !array2.includes(x)))
       let toDeleteMarcaLineasN = array1.filter(x => !array2.includes(x));
-
-      // console.log("LO QUE ESTABA AL INICIO (CONTEXT): " + array1);
-      // console.log("LO QUE ESTA EN EL FORMULARIO: " + array2);
-      // console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.lineas_nn_in.length);
-      // console.log("LA DATA QUE QUE VIENE (FORM): " + JSON.stringify(values) + " MAS EL LENGHT : " +  values.lineas_nn.length);
 
       // let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
       let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
@@ -146,20 +155,21 @@ const FormMarca = (props) => {
     } else {
 
       values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
+      delete values.codigo; // 30/08/2021 - OBSERVACIÓN: VERFICAR SI DESPUÉS SE DEBE VALIDAR ANTES DE HACER EL DELETE.
+      // values.codigo = '004';
       data = await createMarca(values);
 
     }
-    console.log("LA DTAA QUE SALIO: " + JSON.stringify(data))
+
+    // console.log("LA DTAA QUE SALIO: " + JSON.stringify(data))
 
     if (data.message.includes("OK")) {
 
-      // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
       if (Object.keys(data.data).length > 0){
-        message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] 
-        + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
-      
+        message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) + 
+        " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
       } else {
-        console.log("MENSAJE DE VALIDACION DE OBJECTS EN DATA RES: " + values.nombre)
+        message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA MARCA - \n" + JSON.stringify(data.errorDetails.description), 15);
         // history.push("/home/marcas/");
       }
 
@@ -171,12 +181,8 @@ const FormMarca = (props) => {
   }
 
   const onFinishFailed = (errorInfo) => {
-    // console.log("onFinishFailed - Error al guardar la Linea: " + errorInfo.errorFields, errorInfo);
-    // console.log("BRINCA EL ONFINISHFAILED"); // OBSER
-
     // 21/07/2021 - OBSERVACIÓN: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUE TIPO DE ELIMINADO LÓGICO SE DEBE HACER. - MC
     // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
-    // console.log("ENTRA AL ELIMINAR EN HANDLEOK LINEA CON RECORD: " + JSON.stringify(record))
     message.warning("ERROR AL GUARDAR LA MARCA");
   };
 
@@ -221,17 +227,17 @@ const FormMarca = (props) => {
               </Col>
               <Col span={10}>
                 <Form.Item
-                  label="Pseudónimo"
-                  name="pseudo"
+                  label="Código"
+                  name="codigo"
                   rules={[
-                    { required: true, message: "Por favor, ingrese el Pseudónimo de la Marca!" },
-                    { max: 3, message: 'El Pseudónimo debe tener como máximo 3 caracteres' },
+                    { required: true, message: "Por favor, ingrese el Código de la Marca!" },
+                    { max: 3, message: 'El Código debe tener como máximo 3 caracteres' },
                   ]}
                 >
                   <Input
-                    readOnly={operacion === "editar" ? crud : !crud}
-                    placeholder="Ej: BA"
+                    readOnly
                     className="input-type"
+                    style={{ backgroundColor: '#d9d9d9' }}
                   />
                 </Form.Item>
               </Col>
@@ -303,6 +309,7 @@ const FormMarca = (props) => {
                 </Col>
               }
             </Row>
+            <br />
           </Form>
         </> : null
     );

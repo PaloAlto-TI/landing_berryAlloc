@@ -15,7 +15,7 @@ const MarcaList = () => {
 
   // 05/08/2021 - OBSERVACIÓN: No esta mostrando el SUBGRUPO en el listado, pendiente de hacer y definir -MC
       
-  console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
+  // console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
   
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
@@ -46,12 +46,12 @@ const MarcaList = () => {
       width: '30%'
     },
     {
-      title: "PSEUDÓNIMO",
-      dataIndex: "pseudo",
-      key: "pseudo",
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
       align: "center",
       sorter: {
-        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
       },
       showSorterTooltip: false,
       width: '15%'
@@ -109,12 +109,12 @@ const MarcaList = () => {
       width: '30%'
     },
     {
-      title: "PSEUDÓNIMO",
-      dataIndex: "pseudo",
-      key: "pseudo",
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
       align: "center",
       sorter: {
-        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
       },
       showSorterTooltip: false,
       width: '15%'
@@ -169,7 +169,7 @@ const MarcaList = () => {
     setValue(currValue);
     // const filteredData = marcas.filter(entry => //-- Estaba antes de cambiar a nn
     const filteredData = marcas_lineas_nn.filter(entry =>
-      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase()));
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase()));
     setDataSource(filteredData);
   }
 

@@ -46,7 +46,7 @@ let { path} = useRouteMatch();
           <Menu.Item key="4" icon={<WechatOutlined />}><a href={`${path}/grupos`}>GRUPOS</a></Menu.Item>
           <Menu.Item key="5" icon={<DollarCircleOutlined />}><a href={`${path}/proveedores`}>PROVEEDORES</a></Menu.Item>
           <Menu.Item key="6" icon={<BarcodeOutlined />}><a href={`${path}/productos`}>PRODUCTOS</a></Menu.Item>
-          <Menu.Item key="8" icon={<FormatPainterOutlined />}><a href={`${path}/modelos`}>MODELOS</a></Menu.Item>
+          {/* <Menu.Item key="8" icon={<FormatPainterOutlined />}><a href={`${path}/modelos`}>MODELOS</a></Menu.Item> */}
           <Menu.Item key="7" icon={<StarOutlined />}><a href={`${path}/subgrupo`}>SUBGRUPOS</a></Menu.Item>
 
           {/* <SubMenu key="sub1" icon={<LineChartOutlined />} title="REPORTES">
