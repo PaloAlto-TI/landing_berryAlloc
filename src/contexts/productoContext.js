@@ -12,8 +12,11 @@ const ProductoContextProvider = (props) => {
 
   useEffect(() => {
     setIsEmpty(false)
-    productoService.getProductos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data)});
-    
+
+    if (props.value){
+      productoService.getProductos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data);});
+    }
+
     // if (productos.length === 0){
     //   setIsEmpty(true);
     // }
@@ -32,10 +35,10 @@ const ProductoContextProvider = (props) => {
 
   const createProducto = async (producto) => {
     const data = await productoService.createProducto(producto);
-
+    
     console.log("err:", data);
     if (data.message === "OK CREATE") {
-      productoService.getAllProductos().then((data) => setProductos(data));
+      productoService.getProductos({ linea_id : producto.fk_linea_id}).then((data) => setProductos(data));
       // setProductos([...productos, data.data]);
     }
 
@@ -53,13 +56,19 @@ const ProductoContextProvider = (props) => {
 
   };
 
-  const findProducto = (id) => {
+  const getSerialModelo = async (id) => {
+    const data = await productoService.getSerialModelo(id);
 
+    return data[0].serial;
+  }
+
+
+  const findProducto = async (id) => {
 
     console.log(id);
-    const producto = productos.find((p) => p.codigo_interno === id);
-    
-    setEditProducto(producto);
+    const producto = await productoService.getOneProductos(id).then((data) =>  setEditProducto(data[0]));
+
+
   };
 
   const updateProducto = async(producto) => {
@@ -91,7 +100,8 @@ const ProductoContextProvider = (props) => {
         setPermiso,
         setEditProducto,
         isEmpty,
-        filterProductos
+        filterProductos, 
+        getSerialModelo,
       }}
     >
       {props.children}

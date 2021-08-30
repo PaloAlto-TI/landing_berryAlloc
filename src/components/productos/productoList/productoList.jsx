@@ -67,7 +67,7 @@ const ProductoList = () => {
                 a.codigo_interno.localeCompare(b.codigo_interno),
             },
             showSorterTooltip: false,
-            width: '10%'
+            width: '15%'
           },
           {
             title: "NOMBRE",
@@ -77,7 +77,7 @@ const ProductoList = () => {
               compare: (a, b) => a.nombre.localeCompare(b.nombre),
             },
             showSorterTooltip: false,
-            width: '35%'
+            width: '30%'
 
             // render:(text)=><Link to='/inicio'>{text}</Link>
           },
@@ -168,7 +168,7 @@ const ProductoList = () => {
                 a.codigo_interno.localeCompare(b.codigo_interno),
             },
             showSorterTooltip: false,
-            width: '10%'
+            width: '15%'
 
           },
           {
@@ -179,7 +179,7 @@ const ProductoList = () => {
               compare: (a, b) => a.nombre.localeCompare(b.nombre),
             },
             showSorterTooltip: false,
-            width: '35%'
+            width: '30%'
 
             // render:(text)=><Link to='/inicio'>{text}</Link>
           },

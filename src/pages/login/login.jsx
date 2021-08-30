@@ -149,7 +149,7 @@ const Login = () => {
 
           <div className="botonGoogle">
             <GoogleLogin
-              clientId="610747110294-o2cruk32qs9j2mi3o9ob1b7dpu4ib35u.apps.googleusercontent.com"
+              clientId="278026949237-vk2iq2u1hqikrvfq5993u88dfcje6up0.apps.googleusercontent.com"
               buttonText="Google"
               render={(renderProps) => (
                 <Button className='googleButton' color='primary' onClick={renderProps.onClick} disabled={renderProps.disabled}  >

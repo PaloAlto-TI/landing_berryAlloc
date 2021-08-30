@@ -10,6 +10,23 @@ export class ProductoService {
             },
           }).then(res => res.data.data);
     }
+    
+    getModelos(){
+      return axios.get(baseUrl+"modelos", {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+      }).then(res => res.data.data);
+    }
+
+
+    getSerialModelo(id){
+      return axios.get(baseUrl+"codigo-modelo/"+id, {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+      }).then(res => res.data.data);
+    }
 
     getProductos(id){
 
@@ -22,6 +39,33 @@ export class ProductoService {
             },
           }).then(res => res.data.data);
     }
+
+    getQR(url){
+
+      return axios.post(baseUrl+"scan", {url: url}, {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+      }).then(res => res.data);
+    }
+
+    generateQRPdf(producto){
+      return axios.post(baseUrl+"generate-qr-pdf", {nombre: producto.nombre ,url: producto.url_pagina_web}, {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+        responseType: 'arraybuffer'
+      }).then(res => res.data);
+    }
+
+    getOneProductos(id){
+
+      return axios.get(baseUrl+"vista/"+ id, {
+          headers: {
+            Authorization: `Bearer ${REACT_APP_API_KEY}`,
+          },
+        }).then(res => res.data.data);
+  }
     
     getProducto(producto){
         return axios.get(baseUrl+"producto/"+producto.id, {
@@ -57,11 +101,23 @@ export class ProductoService {
     }
 
     getStock(id){
+
+      
         return axios.get("https://api.contifico.com/sistema/api/v1/producto/?codigo=" +id, {
             headers: { 
               Authorization: REACT_APP_CONTIFICO_KEY
             }
-          }).then(res => res.data[0] ? res.data[0].cantidad_stock : "N/A");
+          }).then(res => res.data[0] ? res.data[0] : { id: "N/A", cantidad_stock:"N/A"});
+    }
+
+
+    getStockBodegas(id){
+
+      return axios.get("https://api.contifico.com/sistema/api/v1/producto/" +id +"/stock/", {
+        headers: { 
+          Authorization: REACT_APP_CONTIFICO_KEY
+        }
+      }).then(res => res.data ? res.data : { bodega_nombre: "N/A", cantidad:"N/A"});
     }
     
 }
