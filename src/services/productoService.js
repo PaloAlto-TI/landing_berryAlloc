@@ -107,7 +107,17 @@ export class ProductoService {
             headers: { 
               Authorization: REACT_APP_CONTIFICO_KEY
             }
-          }).then(res => res.data[0] ? res.data[0].cantidad_stock : "N/A");
+          }).then(res => res.data[0] ? res.data[0] : { id: "N/A", cantidad_stock:"N/A"});
+    }
+
+
+    getStockBodegas(id){
+
+      return axios.get("https://api.contifico.com/sistema/api/v1/producto/" +id +"/stock/", {
+        headers: { 
+          Authorization: REACT_APP_CONTIFICO_KEY
+        }
+      }).then(res => res.data ? res.data : { bodega: "N/A", cantidad:"N/A"});
     }
     
 }

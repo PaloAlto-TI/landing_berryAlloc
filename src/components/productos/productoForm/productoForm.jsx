@@ -8,6 +8,8 @@ import {
   Collapse,
   Select,
   Space,
+  Image,
+  Tooltip,
 } from "antd";
 import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
@@ -20,9 +22,11 @@ import {
   CloseCircleFilled,
   CloseSquareOutlined,
   EditOutlined,
+  InfoCircleOutlined,
   LoadingOutlined,
   PlusOutlined,
   PushpinFilled,
+  QrcodeOutlined,
   RollbackOutlined,
   SaveOutlined,
   SearchOutlined,
@@ -44,6 +48,8 @@ import { ProductoProductoTipoService } from "../../../services/productoProductoT
 import { ProductoTipoService } from "../../../services/productoTipoService";
 import { Typography } from "antd";
 import { ProductoService } from "../../../services/productoService";
+import Modal from "antd/lib/modal/Modal";
+import { saveAs } from 'file-saver'
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -88,6 +94,8 @@ const FormProducto = (props) => {
   const [metodoABC, setMetodoABC] = useState(undefined);
   const [nombre, setNombre] = useState(undefined);
   const [nombreEdit, setNombreEdit] = useState(false);
+  const [QR, setQR] = useState(null)
+  const [stockBodegas, setstockBodegas] = useState(null)
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
   );
@@ -97,7 +105,7 @@ const FormProducto = (props) => {
   const [show, setShow] = useState(null);
   const [infoTecnicaLinea, setinfoTecnicaLinea] = useState(null);
   const [infoTecnicaGrupo, setinfoTecnicaGrupo] = useState(null);
-
+  const [isModalVisible, setIsModalVisible] = useState(null)
   // const [precio, setPrecio] = useState(null)
   const [form] = Form.useForm();
   let initialValues = {
@@ -209,7 +217,7 @@ const FormProducto = (props) => {
         setSelectedGrupoId(editProducto.fk_grupo_id);
         setUnidadMedida(editProducto.fk_unidad_medida_id);
         setId(editProducto.id);
-        if(crud){
+        if (crud) {
           fetch();
         }
       }
@@ -291,6 +299,23 @@ const FormProducto = (props) => {
       }}
     />
   );
+
+  const stockPorBodegas = async() => {
+    let data = await new ProductoService().getStockBodegas(stock.id)
+    let view = "";
+
+    var list = data.map(function (d) {
+      
+        return (
+          <div>
+            {d.bodega_nombre+" : "+d.cantidad}
+          </div>
+        );
+      
+    });
+
+    setstockBodegas(list)
+  }
   // const randomNumber = (min, max) =>{
   //   return Math.floor(Math.random() * (max - min) + min);
   // }
@@ -318,9 +343,9 @@ const FormProducto = (props) => {
       console.log("values", values);
       data = await updateProducto(values);
     } else {
-      console.log("aqui!!!!")
+      console.log("aqui!!!!");
       data = await createProducto(values);
-      console.log("zzzzz",data)
+      console.log("zzzzz", data);
     }
 
     if (data.includes("OK")) {
@@ -725,6 +750,30 @@ const FormProducto = (props) => {
     }
   }
 
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleDownload = async () => {
+    if (editProducto.url_pagina_web) {
+      const data = await new ProductoService()
+        .generateQRPdf(editProducto)
+      const blob = new Blob([data], { type: 'application/pdf' })
+      saveAs(blob, "QR-"+editProducto.nombre+".pdf")
+    }
+
+  };
+
+  const generarQR = async () => {
+    if (editProducto.url_pagina_web) {
+      await new ProductoService()
+        .getQR(editProducto.url_pagina_web)
+        .then((data) => setQR(data));
+    }
+
+    setIsModalVisible(true)
+  };
+
   function goBackHistory() {
     history.push("/home/productos");
   }
@@ -743,6 +792,26 @@ const FormProducto = (props) => {
   ) {
     return editProducto || codigo === "nuevo" ? (
       <>
+      { codigo !== "nuevo" &&
+        <Modal
+        title={<b>CÓDIGO QR: {editProducto.nombre}</b>}
+        okType="primary"
+        okText="Descargar"
+        cancelText="Regresar"
+        visible={isModalVisible ? true : false}
+        onCancel={handleCancel}
+        onOk={handleDownload}
+
+      >
+        <Row>
+          <Col span={12} offset={6}>
+            <Image width={200} src={QR} />
+          </Col>
+        </Row>
+        <Button type="link" href={editProducto.url_pagina_web} target="_blank">{editProducto.url_pagina_web}</Button>
+
+      </Modal>
+    }
         <Form
           {...layout}
           form={form}
@@ -753,7 +822,9 @@ const FormProducto = (props) => {
           onValuesChange={handleFormValuesChange}
           hidden={codigo !== "nuevo" ? show : false}
         >
-          <Divider>PRODUCTO</Divider>
+          <Divider>
+            PRODUCTO {codigo !== "nuevo" && editProducto.url_pagina_web  ? <QrcodeOutlined style={{ fontSize: '25px' }} onClick={() =>generarQR()} /> : null} 
+          </Divider>
           <br />
 
           <Collapse defaultActiveKey={["1", "2", "3", "4"]}>
@@ -852,16 +923,20 @@ const FormProducto = (props) => {
                     {crud ? (
                       !newModelo ? (
                         <Space>
-                          <Form.Item name={crud ? "modelo" : "modelo"}  rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione un modelo!",
-                            },
-                          ]
-                        : []
-                    }>
+                          <Form.Item
+                            name={crud ? "modelo" : "modelo"}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione un modelo!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
                             <SelectOpciones
                               tipo="modelo"
                               filter={selectedGrupoId}
@@ -887,16 +962,19 @@ const FormProducto = (props) => {
                         </Space>
                       ) : (
                         <Space>
-                          <Form.Item name={crud ? "modelo" : "modelo"}  rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese un modelo!",
-                            },
-                          ]
-                        : []
-                    }>
+                          <Form.Item
+                            name={crud ? "modelo" : "modelo"}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message: "Por favor, ingrese un modelo!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
                             <Input placeholder="Ingrese el modelo" />
                           </Form.Item>
                           <Form.Item>
@@ -1063,9 +1141,8 @@ const FormProducto = (props) => {
             {selectedLineaId !== "60d4c04b894c18b5e810e025" &&
               selectedLineaId !== "60faeee1a412169c92c778c2" &&
               selectedLineaId !== "60d4c04a8e4f5ab5e8b93218" &&
-              selectedLineaId !== "60ff0a8a5d3d71d21abba9d1" && 
-              selectedLineaId !== "61252dc1c2ac82f8cc563b5f" && 
-              (
+              selectedLineaId !== "60ff0a8a5d3d71d21abba9d1" &&
+              selectedLineaId !== "61252dc1c2ac82f8cc563b5f" && (
                 <Panel
                   className="tecnica"
                   header="INFORMACIÓN TÉCNICA"
@@ -2583,12 +2660,13 @@ const FormProducto = (props) => {
                               : []
                           }
                         >
-                        {crud ? (
-                          <SelectOpciones
-                            tipo="color de pegamento"
-                            readOnly={!crud}
-                            setShow={setShow}
-                          />): (
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="color de pegamento"
+                              readOnly={!crud}
+                              setShow={setShow}
+                            />
+                          ) : (
                             <Input className="input-type" readOnly={!crud} />
                           )}
                         </Form.Item>
@@ -2607,13 +2685,13 @@ const FormProducto = (props) => {
                               : []
                           }
                         >
-                        {crud ? (
-
-                          <SelectOpciones
-                            tipo="olor"
-                            readOnly={!crud}
-                            setShow={setShow}
-                          />): (
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="olor"
+                              readOnly={!crud}
+                              setShow={setShow}
+                            />
+                          ) : (
                             <Input className="input-type" readOnly={!crud} />
                           )}
                         </Form.Item>
@@ -2631,12 +2709,14 @@ const FormProducto = (props) => {
                                 ]
                               : []
                           }
-                        >{crud ? (
-                          <SelectOpciones
-                            tipo="adherencia"
-                            readOnly={!crud}
-                            setShow={setShow}
-                          />): (
+                        >
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="adherencia"
+                              readOnly={!crud}
+                              setShow={setShow}
+                            />
+                          ) : (
                             <Input className="input-type" readOnly={!crud} />
                           )}
                         </Form.Item>
@@ -3303,10 +3383,12 @@ const FormProducto = (props) => {
                   {!crud ? (
                     <Row>
                       <Col span={11}>
-                        <Title level={5}>Stock General:</Title>
+                      
+                        <Title level={5}>Stock General: </Title>
                       </Col>
                       <Col span={10}>
-                        <Title level={5}>{stock}</Title>
+                        <Title level={5}>{stock && stock.cantidad_stock} <Tooltip onClick={()=>stockPorBodegas()} trigger="click" placement="right" title={stockBodegas ? stockBodegas : "Cargando..."}>
+    <InfoCircleOutlined /></Tooltip></Title>
                       </Col>
                     </Row>
                   ) : null}
