@@ -29,6 +29,7 @@ import { adherenciasPegamentos } from "../../utils/adherenciasPegamentos";
 import { resistenciasDeslizamiento } from "../../utils/resistenciasDeslizamiento";
 import { resistenciasAbrasionPorcelanato } from "../../utils/resistenciasAbrasionPorcelanato";
 import { ProductoTipoService } from "../../services/productoTipoService";
+import { ProductoService } from "../../services/productoService";
 
 const { Option } = Select;
 const SelectOpciones = (props) => {
@@ -127,23 +128,30 @@ const SelectOpciones = (props) => {
             data.filter((p) => p.marca_id === filter && p.linea_id === filter2)
           );
         });
-      } else if (tipo === "color" && filter) {
+      } else if (tipo === "modelo" && filter) {
         console.log("FILTER-COLOR:", filter);
         console.log("FILTER-COLOR2:", filter2);
 
-        const colorService = new ColorGrupoService();
-        await colorService.getAll().then((data) => {
-          if (cancel) return;
-          if (filter3 === "60d4c04b894c18b5e810e025") {
-            setOpciones(
-              data.filter(
-                (p) => p.grupo_id === filter && p.marca_id === filter2
-              )
-            );
-          } else {
-            setOpciones(data.filter((p) => p.grupo_id === filter));
-          }
-        });
+        const productoService = new ProductoService()
+        await productoService.getModelos().then((data) => {
+            if (cancel) return;
+            console.log("modelos", data)
+              setOpciones(
+                data);
+          });
+        // const colorService = new ColorGrupoService();
+        // await colorService.getAll().then((data) => {
+        //   if (cancel) return;
+        //   if (filter3 === "60d4c04b894c18b5e810e025") {
+        //     setOpciones(
+        //       data.filter(
+        //         (p) => p.grupo_id === filter && p.marca_id === filter2
+        //       )
+        //     );
+        //   } else {
+        //     setOpciones(data.filter((p) => p.grupo_id === filter));
+        //   }
+        // });
         setShow(false);
       } else if (tipo === "proveedor" && filter) {
         console.log("ejecuta proveedor");

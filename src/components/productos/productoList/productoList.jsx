@@ -59,29 +59,31 @@ const ProductoList = () => {
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const columns =
-    sesions ? sesions._usuario[0].rol === 2
+  sesions ? sesions._usuario[0].rol === 2
       && [
-        {
-          title: "CÓDIGO",
-          dataIndex: "codigo_interno",
-          key: "codigo_interno",
-          sorter: {
-            compare: (a, b) =>
-              a.codigo_interno.localeCompare(b.codigo_interno),
+          {
+            title: "CÓDIGO",
+            dataIndex: "codigo_interno",
+            key: "codigo_interno",
+            sorter: {
+              compare: (a, b) =>
+                a.codigo_interno.localeCompare(b.codigo_interno),
+            },
+            showSorterTooltip: false,
+            width: '15%'
           },
-          showSorterTooltip: false,
-          width: '10%'
-        },
-        {
-          title: "NOMBRE",
-          dataIndex: "nombre",
-          key: "nombre",
-          sorter: {
-            compare: (a, b) => a.nombre.localeCompare(b.nombre),
-          },
-          showSorterTooltip: false,
-          width: '35%'
+          {
+            title: "NOMBRE",
+            dataIndex: "nombre",
+            key: "nombre",
+            sorter: {
+              compare: (a, b) => a.nombre.localeCompare(b.nombre),
+            },
+            showSorterTooltip: false,
+            width: '30%'
 
+            // render:(text)=><Link to='/inicio'>{text}</Link>
+          
           // render:(text)=><Link to='/inicio'>{text}</Link>
         },
         {
@@ -162,27 +164,30 @@ const ProductoList = () => {
 
       ]
       : [
-        {
-          title: "CÓDIGO",
-          dataIndex: "codigo_interno",
-          key: "codigo_interno",
-          sorter: {
-            compare: (a, b) =>
-              a.codigo_interno.localeCompare(b.codigo_interno),
-          },
-          showSorterTooltip: false,
-          width: '10%'
+          {
+            title: "CÓDIGO",
+            dataIndex: "codigo_interno",
+            key: "codigo_interno",
+            sorter: {
+              compare: (a, b) =>
+                a.codigo_interno.localeCompare(b.codigo_interno),
+            },
+            showSorterTooltip: false,
+            width: '15%'
 
-        },
-        {
-          title: "NOMBRE",
-          dataIndex: "nombre",
-          key: "nombre",
-          sorter: {
-            compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
-          showSorterTooltip: false,
-          width: '35%'
+          {
+            title: "NOMBRE",
+            dataIndex: "nombre",
+            key: "nombre",
+            sorter: {
+              compare: (a, b) => a.nombre.localeCompare(b.nombre),
+            },
+            showSorterTooltip: false,
+            width: '30%'
+
+            // render:(text)=><Link to='/inicio'>{text}</Link>
+        
 
           // render:(text)=><Link to='/inicio'>{text}</Link>
         },
@@ -263,6 +268,7 @@ const ProductoList = () => {
   }
 
   function ver(record) {
+    filterProductos(record.fk_linea_id);
     record["permiso"] = false;
     history.push(`${path}/${record.codigo_interno}/ver`, record);
   }
@@ -411,15 +417,11 @@ const ProductoList = () => {
             return {
               onClick: (event) => {
                 console.log(event);
-                if (sesions) {
-                  if (sesions._usuario[0].rol ===2) {
-                    if (event.clientX < window.innerWidth * click && rowState) {
-                      // record["permiso"] = false;
-                      // history.push(`${path}/${record.codigo_interno}/ver`, record);
 
-                      ver(record);
-                    }
-                  } else {
+                if (sesions._usuario[0].rol ===2) {
+                  if (event.clientX < window.innerWidth * click && rowState) {
+                    // record["permiso"] = false;
+                    // history.push(`${path}/${record.codigo_interno}/ver`, record);
                     ver(record);
                   }
                 }

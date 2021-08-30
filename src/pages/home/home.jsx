@@ -21,21 +21,28 @@ import ModeloList from "../../components/modelo/modeloList/modeloList";
 import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
 import ModeloContextProvider from "../../contexts/modeloContext";
 
-
 import { Layout } from "antd";
 import "./home.css";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  useRouteMatch
+  useRouteMatch,
 } from "react-router-dom";
-import { ConfigProvider } from 'antd';
-import es_ES from 'antd/es/locale/es_ES';
+import { ConfigProvider } from "antd";
+import es_ES from "antd/es/locale/es_ES";
 import SubgrupoForm from "../../components/subgrupo/subgrupoForm/subgrupoForm";
 import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoList";
 import SubgrupoContextProvider from "../../contexts/subgrupoContext";
 const Home = () => {
+  // const Sesion= async()=>{
+
+  //   const { usuario} =  useContext(SesionContext);
+
+  //     return await usuario();
+  // }
+
+  //console.log("SESION: "+Sesion());
 
   let { path } = useRouteMatch();
 
@@ -59,86 +66,108 @@ const Home = () => {
               </ProductoContextProvider>
             </Route>
             <Route exact path={`${path}`}>
-              <Layout style={{ height: "62vh", backgroundColor: "white", justifyContent: "center", }}>
-                <span style={{ color: "black", fontSize: "45px", fontWeight: "bold", }}>
+              <Layout
+                style={{
+                  height: "62vh",
+                  backgroundColor: "white",
+                  justifyContent: "center",
+                }}
+              >
+                <span
+                  style={{
+                    color: "black",
+                    fontSize: "45px",
+                    fontWeight: "bold",
+                  }}
+                >
                   PRODUCTOS - PALO ALTO
                 </span>
               </Layout>
             </Route>
-          </Switch>
-          <Switch>
             <Route exact path={`${path}/lineas`}>
-              <LineaContextProvider Provider>
+              <LineaContextProvider>
                 <LineaList />
               </LineaContextProvider>
             </Route>
             <Route path={`${path}/lineas/:codigo?/:operacion?`}>
-              <LineaContextProvider Provider>
+              <LineaContextProvider>
                 <LineaForm />
               </LineaContextProvider>
             </Route>
-          </Switch>
-          <Switch>
             <Route exact path={`${path}/marcas`}>
-              <MarcaContextProvider Provider>
+              <MarcaContextProvider>
                 <MarcaList />
               </MarcaContextProvider>
             </Route>
             <Route path={`${path}/marcas/:codigo?/:operacion?`}>
-              <MarcaContextProvider Provider>
+              <MarcaContextProvider>
                 <MarcaForm />
               </MarcaContextProvider>
             </Route>
-          </Switch>
-          <Switch>
+            <Route exact path={`${path}/subgrupo`}>
+              <SubgrupoContextProvider>
+                <SubgrupoList />
+              </SubgrupoContextProvider>
+            </Route>
+            <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              <SubgrupoContextProvider>
+                <SubgrupoForm />
+              </SubgrupoContextProvider>
+            </Route>
             <Route exact path={`${path}/proveedores`}>
-              <ProveedorContextProvider Provider>
+              <ProveedorContextProvider>
                 <ProveedorList />
               </ProveedorContextProvider>
             </Route>
             <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
-              <ProveedorContextProvider Provider>
+              <ProveedorContextProvider>
                 <ProveedorForm />
               </ProveedorContextProvider>
             </Route>
-          </Switch>
-          <Switch>
             <Route exact path={`${path}/grupos`}>
-              <GrupoContextProvider Provider>
+              <GrupoContextProvider>
                 <GrupoList />
               </GrupoContextProvider>
             </Route>
             <Route path={`${path}/grupos/:codigo?/:operacion?`}>
-              <GrupoContextProvider Provider>
+              <GrupoContextProvider>
                 <GrupoForm />
               </GrupoContextProvider>
             </Route>
+           
           </Switch>
+
+          {/* <ProveedorContextProvider Provider>
           <Switch>
-            <Route exact path={`${path}/modelos`}>
-              <ModeloContextProvider Provider>
-                <ModeloList />
-              </ModeloContextProvider>
-            </Route>
-            <Route path={`${path}/modelos/:codigo?/:operacion?`}>
-              <ModeloContextProvider Provider>
-                <ModeloForm />
-              </ModeloContextProvider>
-            </Route>
+          <Route exact path={`${path}/proveedores`}>
+              <ProveedorList />
+          </Route>
+          <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
+              <ProveedorForm />
+          </Route>
           </Switch>
-            <Switch>
-              <Route exact path={`${path}/subgrupo`}>
-              <SubgrupoContextProvider>
-                <SubgrupoList />
-                </SubgrupoContextProvider>
-              </Route>
-              <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
-              <SubgrupoContextProvider>
-                <SubgrupoForm />
-                </SubgrupoContextProvider>
-              </Route>
-            </Switch>
-          {/*<Route path="*">
+          </ProveedorContextProvider>
+          <GrupoContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/grupos`}>
+              <GrupoList />
+          </Route>
+          <Route path={`${path}/grupos/:codigo?/:operacion?`}>
+              <GrupoForm />
+          </Route>
+          </Switch>
+          </GrupoContextProvider>
+          <ModeloContextProvider Provider>
+          <Switch>
+          <Route exact path={`${path}/modelos`}>
+              <ModeloList />
+          </Route>
+          <Route path={`${path}/modelos/:codigo?/:operacion?`}>
+              <ModeloForm />
+          </Route>
+          </Switch>
+          </ModeloContextProvider>
+            {/*<Route path="*">
               <p>404 NOT FOUND</p>
   </Route>*/}
         </Router>

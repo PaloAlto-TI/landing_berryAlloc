@@ -30,6 +30,10 @@ export const formatos= [
     {
         "id":"ROLLO",
         "nombre":"ROLLO"
+    },
+    {
+        "id":"UNIDAD",
+        "nombre":"UNIDAD"
     }
  
 

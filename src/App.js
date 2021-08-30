@@ -2,7 +2,7 @@ import React from "react";
 import './App.less';
 import Home from "./pages/home/home";
 import Login from "./pages/login/login";
-import SesionContextProvider from "../../PRODUCTOS_PA_FE/src/contexts/sesionContext";
+import SesionContextProvider from "./contexts/sesionContext";
 
 import {
   BrowserRouter as Router,
