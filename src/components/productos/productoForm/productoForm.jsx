@@ -318,7 +318,9 @@ const FormProducto = (props) => {
       console.log("values", values);
       data = await updateProducto(values);
     } else {
+      console.log("aqui!!!!")
       data = await createProducto(values);
+      console.log("zzzzz",data)
     }
 
     if (data.includes("OK")) {
@@ -1061,7 +1063,9 @@ const FormProducto = (props) => {
             {selectedLineaId !== "60d4c04b894c18b5e810e025" &&
               selectedLineaId !== "60faeee1a412169c92c778c2" &&
               selectedLineaId !== "60d4c04a8e4f5ab5e8b93218" &&
-              selectedLineaId !== "60ff0a8a5d3d71d21abba9d1" && (
+              selectedLineaId !== "60ff0a8a5d3d71d21abba9d1" && 
+              selectedLineaId !== "61252dc1c2ac82f8cc563b5f" && 
+              (
                 <Panel
                   className="tecnica"
                   header="INFORMACIÓN TÉCNICA"

@@ -84,70 +84,67 @@ const Home = () => {
                 </span>
               </Layout>
             </Route>
-          </Switch>
-          <LineaContextProvider Provider>
-            <Switch>
-              <Route exact path={`${path}/lineas`}>
+            <Route exact path={`${path}/lineas`}>
+              <LineaContextProvider>
                 <LineaList />
-              </Route>
-              <Route path={`${path}/lineas/:codigo?/:operacion?`}>
+              </LineaContextProvider>
+            </Route>
+            <Route path={`${path}/lineas/:codigo?/:operacion?`}>
+              <LineaContextProvider>
                 <LineaForm />
-              </Route>
-            </Switch>
-          </LineaContextProvider>
-          <MarcaContextProvider Provider>
-            <Switch>
-              <Route exact path={`${path}/marcas`}>
+              </LineaContextProvider>
+            </Route>
+            <Route exact path={`${path}/marcas`}>
+              <MarcaContextProvider>
                 <MarcaList />
-              </Route>
-              <Route path={`${path}/marcas/:codigo?/:operacion?`}>
+              </MarcaContextProvider>
+            </Route>
+            <Route path={`${path}/marcas/:codigo?/:operacion?`}>
+              <MarcaContextProvider>
                 <MarcaForm />
-              </Route>
-            </Switch>
-          </MarcaContextProvider>
-
-          <SubgrupoContextProvider>
-            <Switch>
-              <Route exact path={`${path}/subgrupo`}>
-                {/* <SubgrupoForm /> */}
+              </MarcaContextProvider>
+            </Route>
+            <Route exact path={`${path}/subgrupo`}>
+              <SubgrupoContextProvider>
                 <SubgrupoList />
-              </Route>
-              <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              </SubgrupoContextProvider>
+            </Route>
+            <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+              <SubgrupoContextProvider>
                 <SubgrupoForm />
-              </Route>
-            </Switch>
-          </SubgrupoContextProvider>
-          <ProveedorContextProvider>
-            <Switch>
-              <Route exact path={`${path}/proveedores`}>
+              </SubgrupoContextProvider>
+            </Route>
+            <Route exact path={`${path}/proveedores`}>
+              <ProveedorContextProvider>
                 <ProveedorList />
-              </Route>
-              <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
+              </ProveedorContextProvider>
+            </Route>
+            <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
+              <ProveedorContextProvider>
                 <ProveedorForm />
-              </Route>
-            </Switch>
-          </ProveedorContextProvider>
-          <GrupoContextProvider>
-            <Switch>
-              <Route exact path={`${path}/grupos`}>
+              </ProveedorContextProvider>
+            </Route>
+            <Route exact path={`${path}/grupos`}>
+              <GrupoContextProvider>
                 <GrupoList />
-              </Route>
-              <Route path={`${path}/grupos/:codigo?/:operacion?`}>
+              </GrupoContextProvider>
+            </Route>
+            <Route path={`${path}/grupos/:codigo?/:operacion?`}>
+              <GrupoContextProvider>
                 <GrupoForm />
-              </Route>
-            </Switch>
-          </GrupoContextProvider>
-
-          <ModeloContextProvider>
-            <Switch>
-              <Route exact path={`${path}/modelos`}>
+              </GrupoContextProvider>
+            </Route>
+            <Route exact path={`${path}/modelos`}>
+              <ModeloContextProvider>
                 <ModeloList />
-              </Route>
-              <Route path={`${path}/modelos/:codigo?/:operacion?`}>
+              </ModeloContextProvider>
+            </Route>
+            <Route path={`${path}/modelos/:codigo?/:operacion?`}>
+              <ModeloContextProvider>
                 <ModeloForm />
-              </Route>
-            </Switch>
-          </ModeloContextProvider>
+              </ModeloContextProvider>
+            </Route>
+          </Switch>
 
           {/* <ProveedorContextProvider Provider>
           <Switch>

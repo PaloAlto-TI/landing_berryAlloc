@@ -40,6 +40,24 @@ export class ProductoService {
           }).then(res => res.data.data);
     }
 
+    getQR(url){
+
+      return axios.post(baseUrl+"scan", {url: url}, {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+      }).then(res => res.data);
+    }
+
+    generateQRPdf(producto){
+      return axios.post(baseUrl+"generate-qr-pdf", {nombre: producto.nombre ,url: producto.url_pagina_web}, {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+        responseType: 'arraybuffer'
+      }).then(res => res.data);
+    }
+
     getOneProductos(id){
 
       return axios.get(baseUrl+"vista/"+ id, {

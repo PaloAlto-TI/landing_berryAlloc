@@ -1,62 +1,78 @@
 import React, { useState } from "react";
-import { Menu, Dropdown, message } from "antd";
+import { Menu, Dropdown, message, Image, Col, Row, Button } from "antd";
 import { useHistory, useRouteMatch } from "react-router-dom";
-import { Modal } from 'antd';
-import { DeleteFilled, EditFilled} from "@ant-design/icons";
+import { Modal } from "antd";
+import { DeleteFilled, EditFilled, QrcodeOutlined } from "@ant-design/icons";
+import { ProductoService } from "../../services/productoService";
+import { saveAs } from 'file-saver'
 
 const CrudButton = (props) => {
   const { record, softDelete, setRowState, typeTransaction } = props;
   let { path } = useRouteMatch();
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(null);
+  const [QR, setQR] = useState(null);
   // console.log("EL TIPO DE TRANSACTION: " + JSON.stringify(typeTransaction));
   // console.log("RECORD: " + JSON.stringify(record));
   // console.log("EL SOFDELETE DE CRUDBUTTON: " + softDelete);
   // console.log("EL ROWSTATE = ", setRowState )
-  
-  const showModal = () => {
+
+  const showModal = (t) => {
     setRowState(false);
-    setIsModalVisible(true);
+    setIsModalVisible(t);
   };
 
-  const handleOk = async() => {
-
+  const handleOk = async () => {
     // setRowState(true);
     // let data = await softDelete(record);
     // message.info(data.nombre + " ha sido eliminado");
     // setIsModalVisible(false);
     // console.log("ENTRA AL ELIMINAR EN HANDLEOK LINEA CON TYPE: " + JSON.stringify(typeTransaction))
-    // 21/07/2021 - OBSERVACION: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUÉ TIPO DE ELIMINADO LÓGICO SE DEBE HACER. 
+    // 21/07/2021 - OBSERVACION: ACÁ SE DEBE CONTROLAR DESDE EL TYPETRANSACTION QUÉ TIPO DE ELIMINADO LÓGICO SE DEBE HACER.
     // AL MOMENTO TODOS VAN A SOFDELETE, DESPUÉS SE VERÁ UNO POR DEFAULT
-    
+
     let dataSoftDelete = null;
     setRowState(true);
-    
+
     // record.pseudo = null;// PRUEBA PARA NUEVO TIPO DE ERROR
     //console.log("record"+JSON.stringify(record))
     dataSoftDelete = await softDelete(record);
-    
-    console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete)); 
+
+    console.log(
+      "LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +
+        JSON.stringify(dataSoftDelete)
+    );
     //console.log("LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +JSON.stringify(dataSoftDelete));
-//-------------------------------------------------------REVISAR CON QUE DELETE NOS QUEDAMSO------------------------
-if(dataSoftDelete){
-    if (dataSoftDelete.message.includes("OK")) {
-      message.info(JSON.stringify(dataSoftDelete.message) + " -  LA ELIMINACIÓN DE " + (typeTransaction === null || typeTransaction === undefined ? 
-        "REGISTRO" : typeTransaction.labelCrudSingle) + ": "  + JSON.stringify(dataSoftDelete.data.nombre) + " SE REALIZÓ CON ÉXITO", 15);
-      // message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] +  " CON ÉXITO", 4).then((t) => history.goBack());
+    //-------------------------------------------------------REVISAR CON QUE DELETE NOS QUEDAMSO------------------------
+    if (dataSoftDelete) {
+      if (dataSoftDelete.message.includes("OK")) {
+        message.info(
+          JSON.stringify(dataSoftDelete.message) +
+            " -  LA ELIMINACIÓN DE " +
+            (typeTransaction === null || typeTransaction === undefined
+              ? "REGISTRO"
+              : typeTransaction.labelCrudSingle) +
+            ": " +
+            JSON.stringify(dataSoftDelete.data.nombre) +
+            " SE REALIZÓ CON ÉXITO",
+          15
+        );
+        // message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] +  " CON ÉXITO", 4).then((t) => history.goBack());
+      } else {
+        message.error(
+          "ERROR AL MOMENTO DE ELIMINAR " + typeTransaction.labelCrudSingle,
+          15
+        );
+        // message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
+      }
     } else {
-      message.error("ERROR AL MOMENTO DE ELIMINAR " + typeTransaction.labelCrudSingle, 15);
-      // message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
+      setRowState(true);
+      let data = await softDelete(record);
+      //console.log("datas jksdnfksd "+data)
+      message.info(record.nombre + " ha sido eliminado");
+      //setIsModalVisible(false);
     }
-  }else{
-    setRowState(true);
-   let data= await softDelete(record);
-   //console.log("datas jksdnfksd "+data)
-    message.info(record.nombre + " ha sido eliminado");
-    //setIsModalVisible(false);
-  }
 
-    setIsModalVisible(false);
-
+    setIsModalVisible(null);
   };
 
   const handleCancel = () => {
@@ -71,42 +87,59 @@ if(dataSoftDelete){
   let history = useHistory();
 
   function eliminar() {
-    showModal();
+    showModal("eliminar");
   }
+
+  const generarQR = async () => {
+    if (record.url_pagina_web) {
+      await new ProductoService()
+        .getQR(record.url_pagina_web)
+        .then((data) => setQR(data));
+    }
+
+    showModal("qr");
+  };
+
+  const handleDownload = async () => {
+    if (record.url_pagina_web) {
+      const data = await new ProductoService()
+        .generateQRPdf(record)
+      const blob = new Blob([data], { type: 'application/pdf' })
+      saveAs(blob, "QR-"+record.nombre+".pdf")
+    }
+
+  };
 
   function editar() {
     record["permiso"] = true;
     // console.log("ENTRA  EL TYPE AL EDITAR DEL CRUD CON " + JSON.stringify(typeTransaction));
     // console.log("ENTRA EL RECORD AL EDITAR DEL CRUD CON " + JSON.stringify(record));
-  //---------------------------Master.------------------------------------------
+    //---------------------------Master.------------------------------------------
     //history.push(`${path}/${record.codigo_interno}/editar`);
-  
+
     //}
     //---------------------------Master.------------------------------------------
 
-    if (typeTransaction === null || typeTransaction === undefined){
-
+    if (typeTransaction === null || typeTransaction === undefined) {
       history.push(`${path}/${record.codigo_interno}/editar`, record);
-      
     } else {
-
-      switch(typeTransaction.byIdPSQL) {
+      switch (typeTransaction.byIdPSQL) {
         case true:
           return history.push(`${path}/${record.id}/editar`, record);
         default:
           return history.push(`${path}/${record.codigo_interno}/editar`);
-        } 
+      }
     }
 
     // typeTransaction ? ( history.push(`${path}/${record.codigo_interno}/editar`, record)
     //   ) : history.push(`${path}/${record.codigo_interno}/editar`, record);
-    
-      // switch(typeTransaction.byIdPSQL) {
-      //   case true:
-      //     return history.push(`${path}/${record.id}/editar`, record);
-      //   default:
-      //     return history.push(`${path}/${record.codigo_interno}/editar`, record);
-      //   } 
+
+    // switch(typeTransaction.byIdPSQL) {
+    //   case true:
+    //     return history.push(`${path}/${record.id}/editar`, record);
+    //   default:
+    //     return history.push(`${path}/${record.codigo_interno}/editar`, record);
+    //   }
 
     // : history.push(`${path}/${record.codigo_interno}/editar`, record);
 
@@ -117,7 +150,7 @@ if(dataSoftDelete){
 
     // history.push(`${path}/${record.codigo_interno}/editar`, record);
   }
-  
+
   const menu = (
     <Menu onClick={handleMenuClick}>
       {/* <Menu.Item icon={<EyeFilled />}key="1" onClick={ver}>
@@ -126,19 +159,60 @@ if(dataSoftDelete){
       <Menu.Item icon={<EditFilled />} key="2" onClick={editar}>
         Editar
       </Menu.Item>
-      <Menu.Item icon={<DeleteFilled />}key="3" onClick={eliminar}>
+      {record.url_pagina_web ? (
+        <Menu.Item icon={<QrcodeOutlined />} key="1" onClick={generarQR}>
+          Código QR
+        </Menu.Item>
+      ) : null}
+      <Menu.Item icon={<DeleteFilled />} key="3" onClick={eliminar}>
         Eliminar
       </Menu.Item>
     </Menu>
   );
   return (
-    // OBSERVACIÓN 22/07/2021: En el renderizado condiconal para la etiqueta de: ¿ Está seguro que desea eliminar : {record.nombre} se deja 
+    // OBSERVACIÓN 22/07/2021: En el renderizado condiconal para la etiqueta de: ¿ Está seguro que desea eliminar : {record.nombre} se deja
     // por default el atributo nombre para que en futuros casos que tabla no tenga el campo "nombre", se pueda asignar otro valor
     <>
-      <Dropdown.Button overlay={menu} placement="bottomCenter"></Dropdown.Button>
-      <Modal title={"ELIMINAR " + (typeTransaction === null || typeTransaction === undefined ? "REGISTRO" : typeTransaction.labelCrudSingle)} 
-        okType="danger" okText="Eliminar" cancelText="Cancelar" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        <p>¿ Está seguro que desea eliminar {record.nombre ? record.nombre : record.nombre } ?</p>
+      <Dropdown.Button
+        overlay={menu}
+        placement="bottomCenter"
+      ></Dropdown.Button>
+      <Modal
+        title={
+          "ELIMINAR " +
+          (typeTransaction === null || typeTransaction === undefined
+            ? "REGISTRO"
+            : typeTransaction.labelCrudSingle)
+        }
+        okType="danger"
+        okText="Eliminar"
+        cancelText="Cancelar"
+        visible={isModalVisible === "eliminar" ? true : false}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <p>
+          ¿ Está seguro que desea eliminar{" "}
+          {record.nombre ? record.nombre : record.nombre} ?
+        </p>
+      </Modal>
+      <Modal
+        title={<b>CÓDIGO QR: {record.nombre}</b>}
+        okType="primary"
+        okText="Descargar"
+        cancelText="Regresar"
+        visible={isModalVisible === "qr" ? true : false}
+        onCancel={handleCancel}
+        onOk={handleDownload}
+
+      >
+        <Row>
+          <Col span={12} offset={6}>
+            <Image width={200} src={QR} />
+          </Col>
+        </Row>
+        <Button type="link" href={record.url_pagina_web} target="_blank">{record.url_pagina_web}</Button>
+
       </Modal>
     </>
   );
