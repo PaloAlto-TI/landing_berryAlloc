@@ -6,9 +6,11 @@ import SelectOpciones from '../../selectOpciones/selectOpciones'
 import { SubgrupoContext } from "../../../contexts/subgrupoContext";
 import { useHistory } from "react-router";
 import { CloseSquareOutlined, RollbackOutlined, SaveOutlined } from '@ant-design/icons';
+import { SesionContext } from '../../../contexts/sesionContext';
 
 
 const SubgrupoForm = () => {
+  var { setMoved, sesions } = useContext(SesionContext);
     let formHasChanges = false;
     const [id, setId] = useState(null);
     let { codigo, operacion } = useParams();
@@ -107,8 +109,8 @@ const SubgrupoForm = () => {
         const formFieldName = Object.keys(changedValues)[0];
       };
 //_-------------------------------------------------------------------------------------------
-      
-      if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
+      if (sesions){
+      if (sesions._usuario[0].rol ===2|| operacion === "ver") {
 
     return (
         <>
@@ -215,6 +217,7 @@ const SubgrupoForm = () => {
     {
         return <Redirect to="/home" />;
     }
+  }
 }
 
 export default SubgrupoForm
