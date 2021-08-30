@@ -3388,7 +3388,7 @@ const FormProducto = (props) => {
                       </Col>
                       <Col span={10}>
                         <Title level={5}>{stock && stock.cantidad_stock} <Tooltip onClick={()=>stockPorBodegas()} trigger="click" placement="right" title={stockBodegas ? stockBodegas : "Cargando..."}>
-    <InfoCircleOutlined /></Tooltip></Title>
+    {stock && stock.cantidad_stock !== "N/A" &&<InfoCircleOutlined />}</Tooltip></Title>
                       </Col>
                     </Row>
                   ) : null}

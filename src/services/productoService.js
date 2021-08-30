@@ -117,7 +117,7 @@ export class ProductoService {
         headers: { 
           Authorization: REACT_APP_CONTIFICO_KEY
         }
-      }).then(res => res.data ? res.data : { bodega: "N/A", cantidad:"N/A"});
+      }).then(res => res.data ? res.data : { bodega_nombre: "N/A", cantidad:"N/A"});
     }
     
 }
