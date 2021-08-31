@@ -219,7 +219,7 @@ const MarcaList = () => {
         placeholder="Buscar Marca..."
         value={value}
         onChange={e => filtrar(e)}
-        style={{ width: 200 }}
+        style={{ width: 200,marginLeft:20 }}
       />
       <br /><br />
 

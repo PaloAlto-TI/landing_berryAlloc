@@ -175,7 +175,7 @@ const ProveedorList = () => {
             placeholder="Buscar Proveedor..."
             value={value}
             onChange={e => filtrar(e)}
-            style={{ width: 200 }}
+            style={{ width: 200,marginLeft:20}}
           />
           <br /><br />
     

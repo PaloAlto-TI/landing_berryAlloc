@@ -7,6 +7,7 @@ export const SubgrupoContext = createContext();
 const SubgrupoContextProvider = (props) => {
   const subgrupoService = new SubgrupoService();
   const [subgrupos, setSubgrupos] = useState([]);
+  const [subgruposQR, setSubgruposQR] = useState([]);
   const [editSubgrupo, setEditSubgrupo] = useState(null);
   const [permiso, setPermiso] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false)
@@ -16,6 +17,10 @@ const SubgrupoContextProvider = (props) => {
     setIsEmpty(false)
     //subgrupoService.getSubgrupos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setSubgrupos(data)});
     subgrupoService.getAll().then((data) => setSubgrupos(data));
+    
+    //subgrupoService.getAllQR().then((data) => setSubgruposQR(data));
+
+
     // if (subgrupos.length === 0){
     //   setIsEmpty(true);
     // }
@@ -108,6 +113,7 @@ const SubgrupoContextProvider = (props) => {
     <SubgrupoContext.Provider
       value={{
         createSubgrupo,
+        //subgruposQR,
         findSubgrupo,
         updateSubgrupo,
         softDeleteSubgrupo,

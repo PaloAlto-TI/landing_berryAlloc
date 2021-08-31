@@ -17,9 +17,9 @@ import ProveedorContextProvider from "../../contexts/proveedorContext";
 import GrupoList from "../../components/grupos/grupoList/grupoList";
 import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
 import GrupoContextProvider from "../../contexts/grupoContext";
-import ModeloList from "../../components/modelo/modeloList/modeloList";
-import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
-import ModeloContextProvider from "../../contexts/modeloContext";
+// import ModeloList from "../../components/modelo/modeloList/modeloList";
+// import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
+// import ModeloContextProvider from "../../contexts/modeloContext";
 
 import { Layout } from "antd";
 import "./home.css";
@@ -34,6 +34,7 @@ import es_ES from "antd/es/locale/es_ES";
 import SubgrupoForm from "../../components/subgrupo/subgrupoForm/subgrupoForm";
 import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoList";
 import SubgrupoContextProvider from "../../contexts/subgrupoContext";
+import { SesionContext } from "../../contexts/sesionContext";
 const Home = () => {
   // const Sesion= async()=>{
 
@@ -45,6 +46,7 @@ const Home = () => {
   //console.log("SESION: "+Sesion());
 
   let { path } = useRouteMatch();
+  var {setMoved,sesions} =  useContext(SesionContext);
 
   return (
     <>

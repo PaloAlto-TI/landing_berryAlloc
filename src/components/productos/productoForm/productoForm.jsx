@@ -3485,6 +3485,7 @@ if (
                   icon={<RollbackOutlined />}
                   type="primary"
                   onClick={goBackHistory}
+                  style={{ marginBottom:20}}
                 >
                   REGRESAR
                 </Button>

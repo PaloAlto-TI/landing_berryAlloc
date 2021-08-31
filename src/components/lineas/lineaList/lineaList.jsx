@@ -160,7 +160,7 @@ const LineaList = () => {
         placeholder="Buscar Línea..."
         value={value}
         onChange={e => filtrar(e)}
-        style={{ width: 200 }}
+        style={{ width: 200,marginLeft:20 }}
       />
       <br />
       <br />

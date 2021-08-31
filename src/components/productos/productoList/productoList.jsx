@@ -7,7 +7,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { ProductoContext } from "../../../contexts/productoContext";
 import CrudButton from "../../crudButton/crudButton";
 import { useHistory } from "react-router";
-import { useRouteMatch } from "react-router-dom";
+import { Redirect, useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import "./productoList.css";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
@@ -60,7 +60,7 @@ const ProductoList = () => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const columns =
   sesions ? sesions._usuario[0].rol === 2
-      && [
+      ? [
           {
             title: "CÓDIGO",
             dataIndex: "codigo_interno",
@@ -253,7 +253,7 @@ const ProductoList = () => {
           align: 'center',
           width: '15%'
         }
-      ];
+      ]:null;
 
   let history = useHistory();
 
@@ -329,7 +329,8 @@ const ProductoList = () => {
 
   //-----------------------------------------------------------------------
 
-  return (
+  return  (
+    
     <div>
       <br />
       <Divider>PRODUCTOS</Divider>
@@ -417,14 +418,22 @@ const ProductoList = () => {
             return {
               onClick: (event) => {
                 console.log(event);
-
+                if (sesions){
                 if (sesions._usuario[0].rol ===2) {
                   if (event.clientX < window.innerWidth * click && rowState) {
                     // record["permiso"] = false;
                     // history.push(`${path}/${record.codigo_interno}/ver`, record);
                     ver(record);
                   }
+                  
                 }
+                else
+                  {
+                    ver(record);
+                  }
+
+
+              }
               },
             };
           }}
