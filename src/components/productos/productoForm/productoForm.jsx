@@ -954,7 +954,7 @@ const FormProducto = (props) => {
                           </Form.Item>
                           <Form.Item>
                             <Button
-                              type="primary"
+                              type="dashed"
                               icon={
                                 !newModelo ? (
                                   <EditOutlined />
