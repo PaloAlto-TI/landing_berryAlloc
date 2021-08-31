@@ -1148,7 +1148,8 @@ const FormProducto = (props) => {
               selectedLineaId !== "60faeee1a412169c92c778c2" &&
               selectedLineaId !== "60d4c04a8e4f5ab5e8b93218" &&
               selectedLineaId !== "60ff0a8a5d3d71d21abba9d1" &&
-              selectedLineaId !== "61252dc1c2ac82f8cc563b5f" && (
+              selectedLineaId !== "61252dc1c2ac82f8cc563b5f" && 
+              selectedLineaId !== "61252dc010658af8cc902179" && (
                 <Panel
                   className="tecnica"
                   header="INFORMACIÓN TÉCNICA"
@@ -1306,100 +1307,9 @@ const FormProducto = (props) => {
                           </Form.Item>
                         </div>
                       ) : null}
-                      {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                      infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
-                      infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
-                      infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
-                      infoTecnicaLinea !== "60d4c04880c445b5e8b87047" &&
-                      infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
-                        <Form.Item
-                          label="Clase Residencial"
-                          name={["atributos_js", "clase_residencial"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la clase residencial!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones
-                              tipo="clase residencial"
-                              readOnly={!crud}
-                            />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                      ) : null}
+                      
 
-                      {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                      infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
-                      infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
-                      infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
-                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ? (
-                        <Form.Item
-                          label="Clase Comercial"
-                          name={["atributos_js", "clase_comercial"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la clase comercial!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones
-                              tipo="clase comercial"
-                              readOnly={!crud}
-                            />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                      ) : null}
-
-                      {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
-                        <Form.Item
-                          label="Clase Industrial"
-                          name={["atributos_js", "clase_industrial"]}
-                          rules={
-                            crud
-                              ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la clase industrial!",
-                                  },
-                                ]
-                              : []
-                          }
-                        >
-                          {crud ? (
-                            <SelectOpciones
-                              tipo="clase industrial"
-                              readOnly={!crud}
-                            />
-                          ) : (
-                            <Input className="input-type" readOnly={!crud} />
-                          )}
-                        </Form.Item>
-                      ) : null}
-
+                     
                       {infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
                         <div>
                           <Form.Item
@@ -1453,56 +1363,6 @@ const FormProducto = (props) => {
 
                       {infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
                         <div>
-                          <Form.Item
-                            label="Alimentación"
-                            name={["atributos_js", "alimentacion"]}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el valor de la alimentación!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            <InputNumber
-                              min={0}
-                              precision={0}
-                              readOnly={!crud}
-                              formatter={(value) => `${value} V`}
-                              parser={(value) => value.replace(" V", "")}
-                            />
-                          </Form.Item>
-
-                          <Form.Item
-                            label="Longitud del Cable de Alimentación"
-                            name={[
-                              "atributos_js",
-                              "longitud_cable_alimentacion",
-                            ]}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la longitud del cable de alimentación!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            <InputNumber
-                              min={0}
-                              precision={0}
-                              readOnly={!crud}
-                              formatter={(value) => `${value} m`}
-                              parser={(value) => value.replace(" m", "")}
-                            />
-                          </Form.Item>
                           <Form.Item
                             label="Potencia"
                             name={["atributos_js", "potencia"]}
@@ -1574,8 +1434,184 @@ const FormProducto = (props) => {
                           </Form.Item>
                         </div>
                       ) : null}
+                      {infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
+                        <div>
+                          <Form.Item
+                            label="Proceso de Fabricación"
+                            name={["atributos_js", "proceso_fabricacion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el proceso de fabricación!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <Input readOnly={true} defaultValue="MONOCOCCIÓN" />
+                          </Form.Item>
+                          <Form.Item
+                            label="Rectificado"
+                            name={["atributos_js", "rectificado"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione rectificado o no!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <Radio.Group disabled={!crud}>
+                                <Radio value={"SI"}>SI</Radio>
+                                <Radio value={"NO"}>NO</Radio>
+                              </Radio.Group>
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                          <Form.Item
+                            label="Absorción de Agua"
+                            name={["atributos_js", "absorcion_agua"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el valor de absorción de agua!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <Input readOnly={true} defaultValue="<0.5%" />
+                          </Form.Item>
+
+                        </div>
+                      ) : null}
+
+                      {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                      infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                      infoTecnicaLinea === "60d4c04880c445b5e8b87047" ? (
+                        <div>
+                          <Form.Item
+                            label="Core"
+                            name={["atributos_js", "core"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message: "Por favor, seleccione el core!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones tipo="core" readOnly={!crud} />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+
+                          <Form.Item
+                            label="Terminado"
+                            name={["atributos_js", "terminado"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione el terminado!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            {crud ? (
+                              <SelectOpciones
+                                tipo="terminado"
+                                readOnly={!crud}
+                              />
+                            ) : (
+                              <Input className="input-type" readOnly={!crud} />
+                            )}
+                          </Form.Item>
+                        </div>
+                      ) : null}
+
                     </Col>
                     <Col span={12}>
+
+                    
+                    {infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
+                        <div>
+                          <Form.Item
+                            label="Alimentación"
+                            name={["atributos_js", "alimentacion"]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el valor de la alimentación!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} V`}
+                              parser={(value) => value.replace(" V", "")}
+                            />
+                          </Form.Item>
+
+                          <Form.Item
+                            label="Longitud del Cable"
+                            name={[
+                              "atributos_js",
+                              "longitud_cable_alimentacion",
+                            ]}
+                            rules={
+                              crud
+                                ? [
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese la longitud del cable de alimentación!",
+                                    },
+                                  ]
+                                : []
+                            }
+                          >
+                            <InputNumber
+                              min={0}
+                              precision={0}
+                              readOnly={!crud}
+                              formatter={(value) => `${value} m`}
+                              parser={(value) => value.replace(" m", "")}
+                            />
+                          </Form.Item>
+                          
+                        </div>
+                      ) : null}
                       {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
                         infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68") ||
                       infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
@@ -1629,6 +1665,41 @@ const FormProducto = (props) => {
                           />
                         </Form.Item>
                       ) : null}
+
+                      {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                      infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
+                      infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                      infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
+                      infoTecnicaLinea !== "60d4c04880c445b5e8b87047" &&
+                      infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
+                        <Form.Item
+                          label="Clase Residencial"
+                          name={["atributos_js", "clase_residencial"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la clase residencial!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="clase residencial"
+                              readOnly={!crud}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+                      ) : null}
+
                       <Form.Item
                         label={
                           infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
@@ -1874,6 +1945,39 @@ const FormProducto = (props) => {
                       infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
                       infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
                       infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ? (
+                        <Form.Item
+                          label="Clase Comercial"
+                          name={["atributos_js", "clase_comercial"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la clase comercial!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="clase comercial"
+                              readOnly={!crud}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+                      ) : null}
+
+                      {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                      infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
+                      infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
+                      infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
+                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
                       infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
                       infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
                       infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
@@ -1906,47 +2010,6 @@ const FormProducto = (props) => {
 
                       {infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
                         <div>
-                          <Form.Item
-                            label="Proceso de Fabricación"
-                            name={["atributos_js", "proceso_fabricacion"]}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el proceso de fabricación!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            <Input readOnly={true} defaultValue="MONOCOCCIÓN" />
-                          </Form.Item>
-                          <Form.Item
-                            label="Rectificado"
-                            name={["atributos_js", "rectificado"]}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione rectificado o no!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            {crud ? (
-                              <Radio.Group disabled={!crud}>
-                                <Radio value={"SI"}>SI</Radio>
-                                <Radio value={"NO"}>NO</Radio>
-                              </Radio.Group>
-                            ) : (
-                              <Input className="input-type" readOnly={!crud} />
-                            )}
-                          </Form.Item>
                           <Form.Item
                             label="Absorción de Agua"
                             name={["atributos_js", "absorcion_agua"]}
@@ -2018,6 +2081,36 @@ const FormProducto = (props) => {
                         </div>
                       ) : null}
 
+                   
+
+                      {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
+                        <Form.Item
+                          label="Clase Industrial"
+                          name={["atributos_js", "clase_industrial"]}
+                          rules={
+                            crud
+                              ? [
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la clase industrial!",
+                                  },
+                                ]
+                              : []
+                          }
+                        >
+                          {crud ? (
+                            <SelectOpciones
+                              tipo="clase industrial"
+                              readOnly={!crud}
+                            />
+                          ) : (
+                            <Input className="input-type" readOnly={!crud} />
+                          )}
+                        </Form.Item>
+                      ) : null}
+
+
                       {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
                         <Form.Item
                           label="Garantía Industrial (años)"
@@ -2046,60 +2139,7 @@ const FormProducto = (props) => {
                         </Form.Item>
                       ) : null}
 
-                      {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                      infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                      infoTecnicaLinea === "60d4c04880c445b5e8b87047" ? (
-                        <div>
-                          <Form.Item
-                            label="Core"
-                            name={["atributos_js", "core"]}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message: "Por favor, seleccione el core!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            {crud ? (
-                              <SelectOpciones tipo="core" readOnly={!crud} />
-                            ) : (
-                              <Input className="input-type" readOnly={!crud} />
-                            )}
-                          </Form.Item>
-
-                          <Form.Item
-                            label="Terminado"
-                            name={["atributos_js", "terminado"]}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione el terminado!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            {crud ? (
-                              <SelectOpciones
-                                tipo="terminado"
-                                readOnly={!crud}
-                              />
-                            ) : (
-                              <Input className="input-type" readOnly={!crud} />
-                            )}
-                          </Form.Item>
-                        </div>
-                      ) : null}
+                      
                       {infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
                         <Form.Item
                           label="Tipo de Hebra"
@@ -3423,11 +3463,11 @@ const FormProducto = (props) => {
                       <Checkbox disabled={!crud}>En Sistema Externo</Checkbox>
                     ) : editProducto.en_sistema_externo ? (
                       <p>
-                        En Sistema Externo: <CheckCircleFilled />
+                        En Sistema Externo: <CheckCircleFilled style={{ fontSize: 18 }}/>
                       </p>
                     ) : (
                       <p>
-                        En Sistema Externo: <CloseCircleFilled />
+                        En Sistema Externo: <CloseCircleFilled style={{ fontSize: 18 }}/>
                       </p>
                     )}
                   </Form.Item>
@@ -3443,11 +3483,11 @@ const FormProducto = (props) => {
                       <Checkbox disabled={!crud}>En Página Web</Checkbox>
                     ) : editProducto.en_web ? (
                       <p>
-                        En Página Web: <CheckCircleFilled />
+                        En Página Web: <CheckCircleFilled style={{ fontSize: 18 }}/>
                       </p>
                     ) : (
                       <p>
-                        En Página Web: <CloseCircleFilled />
+                        En Página Web: <CloseCircleFilled style={{ fontSize: 18 }}/>
                       </p>
                     )}
                   </Form.Item>
