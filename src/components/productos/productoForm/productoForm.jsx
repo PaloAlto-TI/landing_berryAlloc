@@ -49,7 +49,7 @@ import { ProductoTipoService } from "../../../services/productoTipoService";
 import { Typography } from "antd";
 import { ProductoService } from "../../../services/productoService";
 import Modal from "antd/lib/modal/Modal";
-import { saveAs } from 'file-saver'
+import { saveAs } from "file-saver";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -94,8 +94,8 @@ const FormProducto = (props) => {
   const [metodoABC, setMetodoABC] = useState(undefined);
   const [nombre, setNombre] = useState(undefined);
   const [nombreEdit, setNombreEdit] = useState(false);
-  const [QR, setQR] = useState(null)
-  const [stockBodegas, setstockBodegas] = useState(null)
+  const [QR, setQR] = useState(null);
+  const [stockBodegas, setstockBodegas] = useState(null);
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
   );
@@ -105,7 +105,7 @@ const FormProducto = (props) => {
   const [show, setShow] = useState(null);
   const [infoTecnicaLinea, setinfoTecnicaLinea] = useState(null);
   const [infoTecnicaGrupo, setinfoTecnicaGrupo] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(null)
+  const [isModalVisible, setIsModalVisible] = useState(null);
   // const [precio, setPrecio] = useState(null)
   const [form] = Form.useForm();
   let initialValues = {
@@ -300,22 +300,16 @@ const FormProducto = (props) => {
     />
   );
 
-  const stockPorBodegas = async() => {
-    let data = await new ProductoService().getStockBodegas(stock.id)
+  const stockPorBodegas = async () => {
+    let data = await new ProductoService().getStockBodegas(stock.id);
     let view = "";
 
     var list = data.map(function (d) {
-      
-        return (
-          <div>
-            {d.bodega_nombre+" : "+d.cantidad}
-          </div>
-        );
-      
+      return <div>{d.bodega_nombre + " : " + d.cantidad}</div>;
     });
 
-    setstockBodegas(list)
-  }
+    setstockBodegas(list);
+  };
   // const randomNumber = (min, max) =>{
   //   return Math.floor(Math.random() * (max - min) + min);
   // }
@@ -735,9 +729,11 @@ const FormProducto = (props) => {
           )
         ) {
           history.push("/home/productos");
+          window.scroll(0, 0);
         }
       } else {
         history.push("/home/productos/");
+        window.scroll(0, 0);
       }
     } else {
       if (
@@ -746,6 +742,7 @@ const FormProducto = (props) => {
         )
       ) {
         history.push("/home/productos/");
+        window.scroll(0, 0);
       }
     }
   }
@@ -756,12 +753,10 @@ const FormProducto = (props) => {
 
   const handleDownload = async () => {
     if (editProducto.url_pagina_web) {
-      const data = await new ProductoService()
-        .generateQRPdf(editProducto)
-      const blob = new Blob([data], { type: 'application/pdf' })
-      saveAs(blob, "QR-"+editProducto.nombre+".pdf")
+      const data = await new ProductoService().generateQRPdf(editProducto);
+      const blob = new Blob([data], { type: "application/pdf" });
+      saveAs(blob, "QR-" + editProducto.nombre + ".pdf");
     }
-
   };
 
   const generarQR = async () => {
@@ -771,11 +766,12 @@ const FormProducto = (props) => {
         .then((data) => setQR(data));
     }
 
-    setIsModalVisible(true)
+    setIsModalVisible(true);
   };
 
   function goBackHistory() {
     history.push("/home/productos");
+    window.scroll(0, 0);
   }
   // const handleFormValuesChange = async (changedValues) => {
   //   // console.log("ONCHANGE", form.getFieldsValue());
@@ -792,26 +788,30 @@ const FormProducto = (props) => {
   ) {
     return editProducto || codigo === "nuevo" ? (
       <>
-      { codigo !== "nuevo" &&
-        <Modal
-        title={<b>CÓDIGO QR: {editProducto.nombre}</b>}
-        okType="primary"
-        okText="Descargar"
-        cancelText="Regresar"
-        visible={isModalVisible ? true : false}
-        onCancel={handleCancel}
-        onOk={handleDownload}
-
-      >
-        <Row>
-          <Col span={12} offset={6}>
-            <Image width={200} src={QR} />
-          </Col>
-        </Row>
-        <Button type="link" href={editProducto.url_pagina_web} target="_blank">{editProducto.url_pagina_web}</Button>
-
-      </Modal>
-    }
+        {codigo !== "nuevo" && (
+          <Modal
+            title={<b>CÓDIGO QR: {editProducto.nombre}</b>}
+            okType="primary"
+            okText="Descargar"
+            cancelText="Regresar"
+            visible={isModalVisible ? true : false}
+            onCancel={handleCancel}
+            onOk={handleDownload}
+          >
+            <Row>
+              <Col span={12} offset={6}>
+                <Image width={200} src={QR} />
+              </Col>
+            </Row>
+            <Button
+              type="link"
+              href={editProducto.url_pagina_web}
+              target="_blank"
+            >
+              {editProducto.url_pagina_web}
+            </Button>
+          </Modal>
+        )}
         <Form
           {...layout}
           form={form}
@@ -823,7 +823,13 @@ const FormProducto = (props) => {
           hidden={codigo !== "nuevo" ? show : false}
         >
           <Divider>
-            PRODUCTO {codigo !== "nuevo" && editProducto.url_pagina_web  ? <QrcodeOutlined style={{ fontSize: '25px' }} onClick={() =>generarQR()} /> : null} 
+            PRODUCTO{" "}
+            {codigo !== "nuevo" && editProducto.url_pagina_web ? (
+              <QrcodeOutlined
+                style={{ fontSize: "25px" }}
+                onClick={() => generarQR()}
+              />
+            ) : null}
           </Divider>
           <br />
 
@@ -3383,12 +3389,22 @@ const FormProducto = (props) => {
                   {!crud ? (
                     <Row>
                       <Col span={11}>
-                      
                         <Title level={5}>Stock General: </Title>
                       </Col>
                       <Col span={10}>
-                        <Title level={5}>{stock && stock.cantidad_stock} <Tooltip onClick={()=>stockPorBodegas()} trigger="click" placement="right" title={stockBodegas ? stockBodegas : "Cargando..."}>
-    {stock && stock.cantidad_stock !== "N/A" &&<InfoCircleOutlined />}</Tooltip></Title>
+                        <Title level={5}>
+                          {stock && stock.cantidad_stock}{" "}
+                          <Tooltip
+                            onClick={() => stockPorBodegas()}
+                            trigger="click"
+                            placement="right"
+                            title={stockBodegas ? stockBodegas : "Cargando..."}
+                          >
+                            {stock && stock.cantidad_stock !== "N/A" && (
+                              <InfoCircleOutlined />
+                            )}
+                          </Tooltip>
+                        </Title>
                       </Col>
                     </Row>
                   ) : null}
