@@ -25,8 +25,9 @@ function App() {
                 <Login />
               </Route>
               <Route path="/home">
-                {localStorage.getItem("token")?
-                <Home />: <Redirect to="/login"/>}
+                {/* {localStorage.getItem("token")? */}
+                <Home />
+                 {/* : <Redirect to="/login"/> */}
               </Route>
               <Route path="/login">
                 <Login/>
