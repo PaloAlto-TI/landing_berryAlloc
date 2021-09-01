@@ -6,4 +6,5 @@ export class LineaMarcaService {
     getAll(){
         return axios.get( baseUrl + "linea-marca-vista" ).then( res => res.data.data );
     }
+
 }

@@ -231,7 +231,6 @@ const FormMarca = (props) => {
                   name="codigo"
                   rules={[
                     { required: true, message: "Por favor, ingrese el Código de la Marca!" },
-                    { max: 3, message: 'El Código debe tener como máximo 3 caracteres' },
                   ]}
                 >
                   <Input

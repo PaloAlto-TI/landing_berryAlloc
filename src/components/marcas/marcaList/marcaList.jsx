@@ -12,9 +12,7 @@ const MarcaList = () => {
   const { /*marcas,*/ marcas_lineas_nn, setPermiso, setEditMarca, isEmpty, softDeleteMarca } = useContext(MarcaContext);
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LAS MARCAS SIN LINEAS: " + JSON.stringify(marcas));
-
   // 05/08/2021 - OBSERVACIÓN: No esta mostrando el SUBGRUPO en el listado, pendiente de hacer y definir -MC
-      
   // console.log("LAS MARCAS CON LINEAS: " + JSON.stringify(marcas_lineas_nn));
   
   const [value, setValue] = useState(null);
@@ -160,7 +158,6 @@ const MarcaList = () => {
 
   function ver(record) {
     record["permiso"] = false;
-    // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
     history.push(`${path}/${record.id}/ver`, record);
   }
 
