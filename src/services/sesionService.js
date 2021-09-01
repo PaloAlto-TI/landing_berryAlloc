@@ -35,7 +35,7 @@ export class SesionService {
     getUsuario(sesion){
         //console.log("token sesion: "+sesion.token);
 
-        return axios.post(baseUrl+"sesionusuario", sesion , {
+        return axios.post(baseUrl+"sesionusuario/", sesion , {
             headers: {
               Authorization: `Bearer ${REACT_APP_API_KEY}`,
             },
