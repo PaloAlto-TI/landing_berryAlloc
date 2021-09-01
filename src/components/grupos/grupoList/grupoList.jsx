@@ -10,9 +10,10 @@ import './grupoList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
 
 const GrupoList = () => {
-  var {setMoved,sesions} =  useContext(SesionContext);
+  var {sesions} =  useContext(SesionContext);
 
-  const { /*grupos,*/ grupo_marcas_nn, setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
+  
+  const { grupos, /*grupo_marcas_nn,*/ setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -33,12 +34,12 @@ const GrupoList = () => {
       width: '15%'
     },
     {
-      title: "PSEUDÓNIMO",
-      dataIndex: "pseudo",
-      key: "pseudo",
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
       align: "center",
       sorter: {
-        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
       },
       showSorterTooltip: false,
       width: '10%'
@@ -51,7 +52,7 @@ const GrupoList = () => {
       // className: "longText",
       showSorterTooltip: false,
       sorter: {
-        compare: (a, b) => a.fk_subgrupo.localeCompare(b.fk_subgrupo),
+        compare: (a, b) => a.fk_subgrupo.nombre.localeCompare(b.fk_subgrupo.nombre),
       },
       render: (subgrupoGrupo, record) => (
         <p>
@@ -71,22 +72,23 @@ const GrupoList = () => {
       showSorterTooltip: false,
       width: '25%'
     },
-    {
-      title: "MARCAS",
-      dataIndex: "grupo_marcas_nn",
-      key: "grupo_marcas_nn",
+    /*{
+      title: "MARCA",
+      dataIndex: "fk_linea_marca",
+      key: "fk_linea_marca",
       className: "longText",
       showSorterTooltip: false,
       sorter: {
-        compare: (a, b) => a.grupo_marcas_nn.localeCompare(b.grupo_marcas_nn),
+        compare: (a, b) => a.fk_linea_marca.localeCompare(b.fk_linea_marca),
       },
       render: (grupoMarca, record) => (
         <p>
           {grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+          {grupoMarca? grupoMarca.nombre : 'N/A' }
         </p>
       ),
-      width: '30%'
-    },
+      width: '20%'
+    },*/
     {
       title: "ACCIONES",
       dataIndex: "",
@@ -116,25 +118,30 @@ const GrupoList = () => {
       width: '15%'
     },
     {
-      title: "PSEUDÓNIMO",
-      dataIndex: "pseudo",
-      key: "pseudo",
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
       align: "center",
       sorter: {
-        compare: (a, b) => a.pseudo.localeCompare(b.pseudo),
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
       },
       showSorterTooltip: false,
       width: '10%'
     },
     {
       title: "SUBGRUPO",
-      dataIndex: "sub",
-      key: "sub",
-      align: "center",
-      sorter: {
-        compare: (a, b) => a.sub.localeCompare(b.sub),
-      },
+      dataIndex: "fk_subgrupo",
+      key: "fk_subgrupo",
+      // className: "longText",
       showSorterTooltip: false,
+      sorter: {
+        compare: (a, b) => a.fk_subgrupo.nombre.localeCompare(b.fk_subgrupo.nombre),
+      },
+      render: (subgrupoGrupo, record) => (
+        <p>
+          {subgrupoGrupo? subgrupoGrupo.nombre : 'N/A' }
+        </p>
+      ),
       width: '15%'
     },
     {
@@ -148,7 +155,7 @@ const GrupoList = () => {
       showSorterTooltip: false,
       width: '25%'
     },
-    {
+    /*{
       title: "MARCAS",
       dataIndex: "grupo_marcas_nn",
       key: "grupo_marcas_nn",
@@ -163,8 +170,7 @@ const GrupoList = () => {
         </p>
       ),
       width: '30%'
-    },
-    
+    },*/
   ]
 
    let { path } = useRouteMatch();
@@ -202,9 +208,10 @@ const GrupoList = () => {
     const currValue = e.target.value;
     setValue(currValue);
     console.log();
-    const filteredData = grupo_marcas_nn.filter(entry =>
-      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.pseudo.toLowerCase().includes(currValue.toLowerCase())
-      );
+    /// const filteredData = grupo_marcas_nn.filter(entry =>
+    const filteredData = grupos.filter(entry =>
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase())
+      || entry.fk_subgrupo.nombre.toLowerCase().includes(currValue.toLowerCase()));
     setDataSource(filteredData);
   }
 
@@ -214,8 +221,9 @@ const GrupoList = () => {
     setPermiso(false);
 
     if (!value) {
-      console.log(grupo_marcas_nn)
-      setDataSource(grupo_marcas_nn)
+      // console.log(grupos)
+      // setDataSource(grupo_marcas_nn)
+      setDataSource(grupos)
     }
   })
 
@@ -234,8 +242,8 @@ const GrupoList = () => {
         style={{ width: 200,marginLeft:20 }}
       />
       <br /><br />
-
-      {grupo_marcas_nn.length > 0 || isEmpty ? (
+      {/*grupo_marcas_nn.length > 0 || isEmpty ? (*/}
+      {grupos.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
           columns={sesions?sesions._usuario[0].rol ===2?columns1:columns2:null}

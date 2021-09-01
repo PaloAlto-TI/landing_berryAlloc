@@ -105,6 +105,7 @@ const SesionContextProvider = (props) => {
 
   const usuario = async () => {
     const tok = { "token": localStorage.getItem("token") };
+    
     const data = await sesionService.getUsuario(tok);
     //setSesions(data);
     // console.log("Entra en sesion");

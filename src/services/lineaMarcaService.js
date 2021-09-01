@@ -10,4 +10,5 @@ export class LineaMarcaService {
             },
           }  ).then( res => res.data.data );
     }
+
 }
