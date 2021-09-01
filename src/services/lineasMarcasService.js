@@ -9,5 +9,8 @@ export class LineasMarcasService {
     getAll(){
         return axios.get( baseUrl + "linea-marcas" ).then( res => res.data.data );
     }
+    getAllLineasmarcas(){
+        return axios.get( baseUrl + "linea-marcas-all" ).then( res => res.data.data );
+    }
 
 }

@@ -9,15 +9,15 @@ import Search from "antd/lib/input/Search";
 import './grupoList.css';
 
 const GrupoList = () => {
-  const { grupos, grupo_marcas_nn, setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
+  const { grupos, /*grupo_marcas_nn,*/ setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const [rowState, setRowState] = useState(true);
 
   // const [filteredInfo, setFilteredInfo] = useState([]);
-  console.log("LOS GRUPOS SIN MARCAS: " + JSON.stringify(grupos));
-  console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
+  // console.log("LOS GRUPOS SIN MARCAS: " + JSON.stringify(grupos));
+  // console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
   const columns1 = [
     {
       title: "NOMBRE",
@@ -48,7 +48,7 @@ const GrupoList = () => {
       // className: "longText",
       showSorterTooltip: false,
       sorter: {
-        compare: (a, b) => a.fk_subgrupo.localeCompare(b.fk_subgrupo),
+        compare: (a, b) => a.fk_subgrupo.nombre.localeCompare(b.fk_subgrupo.nombre),
       },
       render: (subgrupoGrupo, record) => (
         <p>
@@ -68,7 +68,7 @@ const GrupoList = () => {
       showSorterTooltip: false,
       width: '25%'
     },
-    {
+    /*{
       title: "MARCA",
       dataIndex: "fk_linea_marca",
       key: "fk_linea_marca",
@@ -79,12 +79,12 @@ const GrupoList = () => {
       },
       render: (grupoMarca, record) => (
         <p>
-          {/*grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' */}
+          {grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' }
           {grupoMarca? grupoMarca.nombre : 'N/A' }
         </p>
       ),
       width: '20%'
-    },
+    },*/
     {
       title: "ACCIONES",
       dataIndex: "",
@@ -126,13 +126,18 @@ const GrupoList = () => {
     },
     {
       title: "SUBGRUPO",
-      dataIndex: "sub",
-      key: "sub",
-      align: "center",
-      sorter: {
-        compare: (a, b) => a.sub.localeCompare(b.sub),
-      },
+      dataIndex: "fk_subgrupo",
+      key: "fk_subgrupo",
+      // className: "longText",
       showSorterTooltip: false,
+      sorter: {
+        compare: (a, b) => a.fk_subgrupo.nombre.localeCompare(b.fk_subgrupo.nombre),
+      },
+      render: (subgrupoGrupo, record) => (
+        <p>
+          {subgrupoGrupo? subgrupoGrupo.nombre : 'N/A' }
+        </p>
+      ),
       width: '15%'
     },
     {
@@ -162,7 +167,6 @@ const GrupoList = () => {
       ),
       width: '30%'
     },*/
-    
   ]
 
    let { path } = useRouteMatch();
@@ -203,7 +207,7 @@ const GrupoList = () => {
     /// const filteredData = grupo_marcas_nn.filter(entry =>
     const filteredData = grupos.filter(entry =>
       entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase())
-      );
+      || entry.fk_subgrupo.nombre.toLowerCase().includes(currValue.toLowerCase()));
     setDataSource(filteredData);
   }
 
@@ -213,7 +217,7 @@ const GrupoList = () => {
     setPermiso(false);
 
     if (!value) {
-      console.log(grupos)
+      // console.log(grupos)
       // setDataSource(grupo_marcas_nn)
       setDataSource(grupos)
     }

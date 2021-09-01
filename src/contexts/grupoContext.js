@@ -1,11 +1,13 @@
 import React, { createContext, useState, useEffect } from "react";
 import { GrupoService } from "../services/grupoService";
+import { LineasMarcasService } from "../services/lineasMarcasService";
 
 export const GrupoContext = createContext();
 
 const GrupoContextProvider = (props) => {
 
   const grupoService = new GrupoService();
+  const lineasMarcasService = new LineasMarcasService();
   const [grupos, setGrupos] = useState([]);
   const [grupo_marcas_nn, set_grupo_marcas_nn] = useState([]);
   const [editGrupo, setEditGrupo] = useState(null);
@@ -19,7 +21,7 @@ const GrupoContextProvider = (props) => {
   }, []);
 
   const createGrupo = async(grupo) => {
-    console.log("LO QUE VIENE PARA CREAR GRUPO EM CONTEXT: " + grupo)
+    // console.log("LO QUE VIENE PARA CREAR GRUPO EM CONTEXT: " + grupo)
 
     const data = await grupoService.create(grupo);
     
@@ -41,9 +43,45 @@ const GrupoContextProvider = (props) => {
     return data;
   };
 
-  const findGrupo = (id) => {
-    // console.log("LO QUE VA A MAPPEAR: " + JSON.stringify(grupo_marcas_nn))
-    const grupo = grupo_marcas_nn.find((g) => g.id === id);
+  const findGrupo = async(id) => {
+    // OBSERVACIÓN: 01/09/2021 SE CAMBIO LA LÓGINA DE LAS MARCAS POR GRUPO, AHORA SOLO EXISTE UNA MARCA POR GRUPO
+
+    // console.log("LO QUE VA A MAPPEAR: " + JSON.stringify(grupos))
+    // console.log("EL ID PARA FINDGRUPO: " + id);
+
+    const grupo = grupos.find((g) => g.id === id);
+    // console.log("ACA SE DEBE ASIGNAR EL FK_LINEA_ID PARA EL FRONT Y TENGO: " + JSON.stringify(grupo_marcas_nn))
+    
+    if (grupo){
+      
+      // console.log("EL GRUPO QUE ME MAPPEO: ", grupo)
+      // OBSERVACIÓN: 01/09/2021 SE CAMBIO LA LÓGINA DE LAS MARCAS POR GRUPO, AHORA SOLO EXISTE UNA MARCA POR GRUPO
+
+      // OBSERVACIÓN: 01/09/2021 SE DEBE TRAER TODO DESDE EL SEQUELIZE, PERO  YA QUE ESTE MANEJA OTRO TIPO DE NIVEL DE CONSULTA SE TENDRÁ EN PENDIENTE
+
+      // grupo.fk_linea_id = '61252dc1c2ac82f8cc563b5f';
+      // grupo.linea = 'NOMBRE LINEA';
+      // grupo.fk_marca_id = '60d4c50a77fa7bb632c22e64';
+      // grupo.marca = 'QWERTY';
+      // console.log("VOY A BUSVCAR EN LINEA_MARCA CON: ", grupo.fk_linea_marca)
+
+      const lineamarca =  await lineasMarcasService.getAllLineasmarcas().then((data) => {
+        // console.log("LA DATA COMO NO DEBE SER: ", data)
+        console.log("LA DATA FILTEREDDD: ", data.filter((lm) => lm.id === grupo.fk_linea_marca))
+        return data.filter((lm) => lm.id === grupo.fk_linea_marca);
+      });
+
+      if (lineamarca){
+        // console.log("EL LINEAMARCA: ", lineamarca[0])
+        grupo.fk_linea_id = lineamarca[0].fk_linea.id;
+        grupo.linea = lineamarca[0].fk_linea.nombre;
+        grupo.fk_marca_id = lineamarca[0].fk_marca.id;
+        grupo.marca = lineamarca[0].fk_marca.nombre;
+      }
+
+    }
+    /*
+    // const grupo = grupo_marcas_nn.find((g) => g.id === id);
     // console.log("ACA SE DEBE ASIGNAR EL FK_LINEA_ID PARA EL FRONT Y TENGO: " + JSON.stringify(grupo_marcas_nn))
     if (grupo){
       // console.log("EL LENGTH= " + grupo.grupo_marcas_nn.length)
@@ -60,21 +98,14 @@ const GrupoContextProvider = (props) => {
         grupo.fk_linea_id = '';
       }
 
-      // console.log("LO QUE QUEDO va a mapear: " +  JSON.stringify(grupo.fk_subgrupo)) 
-
       if (grupo.fk_subgrupo){
         grupo.fk_subgrupo_nombre = grupo.fk_subgrupo.nombre 
       } else {
         grupo.fk_subgrupo_nombre = '';
       }
 
-      // console.log("LO QUE QUEDO EN SUBGRUPO NAME: " +  grupo.fk_subgrupo_nombre)
-      // grupo.fk_linea_id = grupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
-      // editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
-      // editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id
-
       setEditGrupo(grupo);
-    }
+    }*/
     setEditGrupo(grupo);
 
   };
@@ -85,7 +116,7 @@ const GrupoContextProvider = (props) => {
     
     if (data.message === "OK UPDATE") {
         grupoService.getAll().then((data) => setGrupos(data));
-        grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
+        // grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
     }
 
     setEditGrupo(null);

@@ -16,7 +16,7 @@ const FormGrupo = (props) => {
 
   let history = useHistory();
   let { codigo, operacion } = useParams();
-
+  // console.log("LO QUE TENGO EN EDITGRUPO INICIO: ", editGrupo)
 
   let formHasChanges = false;
   const [crud, setCrud] = useState(
@@ -25,8 +25,8 @@ const FormGrupo = (props) => {
 
   const [id, setId] = useState(null);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
-  const [selectedMarcaId, setSelectedMarcaId] = useState(undefined); // new
-  const [selectedLineaMarcaId, setSelectedLineaMarcaId] = useState(undefined); // new
+  const [selectedMarcaId, setSelectedMarcaId] = useState(undefined); 
+  const [selectedLineaMarcaId, setSelectedLineaMarcaId] = useState(undefined); 
   const [form] = Form.useForm();
   const [codigoInterno, setCodigoInterno] = useState(null);
   let initialValues = {
@@ -61,10 +61,13 @@ const FormGrupo = (props) => {
     placeHoldertext: "Subgrupo"
   };
 
-  const typeTransactionSelectMarca = {
-    mode: "multiple",
-    placeHoldertext: "Marca",
-    hasFilter: true
+  const typeTransactionData = { // OBSERVACIÓN: 01/09/2021 ESTA VARIABLE SE DEBE TRAER POR PROPS, PERO COMO EL COMPONENTE QUE LA TRAE USAN TODAS LAS RAMAS QUEDA AL PENDIENTE EL CAMBIO
+    tableNamePSQL: "grupo",
+    byIdPSQL: true,
+    byInternalCodePSQL: false,
+    dependenciesPSQL: false,
+    labelCrudPlural: "GRUPOS",
+    labelCrudSingle: "GRUPO"
   };
 
   const layout = {
@@ -98,25 +101,16 @@ const FormGrupo = (props) => {
     if (editGrupo) {
       //  console.log("QUIERO SETEAR CON ESTO:  "+ editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id)
       // console.log("QUIERO SETEAR CON ESTO (EDITGRUPO):  " + JSON.stringify(editGrupo));
-
-      /*if (!selectedMarcaId && !selectedLineaId && !selectedGrupoId) {
-        setSelectedLineaId(editProducto.fk_linea_id);
-        setSelectedMarcaId(editProducto.fk_marca_id);
-        setSelectedGrupoId(editProducto.fk_grupo_id);
-        setUnidadMedida(editProducto.fk_unidad_medida_id);
-        setId(editProducto.id);
-        if (crud) {
-          fetch();
-        }
-      } */
-
       if (!selectedMarcaId && !selectedLineaId) {
         // setSelectedLineaId(editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id);
         setSelectedLineaId(editGrupo.fk_linea_id);
+        setSelectedMarcaId(editGrupo.fk_marca_id);
+        setCodigoInterno(editGrupo.codigo);
         // setSelectedMarcaId(editGrupo.fk_marca_id); ESTO DEBE IR
         setId(editGrupo.id);
       }
     } else {
+      // console.log("ACA QUIRERE ENTRAR CON ESTE CODIGO: ", codigo)
       findGrupo(codigo);
     }
 
@@ -137,26 +131,32 @@ const FormGrupo = (props) => {
     // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESIÓN EN CUANTO ESTE CULMINADA
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
 
-    // console.log("EL ID QUE TRAE: " + id);
-    // console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
+    console.log("EL ID QUE TRAE: " + id);
+    console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
 
     if (id) {
 
       values["id"] = id;
-      let array1 = editGrupo.grupo_marcas_nn.map(x => x.id); // MARCAS INICIALES (BD)
-      let array2 = values.grupo_marcas_nn_in; // MARCAS DE FORM
+
+      // 01/09/2021 - OBSERVACIÓN: SE COMENTA LA LÓGICA ANTIGUA
+      // let array1 = editGrupo.grupo_marcas_nn.map(x => x.id); // MARCAS INICIALES (BD)
+      //let array2 = values.grupo_marcas_nn_in; // MARCAS DE FORM
 
       // 05/08/2021 - OBSERVACIÓN: Tener en cuenta si se cambia de Línea en el formulario qué pasa con las ingresadas anteriormente. -MC
 
       // SETTING GRUPO_MARCAS TO CREATE OR UPDATE
       // let temp_toCreateProveedorMarcasN = array2.filter(x => !array1.includes(x));
       // let toCreateProveedorMarcasN = temp_toCreateProveedorMarcasN.map(x => ({ fk_marca_id:x , fk_proveedor_id:id })) // SET FORMAT JSON
-      let temp_toCreateGrupoMarcasN = array2.filter(x => !array1.includes(x));
-      let toCreateGrupoMarcasN = temp_toCreateGrupoMarcasN.map(x => ({ fk_marca_id: x, fk_linea_id: values.fk_linea_id, fk_grupo_id: id })) // SET FORMAT JSON
+      
+      // 01/09/2021 - OBSERVACIÓN: SE COMENTA LA LÓGICA ANTIGUA
+      // let temp_toCreateGrupoMarcasN = array2.filter(x => !array1.includes(x));
+      // let toCreateGrupoMarcasN = temp_toCreateGrupoMarcasN.map(x => ({ fk_marca_id: x, fk_linea_id: values.fk_linea_id, fk_grupo_id: id })) // SET FORMAT JSON
 
       // SETTING LINEAS_MARCAS TO DELETE (SOFTDELETE)
-      let toDeleteGrupoMarcasN = array1.filter(x => !array2.includes(x));
-      let jsonGruposMarcas = { id_grupo: id, fk_linea_id: values.fk_linea_id, grupo_marcas_create: toCreateGrupoMarcasN, grupo_marcas_delete: toDeleteGrupoMarcasN };
+      // 01/09/2021 - OBSERVACIÓN: SE COMENTA LA LÓGICA ANTIGUA
+      // let toDeleteGrupoMarcasN = array1.filter(x => !array2.includes(x));
+      let jsonGruposMarcas = {}
+      // let jsonGruposMarcas = { id_grupo: id, fk_linea_id: values.fk_linea_id, grupo_marcas_create: toCreateGrupoMarcasN, grupo_marcas_delete: toDeleteGrupoMarcasN };
       // console.log("EL JSON GRUPOS_MARCAS A MANDAR: " + JSON.stringify(jsonGruposMarcas))
 
       data = await updateGrupo([values, jsonGruposMarcas]);
@@ -234,6 +234,10 @@ const FormGrupo = (props) => {
     if (formFieldName === "fk_linea_id") {
       // console.log("ENTRA EN CHANGE DE fk_linea_id CON: " + changedValues[formFieldName])
       setSelectedLineaId(changedValues[formFieldName]);
+      setCodigoInterno(null);
+      setSelectedMarcaId(null);
+      form.setFieldsValue({ fk_marca_id: undefined });
+      form.setFieldsValue({ codigo: undefined });
 
       // const lineaService = new LineaService();
       // const linea = await lineaService.getOne(changedValues[formFieldName]);
@@ -280,7 +284,7 @@ const FormGrupo = (props) => {
       // console.log("LENGTH: " + codigoInternoData.length + " LO QUE DEVUELVE EL DATA DE CODIGO: " + JSON.stringify(codigoInternoData));
 
       if (codigoInternoData){
-        // console.log("QUIERE ASIGANAR ESTOOOOOOOOO: ", codigoInternoData[0].id)
+        console.log("QUIERE ASIGANAR ESTOOOOOOOOO: ", codigoInternoData[0])
         setSelectedLineaMarcaId(codigoInternoData[0])
         
         initialValues.fk_linea_marca = codigoInternoData[0].id;
@@ -295,9 +299,16 @@ const FormGrupo = (props) => {
           // console.log("LO QUE MAPEO: "+ JSON.stringify(data.filter((s) => s.fk_linea_marca === codigoInternoData[0].id)))
           // AGREAGR EL IF PARA CONTROL Y EL CASO CONTRARIO CON ASIGNACION 001
           // console.log("MI CODIGO A GUARDAR!!!!!!!!!!  " + tempCodigoInterno[0].code_to_add)
-          setCodigoInterno(tempCodigoInterno[0].code_to_add);
-
-          form.setFieldsValue({ codigo: tempCodigoInterno[0].code_to_add });
+          if (tempCodigoInterno.length > 0){
+            ///console.log("EXISTEEEEEEE: ", tempCodigoInterno.length)
+            setCodigoInterno(tempCodigoInterno[0].code_to_add);
+            form.setFieldsValue({ codigo: tempCodigoInterno[0].code_to_add });
+          } else {
+            setCodigoInterno("001");
+          form.setFieldsValue({ codigo: "001" });
+          }
+          // setCodigoInterno(tempCodigoInterno[0].code_to_add);
+          // form.setFieldsValue({ codigo: tempCodigoInterno[0].code_to_add });
         });
 
         }
@@ -356,7 +367,7 @@ const FormGrupo = (props) => {
                   label="Línea"
                   // name={crud ? "grupo_marcas_nn_in" : "linea"} 
                   // name={["grupo_marcas_nn_in",]}
-                  name="fk_linea_id"
+                  name={crud ? "fk_linea_id" : "linea"}
                   rules={crud ? [
                     {
                       required: true,
@@ -364,16 +375,11 @@ const FormGrupo = (props) => {
                     },
                   ] : []}
                 >
-                  {/* {crud ? ( */}
                   <SelectOpciones
                     tipo="línea"
                     readOnly={crud ? false : true}
-                  // setShow={setShow}
+                  
                   />
-                  {/* ) : (
-                    
-                    // <Input className="input-type" readOnly={!crud} />
-                  )}*/}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -414,6 +420,7 @@ const FormGrupo = (props) => {
                 <Form.Item
                     label="Marca"
                     name={crud ? "fk_marca_id" : "marca"}
+                    // name="fk_marca_id"
                     rules={
                       crud
                         ? [
@@ -425,15 +432,11 @@ const FormGrupo = (props) => {
                         : []
                     }
                   >
-                    {crud ? (
                       <SelectOpciones
                         tipo="marca"
-                        readOnly={!crud}
+                        readOnly={crud ? false : true}
                         filter={selectedLineaId}
                       />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
                   </Form.Item>
               </Col>
               <Col span={12}>
