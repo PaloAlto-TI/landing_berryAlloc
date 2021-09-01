@@ -80,12 +80,13 @@ const SesionContextProvider = (props) => {
     const tok = { "token": localStorage.getItem("token") };
     const data = await sesionService.getUsuario(tok);
 
-    softDeleteSesion(data);
+    await softDeleteSesion(data);
     localStorage.clear();
-    history.push("/login");
+   
     message.success('Log Out');
     setSesions();
     setMoved(false);
+    //history.push("/login");
   // console.log("cookies:"+ document.cookie.split(";"));
    //document.cookie = "userId=nick123";
 
@@ -105,7 +106,7 @@ const SesionContextProvider = (props) => {
 
   const usuario = async () => {
     const tok = { "token": localStorage.getItem("token") };
-    
+
     const data = await sesionService.getUsuario(tok);
     //setSesions(data);
     // console.log("Entra en sesion");

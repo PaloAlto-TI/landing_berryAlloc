@@ -3,11 +3,13 @@ import { Menu, Button, Dropdown, Row, Col} from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import "./header.css";
 import { SesionContext } from "../../../src/contexts/sesionContext";
+import { useHistory } from "react-router";
 
 
 
 
 const Header = () => {
+    let history = useHistory();
   const { sesions,LogOut} =  useContext(SesionContext);
   const userName = JSON.parse(localStorage.getItem("user"));
   
@@ -71,6 +73,7 @@ function valid()
 
   function  logOut() {
     LogOut();
+    history.push("/login");
     //DeleteSesion();
     //message.success('Log Out');
     //localStorage.clear();
