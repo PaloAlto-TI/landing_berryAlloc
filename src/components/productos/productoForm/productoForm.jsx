@@ -305,7 +305,7 @@ const FormProducto = (props) => {
     let view = "";
 
     var list = data.map(function (d) {
-      return <div>{d.bodega_nombre + " : " + d.cantidad}</div>;
+      return <div key={d.bodega_id}>{d.bodega_nombre + " : " + d.cantidad}</div>;
     });
 
     setstockBodegas(list);
@@ -770,7 +770,7 @@ const FormProducto = (props) => {
   };
 
   function goBackHistory() {
-    history.push("/home/productos");
+    history.push("/home/productos", {linea : editProducto.fk_linea_id} );
     window.scroll(0, 0);
   }
   // const handleFormValuesChange = async (changedValues) => {

@@ -50,7 +50,7 @@ export class ProductoService {
     }
 
     generateQRPdf(producto){
-      return axios.post(baseUrl+"generate-qr-pdf", {nombre: producto.nombre ,url: producto.url_pagina_web}, {
+      return axios.post(baseUrl+"generate-qr-pdf", producto, {
         headers: {
           Authorization: `Bearer ${REACT_APP_API_KEY}`,
         },
