@@ -127,7 +127,7 @@ const ProductoList = () => {
                 a.codigo_interno.localeCompare(b.codigo_interno),
             },
             showSorterTooltip: false,
-            width: '15%'
+            width: '16%'
           },
           {
             title: "PRODUCTO",
@@ -137,7 +137,7 @@ const ProductoList = () => {
               compare: (a, b) => a.nombre.localeCompare(b.nombre),
             },
             showSorterTooltip: false,
-            width: '35%'
+            width: '34%'
 
             // render:(text)=><Link to='/inicio'>{text}</Link>
           },
@@ -369,7 +369,7 @@ const ProductoList = () => {
               a.codigo_interno.localeCompare(b.codigo_interno),
           },
           showSorterTooltip: false,
-          width: '15%'
+          width: '16%'
         },
         {
           title: "PRODUCTO",
@@ -379,7 +379,7 @@ const ProductoList = () => {
             compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
           showSorterTooltip: false,
-          width: '35%'
+          width: '34%'
 
           // render:(text)=><Link to='/inicio'>{text}</Link>
         },
@@ -628,7 +628,7 @@ const ProductoList = () => {
       (entry) => (
         entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
         entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-        entry.tipo_inventario.toLowerCase().includes(currValue.toLowerCase()) ||
+        entry.unidad_medida_abreviatura.toLowerCase().includes(currValue.toLowerCase()) ||
         entry.precio.toString().includes(currValue)) && 
         (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
         (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
