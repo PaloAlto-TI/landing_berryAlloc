@@ -91,6 +91,8 @@ export default (state = initialState, action) => {
       return {...state, producto: producto.data[0]};
     case SET_SERIAL_MODELO:
       return {...state, serial: serial};
+    case GET_SERIAL_MODELO:
+      return {...state, serial: null};
     case PRODUCTO_RESPONSE:
       return {...state, response: response, loading:false};
      case SOFT_DELETE_PRODUCTO:

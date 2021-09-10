@@ -1039,7 +1039,7 @@ const FormProducto = (props) => {
                                 : []
                             }
                           >
-                            <Input placeholder="Ingrese el modelo" />
+                            <Input disabled={!selectedGrupoId ? true : false} placeholder="Ingrese el modelo" />
                           </Form.Item>
                           <Form.Item>
                             <Button
