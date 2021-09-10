@@ -55,15 +55,11 @@ const Home = () => {
           <Switch>
             <Route exact path={`${path}/productos`}>
               <ConfigProvider locale={es_ES}>
-                <ProductoContextProvider value={true}>
                   <ProductoList />
-                </ProductoContextProvider>
               </ConfigProvider>
             </Route>
             <Route path={`${path}/productos/:codigo?/:operacion?`}>
-              <ProductoContextProvider value={false}>
                 <ProductoForm />
-              </ProductoContextProvider>
             </Route>
             <Route exact path={`${path}`}>
               <Layout

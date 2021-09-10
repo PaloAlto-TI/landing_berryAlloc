@@ -50,6 +50,8 @@ import { Typography } from "antd";
 import { ProductoService } from "../../../services/productoService";
 import Modal from "antd/lib/modal/Modal";
 import { saveAs } from "file-saver";
+import { useDispatch, useSelector } from "react-redux";
+import { addProducto, getProducto, _editProducto, _getSerialModelo } from "../../../_redux/ducks/producto.duck";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -64,13 +66,13 @@ const FormProducto = (props) => {
 
   console.log("path", path);
   // console.log(props);
-  const {
-    createProducto,
-    updateProducto,
-    findProducto,
-    editProducto,
-    getSerialModelo,
-  } = useContext(ProductoContext);
+  // const {
+  //   createProducto,
+  //   updateProducto,
+  //   findProducto,
+  //   //editProducto,
+  //   getSerialModelo,
+  // } = useContext(ProductoContext);
 
   let history = useHistory();
   let { codigo, operacion } = useParams();
@@ -106,6 +108,7 @@ const FormProducto = (props) => {
   const [infoTecnicaLinea, setinfoTecnicaLinea] = useState(null);
   const [infoTecnicaGrupo, setinfoTecnicaGrupo] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(null);
+  const [_serial, set_Serial] = useState(null)
   // const [precio, setPrecio] = useState(null)
   const [form] = Form.useForm();
   let initialValues = {
@@ -176,6 +179,31 @@ const FormProducto = (props) => {
       </Option>
     );
   });
+  const response = useSelector((state) => state.productos.response);
+
+  useEffect(() => {
+    window.onpopstate = e => {
+      window.scrollTo(0, 0);
+      console.log("ATRAS")
+
+   } 
+  })
+
+  useEffect(() => {
+    
+    if (response){
+      if (response.message.includes("OK")) {
+        console.log(response);
+        //setPermiso(false);
+        window.scrollTo(0, 0);
+        message.info(response.message, 2).then((t) => history.push("/home/productos/"));
+      } else {
+        message.warning(response.message);
+      }
+    }
+  }, [response])
+
+
 
   // useEffect(() => {
   //   if (infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5") {
@@ -191,6 +219,40 @@ const FormProducto = (props) => {
   //     setCapaDesgaste("PUR");
   //   }
   // }, [infoTecnicaLinea]);
+
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    if (codigo !== "nuevo"){
+
+      dispatch(getProducto(codigo));
+    }
+  }, [dispatch]);
+  
+  const editProducto = useSelector((state) => state.productos.producto);
+  const serial = useSelector((state) => state.productos.serial);
+  console.log("EL PROD", editProducto)
+
+  useEffect(async() => {
+
+    if (form.getFieldValue("codigo_interno") && form.getFieldValue("fk_grupo_id")){
+    const grupoService = new GrupoService();
+    const grupo = await grupoService.getOne(form.getFieldValue("fk_grupo_id"));
+    // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
+    //const serial = await getSerialModelo(changedValues[formFieldName]);
+    // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
+    if (serial){
+    form.setFieldsValue({
+      codigo_interno:
+        form.getFieldValue("codigo_interno").substring(0, 7) +
+        "-" +
+        grupo.codigo +
+        "-" +
+        serial,
+    });
+    }
+    }
+  }, [serial])
 
   useEffect(() => {
     if (crud === null) {
@@ -233,7 +295,7 @@ const FormProducto = (props) => {
       }
     } else {
       console.log("CODIGO: ", codigo);
-      findProducto(codigo);
+      //findProducto(codigo);
       console.log("PRODUCTO", editProducto);
     }
 
@@ -305,7 +367,7 @@ const FormProducto = (props) => {
     let view = "";
 
     var list = data.map(function (d) {
-      return <div key={d.bodega_id}>{d.bodega_nombre + " : " + d.cantidad}</div>;
+      return <div style={{fontSize:13}} key={d.bodega_id}>{d.bodega_nombre + " : " + d.cantidad}</div>;
     });
 
     setstockBodegas(list);
@@ -335,21 +397,19 @@ const FormProducto = (props) => {
     if (id) {
       values["id"] = id;
       console.log("values", values);
-      data = await updateProducto(values);
+      //data = await updateProducto(values);
+      dispatch(_editProducto(values));
+      
     } else {
       console.log("aqui!!!!");
-      data = await createProducto(values);
+      //data = await createProducto(values);
+      dispatch(addProducto(values));
+      
       console.log("zzzzz", data);
     }
+    
 
-    if (data.includes("OK")) {
-      console.log(data);
-      //setPermiso(false);
-      window.scrollTo(0, 0);
-      message.info(data, 2).then((t) => history.push("/home/productos/"));
-    } else {
-      message.warning(data);
-    }
+    
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -630,16 +690,10 @@ const FormProducto = (props) => {
       const grupoService = new GrupoService();
       const grupo = await grupoService.getOne(changedValues[formFieldName]);
       // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
-      const serial = await getSerialModelo(changedValues[formFieldName]);
+      //const serial = await getSerialModelo(changedValues[formFieldName]);
+      dispatch(_getSerialModelo(changedValues[formFieldName]))
       // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
-      form.setFieldsValue({
-        codigo_interno:
-          form.getFieldValue("codigo_interno").substring(0, 7) +
-          "-" +
-          grupo.codigo +
-          "-" +
-          serial,
-      });
+      
       // } else if (
       //   selectedLineaId === "60d4c04b894c18b5e810e025" ||
       //   selectedLineaId === "60faeee1a412169c92c778c2"
@@ -721,6 +775,9 @@ const FormProducto = (props) => {
   //-----------------------------------------------------------
 
   function cancelConfirm() {
+
+    //dispatch(_getSerialModelo('60d617628b7d31ca139fb948'))
+
     if (formHasChanges !== null) {
       if (formHasChanges === true) {
         if (
@@ -788,6 +845,7 @@ const FormProducto = (props) => {
   ) {
     return editProducto || codigo === "nuevo" ? (
       <>
+
         {codigo !== "nuevo" && (
           <Modal
             title={<b>CÓDIGO QR: {editProducto.nombre}</b>}
