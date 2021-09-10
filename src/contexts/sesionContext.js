@@ -13,42 +13,53 @@ const SesionContextProvider = (props) => {
 
   const [sesions, setSesions] = useState();
   const [isLogged, setIsLogged] = useState(false);
+  const [redirect, setRedirect] = useState(false);
   const [ismoved, setMoved] = useState(false);
   //------------------------------------------------------
 
 
   useEffect(async () => {
-  
+    
     // if (productos.length === 0){
     //   setIsEmpty(true);
     //console.log("imprime token :"+localStorage.getItem("token"));
     if (localStorage.getItem("token")) {
-
-
+      
       const tok = { "token": localStorage.getItem("token") };
       let data = await usuario(tok);
-
+      console.log("prueba data "+data);
       
-      console.log("prueba data "+JSON.stringify(sesions));
+      
+      console.log("prueba sesions "+JSON.stringify(sesions));
       //console.log("Entra en effect service1 " + JSON.stringify(sesions));
 
-      if (!sesions) {
-
+      if (sesions==="CONSULTA" || !sesions) {
+        if(data){
+          setMoved(true);
+          console.log("prueba data "+JSON.stringify(sesions));
         setSesions(data);
         setIsLogged(true);
-        console.log("fecha ahora:"+new Date()+"milisegundos ahora"+ new Date().getTime())
-        console.log("fecha salir:"+new Date( (new Date(data.fecha).getTime() + data.time_out))+"milisegundos para salir"+  (new Date(data.fecha).getTime() + data.time_out))
+        //console.log("fecha ahora:"+new Date()+"milisegundos ahora"+ new Date().getTime())
+        //console.log("fecha salir:"+new Date( (new Date(data.fecha).getTime() + data.time_out))+"milisegundos para salir"+  (new Date(data.fecha).getTime() + data.time_out))
         
         if (  new Date().getTime() > (new Date(data.fecha).getTime() + data.time_out) )
         { 
           LogOut();
           setIsLogged(false);
+
           
           
 
 
 
         }
+      }
+      else{
+        
+        setSesions(null);
+        localStorage.clear()
+      
+      }
 
 
 
@@ -62,13 +73,13 @@ const SesionContextProvider = (props) => {
       //console.log("Entra en effect service3 " + new Date(new Date(data.fecha).getTime() + data.time_out));
     }
     else {
-      setIsLogged(false);
+      setIsLogged(true);
 
     }
     // }
 
   //},[localStorage.getItem("token"),sesions],ismoved);
-},[localStorage,sesions,ismoved,setSesions]);
+},[localStorage,sesions,ismoved,setSesions,isLogged]);
 
   //----------------------------------------------------------------
 
@@ -126,7 +137,7 @@ const SesionContextProvider = (props) => {
   return (
     <SesionContext.Provider
       value={{
-        
+        redirect,
         isLogged,
         usuario,
         softDeleteSesion,

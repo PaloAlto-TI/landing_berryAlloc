@@ -57,6 +57,7 @@ const Login = () => {
 
   const ResponseGoogle = async (response) => {
     // console.log(response);
+
     const usuarioService = new UsuarioService();
 
     let res2;

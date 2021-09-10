@@ -10,14 +10,14 @@ import "./lineaForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
 const { TextArea } = Input;
 const FormLinea = (props) => {
-  var {setMoved,sesions} =  useContext(SesionContext);
+  var { setMoved, sesions } = useContext(SesionContext);
   const { createLinea, updateLinea, findLinea, editLinea } = useContext(LineaContext);
   let history = useHistory();
   // console.log("LO QUE ESTA EN EDIT LINEA: " + JSON.stringify(editLinea))
   let { codigo, operacion } = useParams();
   let formHasChanges = false;
   const [crud, setCrud] = useState(
-    operacion === "editar" || codigo === "nuevo" ? true : false
+    sesions && operacion === "editar" || codigo === "nuevo" && sesions._usuario[0].rol === 2 ? true : false
   );
 
   const [id, setId] = useState(null);
@@ -67,7 +67,7 @@ const FormLinea = (props) => {
   // console.log("EL typeTransactionData: " + JSON.stringify(typeTransactionData));
 
   // 02/08/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. 
-  
+
   const typeTransactionSelect = {
     mode: "multiple",
     placeHoldertext: "Marcas"
@@ -101,14 +101,14 @@ const FormLinea = (props) => {
     }
 
 
-     // console.log("EL EDITLINEA EN USEEFFECT: " + JSON.stringify(editLinea))
+    // console.log("EL EDITLINEA EN USEEFFECT: " + JSON.stringify(editLinea))
     if (initialValues.codigo === '' && codigoInterno && !editLinea) {
       // console.log("EL CODIGO INTERNO: ", JSON.stringify(codigoInterno))
       // console.log("ENTRA A IF INITIAL" + JSON.stringify(codigoInterno))
 
       // 26/07/2021 - OBSERVACIÓN: SE DEBE ANALIZAR SI SE ASIGNA O NO EL VALOR DEL CÓDIGO A INGRESAR QUE NOS TRAE LA VISTA AL JSON
       // QUE VA A GUARDAR,, YA QUE LA BASE DE DATOS EN EL TRIGGER ESTÁ ASIGNANDO EL CAMPO DE CODIGO, PERO TENER EN CUENTA.
-      
+
       // initialValues.codigo = codigoInterno[0].code_to_add; // COMENTADO - MC
 
       // console.log("DESPUES DE ASIGNACION: " + JSON.stringify(initialValues))
@@ -116,7 +116,7 @@ const FormLinea = (props) => {
 
     }
 
-    
+
 
     // console.log("useeffect editlinea: " + editLinea)
     if (!codigoInterno && editLinea) {
@@ -147,8 +147,8 @@ const FormLinea = (props) => {
       secuencialesService.getAll().then((data) => {
         // console.log("LA DATA QUE DEVUELVE DEL SERVICE: ", data)
         // console.log("LO QUE TENGO EN TRABSACTION DATA: ", typeTransactionData)
-
         // console.log("MAP TABLENAME: ", data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL).code_to_add)
+
         if (typeTransactionData) {
           setCodigoInterno(data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL))
           // console.log("LO QUE ME QUEDA DEL codigoInterno: " + JSON.stringify(codigoInterno))
@@ -216,8 +216,8 @@ const FormLinea = (props) => {
     // console.log("LA DATA QUE VUELVE AL GUARDAR: ", JSON.stringify(data))
     // 26/08/2021 (MC) - OBSERVACIÓN: DEFINIR SI SE TIENE QUE HACER UN LLAMADO DE LA LINEA INGRESADA PARA MOSTRARLE AL USUARIO EL CÓDIGO CON EL QUE SE GUARDÓ.
     if (data.message.includes("OK")) {
-      message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) + 
-      " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/lineas/"));
+      message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
+        " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/lineas/"));
       // message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/lineas/"));
     } else {
       message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA LÍNEA - \n" + JSON.stringify(data.errorDetails.description), 15);
@@ -240,75 +240,76 @@ const FormLinea = (props) => {
   };
 
   const handleFormValuesChange = async (changedValues) => {
+
     formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
   };
 
   // console.log("EL ROL DEL USER ID: " + JSON.parse(localStorage.getItem("user")).rol);
-  
-if(sesions){
-  if (sesions._usuario[0].rol ===2 || operacion === "ver") {
-    return (
-      editLinea || codigo === "nuevo" ?
-        <>
-          <Form
-            {...layout}
-            form={form}
-            name="customized_form_controls"
-            initialValues={editLinea ? editLinea : initialValues}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            onValuesChange={handleFormValuesChange}
-          >
-            <Divider className="titleFont">LÍNEA</Divider>
-            {/*"EL CRUD:   " + crud + " EL CODIGO TEXT: " + codigo +  " OPERACION: " + operacion*/}
-            {/*JSON.stringify(editLinea)*/}
-            {/*JSON.stringify(codigoInterno)*/}
-            {/*JSON.stringify(initialValues)*/}
-            <br />
-            <Row>
-              <Col span={12}>
-                <Form.Item
-                  label="Nombre"
-                  name="nombre"
-                  // rules={[
-                  //   {
-                  //     required: true,
-                  //     message: "Por favor, ingrese el Nombre de la Línea!!",
-                  //   },
-                  // ]}
-                  rules={
-                    crud
-                      ? [
-                        {
-                          required: true,
-                          message: "Por favor, ingrese el Nombre de la Línea!!",
-                        },
-                      ]
-                      : []
-                  }
-                >
-                  <Input
-                    readOnly={!crud}
-                    placeholder="Ej: Piso Laminado"
-                    className="input-type"
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={10}>
-                <Form.Item
-                  label="Código"
-                  name="codigo"
-                  rules={[
-                    { required: true, message: "No se ha asignado un Código a la Línea!" }
-                  ]}
-                >
-                  <Input
-                    readOnly
-                    className="input-type"
-                    style={{ backgroundColor: '#d9d9d9' }} // 
-                  />
-                </Form.Item>
-                {/* <Form.Item
+
+
+  // if (sesions._usuario[0].rol ===2 || operacion === "ver") {
+  return (
+    editLinea || codigo === "nuevo" ?
+      <>
+        <Form
+          {...layout}
+          form={form}
+          name="customized_form_controls"
+          initialValues={editLinea ? editLinea : initialValues}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          onValuesChange={handleFormValuesChange}
+        >
+          <Divider className="titleFont">LÍNEA</Divider>
+          {/*"EL CRUD:   " + crud + " EL CODIGO TEXT: " + codigo +  " OPERACION: " + operacion*/}
+          {/*JSON.stringify(editLinea)*/}
+          {/*JSON.stringify(codigoInterno)*/}
+          {/*JSON.stringify(initialValues)*/}
+          <br />
+          <Row>
+            <Col span={12}>
+              <Form.Item
+                label="Nombre"
+                name="nombre"
+                // rules={[
+                //   {
+                //     required: true,
+                //     message: "Por favor, ingrese el Nombre de la Línea!!",
+                //   },
+                // ]}
+                rules={
+                  crud
+                    ? [
+                      {
+                        required: true,
+                        message: "Por favor, ingrese el Nombre de la Línea!!",
+                      },
+                    ]
+                    : []
+                }
+              >
+                <Input
+                  readOnly={!crud}
+                  placeholder="Ej: Piso Laminado"
+                  className="input-type"
+                />
+              </Form.Item>
+            </Col>
+            <Col span={10}>
+              <Form.Item
+                label="Código"
+                name="codigo"
+                rules={[
+                  { required: true, message: "No se ha asignado un Código a la Línea!" }
+                ]}
+              >
+                <Input
+                  readOnly
+                  className="input-type"
+                  style={{ backgroundColor: '#d9d9d9' }} // 
+                />
+              </Form.Item>
+              {/* <Form.Item
                   label="Pseudónimo"
                   name="pseudo"
                   rules={[
@@ -322,89 +323,89 @@ if(sesions){
                     className="input-type"
                   />
                 </Form.Item> */}
-              </Col>
-            </Row>
-            <br />
-            <Row justify="start">
-              <Col span={18}>
-                <Form.Item
-                  label="Descripción"
-                  name="descripcion"
-                  rules={
-                    crud
-                      ? [
-                        {
-                          required: true,
-                          message: "Por favor, ingrese la descripción de la Línea",
-                        },
-                      ]
-                      : []
-                  }
-                >
-                  <TextArea rows={6} readOnly={!crud} placeholder="Descripción de la Línea, esta descripción se visualizará en la página web." />
-                </Form.Item>
-              </Col>
-            </Row>
-            <br />
-            <Divider className="titleFont" orientation="left" >MARCAS DE LA LÍNEA</Divider>
-            <br />
-            <Row >
-              <Col span={9}>
-                <Form.Item
-                  label="Marca"
-                  name={"marcas_nn_in"}
-                >
-                  <SelectOpciones
-                    tipo="marcas"
-                    readOnly={!crud}
-                    typeTransaction={typeTransactionSelect} />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              {crud ? (
-                <Col md={18} xs={15}>
-                  <Form.Item {...tailLayout}>
-                    <Button
-                      icon={<SaveOutlined />}
-                      type="primary"
-                      htmlType="submit"
-                    >
-                      GUARDAR
-                    </Button>
-                    &nbsp;&nbsp;
-                    <Button
-                      className="button button3"
-                      icon={<CloseSquareOutlined />}
-                      type="default"
-                      onClick={cancelConfirm}
-                    >
-                      CANCELAR
-                    </Button>
-                  </Form.Item>
-                </Col>
-              ) :
-                <Col md={24} xs={15}>
+            </Col>
+          </Row>
+          <br />
+          <Row justify="start">
+            <Col span={18}>
+              <Form.Item
+                label="Descripción"
+                name="descripcion"
+                rules={
+                  crud
+                    ? [
+                      {
+                        required: true,
+                        message: "Por favor, ingrese la descripción de la Línea",
+                      },
+                    ]
+                    : []
+                }
+              >
+                <TextArea rows={6} readOnly={!crud} placeholder="Descripción de la Línea, esta descripción se visualizará en la página web." />
+              </Form.Item>
+            </Col>
+          </Row>
+          <br />
+          <Divider className="titleFont" orientation="left" >MARCAS DE LA LÍNEA</Divider>
+          <br />
+          <Row >
+            <Col span={9}>
+              <Form.Item
+                label="Marca"
+                name={"marcas_nn_in"}
+              >
+                <SelectOpciones
+                  tipo="marcas"
+                  readOnly={!crud}
+                  typeTransaction={typeTransactionSelect} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            {crud ? (
+              <Col md={18} xs={15}>
+                <Form.Item {...tailLayout}>
                   <Button
-                    icon={<RollbackOutlined />}
+                    icon={<SaveOutlined />}
                     type="primary"
-                    onClick={goBackHistory}
-                    
+                    htmlType="submit"
                   >
-                    REGRESAR
+                    GUARDAR
                   </Button>
-                </Col>
-              }
-            </Row>
-            <br />
-          </Form>
-        </> : null
-    );
+                  &nbsp;&nbsp;
+                  <Button
+                    className="button button3"
+                    icon={<CloseSquareOutlined />}
+                    type="default"
+                    onClick={cancelConfirm}
+                  >
+                    CANCELAR
+                  </Button>
+                </Form.Item>
+              </Col>
+            ) :
+              <Col md={24} xs={15}>
+                <Button
+                  icon={<RollbackOutlined />}
+                  type="primary"
+                  onClick={goBackHistory}
 
-  } else {
-    return <Redirect to="/home" />;
-  }
-}
+                >
+                  REGRESAR
+                </Button>
+              </Col>
+            }
+          </Row>
+          <br />
+        </Form>
+      </> : null
+  );
+
+  // } else {
+  //   return <Redirect to="/home" />;
+  // }
+
 };
 
 const LineaForm = () => {

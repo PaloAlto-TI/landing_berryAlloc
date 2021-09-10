@@ -58,6 +58,8 @@ function valid()
   //  else {
   //    return "NO HAY"
   //  }
+console.log("Sesion:"+JSON.stringify(sesions))
+  if (sesions){
   if(sesions._usuario[0].rol===2)
   {
    return ("VENTAS")
@@ -65,6 +67,7 @@ function valid()
   else {
     return "ASESOR"
   }
+}
 
 
 };
@@ -84,7 +87,7 @@ function valid()
 
   return (
     <header className="main-header">
-      { sesions?
+      {/* { localStorage.getItem("token")?sesions? */}
       <Row>
       <Col span={8} className="labels-header">{ sesions ? valid() :"PALO ALTO - Especialista en Pisos" }</Col>
 
@@ -95,8 +98,8 @@ function valid()
         </Dropdown>
       </Col>
     </Row>
-    :null
-    }
+    {/* :null
+    :history.push("/login")    } */}
     </header>
   );
 };
