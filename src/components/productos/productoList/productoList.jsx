@@ -138,6 +138,7 @@ const ProductoList = () => {
             },
             showSorterTooltip: false,
             width: '34%'
+            
 
             // render:(text)=><Link to='/inicio'>{text}</Link>
           },
