@@ -132,6 +132,7 @@ const LineaList = () => {
   function ver(record) {
     record["permiso"] = false;
     // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
+    
     history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
   }
 
