@@ -8,8 +8,11 @@ import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './lineaList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids'
+let { REACT_APP_SEED } = process.env;
 
 const LineaList = () => {
+  const hashids = new Hashids(REACT_APP_SEED)
   var {setMoved,sesions} =  useContext(SesionContext);
   const { lineas, setPermiso, setEditLinea, isEmpty, softDeleteLinea } = useContext(LineaContext);
   // const [filteredInfo, setFilteredInfo] = useState([]);
@@ -129,7 +132,7 @@ const LineaList = () => {
   function ver(record) {
     record["permiso"] = false;
     // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
-    history.push(`${path}/${record.id}/ver`, record);
+    history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
   }
 
   const filtrar = (e) => {
