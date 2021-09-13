@@ -9,6 +9,11 @@ import { SecuencialesService } from "../../../services/secuencialesService";
 import { LineaService } from "../../../services/lineaService";
 import "./lineaForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
+
+import Hashids from 'hashids'
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED)
+
 const { TextArea } = Input;
 const FormLinea = (props) => {
   var { setMoved, sesions } = useContext(SesionContext);
@@ -113,7 +118,7 @@ const FormLinea = (props) => {
       // initialValues.codigo = data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL)// acacaaaaa
 
     } else {
-      findLinea(codigo);
+      findLinea(hashids.decodeHex(codigo));
     }
 
     if (!codigoInterno) {
