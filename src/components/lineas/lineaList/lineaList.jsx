@@ -10,9 +10,9 @@ import './lineaList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
 import Hashids from 'hashids'
 let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED)
 
 const LineaList = () => {
-  const hashids = new Hashids(REACT_APP_SEED)
   var {setMoved,sesions} =  useContext(SesionContext);
   const { lineas, setPermiso, setEditLinea, isEmpty, softDeleteLinea } = useContext(LineaContext);
   // const [filteredInfo, setFilteredInfo] = useState([]);
