@@ -5,9 +5,11 @@ import { Modal } from "antd";
 import { DeleteFilled, EditFilled, QrcodeOutlined } from "@ant-design/icons";
 import { ProductoService } from "../../services/productoService";
 import { saveAs } from 'file-saver'
+import { useDispatch } from "react-redux";
 
 const CrudButton = (props) => {
-  const { record, softDelete, setRowState, typeTransaction } = props;
+  const { record, softDelete, setRowState, typeTransaction, permiso } = props;
+  console.log("LOS PROPS", props)
   let { path } = useRouteMatch();
   const [isModalVisible, setIsModalVisible] = useState(null);
   const [QR, setQR] = useState(null);
@@ -15,6 +17,7 @@ const CrudButton = (props) => {
   // console.log("RECORD: " + JSON.stringify(record));
   // console.log("EL SOFDELETE DE CRUDBUTTON: " + softDelete);
   // console.log("EL ROWSTATE = ", setRowState )
+  const dispatch = useDispatch();
 
   const showModal = (t) => {
     setRowState(false);
@@ -35,8 +38,13 @@ const CrudButton = (props) => {
 
     // record.pseudo = null;// PRUEBA PARA NUEVO TIPO DE ERROR
     //console.log("record"+JSON.stringify(record))
-    dataSoftDelete = await softDelete(record);
 
+    if (typeTransaction){
+
+      dataSoftDelete = await softDelete(record);
+    }else{
+      dispatch(softDelete(record))
+    }
     console.log(
       "LA DATA QUE VUELVE EN EL LLAMADADO DE CRUD BUTTON: " +
         JSON.stringify(dataSoftDelete)
@@ -156,17 +164,20 @@ const CrudButton = (props) => {
       {/* <Menu.Item icon={<EyeFilled />}key="1" onClick={ver}>
         Ver
       </Menu.Item> */}
-      <Menu.Item icon={<EditFilled />} key="2" onClick={editar}>
+      {permiso || typeTransaction ? <Menu.Item icon={<EditFilled />} key="2" onClick={editar}>
         Editar
-      </Menu.Item>
+      </Menu.Item> :null }
+      
       {record.url_pagina_web ? (
         <Menu.Item icon={<QrcodeOutlined />} key="1" onClick={generarQR}>
           Código QR
         </Menu.Item>
       ) : null}
-      <Menu.Item icon={<DeleteFilled />} key="3" onClick={eliminar}>
+
+      {permiso || typeTransaction ? <Menu.Item icon={<DeleteFilled />} key="3" onClick={eliminar}>
         Eliminar
-      </Menu.Item>
+      </Menu.Item> :null}
+      
     </Menu>
   );
   return (

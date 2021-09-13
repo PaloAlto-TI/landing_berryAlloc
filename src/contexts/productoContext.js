@@ -9,14 +9,15 @@ const ProductoContextProvider = (props) => {
   const [editProducto, setEditProducto] = useState(null);
   const [permiso, setPermiso] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false)
+  const [linea, setLinea] = useState(null)
 
   useEffect(() => {
     setIsEmpty(false)
-
     if (props.value){
       productoService.getProductos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setProductos(data);});
     }
-
+    
+    
     // if (productos.length === 0){
     //   setIsEmpty(true);
     // }
@@ -66,7 +67,7 @@ const ProductoContextProvider = (props) => {
   const findProducto = async (id) => {
 
     console.log(id);
-    const producto = await productoService.getOneProductos(id).then((data) =>  setEditProducto(data[0]));
+    const producto = await productoService.getOneProductos(id).then((data) =>  {setEditProducto(data[0])});
 
 
   };
