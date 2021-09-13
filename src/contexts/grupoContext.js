@@ -10,6 +10,7 @@ const GrupoContextProvider = (props) => {
   const lineasMarcasService = new LineasMarcasService();
   const [grupos, setGrupos] = useState([]);
   const [grupo_marcas_nn, set_grupo_marcas_nn] = useState([]);
+  const [grupo_marca_subgrupo, set_grupo_marcas_subgrupo] = useState([]);
   const [editGrupo, setEditGrupo] = useState(null);
   const [permiso, setPermiso] = useState(false);
   const [isEmpty, setIsEmpty] = useState(false);
@@ -18,6 +19,8 @@ const GrupoContextProvider = (props) => {
     await grupoService.getAll().then((data) => setGrupos(data));
     // console.log("useeffect");
    await grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
+
+   await grupoService.get_grupo_marca_subgrupo().then((data) => set_grupo_marcas_subgrupo(data));
   }, []);
 
   const createGrupo = async(grupo) => {
@@ -132,6 +135,7 @@ const GrupoContextProvider = (props) => {
         editGrupo,
         grupos,
         grupo_marcas_nn,
+        grupo_marca_subgrupo,
         permiso,
         setPermiso,
         setEditGrupo,

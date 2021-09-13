@@ -28,6 +28,14 @@ export class GrupoService {
       } ).then( res => res.data.data).catch(error => error.response.data);
     }
 
+    get_grupo_marca_subgrupo(){
+      return axios.get( baseUrl + "grupo_marca_subgrupo",{
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+      } ).then( res => res.data.data).catch(error => error.response.data);
+    }
+
     create(grupo){
       return axios.post( baseUrl + "grupo", grupo, {
         headers: {

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { Form, Input, Button, message, Row, Col, Divider } from "antd";
+import { Form, Input, Button, message, Row, Col, Divider, Spin } from "antd";
 import { useHistory } from "react-router";
-import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design/icons";
+import { SaveOutlined, CloseSquareOutlined, RollbackOutlined, LoadingOutlined } from "@ant-design/icons";
 import { GrupoContext } from "../../../contexts/grupoContext";
 import { SecuencialesGrupoService } from "../../../services/secuencialesGrupoService";
 import { LineasMarcasService } from "../../../services/lineasMarcasService";
@@ -27,8 +27,8 @@ const FormGrupo = (props) => {
 
   const [id, setId] = useState(null);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
-  const [selectedMarcaId, setSelectedMarcaId] = useState(undefined); 
-  const [selectedLineaMarcaId, setSelectedLineaMarcaId] = useState(undefined); 
+  const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
+  const [selectedLineaMarcaId, setSelectedLineaMarcaId] = useState(undefined);
   const [form] = Form.useForm();
   const [codigoInterno, setCodigoInterno] = useState(null);
   let initialValues = {
@@ -37,7 +37,7 @@ const FormGrupo = (props) => {
   };
 
   function cancelConfirm() {
-    if (formHasChanges !== null) {
+    if (!formHasChanges) {
       if (formHasChanges === true) {
         if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
           history.push("/home/grupos/");
@@ -87,6 +87,8 @@ const FormGrupo = (props) => {
     },
   };
 
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
   useEffect(() => {
 
     if (crud === null) {
@@ -95,7 +97,7 @@ const FormGrupo = (props) => {
     // console.log("EN EN USEEFFECT EL EDIITGRUPO CON: " + JSON.stringify(editGrupo) + "Y LA LINEA SELECTED: " + selectedLineaId)
 
     if (initialValues.codigo === '' && codigoInterno && !editGrupo) {
-      
+
       form.setFieldsValue({ codigo: codigoInterno[0].code_to_add })
 
     }
@@ -149,7 +151,7 @@ const FormGrupo = (props) => {
       // SETTING GRUPO_MARCAS TO CREATE OR UPDATE
       // let temp_toCreateProveedorMarcasN = array2.filter(x => !array1.includes(x));
       // let toCreateProveedorMarcasN = temp_toCreateProveedorMarcasN.map(x => ({ fk_marca_id:x , fk_proveedor_id:id })) // SET FORMAT JSON
-      
+
       // 01/09/2021 - OBSERVACIÓN: SE COMENTA LA LÓGICA ANTIGUA
       // let temp_toCreateGrupoMarcasN = array2.filter(x => !array1.includes(x));
       // let toCreateGrupoMarcasN = temp_toCreateGrupoMarcasN.map(x => ({ fk_marca_id: x, fk_linea_id: values.fk_linea_id, fk_grupo_id: id })) // SET FORMAT JSON
@@ -168,10 +170,10 @@ const FormGrupo = (props) => {
       values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
 
       const lineasMarcasService = new LineasMarcasService();
-      const codigoInternoData =  await lineasMarcasService.getAll().then((data) => { // OBSERVACIÓN 31/08/2021: DEBE SER EL LLAMADO A UN GETONE() - MC
+      const codigoInternoData = await lineasMarcasService.getAll().then((data) => { // OBSERVACIÓN 31/08/2021: DEBE SER EL LLAMADO A UN GETONE() - MC
         // console.log("LA DATA DE LINEA_MARCA ANTES DE GUARDAR: " +  JSON.stringify(data.filter((lm) => lm.fk_marca_id === values.fk_marca_id && lm.fk_linea_id === values.fk_linea_id)))
         // setSelectedLineaMarcaId(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId))
-        
+
         // initialValues.fk_linea_marca = data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id;
 
         // console.log("MI VALUES!! " + JSON.stringify(initialValues))
@@ -179,7 +181,7 @@ const FormGrupo = (props) => {
         // setCodigoInterno(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id);
         // console.log("VOY A COMPARAR ESTO: " + data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id)
         // REVISAR return data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId);
-        
+
         // DEEBE IR IF 
 
         // console.log("LO QUE QUIERO ASIGNAR: " + data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id);
@@ -191,7 +193,7 @@ const FormGrupo = (props) => {
 
       // console.log("LO QUE DEVUELVE AL GUARDAR DE LINEA_MARCA: " + codigoInternoData)
 
-      if (codigoInternoData){
+      if (codigoInternoData) {
         values.fk_linea_marca = codigoInternoData[0].id
         delete values.fk_linea_id;
         delete values.fk_marca_id;
@@ -200,18 +202,18 @@ const FormGrupo = (props) => {
       data = await createGrupo(values);
     }
 
-    if (data.message.includes("OK")){
+    if (data.message.includes("OK")) {
       // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
       if (Object.keys(data.data).length > 0) {
 
-        message.info(JSON.stringify(data.message) + " -  EL GRUPO: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) + 
-        " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/grupos/"));
+        message.info(JSON.stringify(data.message) + " -  EL GRUPO: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
+          " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/grupos/"));
 
       } else {
 
         message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " EL GRUPO - \n" + JSON.stringify(data.errorDetails.description), 15);
 
-      } 
+      }
     } else {
       // 05/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted - MC
       // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
@@ -259,13 +261,13 @@ const FormGrupo = (props) => {
       const lineasMarcasService = new LineasMarcasService();
       // console.log("LA MARCA CON LA QUE VA A MAPEAR: " + changedValues[formFieldName])
 
-      const codigoInternoData =  await lineasMarcasService.getAll().then((data) => { // OBSERVACIÓN 31/08/2021: DEBE SER EL LLAMADO A UN GETONE() - MC
+      const codigoInternoData = await lineasMarcasService.getAll().then((data) => { // OBSERVACIÓN 31/08/2021: DEBE SER EL LLAMADO A UN GETONE() - MC
         // console.log("LA DATA LINEA_MARCA: ", data);
         // console.log("CON LO QUE VA A MAPPEAR: ", changedValues[formFieldName])
         // console.log("CON LO QUE VA A MAPPEAR LINEA ID: ", selectedLineaId)
         // console.log("LA DATA DE LINEA_MARCA MAPPEADO: " +  JSON.stringify(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)))
         // setSelectedLineaMarcaId(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId))
-        
+
         // initialValues.fk_linea_marca = data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id;
 
         // console.log("MI VALUES!! " + JSON.stringify(initialValues))
@@ -273,7 +275,7 @@ const FormGrupo = (props) => {
         // setCodigoInterno(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id);
         // console.log("VOY A COMPARAR ESTO: " + data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id)
         // REVISAR return data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId);
-        
+
         // DEEBE IR IF 
 
         // console.log("LO QUE QUIERO ASIGNAR: " + data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id);
@@ -285,10 +287,10 @@ const FormGrupo = (props) => {
 
       // console.log("LENGTH: " + codigoInternoData.length + " LO QUE DEVUELVE EL DATA DE CODIGO: " + JSON.stringify(codigoInternoData));
 
-      if (codigoInternoData){
-        console.log("QUIERE ASIGANAR ESTOOOOOOOOO: ", codigoInternoData[0])
+      if (codigoInternoData) {
+        // console.log("QUIERE ASIGANAR ESTOOOOOOOOO: ", codigoInternoData[0])
         setSelectedLineaMarcaId(codigoInternoData[0])
-        
+
         initialValues.fk_linea_marca = codigoInternoData[0].id;
         // console.log("MI VALUES!! " + JSON.stringify(initialValues))
 
@@ -301,20 +303,20 @@ const FormGrupo = (props) => {
           // console.log("LO QUE MAPEO: "+ JSON.stringify(data.filter((s) => s.fk_linea_marca === codigoInternoData[0].id)))
           // AGREAGR EL IF PARA CONTROL Y EL CASO CONTRARIO CON ASIGNACION 001
           // console.log("MI CODIGO A GUARDAR!!!!!!!!!!  " + tempCodigoInterno[0].code_to_add)
-          if (tempCodigoInterno.length > 0){
+          if (tempCodigoInterno.length > 0) {
             ///console.log("EXISTEEEEEEE: ", tempCodigoInterno.length)
             setCodigoInterno(tempCodigoInterno[0].code_to_add);
             form.setFieldsValue({ codigo: tempCodigoInterno[0].code_to_add });
           } else {
             setCodigoInterno("001");
-          form.setFieldsValue({ codigo: "001" });
+            form.setFieldsValue({ codigo: "001" });
           }
           // setCodigoInterno(tempCodigoInterno[0].code_to_add);
           // form.setFieldsValue({ codigo: tempCodigoInterno[0].code_to_add });
         });
 
-        }
-      
+      }
+
       // initialValues.fk_linea_marca = selectedLineaMarcaId[0].id;
 
       /* LE COMENTE ESTO ES ORIGINAL const secuencialesGrupoService = new SecuencialesGrupoService();
@@ -344,7 +346,7 @@ const FormGrupo = (props) => {
 if(sesions){
   if (sesions._usuario[0].rol ===2|| operacion === "ver") {
     return (
-      editGrupo || codigo === "nuevo" ?
+      editGrupo || codigo === "nuevo" ? (
         <>
           <Form
             {...layout}
@@ -380,12 +382,12 @@ if(sesions){
                   <SelectOpciones
                     tipo="línea"
                     readOnly={crud ? false : true}
-                  
+
                   />
                 </Form.Item>
               </Col>
               <Col span={12}>
-              <Form.Item
+                <Form.Item
                   label="Código"
                   name="codigo"
                   rules={[
@@ -420,29 +422,29 @@ if(sesions){
                   />
                 </Form.Item> */}
                 <Form.Item
-                    label="Marca"
-                    name={crud ? "fk_marca_id" : "marca"}
-                    // name="fk_marca_id"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione una marca!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                      <SelectOpciones
-                        tipo="marca"
-                        readOnly={crud ? false : true}
-                        filter={selectedLineaId}
-                      />
-                  </Form.Item>
+                  label="Marca"
+                  name={crud ? "fk_marca_id" : "marca"}
+                  // name="fk_marca_id"
+                  rules={
+                    crud
+                      ? [
+                        {
+                          required: true,
+                          message: "Por favor, seleccione una marca!",
+                        },
+                      ]
+                      : []
+                  }
+                >
+                  <SelectOpciones
+                    tipo="marca"
+                    readOnly={crud ? false : true}
+                    filter={selectedLineaId}
+                  />
+                </Form.Item>
               </Col>
               <Col span={12}>
-              <Form.Item
+                <Form.Item
                   label="Subgrupo"
                   //name={!crud ? "fk_subgrupo_id" : "subgrupo"}
                   name="fk_subgrupo_id"
@@ -483,15 +485,9 @@ if(sesions){
                 </Form.Item>
               </Col>
               <Col span={12}>
-              <Form.Item
+                <Form.Item
                   label="Descripción"
                   name="descripcion"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la Descripción del Grupo.",
-                    },
-                  ]}
                 >
                   <TextArea rows={4} readOnly={!crud} placeholder="Descripción del Grupo, esta descripción se visualizará en la página web." />
                 </Form.Item>
@@ -499,7 +495,7 @@ if(sesions){
             </Row>
             <br />
             {/* <Row> */}
-              {/* <Col span={12}>
+            {/* <Col span={12}>
                 <Form.Item
                   label="Marcas"
                   //name={crud ? "grupo_marcas_nn_in" : "marca"}
@@ -576,7 +572,7 @@ if(sesions){
             </Row>
             <br></br>
           </Form>
-        </> : null
+        </>) : (<Spin indicator={antIcon} className="loading-info" />)
     );
 
   } else {

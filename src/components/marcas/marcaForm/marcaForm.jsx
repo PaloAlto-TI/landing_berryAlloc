@@ -1,11 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { Form, Input, Button, message, Row, Col, Divider } from "antd";
+import { Form, Input, Button, message, Row, Col, Divider, Spin } from "antd";
 import { useHistory } from "react-router";
-import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design/icons";
+import { SaveOutlined, CloseSquareOutlined, RollbackOutlined, LoadingOutlined } from "@ant-design/icons";
 import { MarcaContext } from "../../../contexts/marcaContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { SecuencialesService } from "../../../services/secuencialesService";
+import { MarcaService } from "../../../services/marcaService";
 import "./marcaForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
 const { TextArea } = Input;
@@ -14,20 +15,13 @@ const FormMarca = (props) => {
   var {setMoved,sesions} =  useContext(SesionContext);
 
   const { createMarca, updateMarca, findMarca, editMarca } = useContext(MarcaContext);
-  // let { path } = useRouteMatch();
-  // console.log("EL PATH A NIVEL PRINCIPAL: ", path);
-  // console.log("LO QUE ESTA EN EDIT MARCA: " + JSON.stringify(editMarca))
-
   let history = useHistory();
+  // console.log("LO QUE ESTA EN EDIT MARCA: " + JSON.stringify(editMarca))
   let { codigo, operacion } = useParams();
-  // console.log("El codigo de params: ", codigo);
-  // console.log("La operacion de params: ", operacion);
   let formHasChanges = false;
-  
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
   );
-
   const [id, setId] = useState(null);
   const [form] = Form.useForm();
   const [codigoInterno, setCodigoInterno] = useState(null); // OBSERVACIÓN: 30/08/2021 LA VARIABLE SE DEBE CAMBIAR EN CUANTO SE DECIDA QUÉ NOMBRE VA A TENER EN LA BASE DE DATOS
@@ -38,7 +32,7 @@ const FormMarca = (props) => {
   };
 
   function cancelConfirm() {
-    if (formHasChanges !== null) {
+    if (!formHasChanges) {
       if (formHasChanges === true) {
         if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
           history.push("/home/marcas/");
@@ -53,7 +47,11 @@ const FormMarca = (props) => {
     }
   }
 
-  const typeTransactionData = { // OBSERVACIÓN: 30/08/2021 ESTA VARIABLE SE DEBE TRAER POR PROPS, PERO COMO EL COMPONENTE QUE LA TRAE USAN TODAS LAS RAMAS QUEDA AL PENDIENTE EL CAMBIO
+  function goBackHistory() {
+    history.push("/home/marcas/")
+  }
+
+  const typeTransactionData = { // OBSERVACIÓN: 30/08/2021 ESTA VARIABLE SE DEBE TRAER POR PROPS, PERO COMO EL COMPONENTE QUE LA TRAE USAN TODAS LAS RAMAS QUEDA AL PENDIENTE EL CAMBIO -MC
     tableNamePSQL: "marca",
     byIdPSQL: true,
     byInternalCodePSQL: false,
@@ -61,11 +59,6 @@ const FormMarca = (props) => {
     labelCrudPlural: "MARCAS",
     labelCrudSingle: "MARCA"
   };
-
-  function goBackHistory() {
-    history.push("/home/marcas/")
-    // window.history.back();
-  }
 
   // 29/07/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. -MC
 
@@ -90,6 +83,8 @@ const FormMarca = (props) => {
     },
   };
 
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
   useEffect(() => {
     
     if (crud === null) {
@@ -97,7 +92,8 @@ const FormMarca = (props) => {
     }
 
     if (initialValues.codigo === '' && codigoInterno && !editMarca) {
-      form.setFieldsValue({ codigo: codigoInterno[0].code_to_add })
+      // form.setFieldsValue({ codigo: codigoInterno[0].code_to_add })
+      form.setFieldsValue({ codigo: codigoInterno.code_to_add });
     }
 
     if (editMarca) {
@@ -111,12 +107,20 @@ const FormMarca = (props) => {
     }
 
     if (!codigoInterno) {
-      const secuencialesService = new SecuencialesService();      
-      secuencialesService.getAll().then((data) => {
-        if (typeTransactionData) {
-          setCodigoInterno(data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL))
-        } // 30/08/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO O EL MANEJO DE UN CASO QUE NO SE ENCUENTRE UN CÓDIGO
+      const secuencialesService = new SecuencialesService();
+      secuencialesService.getOne(typeTransactionData).then((data) => {
+        if (data.message.includes("OK")) {
+          if (data.data) {
+          setCodigoInterno(data.data);
+          }
+        } else {
+          // 09/09/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO O EL MANEJO DE UN CASO QUE NO SE ENCUENTRE UN CÓDIGO
+          alert("ERROR AL GENERAR EL CÓDIGO INTERNO A INGRESAR: " + data.message)
+          setCodigoInterno(data.data);
+        }
+
       });
+
     }
   })
 
@@ -160,24 +164,31 @@ const FormMarca = (props) => {
       delete values.codigo; // 30/08/2021 - OBSERVACIÓN: VERFICAR SI DESPUÉS SE DEBE VALIDAR ANTES DE HACER EL DELETE.
       // values.codigo = '004';
       data = await createMarca(values);
-
     }
 
-    // console.log("LA DTAA QUE SALIO: " + JSON.stringify(data))
-
     if (data.message.includes("OK")) {
+      if (codigo === "nuevo") {
 
-      if (Object.keys(data.data).length > 0){
-        message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) + 
-        " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
+        const marcaService = new MarcaService();
+        const marcaCreated = await marcaService.getOne(data.data.id);
+
+        if (marcaCreated){
+          message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(marcaCreated.codigo) + " - " + JSON.stringify(marcaCreated.nombre) +
+          " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
+
+        } else {
+          message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
+          " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
+        }
+        
       } else {
-        message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA MARCA - \n" + JSON.stringify(data.errorDetails.description), 15);
-        // history.push("/home/marcas/");
+        message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
+          " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
       }
 
     } else {
       // 01/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted -MC
-      // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
+      // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALIZAR SI SE USA UN ROLLBACK & COMMIT
       message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " LA MARCA - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
   }
@@ -189,13 +200,14 @@ const FormMarca = (props) => {
   };
 
   const handleFormValuesChange = async (changedValues) => {
-    // console.log("ONCHANGE", form.getFieldsValue());
-    formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
+
+    formHasChanges = true;
+    
   };
 if(sesions){
   if (sesions._usuario[0].rol ===2 || operacion === "ver") {
     return (
-      editMarca || codigo === "nuevo" ?
+      (editMarca || codigo === "nuevo") && codigoInterno ? (
         <>
           <Form
             {...layout}
@@ -249,12 +261,6 @@ if(sesions){
                 <Form.Item
                   label="Descripción"
                   name="descripcion"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la descripción de la Marca",
-                    },
-                  ]}
                 >
                   <TextArea rows={6} readOnly={!crud} placeholder="Descripción de la Marca, esta descripción se visualizará en la página web." />
                 </Form.Item>
@@ -312,7 +318,7 @@ if(sesions){
             </Row>
             <br />
           </Form>
-        </> : null
+        </> ) : ( <Spin indicator={antIcon} className="loading-info" /> )
     );
 
   } else {

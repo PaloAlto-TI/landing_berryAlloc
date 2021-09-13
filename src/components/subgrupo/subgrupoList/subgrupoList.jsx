@@ -8,8 +8,6 @@ import Search from 'antd/lib/input/Search';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { SesionContext } from '../../../contexts/sesionContext';
 
-
-
 export const SubgrupoList = () => {
   var { setMoved, sesions } = useContext(SesionContext);
 
@@ -22,7 +20,6 @@ export const SubgrupoList = () => {
   });
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const [value, setValue] = useState(null);
-
   let { path } = useRouteMatch();
   let history = useHistory();
   const { subgrupos, setPermiso, softDeleteSubgrupo, setEditSubgrupo } = useContext(SubgrupoContext);
@@ -36,9 +33,9 @@ export const SubgrupoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '20%'
     },
-
     {
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
@@ -47,7 +44,21 @@ export const SubgrupoList = () => {
       sorter: {
         compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '20%'
+    },
+    {
+      title: "LÍNEAS",
+      dataIndex: "lineas_nn",
+      key: "lineas_nn",
+      className: "longText",
+      showSorterTooltip: false,
+      /*render: (lineasSubgrupo, record) => (
+        <p>
+          {lineasSubgrupo.length > 0 ? lineasSubgrupo.map(x=>x.nombre).join(", ") : 'N/A' }
+        </p>
+      ),*/
+      width: '55%'
     },
     {
       title: "ACCIONES",
@@ -61,10 +72,10 @@ export const SubgrupoList = () => {
           setRowState={setRowState}
         />
       ),
+      width: '5%'
     },
   ]
 
-  //.................................................
   const columns2 = [
     {
       title: "NOMBRE",
@@ -73,9 +84,9 @@ export const SubgrupoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '20%'
     },
-
     {
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
@@ -84,11 +95,23 @@ export const SubgrupoList = () => {
       sorter: {
         compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '20%'
     },
-
+    {
+      title: "LÍNEAS",
+      dataIndex: "lineas_nn",
+      key: "lineas_nn",
+      className: "longText",
+      showSorterTooltip: false,
+      /*render: (lineasSubgrupo, record) => (
+        <p>
+          {lineasSubgrupo.length > 0 ? lineasSubgrupo.map(x=>x.nombre).join(", ") : 'N/A' }
+        </p>
+      ),*/
+      width: '60%'
+    },
   ]
-  //.................................................
 
   const typeTransactionData = {
     tableNamePSQL: "subgrupo",
@@ -105,7 +128,6 @@ export const SubgrupoList = () => {
     //alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
     //setEditSubgrupo(record);
     history.push(`${path}/${record.id}/ver`, record);
-
   }
 
   const filtrar = (e) => {
@@ -118,7 +140,6 @@ export const SubgrupoList = () => {
 
     );
     setDataSource(filteredData);
-
   }
 
   function handleClick() {
@@ -131,61 +152,45 @@ export const SubgrupoList = () => {
   }
 
   return (
-
-
     <div>
-
       <br />
       <Divider>SUBGRUPOS</Divider>
       <br />
-
       <>
-        {sesions ? sesions._usuario[0].rol === 2 ?
+        {sesions?sesions._usuario[0].rol ===2 ?
           <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
-          : null : null}
-
+          : null:null}
       </>
-      
       <Search
-        placeholder="Buscar Marca..."
+        placeholder="Buscar Subgrupo..."
         value={value}
         onChange={e => filtrar(e)}
         style={{ width: 200,marginLeft:20}}
       />
-
-
       <br /><br />
       {subgrupos.length > 0 ?
         <Table
           dataSource={dataSource}
-
-          columns={sesions ? sesions._usuario[0].rol === 2 ? columns1 : columns2 : columns2}
+          columns={sesions?sesions._usuario[0].rol ===2 ? columns1 : columns2 : null }
           rowKey="id"
           onRow={(record, rowIndex) => {
             return {
               onClick: (event) => {
-                if (sesions) {
-
-                  if (sesions._usuario[0].rol === 2) {
-                    if (event.clientX < window.innerWidth * 0.7 && rowState) {
-
-                      // record["permiso"] = false;
-                      // history.push(`${path}/${record.codigo_interno}/ver`, record);
-                      ver(record);
-                    }
-                  } else {
+                if(sesions){
+                  
+                if (sesions._usuario[0].rol ===2) {
+                  if (event.clientX < window.innerWidth * 0.7 && rowState) {
                     ver(record);
                   }
-                }
-                else{
+                } else {
                   ver(record);
                 }
+              }
               },
             };
           }}
         />
         : <Spin indicator={antIcon} />}
-
     </div>
   )
 }
