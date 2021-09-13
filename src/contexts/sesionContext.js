@@ -29,11 +29,11 @@ const SesionContextProvider = (props) => {
       if (!sesions) {// VALIDA QUE LA VARIABLE SESIONS ESTE VACIA
         if (data) { //DATA ES EL RESULTADO DE BUSCAR EL TOKEN EN EL REGISTRO DE SESIONES
           setMoved(true);
-          console.log("prueba data " + JSON.stringify(sesions));
+         // console.log("prueba data " + JSON.stringify(sesions));
           setSesions(data);
 
           setIsLogged(true);
-          console.log("prueba data " + data);
+         // console.log("prueba data " + data);
           
 
           if (new Date().getTime() > (new Date(data.fecha).getTime() + data.time_out)) {
