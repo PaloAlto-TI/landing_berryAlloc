@@ -143,7 +143,7 @@ const GrupoList = () => {
       ),
       width: '15%'
     },
-    {
+    /*{
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
       key: "descripcion",
@@ -153,22 +153,20 @@ const GrupoList = () => {
       },
       showSorterTooltip: false,
       width: '25%'
-    },
+    },*/
     {
-      title: "MARCAS",
-      dataIndex: "grupo_marcas_nn",
-      key: "grupo_marcas_nn",
+      title: "MARCA",
+      dataIndex: "fk_lineamarca",
+      key: "fk_lineamarca",
       className: "longText",
       showSorterTooltip: false,
       sorter: {
-        compare: (a, b) => a.grupo_marcas_nn.localeCompare(b.grupo_marcas_nn),
+        compare: (a, b) => a.fk_lineamarca.localeCompare(b.fk_lineamarca),
       },
       render: (grupoMarca, record) => (
-        <p>
-          {/*grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' */}
-        </p>
+        <p>{grupoMarca.fk_marca.nombre}</p>
       ),
-      width: '30%'
+      width: '20%'
     },
   ]
 
