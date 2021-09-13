@@ -10,6 +10,7 @@ import './grupoList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
 
 const GrupoList = () => {
+  
   var {sesions} =  useContext(SesionContext);
 
   
