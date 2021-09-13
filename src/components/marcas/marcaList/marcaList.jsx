@@ -21,6 +21,17 @@ const MarcaList = () => {
   const [rowState, setRowState] = useState(true);
   const columns1 = [
     {
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
+      },
+      showSorterTooltip: false,
+      width: '10%'
+    },
+    {
       title: "NOMBRE",
       dataIndex: "nombre",
       key: "nombre",
@@ -28,7 +39,7 @@ const MarcaList = () => {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
       showSorterTooltip: true,
-      width: '15%'
+      width: '35%'
     },
     {
       title: "LÍNEAS",
@@ -41,20 +52,9 @@ const MarcaList = () => {
           {lineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
         </p>
       ),
-      width: '30%'
+      width: '50%'
     },
-    {
-      title: "CÓDIGO",
-      dataIndex: "codigo",
-      key: "codigo",
-      align: "center",
-      sorter: {
-        compare: (a, b) => a.codigo.localeCompare(b.codigo),
-      },
-      showSorterTooltip: false,
-      width: '15%'
-    },
-    {
+    /*{
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
       key: "descripcion",
@@ -64,7 +64,7 @@ const MarcaList = () => {
       },
       showSorterTooltip: false,
       width: '35%'
-    },
+    },*/
     {
       title: "ACCIONES",
       dataIndex: "",
@@ -84,6 +84,17 @@ const MarcaList = () => {
 
   const columns2 = [
     {
+      title: "CÓDIGO",
+      dataIndex: "codigo",
+      key: "codigo",
+      align: "center",
+      sorter: {
+        compare: (a, b) => a.codigo.localeCompare(b.codigo),
+      },
+      showSorterTooltip: false,
+      width: '15%'
+    },
+    {
       title: "NOMBRE",
       dataIndex: "nombre",
       key: "nombre",
@@ -91,7 +102,7 @@ const MarcaList = () => {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
       showSorterTooltip: true,
-      width: '15%'
+      width: '35%'
     },
     {
       title: "LÍNEAS",
@@ -104,20 +115,9 @@ const MarcaList = () => {
           {lineasMarca.length > 0 ? lineasMarca.map(x=>x.nombre).join(", ") : 'N/A' }
         </p>
       ),
-      width: '30%'
+      width: '50%'
     },
-    {
-      title: "CÓDIGO",
-      dataIndex: "codigo",
-      key: "codigo",
-      align: "center",
-      sorter: {
-        compare: (a, b) => a.codigo.localeCompare(b.codigo),
-      },
-      showSorterTooltip: false,
-      width: '15%'
-    },
-    {
+    /*{
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
       key: "descripcion",
@@ -127,7 +127,7 @@ const MarcaList = () => {
       },
       showSorterTooltip: false,
       width: '35%'
-    },
+    },*/
    
   ]
 

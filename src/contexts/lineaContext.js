@@ -20,10 +20,10 @@ const LineaContextProvider = (props) => {
 
   const createLinea = async (linea) => {
     const data = await lineaService.create(linea);
-    // console.log("LO QUE VUELVE DE CREAR LINEA A NIVELL DE CONTEXT")
+
     if (data.message === "OK CREATE") {
       lineaService.getAll().then((data) => setLineas(data));
-      lineaService.get_lineas_marcas_nn().then((data) => set_lineas_marcas_nn(data)); // PREGUNTAR SI VA ESTO O CÓMO DEBERÍA IR
+      lineaService.get_lineas_marcas_nn().then((data) => set_lineas_marcas_nn(data));
     }
     return data;
   }
@@ -43,6 +43,7 @@ const LineaContextProvider = (props) => {
     // console.log("EL ID PARA FINDLINEA: " + id);
     // const linea = lineas.find((l) => l.id === id);
     // setEditLinea(linea);
+
     const linea = lineas_marcas_nn.find((l) => l.id === id);
 
     if (linea){

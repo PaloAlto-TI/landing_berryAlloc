@@ -9,7 +9,7 @@ import Search from "antd/lib/input/Search";
 import './grupoList.css';
 
 const GrupoList = () => {
-  const { grupos, /*grupo_marcas_nn,*/ setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
+  const { grupos, /*grupo_marcas_nn,*/ grupo_marca_subgrupo, setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -18,17 +18,9 @@ const GrupoList = () => {
   // const [filteredInfo, setFilteredInfo] = useState([]);
   // console.log("LOS GRUPOS SIN MARCAS: " + JSON.stringify(grupos));
   // console.log("LOS GRUPOS CON MARCAS: " + JSON.stringify(grupo_marcas_nn));
+  // console.log("LOS GRUPOS CON SUBGRUPO: " + JSON.stringify(grupo_marca_subgrupo));
+  
   const columns1 = [
-    {
-      title: "NOMBRE",
-      dataIndex: "nombre",
-      key: "nombre",
-      sorter: {
-        compare: (a, b) => a.nombre.localeCompare(b.nombre),
-      },
-      showSorterTooltip: true,
-      width: '15%'
-    },
     {
       title: "CÓDIGO",
       dataIndex: "codigo",
@@ -40,7 +32,17 @@ const GrupoList = () => {
       showSorterTooltip: false,
       width: '10%'
     },
-    // 06/08/2021 - OBSERVACIÓN: ANALIZAR SI SE DEBE VER UNA MANERA DE QUE PUEDA BUSCAR POR LOS ANIDADOS -MC 
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: true,
+      width: '15%'
+    },
+    // 06/08/2021 - OBSERVACIÓN: ANALIZAR SI SE DEBE VER UNA MANERA DE QUE PUEDA BUSCAR POR LOS ANIDADOS -MC
     {
       title: "SUBGRUPO",
       dataIndex: "fk_subgrupo",
@@ -57,7 +59,7 @@ const GrupoList = () => {
       ),
       width: '15%'
     },
-    {
+    /*{
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
       key: "descripcion",
@@ -67,24 +69,25 @@ const GrupoList = () => {
       },
       showSorterTooltip: false,
       width: '25%'
-    },
-    /*{
+    },*/
+    {
       title: "MARCA",
-      dataIndex: "fk_linea_marca",
-      key: "fk_linea_marca",
+      dataIndex: "fk_lineamarca",
+      key: "fk_lineamarca",
       className: "longText",
       showSorterTooltip: false,
       sorter: {
-        compare: (a, b) => a.fk_linea_marca.localeCompare(b.fk_linea_marca),
+        compare: (a, b) => a.fk_lineamarca.localeCompare(b.fk_lineamarca),
       },
       render: (grupoMarca, record) => (
         <p>
-          {grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' }
-          {grupoMarca? grupoMarca.nombre : 'N/A' }
+          {grupoMarca.fk_marca.nombre}
+          {/*grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' */}
+          {/*grupoMarca? grupoMarca.nombre : 'N/A'*/ }
         </p>
       ),
       width: '20%'
-    },*/
+    },
     {
       title: "ACCIONES",
       dataIndex: "",
@@ -104,16 +107,6 @@ const GrupoList = () => {
 
   const columns2 = [
     {
-      title: "NOMBRE",
-      dataIndex: "nombre",
-      key: "nombre",
-      sorter: {
-        compare: (a, b) => a.nombre.localeCompare(b.nombre),
-      },
-      showSorterTooltip: true,
-      width: '15%'
-    },
-    {
       title: "CÓDIGO",
       dataIndex: "codigo",
       key: "codigo",
@@ -123,6 +116,16 @@ const GrupoList = () => {
       },
       showSorterTooltip: false,
       width: '10%'
+    },
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: true,
+      width: '15%'
     },
     {
       title: "SUBGRUPO",
@@ -151,7 +154,7 @@ const GrupoList = () => {
       showSorterTooltip: false,
       width: '25%'
     },
-    /*{
+    {
       title: "MARCAS",
       dataIndex: "grupo_marcas_nn",
       key: "grupo_marcas_nn",
@@ -162,11 +165,11 @@ const GrupoList = () => {
       },
       render: (grupoMarca, record) => (
         <p>
-          {grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' }
+          {/*grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' */}
         </p>
       ),
       width: '30%'
-    },*/
+    },
   ]
 
    let { path } = useRouteMatch();
@@ -205,7 +208,7 @@ const GrupoList = () => {
     setValue(currValue);
     console.log();
     /// const filteredData = grupo_marcas_nn.filter(entry =>
-    const filteredData = grupos.filter(entry =>
+    const filteredData = grupo_marca_subgrupo.filter(entry =>
       entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase())
       || entry.fk_subgrupo.nombre.toLowerCase().includes(currValue.toLowerCase()));
     setDataSource(filteredData);
@@ -219,7 +222,7 @@ const GrupoList = () => {
     if (!value) {
       // console.log(grupos)
       // setDataSource(grupo_marcas_nn)
-      setDataSource(grupos)
+      setDataSource(grupo_marca_subgrupo)
     }
   })
 
@@ -239,7 +242,7 @@ const GrupoList = () => {
       />
       <br /><br />
       {/*grupo_marcas_nn.length > 0 || isEmpty ? (*/}
-      {grupos.length > 0 || isEmpty ? (
+      {grupo_marca_subgrupo.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
           columns={JSON.parse(localStorage.getItem("user")).rol===2?columns1:columns2}
@@ -268,7 +271,6 @@ const GrupoList = () => {
       )}
     </div>
   );
-
 }
 
 export default GrupoList;

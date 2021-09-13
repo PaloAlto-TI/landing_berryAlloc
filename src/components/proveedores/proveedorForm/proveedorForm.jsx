@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { Form, Input, Button, message, Row, Col, Divider } from "antd";
+import { Form, Input, Button, message, Row, Col, Divider, Spin } from "antd";
 import { useHistory } from "react-router";
-import { SaveOutlined, CloseSquareOutlined, RollbackOutlined } from "@ant-design/icons";
+import { SaveOutlined, CloseSquareOutlined, RollbackOutlined, LoadingOutlined } from "@ant-design/icons";
 import { ProveedorContext } from "../../../contexts/proveedorContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./proveedorForm.css";
@@ -27,7 +27,7 @@ const FormProveedor = (props) => {
   };
 
   function cancelConfirm() {
-    if (formHasChanges !== null) {
+    if (!formHasChanges) {
       if (formHasChanges === true) {
         if (window.confirm("¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN.")) {
           history.push("/home/proveedores/");
@@ -68,6 +68,8 @@ const FormProveedor = (props) => {
     },
   };
 
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
   useEffect(() => {
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
@@ -92,12 +94,10 @@ const FormProveedor = (props) => {
 
     // OBSERVACIÓN: ESTO SE DEBE REEMPLAZAR POR LA VARIABLE DE SESION EN CUANTO ESTE CULMINADA
     // values["fk_empresa_id"] = "60d4bc7d22b552b5af1280bc";
-
     // console.log("EL ID QUE TRAE: " + id);
     // console.log("LOS VALUES DEL FORMULARIO: " + JSON.stringify(values));
 
     if (id) {
-
       values["id"] = id;
       let array1 = editProveedor.proveedor_marcas_nn.map(x=>x.id); // LINEAS INICIALES (BD)
       let array2 = values.proveedor_marcas_nn_in; // LINEAS DE FORM
@@ -123,8 +123,6 @@ const FormProveedor = (props) => {
     }
 
     if (data.message.includes("OK")) {
-
-      // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
       if (Object.keys(data.data).length > 0){
         message.info(JSON.stringify(data.message) + " -  EL PROVEEDOR: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] 
         + " CON ÉXITO", 2).then((t) => history.push("/home/proveedores/"));
@@ -132,7 +130,6 @@ const FormProveedor = (props) => {
       } else {
         console.log("MENSAJE DE VALIDACION DE OBJECTS EN DATA RES: " + values.nombre)
       }
-
     } else {
       // 01/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted
       // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
@@ -154,7 +151,7 @@ const FormProveedor = (props) => {
 
   if (JSON.parse(localStorage.getItem("user")).rol === 2 || operacion === "ver") {
     return (
-      editProveedor || codigo === "nuevo" ?
+      editProveedor || codigo === "nuevo" ? (
         <>
           <Form
             {...layout}
@@ -190,12 +187,6 @@ const FormProveedor = (props) => {
               <Form.Item
                   label="Descripción"
                   name="descripcion"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la descripción del Proveedor.",
-                    },
-                  ]}
                 >
                   <TextArea rows={4} readOnly={!crud} placeholder="Descripción del Proveedor." />
                 </Form.Item>
@@ -252,9 +243,9 @@ const FormProveedor = (props) => {
               }
             </Row>
           </Form>
-        </> : null
+        </> ) : ( <Spin indicator={antIcon} className="loading-info" /> )
     );
-
+    
   } else {
     return <Redirect to="/home" />;
   }

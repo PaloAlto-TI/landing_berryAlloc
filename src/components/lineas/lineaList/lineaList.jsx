@@ -17,16 +17,6 @@ const LineaList = () => {
   const [rowState, setRowState] = useState(true);
   const columns1 = [
     {
-      title: "NOMBRE",
-      dataIndex: "nombre",
-      key: "nombre",
-      sorter: {
-        compare: (a, b) => a.nombre.localeCompare(b.nombre),
-      },
-      showSorterTooltip: false,
-      width: '15%'
-    },
-    {
       title: "CÓDIGO",
       dataIndex: "codigo",
       key: "codigo",
@@ -38,6 +28,16 @@ const LineaList = () => {
       width: '10%'
     },
     {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: false,
+      width: '35%'
+    },
+    {
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
       key: "descripcion",
@@ -46,7 +46,7 @@ const LineaList = () => {
         compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
       },
       showSorterTooltip: false,
-      width: '35%'
+      width: '50%'
     },
     {
       title: "ACCIONES",
@@ -65,15 +65,6 @@ const LineaList = () => {
   ];
   const columns2 = [
     {
-      title: "NOMBRE",
-      dataIndex: "nombre",
-      key: "nombre",
-      sorter: {
-        compare: (a, b) => a.nombre.localeCompare(b.nombre),
-      },
-      showSorterTooltip: false
-    },
-    {
       title: "CÓDIGO",
       dataIndex: "codigo",
       key: "codigo",
@@ -81,7 +72,18 @@ const LineaList = () => {
       sorter: {
         compare: (a, b) => a.codigo.localeCompare(b.codigo),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '10%'
+    },
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: false,
+      width: '15%'
     },
     {
       title: "DESCRIPCIÓN",
@@ -91,7 +93,8 @@ const LineaList = () => {
       sorter: {
         compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
       },
-      showSorterTooltip: false
+      showSorterTooltip: false,
+      width: '35%'
     },
     
   ];
@@ -131,7 +134,8 @@ const LineaList = () => {
     const currValue = e.target.value;
     setValue(currValue);
     const filteredData = lineas.filter(entry =>
-      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase()));
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase())
+      || entry.descripcion.toLowerCase().includes(currValue.toLowerCase()));
     setDataSource(filteredData);
   }
 
@@ -175,8 +179,6 @@ const LineaList = () => {
               onClick: (event) => {
                 if (JSON.parse(localStorage.getItem("user")).rol === 2) {
                   if (event.clientX < window.innerWidth * 0.8 && rowState) {
-                    // record["permiso"] = false;
-                    // history.push(`${path}/${record.codigo_interno}/ver`, record);
                     ver(record);
                   }
                 } else {

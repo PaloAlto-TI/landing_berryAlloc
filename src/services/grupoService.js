@@ -15,6 +15,10 @@ export class GrupoService {
       return axios.get( baseUrl + "grupo_marcas_nn" ).then( res => res.data.data).catch(error => error.response.data);
     }
 
+    get_grupo_marca_subgrupo(){
+      return axios.get( baseUrl + "grupo_marca_subgrupo" ).then( res => res.data.data).catch(error => error.response.data);
+    }
+
     create(grupo){
       return axios.post( baseUrl + "grupo", grupo).then( res => res.data).catch(error => error.response.data);
     }
