@@ -16,10 +16,8 @@ const GrupoContextProvider = (props) => {
   const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(async() => {
-    await grupoService.getAll().then((data) => setGrupos(data));
-    // console.log("useeffect");
+   await grupoService.getAll().then((data) => setGrupos(data));
    await grupoService.get_grupo_marcas_nn().then((data) => set_grupo_marcas_nn(data));
-
    await grupoService.get_grupo_marca_subgrupo().then((data) => set_grupo_marcas_subgrupo(data));
   }, []);
 
@@ -106,11 +104,10 @@ const GrupoContextProvider = (props) => {
       } else {
         grupo.fk_subgrupo_nombre = '';
       }
-
       setEditGrupo(grupo);
     }*/
-    setEditGrupo(grupo);
 
+    setEditGrupo(grupo);
   };
 
   const updateGrupo = async(grupo) => {

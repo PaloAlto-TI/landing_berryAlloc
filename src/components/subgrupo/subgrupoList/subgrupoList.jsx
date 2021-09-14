@@ -7,6 +7,9 @@ import { useRouteMatch } from "react-router-dom";
 import Search from 'antd/lib/input/Search';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { SesionContext } from '../../../contexts/sesionContext';
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
 
 export const SubgrupoList = () => {
   var { setMoved, sesions } = useContext(SesionContext);
@@ -115,7 +118,8 @@ export const SubgrupoList = () => {
   function ver(record) {
     setEditSubgrupo(null);
     record["permiso"] = false;
-    history.push(`${path}/${record.id}/ver`, record);
+    // history.push(`${path}/${record.id}/ver`, record);
+    history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
   }
 
   const filtrar = (e) => {

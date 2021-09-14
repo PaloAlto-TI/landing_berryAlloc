@@ -9,10 +9,14 @@ import { LineasMarcasService } from "../../../services/lineasMarcasService";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./grupoForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
 const { TextArea } = Input;
 
+
 const FormGrupo = (props) => {
-  var {setMoved,sesions} =  useContext(SesionContext);
+  var { setMoved, sesions } = useContext(SesionContext);
 
   const { createGrupo, updateGrupo, findGrupo, editGrupo } = useContext(GrupoContext);
 
@@ -114,8 +118,9 @@ const FormGrupo = (props) => {
         setId(editGrupo.id);
       }
     } else {
-      // console.log("ACA QUIRERE ENTRAR CON ESTE CODIGO: ", codigo)
-      findGrupo(codigo);
+
+      findGrupo(hashids.decodeHex(codigo));
+
     }
 
     if (!codigoInterno) {
@@ -253,7 +258,7 @@ const FormGrupo = (props) => {
         // console.log("CON LO QUE VA A MAPPEAR LINEA ID: ", selectedLineaId)
         // console.log("LA DATA DE LINEA_MARCA MAPPEADO: " +  JSON.stringify(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)))
         // setSelectedLineaMarcaId(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId))
-        
+
         // initialValues.fk_linea_marca = data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id;
 
         // console.log("MI VALUES!! " + JSON.stringify(initialValues))
@@ -288,105 +293,105 @@ const FormGrupo = (props) => {
           const secuencialesGrupoService = new SecuencialesGrupoService();
           secuencialesGrupoService.getOne(typeTransactionData).then((data) => {
 
-          if (data.message.includes("OK")) {
-            if (data.data) {
-              // console.log("SE VA CON ESTE CODIGO: ", data.data.code_to_add)
-              setCodigoInterno(data.data.code_to_add);
-              form.setFieldsValue({ codigo: data.data.code_to_add });
-              // console.log("EL LENGTH : ", data.data.length)
-              ///console.log("EXISTEEEEEEE: ", tempCodigoInterno.length)
-              // const tempCodigoInterno = data.data;
-              // if (data.data.length > 0) {
-              ///console.log("EXISTEEEEEEE: ", tempCodigoInterno.length)
-              // setCodigoInterno(data.data.code_to_add);
-              // form.setFieldsValue({ codigo: data.data.code_to_add });
-              // } else {
-              // setCodigoInterno("001");
-              // form.setFieldsValue({ codigo: "001" });
-              /// }
-              // setCodigoInterno(tempCodigoInterno[0].code_to_add);
-              // form.setFieldsValue({ codigo: tempCodigoInterno[0].code_to_add });
-            } else {
-              setCodigoInterno("001");
-              form.setFieldsValue({ codigo: "001" });
-            }
-            setCodigoInterno(data.data)
-            // }
+            if (data.message.includes("OK")) {
+              if (data.data) {
+                // console.log("SE VA CON ESTE CODIGO: ", data.data.code_to_add)
+                setCodigoInterno(data.data.code_to_add);
+                form.setFieldsValue({ codigo: data.data.code_to_add });
+                // console.log("EL LENGTH : ", data.data.length)
+                ///console.log("EXISTEEEEEEE: ", tempCodigoInterno.length)
+                // const tempCodigoInterno = data.data;
+                // if (data.data.length > 0) {
+                ///console.log("EXISTEEEEEEE: ", tempCodigoInterno.length)
+                // setCodigoInterno(data.data.code_to_add);
+                // form.setFieldsValue({ codigo: data.data.code_to_add });
+                // } else {
+                // setCodigoInterno("001");
+                // form.setFieldsValue({ codigo: "001" });
+                /// }
+                // setCodigoInterno(tempCodigoInterno[0].code_to_add);
+                // form.setFieldsValue({ codigo: tempCodigoInterno[0].code_to_add });
+              } else {
+                setCodigoInterno("001");
+                form.setFieldsValue({ codigo: "001" });
+              }
+              setCodigoInterno(data.data)
+              // }
 
-          } else {
-            // 09/09/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO O EL MANEJO DE UN CASO QUE NO SE ENCUENTRE UN CÓDIGO
-            // alert("ERROR AL GENERAR EL CÓDIGO INTERNO A INGRESAR: " + data.message)
-            setCodigoInterno(data.data)
-          }
+            } else {
+              // 09/09/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO O EL MANEJO DE UN CASO QUE NO SE ENCUENTRE UN CÓDIGO
+              // alert("ERROR AL GENERAR EL CÓDIGO INTERNO A INGRESAR: " + data.message)
+              setCodigoInterno(data.data)
+            }
           });
         }
       }
     };
 
   };
-if(sesions){
-  if (sesions._usuario[0].rol ===2|| operacion === "ver") {
-    return (
-      editGrupo || codigo === "nuevo" ? ( //13/09/2021 - OBSERVACIÓN: CONTROLAR CON SPIN LA CARGA DEL FORMULARIO - MC
-        <>
-          <Form
-            {...layout}
-            form={form}
-            name="customized_form_controls"
-            initialValues={editGrupo ? editGrupo : initialValues}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            onValuesChange={handleFormValuesChange}
-          >
-            <Divider className="titleFont">GRUPO</Divider>
-            {/*"EL CRUD:   " + crud + " EL CODIGO TEXT: " + codigo +  " OPERACION: " + operacion*/}
-            {/*"LINEA SELECTED: " + selectedLineaId + " MARCA SELECTED: " + selectedMarcaId*/}
-            {/*"EL EDIT GRUPO " + JSON.stringify(editGrupo)*/}
-            {/*"EL  CODIGO INTERNO " + JSON.stringify(codigoInterno)*/}
-            {/*"EL PK LINEA_MARCA " + JSON.stringify(selectedLineaMarcaId)*/}
-            {/*JSON.stringify(initialValues)*/}
-            <br />
-            <Row>
-              <Col span={10}>
-                <Form.Item
-                  label="Línea"
-                  // name={crud ? "grupo_marcas_nn_in" : "linea"} 
-                  // name={["grupo_marcas_nn_in",]}
-                  name={crud ? "fk_linea_id" : "linea"}
-                  rules={crud ? [
-                    {
-                      required: true,
-                      message: "Por favor, seleccione una Línea!",
-                    },
-                  ] : []}
-                >
-                  <SelectOpciones
-                    tipo="línea"
-                    readOnly={crud ? false : true}
+  if (sesions) {
+    if (sesions._usuario[0].rol === 2 || operacion === "ver") {
+      return (
+        editGrupo || codigo === "nuevo" ? ( //13/09/2021 - OBSERVACIÓN: CONTROLAR CON SPIN LA CARGA DEL FORMULARIO - MC
+          <>
+            <Form
+              {...layout}
+              form={form}
+              name="customized_form_controls"
+              initialValues={editGrupo ? editGrupo : initialValues}
+              onFinish={onFinish}
+              onFinishFailed={onFinishFailed}
+              onValuesChange={handleFormValuesChange}
+            >
+              <Divider className="titleFont">GRUPO</Divider>
+              {/*"EL CRUD:   " + crud + " EL CODIGO TEXT: " + codigo +  " OPERACION: " + operacion*/}
+              {/*"LINEA SELECTED: " + selectedLineaId + " MARCA SELECTED: " + selectedMarcaId*/}
+              {/*"EL EDIT GRUPO " + JSON.stringify(editGrupo)*/}
+              {/*"EL  CODIGO INTERNO " + JSON.stringify(codigoInterno)*/}
+              {/*"EL PK LINEA_MARCA " + JSON.stringify(selectedLineaMarcaId)*/}
+              {/*JSON.stringify(initialValues)*/}
+              <br />
+              <Row>
+                <Col span={10}>
+                  <Form.Item
+                    label="Línea"
+                    // name={crud ? "grupo_marcas_nn_in" : "linea"} 
+                    // name={["grupo_marcas_nn_in",]}
+                    name={crud ? "fk_linea_id" : "linea"}
+                    rules={crud ? [
+                      {
+                        required: true,
+                        message: "Por favor, seleccione una Línea!",
+                      },
+                    ] : []}
+                  >
+                    <SelectOpciones
+                      tipo="línea"
+                      readOnly={crud ? false : true}
 
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Código"
-                  name="codigo"
-                  rules={[
-                    { required: true, message: "Por favor, ingrese el Código del Grupo!" },
-                  ]}
-                >
-                  <Input
-                    readOnly
-                    className="input-type"
-                    style={{ backgroundColor: '#d9d9d9' }}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col span={10}>
-                {/* <Form.Item
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Código"
+                    name="codigo"
+                    rules={[
+                      { required: true, message: "Por favor, ingrese el Código del Grupo!" },
+                    ]}
+                  >
+                    <Input
+                      readOnly
+                      className="input-type"
+                      style={{ backgroundColor: '#d9d9d9' }}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col span={10}>
+                  {/* <Form.Item
                   label="Aqui va Marca"
                   name="nombre"
                   rules={[
@@ -402,81 +407,81 @@ if(sesions){
                     className="input-type"
                   />
                 </Form.Item> */}
-                <Form.Item
-                  label="Marca"
-                  name={crud ? "fk_marca_id" : "marca"}
-                  // name="fk_marca_id"
-                  rules={
-                    crud
-                      ? [
-                        {
-                          required: true,
-                          message: "Por favor, seleccione una marca!",
-                        },
-                      ]
-                      : []
-                  }
-                >
-                  <SelectOpciones
-                    tipo="marca"
-                    readOnly={crud ? false : true}
-                    filter={selectedLineaId}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Subgrupo"
-                  //name={!crud ? "fk_subgrupo_id" : "subgrupo"}
-                  name="fk_subgrupo_id"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el Nombre del Subgrupo!!",
-                    },
-                  ]}
-                >
-                  <SelectOpciones
-                    tipo="subgrupo"
-                    readOnly={!crud}
-                    typeTransaction={typeTransactionSelect}
-                  />
-                </Form.Item>
-              </Col>
-            </Row>
-            <br />
-            <Row>
-              <Col span={10}>
-                <Form.Item
-                  label="Nombre"
-                  name="nombre"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el Nombre del Grupo!!",
-                    },
-                  ]}
-                >
-                  <Input
-                    readOnly={!crud}
-                    placeholder="Ej: FIRSTLINE PRO"
-                    className="input-type"
-                    style={{ width: '80%' }}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item
-                  label="Descripción"
-                  name="descripcion"
-                >
-                  <TextArea rows={4} readOnly={!crud} placeholder="Descripción del Grupo, esta descripción se visualizará en la página web." />
-                </Form.Item>
-              </Col>
-            </Row>
-            <br />
-            {/* <Row> */}
-            {/* <Col span={12}>
+                  <Form.Item
+                    label="Marca"
+                    name={crud ? "fk_marca_id" : "marca"}
+                    // name="fk_marca_id"
+                    rules={
+                      crud
+                        ? [
+                          {
+                            required: true,
+                            message: "Por favor, seleccione una marca!",
+                          },
+                        ]
+                        : []
+                    }
+                  >
+                    <SelectOpciones
+                      tipo="marca"
+                      readOnly={crud ? false : true}
+                      filter={selectedLineaId}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Subgrupo"
+                    //name={!crud ? "fk_subgrupo_id" : "subgrupo"}
+                    name="fk_subgrupo_id"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, ingrese el Nombre del Subgrupo!!",
+                      },
+                    ]}
+                  >
+                    <SelectOpciones
+                      tipo="subgrupo"
+                      readOnly={!crud}
+                      typeTransaction={typeTransactionSelect}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <br />
+              <Row>
+                <Col span={10}>
+                  <Form.Item
+                    label="Nombre"
+                    name="nombre"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Por favor, ingrese el Nombre del Grupo!!",
+                      },
+                    ]}
+                  >
+                    <Input
+                      readOnly={!crud}
+                      placeholder="Ej: FIRSTLINE PRO"
+                      className="input-type"
+                      style={{ width: '80%' }}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Descripción"
+                    name="descripcion"
+                  >
+                    <TextArea rows={4} readOnly={!crud} placeholder="Descripción del Grupo, esta descripción se visualizará en la página web." />
+                  </Form.Item>
+                </Col>
+              </Row>
+              <br />
+              {/* <Row> */}
+              {/* <Col span={12}>
                 <Form.Item
                   label="Marcas"
                   //name={crud ? "grupo_marcas_nn_in" : "marca"}
@@ -498,8 +503,8 @@ if(sesions){
               </Col>
               <Col span={18}>
               </Col> */}
-            {/* </Row> */}
-            {/* <Row justify="start">
+              {/* </Row> */}
+              {/* <Row justify="start">
               <Col span={18}>
                 <Form.Item
                   label="Descripción"
@@ -516,50 +521,50 @@ if(sesions){
               </Col>
             </Row>
             <br /><br /> */}
-            <br />
-            <Row>
-              {crud ? (
-                <Col md={18} xs={15}>
-                  <Form.Item {...tailLayout}>
+              <br />
+              <Row>
+                {crud ? (
+                  <Col md={18} xs={15}>
+                    <Form.Item {...tailLayout}>
+                      <Button
+                        icon={<SaveOutlined />}
+                        type="primary"
+                        htmlType="submit"
+                      >
+                        GUARDAR
+                      </Button>
+                      &nbsp;&nbsp;
+                      <Button
+                        className="button button3"
+                        icon={<CloseSquareOutlined />}
+                        type="default"
+                        onClick={cancelConfirm}
+                      >
+                        CANCELAR
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                ) :
+                  <Col md={24} xs={15}>
                     <Button
-                      icon={<SaveOutlined />}
+                      icon={<RollbackOutlined />}
                       type="primary"
-                      htmlType="submit"
+                      onClick={goBackHistory}
                     >
-                      GUARDAR
+                      REGRESAR
                     </Button>
-                    &nbsp;&nbsp;
-                    <Button
-                      className="button button3"
-                      icon={<CloseSquareOutlined />}
-                      type="default"
-                      onClick={cancelConfirm}
-                    >
-                      CANCELAR
-                    </Button>
-                  </Form.Item>
-                </Col>
-              ) :
-                <Col md={24} xs={15}>
-                  <Button
-                    icon={<RollbackOutlined />}
-                    type="primary"
-                    onClick={goBackHistory}
-                  >
-                    REGRESAR
-                  </Button>
-                </Col>
-              }
-            </Row>
-            <br></br>
-          </Form>
-        </>) : (<Spin indicator={antIcon} className="loading-info" />)
-    );
+                  </Col>
+                }
+              </Row>
+              <br></br>
+            </Form>
+          </>) : (<Spin indicator={antIcon} className="loading-info" />)
+      );
 
-  } else {
-    return <Redirect to="/home" />;
+    } else {
+      return <Redirect to="/home" />;
+    }
   }
-}
 };
 
 const GrupoForm = () => {

@@ -8,6 +8,9 @@ import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './grupoList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
 
 const GrupoList = () => {
   var { setMoved, sesions } = useContext(SesionContext);
@@ -199,7 +202,8 @@ const GrupoList = () => {
 
   function ver(record) {
     record["permiso"] = false;
-    history.push(`${path}/${record.id}/ver`, record);
+    // history.push(`${path}/${record.id}/ver`, record);
+    history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
   }
 
   const filtrar = (e) => {

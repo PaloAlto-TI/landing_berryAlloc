@@ -8,208 +8,210 @@ import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './proveedorList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
 
 const ProveedorList = () => {
-  var {setMoved,sesions} =  useContext(SesionContext);
+  var { setMoved, sesions } = useContext(SesionContext);
+  const { /*proveedores,*/ proveedores_marcas_nn, setPermiso, setEditProveedor, isEmpty, softDeleteProveedor } = useContext(ProveedorContext);
+  const [value, setValue] = useState(null);
+  const [dataSource, setDataSource] = useState([]);
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const [rowState, setRowState] = useState(true);
 
-    const { /*proveedores,*/ proveedores_marcas_nn, setPermiso, setEditProveedor, isEmpty, softDeleteProveedor } = useContext(ProveedorContext);
-    const [value, setValue] = useState(null);
-    const [dataSource, setDataSource] = useState([]);
-    const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
-    const [rowState, setRowState] = useState(true);
+  // console.log("LAS PROVEEDORES SIN MARCAS: " + JSON.stringify(proveedores));
+  // console.log("LAS PROVEEDORES CON MARCAS: " + JSON.stringify(proveedores_marcas_nn));
 
-    // console.log("LAS PROVEEDORES SIN MARCAS: " + JSON.stringify(proveedores));
-    // console.log("LAS PROVEEDORES CON MARCAS: " + JSON.stringify(proveedores_marcas_nn));
+  const columns1 = [
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: true,
+      width: '30%'
+    },
+    {
+      title: "DESCRIPCIÓN",
+      dataIndex: "descripcion",
+      key: "descripcion",
+      className: "longText",
+      sorter: {
+        compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+      },
+      showSorterTooltip: false,
+      width: '35%'
+    },
+    {
+      title: "MARCAS",
+      dataIndex: "proveedor_marcas_nn",
+      key: "proveedor_marcas_nn",
+      className: "longText",
+      showSorterTooltip: false,
 
-    const columns1 = [
-        {
-          title: "NOMBRE",
-          dataIndex: "nombre",
-          key: "nombre",
-          sorter: {
-            compare: (a, b) => a.nombre.localeCompare(b.nombre),
-          },
-          showSorterTooltip: true,
-          width: '30%'
-        },
-        {
-          title: "DESCRIPCIÓN",
-          dataIndex: "descripcion",
-          key: "descripcion",
-          className: "longText",
-          sorter: {
-            compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
-          },
-          showSorterTooltip: false,
-          width: '35%'
-        },
-        {
-          title: "MARCAS",
-          dataIndex: "proveedor_marcas_nn",
-          key: "proveedor_marcas_nn",
-          className: "longText",
-          showSorterTooltip: false,
+      render: (proveedorMarca, record) => (
+        <p>
+          {proveedorMarca.length > 0 ? proveedorMarca.map(x => x.nombre).join(", ") : 'N/A'}
+        </p>
+      ),
+      width: '30%'
+    },
+    {
+      title: "ACCIONES",
+      dataIndex: "",
+      align: "center",
+      key: "x",
+      render: (_, record) => (
+        <CrudButton
+          record={record}
+          softDelete={softDeleteProveedor}
+          typeTransaction={typeTransactionData}
+          setRowState={setRowState}
+        />
+      ),
+      width: '5%'
+    },
+  ];
 
-          render: (proveedorMarca, record) => (
-            <p>
-              {proveedorMarca.length > 0 ? proveedorMarca.map(x=>x.nombre).join(", ") : 'N/A' }
-            </p>
-          ),
-          width: '30%'
-        },
-        {
-          title: "ACCIONES",
-          dataIndex: "",
-          align: "center",
-          key: "x",
-          render: (_, record) => (
-            <CrudButton
-              record={record}
-              softDelete={softDeleteProveedor}
-              typeTransaction={typeTransactionData}
-              setRowState={setRowState} 
-            />
-          ),
-          width: '5%'
-        },
-      ];  
+  const columns2 = [
+    {
+      title: "NOMBRE",
+      dataIndex: "nombre",
+      key: "nombre",
+      sorter: {
+        compare: (a, b) => a.nombre.localeCompare(b.nombre),
+      },
+      showSorterTooltip: true,
+      width: '30%'
+    },
+    {
+      title: "DESCRIPCIÓN",
+      dataIndex: "descripcion",
+      key: "descripcion",
+      className: "longText",
+      sorter: {
+        compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
+      },
+      showSorterTooltip: false,
+      width: '35%'
+    },
+    {
+      title: "MARCAS",
+      dataIndex: "proveedor_marcas_nn",
+      key: "proveedor_marcas_nn",
+      className: "longText",
+      showSorterTooltip: false,
 
-      const columns2 = [
-        {
-          title: "NOMBRE",
-          dataIndex: "nombre",
-          key: "nombre",
-          sorter: {
-            compare: (a, b) => a.nombre.localeCompare(b.nombre),
-          },
-          showSorterTooltip: true,
-          width: '30%'
-        },
-        {
-          title: "DESCRIPCIÓN",
-          dataIndex: "descripcion",
-          key: "descripcion",
-          className: "longText",
-          sorter: {
-            compare: (a, b) => a.descripcion.localeCompare(b.descripcion),
-          },
-          showSorterTooltip: false,
-          width: '35%'
-        },
-        {
-          title: "MARCAS",
-          dataIndex: "proveedor_marcas_nn",
-          key: "proveedor_marcas_nn",
-          className: "longText",
-          showSorterTooltip: false,
+      render: (proveedorMarca, record) => (
+        <p>
+          {proveedorMarca.length > 0 ? proveedorMarca.map(x => x.nombre).join(", ") : 'N/A'}
+        </p>
+      ),
+      width: '30%'
+    },
 
-          render: (proveedorMarca, record) => (
-            <p>
-              {proveedorMarca.length > 0 ? proveedorMarca.map(x=>x.nombre).join(", ") : 'N/A' }
-            </p>
-          ),
-          width: '30%'
-        },
-     
-      ];  
+  ];
 
-    let { path } = useRouteMatch();
-    let history = useHistory();
+  let { path } = useRouteMatch();
+  let history = useHistory();
 
-    const typeTransactionData = {
-      tableNamePSQL: "proveedor",
-      byIdPSQL: true,
-      byInternalCodePSQL: false,
-      dependenciesPSQL: false,
-      labelCrudPlural: "PROVEEDORES",
-      labelCrudSingle: "PROVEEDOR"
+  const typeTransactionData = {
+    tableNamePSQL: "proveedor",
+    byIdPSQL: true,
+    byInternalCodePSQL: false,
+    dependenciesPSQL: false,
+    labelCrudPlural: "PROVEEDORES",
+    labelCrudSingle: "PROVEEDOR"
+  };
+
+  const handleChange = (pagination, filters, sorter) => {
+    // setFilteredInfo(filters); No se usa a nivel de Línea porque no tiene un filtro directo a nivel de tabla
+  };
+
+  function handleClick() {
+    setPermiso(true);
+    let record = {
+      permiso: true,
+      nuevo: true,
     };
+    history.push(`${path}/nuevo`, record);
+  }
 
-    const handleChange = (pagination, filters, sorter) => {
-        // setFilteredInfo(filters); No se usa a nivel de Línea porque no tiene un filtro directo a nivel de tabla
-    };
-    
-    function handleClick() {
-      setPermiso(true);
-      let record = {
-        permiso: true,
-        nuevo: true,
-      };
-      history.push(`${path}/nuevo`, record);
-    }
-    
-    function ver(record) {
-      record["permiso"] = false;
-      // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
-      history.push(`${path}/${record.id}/ver`, record);
-    }
-    
-    const filtrar = (e) => {
-      const currValue = e.target.value;
-      setValue(currValue);
-      // const filteredData = marcas_lineas_nn.filter(entry =>
-      const filteredData = proveedores_marcas_nn.filter(entry =>
-        entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.descripcion.toLowerCase().includes(currValue.toLowerCase()));
-      setDataSource(filteredData);
-    }
-    
-    useEffect(() => {
-      setEditProveedor(null);
-      setPermiso(false);
+  function ver(record) {
+    record["permiso"] = false;
+    // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
+    // alert("LO QUE ME DA EN ID: " + JSON.stringify(record.id) + " LO QUE ME CODIFICA: " + hashids.encodeHex(record.id));
+    // history.push(`${path}/${record.id}/ver`, record);
+    history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
+  }
 
-      if (!value) {
-        setDataSource(proveedores_marcas_nn)
-      }
-    })
+  const filtrar = (e) => {
+    const currValue = e.target.value;
+    setValue(currValue);
+    const filteredData = proveedores_marcas_nn.filter(entry =>
+      entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.descripcion.toLowerCase().includes(currValue.toLowerCase()));
+    setDataSource(filteredData);
+  }
 
-    return (
-        <div>
-           <br />
+  useEffect(() => {
+    setEditProveedor(null);
+    setPermiso(false);
+    if (!value) {
+      setDataSource(proveedores_marcas_nn)
+    }
+  })
+
+  return (
+    <div>
+      <br />
       <Divider>PROVEEDORES</Divider>
-          <br />
-          {sesions?sesions._usuario[0].rol ===2?
-          <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
-          :null:null
-          }
-          <Search
-            placeholder="Buscar Proveedor..."
-            value={value}
-            onChange={e => filtrar(e)}
-            style={{ width: 200,marginLeft:20}}
-          />
-          <br /><br />
-    
-          {proveedores_marcas_nn.length > 0 || isEmpty ? (
-            <Table
-              locale={{ emptyText: 'No hay datos' }}
-              columns={sesions?sesions._usuario[0].rol ===2?columns1:columns2:null}
-              dataSource={dataSource}
-              rowKey='id'
-              onChange={handleChange}
-              pagination={{ defaultPageSize: 30 }}
-              onRow={(record, rowIndex) => {
-                return {
-                  onClick: (event) => {
-                    if(sesions){
-                    if (sesions._usuario[0].rol ===2) {
-                      if (event.clientX < window.innerWidth * 0.8 && rowState) {
-                        // record["permiso"] = false;
-                        // history.push(`${path}/${record.codigo_interno}/ver`, record);
-                        ver(record);
-                      }
-                    } else {
+      <br />
+      {sesions ? sesions._usuario[0].rol === 2 ?
+        <Button type="primary" className="success" icon={<PlusOutlined />} onClick={handleClick}>Nuevo</Button>
+        : null : null
+      }
+      <Search
+        placeholder="Buscar Proveedor..."
+        value={value}
+        onChange={e => filtrar(e)}
+        style={{ width: 200, marginLeft: 20 }}
+      />
+      <br /><br />
+
+      {proveedores_marcas_nn.length > 0 || isEmpty ? (
+        <Table
+          locale={{ emptyText: 'No hay datos' }}
+          columns={sesions ? sesions._usuario[0].rol === 2 ? columns1 : columns2 : null}
+          dataSource={dataSource}
+          rowKey='id'
+          onChange={handleChange}
+          pagination={{ defaultPageSize: 30 }}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                if (sesions) {
+                  if (sesions._usuario[0].rol === 2) {
+                    if (event.clientX < window.innerWidth * 0.8 && rowState) {
+                      // record["permiso"] = false;
+                      // history.push(`${path}/${record.codigo_interno}/ver`, record);
                       ver(record);
                     }
+                  } else {
+                    ver(record);
                   }
-                  },
-                };
-              }}
-            />
-          ) : (
-            <Spin indicator={antIcon} />
-          )}
-        </div>
-      );
+                }
+              },
+            };
+          }}
+        />
+      ) : (
+        <Spin indicator={antIcon} />
+      )}
+    </div>
+  );
 }
 
 export default ProveedorList;
