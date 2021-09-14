@@ -45,19 +45,14 @@ export const SubgrupoList = () => {
       showSorterTooltip: false,
       width: '20%'
     },
-    {
+    /*{
       title: "LÍNEAS",
       dataIndex: "lineas_nn",
       key: "lineas_nn",
       className: "longText",
       showSorterTooltip: false,
-      /*render: (lineasSubgrupo, record) => (
-        <p>
-          {lineasSubgrupo.length > 0 ? lineasSubgrupo.map(x=>x.nombre).join(", ") : 'N/A' }
-        </p>
-      ),*/
       width: '55%'
-    },
+    },*/
     {
       title: "ACCIONES",
       dataIndex: "",
@@ -96,19 +91,14 @@ export const SubgrupoList = () => {
       showSorterTooltip: false,
       width: '20%'
     },
-    {
+    /*{
       title: "LÍNEAS",
       dataIndex: "lineas_nn",
       key: "lineas_nn",
       className: "longText",
       showSorterTooltip: false,
-      /*render: (lineasSubgrupo, record) => (
-        <p>
-          {lineasSubgrupo.length > 0 ? lineasSubgrupo.map(x=>x.nombre).join(", ") : 'N/A' }
-        </p>
-      ),*/
       width: '60%'
-    },
+    },*/
   ]
 
   const typeTransactionData = {
@@ -123,8 +113,6 @@ export const SubgrupoList = () => {
   function ver(record) {
     setEditSubgrupo(null);
     record["permiso"] = false;
-    //alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
-    //setEditSubgrupo(record);
     history.push(`${path}/${record.id}/ver`, record);
   }
 
