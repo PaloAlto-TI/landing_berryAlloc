@@ -199,15 +199,12 @@ const GrupoList = () => {
 
   function ver(record) {
     record["permiso"] = false;
-    // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
     history.push(`${path}/${record.id}/ver`, record);
   }
 
   const filtrar = (e) => {
     const currValue = e.target.value;
     setValue(currValue);
-    console.log();
-    /// const filteredData = grupo_marcas_nn.filter(entry =>
     const filteredData = grupo_marca_subgrupo.filter(entry =>
       entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase())
       || entry.fk_subgrupo.nombre.toLowerCase().includes(currValue.toLowerCase()));
@@ -240,7 +237,6 @@ const GrupoList = () => {
         style={{ width: 200,marginLeft:20 }}
       />
       <br /><br />
-      {/*grupo_marcas_nn.length > 0 || isEmpty ? (*/}
       {grupo_marca_subgrupo.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
