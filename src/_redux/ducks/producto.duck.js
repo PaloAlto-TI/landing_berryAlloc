@@ -98,6 +98,6 @@ export default (state = initialState, action) => {
      case SOFT_DELETE_PRODUCTO:
       return {...state, productos: state.productos.filter((entry) => entry.id !== producto.id )};
     default:
-      return {...state, loading: true };
+      return {...state };
   }
 };
