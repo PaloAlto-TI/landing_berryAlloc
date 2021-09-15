@@ -8,6 +8,9 @@ import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './grupoList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
 
 const GrupoList = () => {
   var { setMoved, sesions } = useContext(SesionContext);
@@ -41,7 +44,7 @@ const GrupoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '15%'
     },
     // 06/08/2021 - OBSERVACIÓN: ANALIZAR SI SE DEBE VER UNA MANERA DE QUE PUEDA BUSCAR POR LOS ANIDADOS -MC
@@ -126,7 +129,7 @@ const GrupoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '15%'
     },
     {
@@ -199,7 +202,8 @@ const GrupoList = () => {
 
   function ver(record) {
     record["permiso"] = false;
-    history.push(`${path}/${record.id}/ver`, record);
+    // history.push(`${path}/${record.id}/ver`, record);
+    history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
   }
 
   const filtrar = (e) => {

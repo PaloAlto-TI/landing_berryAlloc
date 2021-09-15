@@ -9,10 +9,9 @@ import { SecuencialesService } from "../../../services/secuencialesService";
 import { LineaService } from "../../../services/lineaService";
 import "./lineaForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
-
-import Hashids from 'hashids'
+import Hashids from 'hashids';
 let { REACT_APP_SEED } = process.env;
-const hashids = new Hashids(REACT_APP_SEED)
+const hashids = new Hashids(REACT_APP_SEED);
 
 const { TextArea } = Input;
 const FormLinea = (props) => {
@@ -365,13 +364,13 @@ if(sesions){
                   </Form.Item>
                 </Col>
               ) :
-                <Col md={24} xs={15}>
+              <Col md={24} xs={15}>
                   <Button
-                    icon={<SaveOutlined />}
+                    icon={<RollbackOutlined />}
                     type="primary"
-                    htmlType="submit"
+                    onClick={goBackHistory}
                   >
-                    GUARDAR
+                    REGRESAR
                   </Button>
                 </Col>
               }

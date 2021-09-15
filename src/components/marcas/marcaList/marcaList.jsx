@@ -8,6 +8,9 @@ import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './marcaList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
 
 const MarcaList = () => {
   var { setMoved, sesions } = useContext(SesionContext);
@@ -41,7 +44,7 @@ const MarcaList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '35%'
     },
     {
@@ -104,7 +107,7 @@ const MarcaList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '35%'
     },
     {
@@ -161,7 +164,8 @@ const MarcaList = () => {
 
   function ver(record) {
     record["permiso"] = false;
-    history.push(`${path}/${record.id}/ver`, record);
+    // history.push(`${path}/${record.id}/ver`, record);
+    history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
   }
 
   const filtrar = (e) => {
