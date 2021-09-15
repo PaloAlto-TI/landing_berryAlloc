@@ -23,5 +23,7 @@ ReactDOM.render(
 
 serviceWorkerRegistration.register();
 
-
+if (process.env.NODE_ENV !== "development")
+    console.log = () => {};
+    
 reportWebVitals();
