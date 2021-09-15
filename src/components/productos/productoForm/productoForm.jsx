@@ -199,7 +199,7 @@ const FormProducto = (props) => {
         console.log(response);
         //setPermiso(false);
         window.scrollTo(0, 0);
-        message.info(response.message, 2).then((t) => history.push("/home/productos/"));
+        message.info("OK", 2).then((t) => history.push("/home/productos/"));
       } else {
         message.warning(response.message);
       }
@@ -845,8 +845,6 @@ const FormProducto = (props) => {
    
       function goBackHistory() {
         history.push("/home/productos")
-        window.scroll(0, 0);
-
       }
       // const handleFormValuesChange = async (changedValues) => {
       //   // console.log("ONCHANGE", form.getFieldsValue());
@@ -1221,12 +1219,18 @@ if (
                 </Col>
               </Row>
             </Panel>
-            {selectedLineaId !== "60d4c04b894c18b5e810e025" &&
-              selectedLineaId !== "60faeee1a412169c92c778c2" &&
-              selectedLineaId !== "60d4c04a8e4f5ab5e8b93218" &&
-              selectedLineaId !== "60ff0a8a5d3d71d21abba9d1" &&
-              selectedLineaId !== "61252dc1c2ac82f8cc563b5f" && 
-              selectedLineaId !== "61252dc010658af8cc902179" && (
+            {selectedLineaId ===  "60d4c0476e8514b5e8c66fd5" ||
+              selectedLineaId === "60d4c0477f7255b5e8cca2b7" ||
+              selectedLineaId === "60d4c04851cbd1b5e83632d3" ||
+              selectedLineaId === "60d4c04880c445b5e8b87047" ||
+              selectedLineaId === "60d4c0491b6606b5e836f80f" || 
+              selectedLineaId === "60d4c04ba23e72b5e8f93e11" || 
+              selectedLineaId === "60d4c04bc02e32b5e8ac7b68" ||
+              selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12" ||
+              selectedLineaId === "60d4c046e600f1b5e85d075c" ||
+              selectedLineaId === "60d4c04663852fb5e8ad40d7" ||
+              selectedLineaId === "60db4816d2a990117e29ad6b" || 
+              selectedLineaId === "60d4c04a145bfab5e81b4626" ? (
                 <Panel
                   className="tecnica"
                   header="INFORMACIÓN TÉCNICA"
@@ -2848,7 +2852,8 @@ if (
                   ) : infoTecnicaLinea ===
                     "60db4816d2a990117e29ad6b" ? null : null}
                 </Panel>
-              )}
+              ) : null }
+              
             <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
               <Row>
                 <Col span={12}>
