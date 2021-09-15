@@ -31,7 +31,7 @@ const ProveedorList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '30%'
     },
     {
@@ -84,7 +84,7 @@ const ProveedorList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '30%'
     },
     {

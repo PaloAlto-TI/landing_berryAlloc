@@ -28,7 +28,7 @@ const ModeloList = () => {
           sorter: {
             compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
-          showSorterTooltip: true,
+          showSorterTooltip: false,
           width: '25%'
         },
         {
@@ -89,7 +89,7 @@ const ModeloList = () => {
           sorter: {
             compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
-          showSorterTooltip: true,
+          showSorterTooltip: false,
           width: '25%'
         },
         {

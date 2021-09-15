@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './sidemenu.css';
 import { Menu } from 'antd';
 import { /*StarOutlined, FormatPainterOutlined,*/ DollarCircleOutlined,
-   MenuOutlined, HighlightOutlined, HomeOutlined, /*LineChartOutlined,*/ 
+   MenuOutlined, HighlightOutlined, HomeOutlined, LineChartOutlined, 
    FundOutlined, WechatOutlined, BarcodeOutlined,
    DownOutlined, BlockOutlined, BorderOutlined  } from '@ant-design/icons';
 // import { useHistory } from "react-router";
@@ -46,8 +46,6 @@ let { path} = useRouteMatch();
           <Menu.Item key="1" icon={<HomeOutlined />}><a href={`${path}`}>INICIO</a></Menu.Item>
           <Menu.Item key="2" icon={<HighlightOutlined />}><a href={`${path}/lineas`}>LÍNEAS</a></Menu.Item>
           <Menu.Item key="3" icon={<FundOutlined />}><a href={`${path}/marcas`}>MARCAS</a></Menu.Item>
-          {/*<Menu.Item key="4" icon={<WechatOutlined />}><a href={`${path}/grupos`}>GRUPOS</a></Menu.Item>
-          <Menu.Item key="5"><a href={`${path}/subgrupo`}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SUBGRUPOS</a></Menu.Item>*/}
           <SubMenu key="sub1" title="GRUPOS">
             <Menu.Item key="4" icon={<BorderOutlined />}><a href={`${path}/grupos`}>GRUPOS</a></Menu.Item>
             <Menu.Item key="5" icon={<BlockOutlined />}><a href={`${path}/subgrupo`}>SUBGRUPOS</a></Menu.Item>
@@ -55,12 +53,10 @@ let { path} = useRouteMatch();
           <Menu.Item key="6" icon={<DollarCircleOutlined />}><a href={`${path}/proveedores`}>PROVEEDORES</a></Menu.Item>
           <Menu.Item key="7" icon={<BarcodeOutlined />}><a href={`${path}/productos`}>PRODUCTOS</a></Menu.Item>
           {/* <Menu.Item key="8" icon={<FormatPainterOutlined />}><a href={`${path}/modelos`}>MODELOS</a></Menu.Item> */}
-          {/* <SubMenu key="sub1" icon={<LineChartOutlined />} title="REPORTES">
-            <Menu.Item key="7">VENTAS</Menu.Item>
-            <Menu.Item key="8">STOCKS</Menu.Item>
-            <Menu.Item key="9">PROMOCIONES</Menu.Item>
+          {<SubMenu key="sub2" icon={<LineChartOutlined />} title="REPORTES">
+            <Menu.Item key="8">VISUALIZADOR DE PRODUCTOS</Menu.Item>
           </SubMenu>
-          <SubMenu key="sub2" icon={<AppstoreOutlined />} title="PERSONAS">
+          /*<SubMenu key="sub2" icon={<AppstoreOutlined />} title="PERSONAS">
             <Menu.Item key="10">CLIENTES</Menu.Item>
             <Menu.Item key="11">COTIZAR</Menu.Item>
           </SubMenu> */}

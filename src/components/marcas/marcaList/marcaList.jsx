@@ -44,7 +44,7 @@ const MarcaList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '35%'
     },
     {
@@ -107,7 +107,7 @@ const MarcaList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '35%'
     },
     {

@@ -44,7 +44,7 @@ const GrupoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '15%'
     },
     // 06/08/2021 - OBSERVACIÓN: ANALIZAR SI SE DEBE VER UNA MANERA DE QUE PUEDA BUSCAR POR LOS ANIDADOS -MC
@@ -129,7 +129,7 @@ const GrupoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '15%'
     },
     {
