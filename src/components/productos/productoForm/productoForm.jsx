@@ -845,6 +845,8 @@ const FormProducto = (props) => {
    
       function goBackHistory() {
         history.push("/home/productos")
+        window.scroll(0, 0);
+
       }
       // const handleFormValuesChange = async (changedValues) => {
       //   // console.log("ONCHANGE", form.getFieldsValue());
