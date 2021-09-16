@@ -241,30 +241,52 @@ const FormProducto = (props) => {
       form.getFieldValue("codigo_interno") &&
       form.getFieldValue("fk_grupo_id")
     ) {
-      if (form.getFieldValue("fk_grupo_id") !== editProducto.fk_grupo_id) {
-        const grupoService = new GrupoService();
-        const grupo = await grupoService.getOne(
-          form.getFieldValue("fk_grupo_id")
-        );
-        // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
-        //const serial = await getSerialModelo(changedValues[formFieldName]);
-        // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
-        if (serial) {
+
+      if (operacion === "editar"){
+        if (form.getFieldValue("fk_grupo_id") !== editProducto.fk_grupo_id) {
+          const grupoService = new GrupoService();
+          const grupo = await grupoService.getOne(
+            form.getFieldValue("fk_grupo_id")
+          );
+          // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
+          //const serial = await getSerialModelo(changedValues[formFieldName]);
+          // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
+          if (serial) {
+            form.setFieldsValue({
+              codigo_interno:
+                form.getFieldValue("codigo_interno").substring(0, 7) +
+                "-" +
+                grupo.codigo +
+                "-" +
+                serial,
+            });
+          }
+        }else{
           form.setFieldsValue({
             codigo_interno:
-              form.getFieldValue("codigo_interno").substring(0, 7) +
-              "-" +
-              grupo.codigo +
-              "-" +
-              serial,
+              editProducto.codigo_interno
           });
         }
       }else{
-        form.setFieldsValue({
-          codigo_interno:
-            editProducto.codigo_interno
-        });
+        const grupoService = new GrupoService();
+          const grupo = await grupoService.getOne(
+            form.getFieldValue("fk_grupo_id")
+          );
+          // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
+          //const serial = await getSerialModelo(changedValues[formFieldName]);
+          // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
+          if (serial) {
+            form.setFieldsValue({
+              codigo_interno:
+                form.getFieldValue("codigo_interno").substring(0, 7) +
+                "-" +
+                grupo.codigo +
+                "-" +
+                serial,
+            });
+          }
       }
+      
     }
   }, [serial]);
 
@@ -1177,6 +1199,7 @@ const FormProducto = (props) => {
                                 required: true,
                                 message:
                                   "Por favor, ingrese el código interno!",
+                                len: 15
                               },
                             ]
                           : []
