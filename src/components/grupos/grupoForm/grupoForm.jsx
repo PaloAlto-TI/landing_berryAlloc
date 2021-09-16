@@ -62,7 +62,6 @@ const FormGrupo = (props) => {
   }
 
   //04/08/2021 - OBSERVACIÓN: ACÁ SE DEBE DEFINIR UNA PROPUESTA COMO UN typeTransactionSelect, PARA VER QUE TIPO DE SELECT SE VA A LLAMAR. - MC
-
   const typeTransactionSelect = {
     mode: null,
     placeHoldertext: "Subgrupo"
@@ -95,7 +94,6 @@ const FormGrupo = (props) => {
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   useEffect(() => {
-
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
     }

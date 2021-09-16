@@ -13,7 +13,7 @@ const ProveedorContextProvider = (props) => {
   const [isEmpty, setIsEmpty] = useState(false);
 
   useEffect(() => {
-    proveedorService.getAll().then((data) => setProveedores(data));
+    // proveedorService.getAll().then((data) => setProveedores(data));
     proveedorService.get_proveedores_marcas_nn().then((data) => set_proveedores_marcas_nn(data));
   }, []);
 
@@ -28,9 +28,8 @@ const ProveedorContextProvider = (props) => {
     // console.log("LO QUE VIENE PAARA CREAR PROVEEDOR EM CONTEXT")
     const data = await proveedorService.create(proveedor);
     
-
     if (data.message === "OK CREATE") {
-      proveedorService.getAll().then((data) => setProveedores(data));
+      // proveedorService.getAll().then((data) => setProveedores(data));
       proveedorService.get_proveedores_marcas_nn().then((data) => set_proveedores_marcas_nn(data));
     }
     return data;
@@ -38,10 +37,11 @@ const ProveedorContextProvider = (props) => {
 
   const softDeleteProveedor = async(proveedor) => {
 
+    // console.log("ENTRA AL SOFDELETE DE PROV: ", proveedor)
     const data = await proveedorService.softDelete(proveedor);
 
     if (data.message === "OK SOFTDELETE") {
-      proveedorService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setProveedores(data)});
+      // proveedorService.getAll().then((data) => { if (data.length===0) setIsEmpty(true) ; setProveedores(data)});
       proveedorService.get_proveedores_marcas_nn().then((data) => set_proveedores_marcas_nn(data));
     }
     setEditProveedor(null);
@@ -64,7 +64,7 @@ const ProveedorContextProvider = (props) => {
     // console.log("LA DATA QUE REGRESA DE UPDATEPROVEEDOR : ", JSON.stringify(data));
 
     if (data.message === "OK UPDATE") {
-      proveedorService.getAll().then((data) => setProveedores(data));
+      // proveedorService.getAll().then((data) => setProveedores(data));
       proveedorService.get_proveedores_marcas_nn().then((data) => set_proveedores_marcas_nn(data)); // PREGUNTAR SI VA ESTO O CÓMO DEBERÍA IR
     }
 
