@@ -865,7 +865,7 @@ const FormProducto = (props) => {
   //---------------------------------------------
   if (sesions) {
     if (sesions._usuario[0].rol === 2 || operacion === "ver") {
-      return editProducto || codigo === "nuevo" ? (
+      return (editProducto && editProducto !==undefined )|| codigo === "nuevo" ? (
         <>
           {codigo !== "nuevo" && (
             <Modal
@@ -3624,7 +3624,7 @@ const FormProducto = (props) => {
             className="loading-producto"
           />
         </>
-      ) : (
+      ) : editProducto === undefined ? <Redirect to="/home/productos" /> : (
         <Spin indicator={antIcon} className="loading-producto" />
       );
     } else {

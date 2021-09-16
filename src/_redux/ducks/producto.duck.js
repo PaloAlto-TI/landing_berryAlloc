@@ -88,7 +88,7 @@ export default (state = initialState, action) => {
     case SET_PRODUCTOS_BY_LINEA:
       return { ...state, productos:productos.data, producto:null, response:null, loading: false };
     case SET_PRODUCTO:
-      return {...state, producto: producto.data[0]};
+      return {...state, producto: producto.data[0]?producto.data[0]:undefined};
     case SET_SERIAL_MODELO:
       return {...state, serial: serial};
     case GET_SERIAL_MODELO:
