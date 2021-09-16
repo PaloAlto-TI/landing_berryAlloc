@@ -140,6 +140,7 @@ const Login = () => {
             <img className="avatar" alt="img" src={imagen} />
           </div>
           <h1 >Productos</h1>
+          
 
           {/* <form>
             <label for="username">Username</label>
