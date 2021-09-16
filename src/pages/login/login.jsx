@@ -19,6 +19,8 @@ const Login = () => {
   let history = useHistory();
   const {setMoved,sesions} =  useContext(SesionContext);
   const sesionService = new SesionService();
+
+
   //------------------------------------------------
   // const [sesionState, setSesionState] = useState({
 
@@ -131,7 +133,7 @@ const Login = () => {
   return (<div className="body1">
 
     {
-      localStorage.getItem("user") === null ?
+      localStorage.getItem("token") === null ?
 
         <div className="box">
           <div className="ava">
