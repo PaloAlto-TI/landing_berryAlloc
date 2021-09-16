@@ -99,13 +99,10 @@ const FormLinea = (props) => {
     }
 
     if (initialValues.codigo === '' && codigoInterno && !editLinea) {
-
       // 26/07/2021 - OBSERVACIÓN: SE DEBE ANALIZAR SI SE ASIGNA O NO EL VALOR DEL CÓDIGO A INGRESAR QUE NOS TRAE LA VISTA AL JSON
       // QUE VA A GUARDAR, YA QUE LA BASE DE DATOS EN EL TRIGGER ESTÁ ASIGNANDO EL CAMPO DE CODIGO, PERO TENER EN CUENTA.
-
       // initialValues.codigo = codigoInterno[0].code_to_add; // COMENTADO - MC
       // console.log("DESPUES DE ASIGNACION: " + JSON.stringify(initialValues))
-
       // console.log("QUIERE SETER EL INPUT DE CODIGO CON: ", codigoInterno)
       form.setFieldsValue({ codigo: codigoInterno.code_to_add });
     }
@@ -115,7 +112,6 @@ const FormLinea = (props) => {
       setId(editLinea.id);
       // setCodigoInterno(data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL))
       // initialValues.codigo = data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL)// acacaaaaa
-
     } else {
       findLinea(hashids.decodeHex(codigo));
     }
@@ -202,7 +198,6 @@ const FormLinea = (props) => {
     // 26/08/2021 (MC) - OBSERVACIÓN: DEFINIR SI SE TIENE QUE HACER UN LLAMADO DE LA LINEA INGRESADA PARA MOSTRARLE AL USUARIO EL CÓDIGO CON EL QUE SE GUARDÓ.
     if (data.message.includes("OK")) {
       if (codigo === "nuevo") {
-
         // CONSULTA DEL REGISTRO GUARDADO UNA VEZ QUE SE ASIGNÓ LOS VALORES DE LA BASE DE DATOS (CODIGO)
         const lineaService = new LineaService();
         const lineaCreated = await lineaService.getOne(data.data.id);

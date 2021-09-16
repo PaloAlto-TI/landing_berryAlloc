@@ -6,6 +6,7 @@ import { SaveOutlined, CloseSquareOutlined, RollbackOutlined, LoadingOutlined } 
 import { GrupoContext } from "../../../contexts/grupoContext";
 import { SecuencialesGrupoService } from "../../../services/secuencialesGrupoService";
 import { LineasMarcasService } from "../../../services/lineasMarcasService";
+import { GrupoService } from "../../../services/grupoService";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./grupoForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
@@ -14,7 +15,6 @@ let { REACT_APP_SEED } = process.env;
 const hashids = new Hashids(REACT_APP_SEED);
 const { TextArea } = Input;
 
-
 const FormGrupo = (props) => {
   var { setMoved, sesions } = useContext(SesionContext);
 
@@ -22,6 +22,7 @@ const FormGrupo = (props) => {
 
   let history = useHistory();
   let { codigo, operacion } = useParams();
+
   // console.log("LO QUE TENGO EN EDITGRUPO INICIO: ", editGrupo)
 
   let formHasChanges = false;
@@ -107,7 +108,7 @@ const FormGrupo = (props) => {
     }
 
     if (editGrupo) {
-      //  console.log("QUIERO SETEAR CON ESTO:  "+ editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id)
+      // console.log("QUIERO SETEAR CON ESTO:  "+ editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id)
       // console.log("QUIERO SETEAR CON ESTO (EDITGRUPO):  " + JSON.stringify(editGrupo));
       if (!selectedMarcaId && !selectedLineaId) {
         // setSelectedLineaId(editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id);
@@ -118,7 +119,7 @@ const FormGrupo = (props) => {
         setId(editGrupo.id);
       }
     } else {
-
+      // console.log("entra con este codigo: ", hashids.decodeHex(codigo))
       findGrupo(hashids.decodeHex(codigo));
 
     }
@@ -145,7 +146,6 @@ const FormGrupo = (props) => {
     if (id) {
 
       values["id"] = id;
-
       // 01/09/2021 - OBSERVACIÓN: SE COMENTA LA LÓGICA ANTIGUA
       // let array1 = editGrupo.grupo_marcas_nn.map(x => x.id); // MARCAS INICIALES (BD)
       //let array2 = values.grupo_marcas_nn_in; // MARCAS DE FORM
@@ -207,16 +207,19 @@ const FormGrupo = (props) => {
     }
 
     if (data.message.includes("OK")) {
-      // console.log("el detalle de data " + Object.keys(data.data).length + "ACA PUEDE IR LO OTRO:: " + values.nombre)
-      if (Object.keys(data.data).length > 0) {
-
+      if (codigo === "nuevo") {
+        const grupoService = new GrupoService();
+        const grupoCreated = await grupoService.getOne(data.data.id);
+        if (grupoCreated){
+          message.info(JSON.stringify(data.message) + " -  EL GRUPO: " + JSON.stringify(grupoCreated.codigo) + " - " + JSON.stringify(grupoCreated.nombre) +
+          " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/grupos/"));
+        } else {
+          message.info(JSON.stringify(data.message) + " -  EL GRUPO: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
+          " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/grupos/"));
+        }
+      } else {
         message.info(JSON.stringify(data.message) + " -  EL GRUPO: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
           " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/grupos/"));
-
-      } else {
-
-        message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " EL GRUPO - \n" + JSON.stringify(data.errorDetails.description), 15);
-
       }
     } else {
       // 05/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted - MC
@@ -234,8 +237,30 @@ const FormGrupo = (props) => {
 
   const handleFormValuesChange = async (changedValues) => {
 
-    formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
+    // formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
+    formHasChanges = true;
     const formFieldName = Object.keys(changedValues)[0];
+
+    // 16/09/2021 - OBSERVACIÓN: SE DEBE CONTROLAR LA VALIDACIÓN DE VOLVER ASIGNAR LA MISMA LINEA Y MARCA Y QUE NO GENERE UN NUEVO CÓDIGO -MC
+    /*
+    if (form.getFieldValue("codigo") && form.getFieldValue("fk_marca_id")) {
+      // console.log("HAY CAMBIOS EN EL CODIGO DE GRUPO!!!: ")
+      console.log("EL EDIT GRUPPO Q TENNGO: ", JSON.stringify(editGrupo))
+
+      if (form.getFieldValue("fk_marca_id") !== editGrupo.fk_marca_id) {
+
+        console.log("DEBE CONSULTAR UN NUEVO CODIGOL")
+
+      } else {
+
+        console.log("DEBE VOLVER AL CODIGO INICIAL")
+        form.setFieldsValue({
+          codigo: editGrupo.codigo
+        });
+
+      }
+    }*/
+
 
     if (formFieldName === "fk_linea_id") {
       // console.log("ENTRA EN CHANGE DE fk_linea_id CON: " + changedValues[formFieldName])
@@ -249,9 +274,9 @@ const FormGrupo = (props) => {
 
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
-
       const lineasMarcasService = new LineasMarcasService();
       // console.log("LA MARCA CON LA QUE VA A MAPEAR: " + changedValues[formFieldName])
+
       const codigoInternoData = await lineasMarcasService.getAll().then((data) => { // OBSERVACIÓN 31/08/2021: DEBE SER EL LLAMADO A UN GETONE() - MC
         // console.log("LA DATA LINEA_MARCA: ", data);
         // console.log("CON LO QUE VA A MAPPEAR: ", changedValues[formFieldName])
@@ -260,7 +285,6 @@ const FormGrupo = (props) => {
         // setSelectedLineaMarcaId(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId))
 
         // initialValues.fk_linea_marca = data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id;
-
         // console.log("MI VALUES!! " + JSON.stringify(initialValues))
 
         // setCodigoInterno(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id);
@@ -273,15 +297,28 @@ const FormGrupo = (props) => {
         // setOpciones(data.filter((p) => p.marca_id === filter && p.linea_id === filter2));
         // setOpciones(data.filter((p) => p.linea_id === filter));
 
+        // console.log("QUIERE FILTRAR PPOR ESTO FK_MARCA_ID : " + changedValues[formFieldName] + " , fk_linea_id == "+  selectedLineaId)
         return data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId);
       });
 
+      /*secuencialesService.getOne(typeTransactionData).then((data) => {
+        // console.log("LA DATA QUE DEVUELVE DEL SERVICE: ", data)
+        if (data.message.includes("OK")) {
+          if (data.data) {
+          // console.log("SE VA CON ESTE CODIGO: ", data.data.code_to_add)
+          setCodigoInterno(data.data)
+          }
+          
+        } else {
+
+        }
+      });*/
+
       // console.log("LENGTH: " + codigoInternoData.length + " LO QUE DEVUELVE EL DATA DE CODIGO: " + JSON.stringify(codigoInternoData));
 
-      if (codigoInternoData) {
-        // console.log("QUIERE ASIGANAR ESTOOOOOOOOO: ", codigoInternoData[0])
+      if (codigoInternoData.length > 0) {
+        // console.log("QUIERE ASIGNAR ESTOOOOOOOOO: ", codigoInternoData[0])
         setSelectedLineaMarcaId(codigoInternoData[0])
-
         initialValues.fk_linea_marca = codigoInternoData[0].id;
         // console.log("MI VALUES!! " + JSON.stringify(initialValues))
 
@@ -325,6 +362,9 @@ const FormGrupo = (props) => {
             }
           });
         }
+      } else {
+        setCodigoInterno("001");
+        form.setFieldsValue({ codigo: "001" });
       }
     };
 

@@ -17,10 +17,7 @@ const SubgrupoContextProvider = (props) => {
     setIsEmpty(false)
     //subgrupoService.getSubgrupos({ linea_id :"60d4c046e600f1b5e85d075c"}).then((data) => { if (data.length===0) setIsEmpty(true) ; setSubgrupos(data)});
     subgrupoService.getAll().then((data) => setSubgrupos(data));
-    
     //subgrupoService.getAllQR().then((data) => setSubgruposQR(data));
-
-
     // if (subgrupos.length === 0){
     //   setIsEmpty(true);
     // }
@@ -40,27 +37,15 @@ const SubgrupoContextProvider = (props) => {
   const createSubgrupo = async (subgrupo) => {
     const data = await subgrupoService.create(subgrupo);
 
-    console.log("err:", data);
-    //if (data.message === "OK CREATE") {
+    if (data.message === "OK CREATE") {
     subgrupoService.getAll().then((data) => setSubgrupos(data));
     // setSubgrupos([...subgrupos, data.data]);
-    // }
+    }
 
-    return data.message;
+    return data;
   };
 
   const softDeleteSubgrupo = async (subgrupo) => {
-    //const data = await marcaService.softDelete(marca);
-    // let data= await subgrupoService.softDelete(subgrupo);
-    // if (data.length===0){
-
-    //   setIsEmpty(true)
-    // }
-    // else
-    // {
-    //   setSubgrupos(data);
-
-    // }
     subgrupoService
       .softDelete(subgrupo)
       .then(() => {
@@ -74,39 +59,34 @@ const SubgrupoContextProvider = (props) => {
             return data;
           }
         });
-
       });
-
-
-
   };
 
   const findSubgrupo = async (id) => {
-
-
-
     //const subgrupo = await subgrupos.find((p) => p.codigo_interno === id);
-    const subgrupo = await subgrupos.find((p) => p.id === id);
+    // ---const subgrupo = await subgrupos.find((p) => p.id === id);
     //console.log(subgrupo);
     //console.log("entra en find");
-    await setEditSubgrupo(subgrupo);
+    //---- await setEditSubgrupo(subgrupo);
+    const subgrupo = subgrupos.find((s) => s.id === id);
 
+    if (subgrupo){
+      setEditSubgrupo(subgrupo);
+    }
   };
 
   const updateSubgrupo = async (subgrupo) => {
-    console.log("err:", subgrupo);
+    
     const data = await subgrupoService.update(subgrupo);
 
-    console.log("err:", data);
-    // if (data.message === "OK UPDATE") {
-    //   subgrupoService.getSubgrupos().then((data) => setSubgrupos(data));
-    //   //setSubgrupos(subgrupos.map((p) => (p.id === subgrupo.id ? data.data : p)))
-    // }
-    subgrupoService.getAll().then((data) => setSubgrupos(data));
+    if (data.message === "OK UPDATE") {
+      // subgrupoService.getSubgrupos().then((data) => setSubgrupos(data));
+      subgrupoService.getAll().then((data) => setSubgrupos(data));
+      //setSubgrupos(subgrupos.map((p) => (p.id === subgrupo.id ? data.data : p)))
+    }
+    
     setEditSubgrupo(null);
-
-    return data.message;
-
+    return data;
   };
 
   return (
