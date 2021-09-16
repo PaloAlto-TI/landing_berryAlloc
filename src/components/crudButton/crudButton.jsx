@@ -6,10 +6,13 @@ import { DeleteFilled, EditFilled, QrcodeOutlined } from "@ant-design/icons";
 import { ProductoService } from "../../services/productoService";
 import { saveAs } from 'file-saver'
 import { useDispatch } from "react-redux";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
 
 const CrudButton = (props) => {
   const { record, softDelete, setRowState, typeTransaction, permiso } = props;
-  console.log("LOS PROPS", props)
+  // console.log("LOS PROPS", props)
   let { path } = useRouteMatch();
   const [isModalVisible, setIsModalVisible] = useState(null);
   const [QR, setQR] = useState(null);
@@ -122,18 +125,17 @@ const CrudButton = (props) => {
     record["permiso"] = true;
     // console.log("ENTRA  EL TYPE AL EDITAR DEL CRUD CON " + JSON.stringify(typeTransaction));
     // console.log("ENTRA EL RECORD AL EDITAR DEL CRUD CON " + JSON.stringify(record));
-    //---------------------------Master.------------------------------------------
-    //history.push(`${path}/${record.codigo_interno}/editar`);
-
-    //}
-    //---------------------------Master.------------------------------------------
+    // ---------------------------Master.------------------------------------------
+    // history.push(`${path}/${record.codigo_interno}/editar`);
+    // }
+    // ---------------------------Master.------------------------------------------
 
     if (typeTransaction === null || typeTransaction === undefined) {
       history.push(`${path}/${record.codigo_interno}/editar`, record);
     } else {
       switch (typeTransaction.byIdPSQL) {
         case true:
-          return history.push(`${path}/${record.id}/editar`, record);
+          return history.push(`${path}/${hashids.encodeHex(record.id)}/editar`, record);
         default:
           return history.push(`${path}/${record.codigo_interno}/editar`);
       }

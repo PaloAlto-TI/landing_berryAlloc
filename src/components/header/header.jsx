@@ -58,7 +58,7 @@ function valid()
   //  else {
   //    return "NO HAY"
   //  }
-console.log("Sesion:"+JSON.stringify(sesions))
+//console.log("Sesion:"+JSON.stringify(sesions))
   if (sesions){
   if(sesions._usuario[0].rol===2)
   {

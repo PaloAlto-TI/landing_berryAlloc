@@ -49,13 +49,11 @@ const ProveedorContextProvider = (props) => {
   };
 
   const findProveedor = (id) => {
-    
     const proveedor = proveedores_marcas_nn.find((p) => p.id === id);
     if (proveedor){
       proveedor.proveedor_marcas_nn_in = proveedor.proveedor_marcas_nn.map(x=>x.id)
       setEditProveedor(proveedor);
     }
-
   };
 
   const updateProveedor = async(proveedor) => {

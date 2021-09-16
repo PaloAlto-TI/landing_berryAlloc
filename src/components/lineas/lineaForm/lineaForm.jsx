@@ -9,9 +9,9 @@ import { SecuencialesService } from "../../../services/secuencialesService";
 import { LineaService } from "../../../services/lineaService";
 import "./lineaForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
-import Hashids from 'hashids'
+import Hashids from 'hashids';
 let { REACT_APP_SEED } = process.env;
-const hashids = new Hashids(REACT_APP_SEED)
+const hashids = new Hashids(REACT_APP_SEED);
 
 const { TextArea } = Input;
 const FormLinea = (props) => {
@@ -132,11 +132,11 @@ const FormLinea = (props) => {
           
         } else {
           // 09/09/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO O EL MANEJO DE UN CASO QUE NO SE ENCUENTRE UN CÓDIGO
-          alert("ERROR AL GENERAR EL CÓDIGO INTERNO A INGRESAR: " + data.message)
+          // alert("ERROR AL GENERAR EL CÓDIGO INTERNO A INGRESAR: " + data.message)
           setCodigoInterno(data.data)
         }
 
-        // console.log("LO QUE TENGO EN TRABSACTION DATA: ", typeTransactionData)
+        // console.log("LO QUE TENGO EN TRANSACTION DATA: ", typeTransactionData)
         // console.log("MAP TABLENAME: ", data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL).code_to_add)
         /*if (typeTransactionData) {
           setCodigoInterno(data.filter((t) => t.table_name_db === typeTransactionData.tableNamePSQL))
@@ -364,13 +364,13 @@ if(sesions){
                   </Form.Item>
                 </Col>
               ) :
-                <Col md={24} xs={15}>
+              <Col md={24} xs={15}>
                   <Button
-                    icon={<SaveOutlined />}
+                    icon={<RollbackOutlined />}
                     type="primary"
-                    htmlType="submit"
+                    onClick={goBackHistory}
                   >
-                    GUARDAR
+                    REGRESAR
                   </Button>
                 </Col>
               }

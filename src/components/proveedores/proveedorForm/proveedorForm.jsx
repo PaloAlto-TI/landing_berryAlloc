@@ -7,11 +7,15 @@ import { ProveedorContext } from "../../../contexts/proveedorContext";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import "./proveedorForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
+
 const { TextArea } = Input;
 
 const FormProveedor = (props) => {
   var {setMoved,sesions} =  useContext(SesionContext);
-
+  // console.log("SESIONS. ", sesions)
   const { createProveedor, updateProveedor, findProveedor, editProveedor } = useContext(ProveedorContext);
 
   let history = useHistory();
@@ -82,9 +86,7 @@ const FormProveedor = (props) => {
       setId(editProveedor.id);
       
     } else {
-
-      findProveedor(codigo);
-
+      findProveedor(hashids.decodeHex(codigo));
     }
   })
 
@@ -134,7 +136,7 @@ const FormProveedor = (props) => {
       }
     } else {
       // 01/08/2021 - OBSERVACIÓN: ACÁ SE PODRÍA DAR UN MENSAJE MÁS DETALLADO Ó CONTROLAR CON LAS BANDERAS isMarcasLineasCreated/isMarcasLineasDeleted
-      // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALLIZAR SI SE USA UN ROLLBACK & COMMIT
+      // A LA INTERFAZ DE USUARIO, INCLUSO SE DEBE ANALIZAR SI SE USA UN ROLLBACK & COMMIT
       message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " EL PROVEEDOR - \n" + JSON.stringify(data.errorDetails.description), 15);
     }
   }

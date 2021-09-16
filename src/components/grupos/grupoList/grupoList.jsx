@@ -8,6 +8,9 @@ import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
 import './grupoList.css';
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
 
 const GrupoList = () => {
   var { setMoved, sesions } = useContext(SesionContext);
@@ -41,7 +44,7 @@ const GrupoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '15%'
     },
     // 06/08/2021 - OBSERVACIÓN: ANALIZAR SI SE DEBE VER UNA MANERA DE QUE PUEDA BUSCAR POR LOS ANIDADOS -MC
@@ -126,7 +129,7 @@ const GrupoList = () => {
       sorter: {
         compare: (a, b) => a.nombre.localeCompare(b.nombre),
       },
-      showSorterTooltip: true,
+      showSorterTooltip: false,
       width: '15%'
     },
     {
@@ -145,7 +148,7 @@ const GrupoList = () => {
       ),
       width: '15%'
     },
-    {
+    /*{
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
       key: "descripcion",
@@ -155,22 +158,20 @@ const GrupoList = () => {
       },
       showSorterTooltip: false,
       width: '25%'
-    },
+    },*/
     {
-      title: "MARCAS",
-      dataIndex: "grupo_marcas_nn",
-      key: "grupo_marcas_nn",
+      title: "MARCA",
+      dataIndex: "fk_lineamarca",
+      key: "fk_lineamarca",
       className: "longText",
       showSorterTooltip: false,
       sorter: {
-        compare: (a, b) => a.grupo_marcas_nn.localeCompare(b.grupo_marcas_nn),
+        compare: (a, b) => a.fk_lineamarca.localeCompare(b.fk_lineamarca),
       },
       render: (grupoMarca, record) => (
-        <p>
-          {/*grupoMarca.length > 0 ? grupoMarca.map(x=>x.nombre).join(", ") : 'N/A' */}
-        </p>
+        <p>{grupoMarca.fk_marca.nombre}</p>
       ),
-      width: '30%'
+      width: '20%'
     },
   ]
 
@@ -201,15 +202,13 @@ const GrupoList = () => {
 
   function ver(record) {
     record["permiso"] = false;
-    // alert("ENTRA A LA FUNCION VER" + JSON.stringify(record));
-    history.push(`${path}/${record.id}/ver`, record);
+    // history.push(`${path}/${record.id}/ver`, record);
+    history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
   }
 
   const filtrar = (e) => {
     const currValue = e.target.value;
     setValue(currValue);
-    console.log();
-    /// const filteredData = grupo_marcas_nn.filter(entry =>
     const filteredData = grupo_marca_subgrupo.filter(entry =>
       entry.nombre.toLowerCase().includes(currValue.toLowerCase()) || entry.codigo.toLowerCase().includes(currValue.toLowerCase())
       || entry.fk_subgrupo.nombre.toLowerCase().includes(currValue.toLowerCase()));
@@ -220,7 +219,6 @@ const GrupoList = () => {
     
     setEditGrupo(null);
     setPermiso(false);
-
     if (!value) {
       // console.log(grupos)
       // setDataSource(grupo_marcas_nn)
@@ -243,7 +241,6 @@ const GrupoList = () => {
         style={{ width: 200,marginLeft:20 }}
       />
       <br /><br />
-      {/*grupo_marcas_nn.length > 0 || isEmpty ? (*/}
       {grupo_marca_subgrupo.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}

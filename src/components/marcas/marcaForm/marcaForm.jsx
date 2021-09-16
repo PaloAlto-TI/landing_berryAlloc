@@ -9,6 +9,10 @@ import { SecuencialesService } from "../../../services/secuencialesService";
 import { MarcaService } from "../../../services/marcaService";
 import "./marcaForm.css";
 import { SesionContext } from "../../../contexts/sesionContext";
+import Hashids from 'hashids';
+let { REACT_APP_SEED } = process.env;
+const hashids = new Hashids(REACT_APP_SEED);
+
 const { TextArea } = Input;
 
 const FormMarca = (props) => {
@@ -102,7 +106,7 @@ const FormMarca = (props) => {
       
     } else {
 
-      findMarca(codigo);
+      findMarca(hashids.decodeHex(codigo));
 
     }
 
@@ -154,7 +158,6 @@ const FormMarca = (props) => {
       let jsonLineasMarcas = {id_marca: id, marcas_lineas_create: toCreateMarcaLineasN, marcas_lineas_delete: toDeleteMarcaLineasN};
 
       // console.log("EL JSON LINEAS_MARCAS A MANDAR: " + JSON.stringify(jsonLineasMarcas))
-
       data = await updateMarca([values, jsonLineasMarcas]);
       // console.log("LA DATA QUE RETORNA EL FORMULARIO EN EDITAR LINEA stringify: " + JSON.stringify(data));
 
@@ -168,21 +171,20 @@ const FormMarca = (props) => {
 
     if (data.message.includes("OK")) {
       if (codigo === "nuevo") {
-
         const marcaService = new MarcaService();
         const marcaCreated = await marcaService.getOne(data.data.id);
 
         if (marcaCreated){
-          message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(marcaCreated.codigo) + " - " + JSON.stringify(marcaCreated.nombre) +
+          message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(marcaCreated.codigo) + " - " + JSON.stringify(marcaCreated.nombre) +
           " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
 
         } else {
-          message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
+          message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
           " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
         }
         
       } else {
-        message.info(JSON.stringify(data.message) + " -  LA LÍNEA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
+        message.info(JSON.stringify(data.message) + " -  LA MARCA: " + JSON.stringify(data.data.codigo) + " - " + JSON.stringify(data.data.nombre) +
           " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/marcas/"));
       }
 

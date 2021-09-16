@@ -52,7 +52,12 @@ import { SesionContext } from "../../../contexts/sesionContext";
 import Modal from "antd/lib/modal/Modal";
 import { saveAs } from "file-saver";
 import { useDispatch, useSelector } from "react-redux";
-import { addProducto, getProducto, _editProducto, _getSerialModelo } from "../../../_redux/ducks/producto.duck";
+import {
+  addProducto,
+  getProducto,
+  _editProducto,
+  _getSerialModelo,
+} from "../../../_redux/ducks/producto.duck";
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -60,7 +65,7 @@ const { Panel } = Collapse;
 const { Option } = Select;
 
 const FormProducto = (props) => {
-  var {setMoved,sesions} =  useContext(SesionContext);
+  var { setMoved, sesions } = useContext(SesionContext);
 
   let formHasChanges = false;
   // console.log(props);
@@ -111,7 +116,7 @@ const FormProducto = (props) => {
   const [infoTecnicaLinea, setinfoTecnicaLinea] = useState(null);
   const [infoTecnicaGrupo, setinfoTecnicaGrupo] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(null);
-  const [_serial, set_Serial] = useState(null)
+  const [_serial, set_Serial] = useState(null);
   // const [precio, setPrecio] = useState(null)
   const [form] = Form.useForm();
   let initialValues = {
@@ -185,28 +190,24 @@ const FormProducto = (props) => {
   const response = useSelector((state) => state.productos.response);
 
   useEffect(() => {
-    window.onpopstate = e => {
+    window.onpopstate = (e) => {
       window.scrollTo(0, 0);
-      console.log("ATRAS")
-
-   } 
-  })
+      console.log("ATRAS");
+    };
+  });
 
   useEffect(() => {
-    
-    if (response){
+    if (response) {
       if (response.message.includes("OK")) {
         console.log(response);
         //setPermiso(false);
         window.scrollTo(0, 0);
-        message.info(response.message, 2).then((t) => history.push("/home/productos/"));
+        message.info("OK", 2).then((t) => history.push("/home/productos/"));
       } else {
         message.warning(response.message);
       }
     }
-  }, [response])
-
-
+  }, [response]);
 
   // useEffect(() => {
   //   if (infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5") {
@@ -224,38 +225,48 @@ const FormProducto = (props) => {
   // }, [infoTecnicaLinea]);
 
   const dispatch = useDispatch();
-  
-  useEffect(() => {
-    if (codigo !== "nuevo"){
 
+  useEffect(() => {
+    if (codigo !== "nuevo") {
       dispatch(getProducto(codigo));
     }
   }, [dispatch]);
-  
+
   const editProducto = useSelector((state) => state.productos.producto);
   const serial = useSelector((state) => state.productos.serial);
-  console.log("EL PROD", editProducto)
+  console.log("EL PROD", editProducto);
 
-  useEffect(async() => {
-
-    if (form.getFieldValue("codigo_interno") && form.getFieldValue("fk_grupo_id")){
-    const grupoService = new GrupoService();
-    const grupo = await grupoService.getOne(form.getFieldValue("fk_grupo_id"));
-    // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
-    //const serial = await getSerialModelo(changedValues[formFieldName]);
-    // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
-    if (serial){
-    form.setFieldsValue({
-      codigo_interno:
-        form.getFieldValue("codigo_interno").substring(0, 7) +
-        "-" +
-        grupo.codigo +
-        "-" +
-        serial,
-    });
+  useEffect(async () => {
+    if (
+      form.getFieldValue("codigo_interno") &&
+      form.getFieldValue("fk_grupo_id")
+    ) {
+      if (form.getFieldValue("fk_grupo_id") !== editProducto.fk_grupo_id) {
+        const grupoService = new GrupoService();
+        const grupo = await grupoService.getOne(
+          form.getFieldValue("fk_grupo_id")
+        );
+        // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
+        //const serial = await getSerialModelo(changedValues[formFieldName]);
+        // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
+        if (serial) {
+          form.setFieldsValue({
+            codigo_interno:
+              form.getFieldValue("codigo_interno").substring(0, 7) +
+              "-" +
+              grupo.codigo +
+              "-" +
+              serial,
+          });
+        }
+      }else{
+        form.setFieldsValue({
+          codigo_interno:
+            editProducto.codigo_interno
+        });
+      }
     }
-    }
-  }, [serial])
+  }, [serial]);
 
   useEffect(() => {
     if (crud === null) {
@@ -370,7 +381,11 @@ const FormProducto = (props) => {
     let view = "";
 
     var list = data.map(function (d) {
-      return <div style={{fontSize:13}} key={d.bodega_id}>{d.bodega_nombre + " : " + d.cantidad}</div>;
+      return (
+        <div style={{ fontSize: 13 }} key={d.bodega_id}>
+          {d.bodega_nombre + " : " + d.cantidad}
+        </div>
+      );
     });
 
     setstockBodegas(list);
@@ -402,17 +417,13 @@ const FormProducto = (props) => {
       console.log("values", values);
       //data = await updateProducto(values);
       dispatch(_editProducto(values));
-      
     } else {
       console.log("aqui!!!!");
       //data = await createProducto(values);
       dispatch(addProducto(values));
-      
+
       console.log("zzzzz", data);
     }
-    
-
-    
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -694,9 +705,9 @@ const FormProducto = (props) => {
       const grupo = await grupoService.getOne(changedValues[formFieldName]);
       // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
       //const serial = await getSerialModelo(changedValues[formFieldName]);
-      dispatch(_getSerialModelo(changedValues[formFieldName]))
+      dispatch(_getSerialModelo(changedValues[formFieldName]));
       // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
-      
+
       // } else if (
       //   selectedLineaId === "60d4c04b894c18b5e810e025" ||
       //   selectedLineaId === "60faeee1a412169c92c778c2"
@@ -778,7 +789,6 @@ const FormProducto = (props) => {
   //-----------------------------------------------------------
 
   function cancelConfirm() {
-
     //dispatch(_getSerialModelo('60d617628b7d31ca139fb948'))
 
     if (formHasChanges !== null) {
@@ -830,7 +840,7 @@ const FormProducto = (props) => {
   };
 
   function goBackHistory() {
-    history.push("/home/productos", {linea : editProducto.fk_linea_id} );
+    history.push("/home/productos", { linea: editProducto.fk_linea_id });
     window.scroll(0, 0);
   }
   // const handleFormValuesChange = async (changedValues) => {
@@ -841,298 +851,296 @@ const FormProducto = (props) => {
   //   const formFieldName = Object.keys(changedValues)[0];
   // };
 
-      
-   
-      function goBackHistory() {
-        history.push("/home/productos")
-      }
-      // const handleFormValuesChange = async (changedValues) => {
-      //   // console.log("ONCHANGE", form.getFieldsValue());
-        
-      //   formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
-    
-      //   const formFieldName = Object.keys(changedValues)[0];
-      // };
+  function goBackHistory() {
+    history.push("/home/productos");
+  }
+  // const handleFormValuesChange = async (changedValues) => {
+  //   // console.log("ONCHANGE", form.getFieldsValue());
 
-//---------------------------------------------
-if(sesions) {
-if (
-  sesions._usuario[0].rol ===2 ||
-    operacion === "ver"
-  ) {
-    return editProducto || codigo === "nuevo" ? (
-      <>
+  //   formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
 
-        {codigo !== "nuevo" && (
-          <Modal
-            title={<b>CÓDIGO QR: {editProducto.nombre}</b>}
-            okType="primary"
-            okText="Descargar"
-            cancelText="Regresar"
-            visible={isModalVisible ? true : false}
-            onCancel={handleCancel}
-            onOk={handleDownload}
-          >
-            <Row>
-              <Col span={12} offset={6}>
-                <Image width={200} src={QR} />
-              </Col>
-            </Row>
-            <Button
-              type="link"
-              href={editProducto.url_pagina_web}
-              target="_blank"
+  //   const formFieldName = Object.keys(changedValues)[0];
+  // };
+
+  //---------------------------------------------
+  if (sesions) {
+    if (sesions._usuario[0].rol === 2 || operacion === "ver") {
+      return editProducto || codigo === "nuevo" ? (
+        <>
+          {codigo !== "nuevo" && (
+            <Modal
+              title={<b>CÓDIGO QR: {editProducto.nombre}</b>}
+              okType="primary"
+              okText="Descargar"
+              cancelText="Regresar"
+              visible={isModalVisible ? true : false}
+              onCancel={handleCancel}
+              onOk={handleDownload}
             >
-              {editProducto.url_pagina_web}
-            </Button>
-          </Modal>
-        )}
-        <Form
-          {...layout}
-          form={form}
-          name="customized_form_controls"
-          initialValues={editProducto ? editProducto : initialValues}
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          onValuesChange={handleFormValuesChange}
-          hidden={codigo !== "nuevo" ? show : false}
-        >
-          <Divider>
-            PRODUCTO{" "}
-            {codigo !== "nuevo" && editProducto.url_pagina_web ? (
-              <QrcodeOutlined
-                style={{ fontSize: "25px" }}
-                onClick={() => generarQR()}
-              />
-            ) : null}
-          </Divider>
-          <br />
-
-          <Collapse defaultActiveKey={["1", "2", "3", "4"]}>
-            <Panel header="INFORMACIÓN GENERAL" key="1" extra={genExtra()}>
               <Row>
-                <Col span={12}>
-                  <Form.Item
-                    label="Línea"
-                    name={crud ? "fk_linea_id" : "linea"}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione una linea!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <SelectOpciones
-                        tipo="línea"
-                        readOnly={!crud}
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Marca"
-                    name={crud ? "fk_marca_id" : "marca"}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione una marca!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <SelectOpciones
-                        tipo="marca"
-                        readOnly={!crud}
-                        filter={selectedLineaId}
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Grupo"
-                    name={crud ? "fk_grupo_id" : "grupo"}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione un grupo!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <SelectOpciones
-                        tipo="grupo"
-                        filter={selectedMarcaId}
-                        filter2={selectedLineaId}
-                        readOnly={!crud}
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
-
-                  <Form.Item
-                    label="Modelo"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione un color!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      !newModelo ? (
-                        <Space>
-                          <Form.Item
-                            name={crud ? "modelo" : "modelo"}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione un modelo!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            <SelectOpciones
-                              tipo="modelo"
-                              filter={selectedGrupoId}
-                              filter2={selectedMarcaId}
-                              filter3={selectedLineaId}
-                              readOnly={!crud}
-                              setShow={setShow}
-                            />
-                          </Form.Item>
-                          <Form.Item>
-                            <Button
-                              type="dashed"
-                              icon={
-                                !newModelo ? (
-                                  <EditOutlined />
-                                ) : (
-                                  <SearchOutlined />
-                                )
-                              }
-                              onClick={() => setNewModelo(!newModelo)}
-                            />
-                          </Form.Item>
-                        </Space>
-                      ) : (
-                        <Space>
-                          <Form.Item
-                            name={crud ? "modelo" : "modelo"}
-                            rules={
-                              crud
-                                ? [
-                                    {
-                                      required: true,
-                                      message: "Por favor, ingrese un modelo!",
-                                    },
-                                  ]
-                                : []
-                            }
-                          >
-                            <Input disabled={!selectedGrupoId ? true : false} placeholder="Ingrese el modelo" />
-                          </Form.Item>
-                          <Form.Item>
-                            <Button
-                              type="primary"
-                              icon={
-                                !newModelo ? (
-                                  <PlusOutlined />
-                                ) : (
-                                  <SearchOutlined />
-                                )
-                              }
-                              onClick={() => setNewModelo(!newModelo)}
-                            />
-                          </Form.Item>
-                        </Space>
-                      )
-                    ) : (
-                      <Form.Item name={crud ? "modelo" : "modelo"}>
-                        <Input className="input-type" readOnly={!crud} />
-                      </Form.Item>
-                    )}
-                  </Form.Item>
+                <Col span={12} offset={6}>
+                  <Image width={200} src={QR} />
                 </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Procedencia"
-                    name="procedencia"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese la procedencia!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <SelectOpciones
-                        tipo="procedencia"
-                        readOnly={!crud}
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
+              </Row>
+              <Button
+                type="link"
+                href={editProducto.url_pagina_web}
+                target="_blank"
+              >
+                {editProducto.url_pagina_web}
+              </Button>
+            </Modal>
+          )}
+          <Form
+            {...layout}
+            form={form}
+            name="customized_form_controls"
+            initialValues={editProducto ? editProducto : initialValues}
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            onValuesChange={handleFormValuesChange}
+            hidden={codigo !== "nuevo" ? show : false}
+          >
+            <Divider>
+              PRODUCTO{" "}
+              {codigo !== "nuevo" && editProducto.url_pagina_web ? (
+                <QrcodeOutlined
+                  style={{ fontSize: "25px" }}
+                  onClick={() => generarQR()}
+                />
+              ) : null}
+            </Divider>
+            <br />
 
-                  <Form.Item
-                    label="Proveedor"
-                    name={crud ? "fk_proveedor_id" : "proveedor"}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, seleccione un proveedor!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <SelectOpciones
-                        tipo="proveedor"
-                        filter={selectedMarcaId}
-                        readOnly={!crud}
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
+            <Collapse defaultActiveKey={["1", "2", "3", "4"]}>
+              <Panel header="INFORMACIÓN GENERAL" key="1" extra={genExtra()}>
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Línea"
+                      name={crud ? "fk_linea_id" : "linea"}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione una linea!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <SelectOpciones
+                          tipo="línea"
+                          readOnly={!crud}
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Marca"
+                      name={crud ? "fk_marca_id" : "marca"}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione una marca!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <SelectOpciones
+                          tipo="marca"
+                          readOnly={!crud}
+                          filter={selectedLineaId}
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Grupo"
+                      name={crud ? "fk_grupo_id" : "grupo"}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione un grupo!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <SelectOpciones
+                          tipo="grupo"
+                          filter={selectedMarcaId}
+                          filter2={selectedLineaId}
+                          readOnly={!crud}
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
 
-                  {/* {selectedLineaId === "60faeee1a412169c92c778c2" ? (
+                    <Form.Item
+                      label="Modelo"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione un color!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        !newModelo ? (
+                          <Space>
+                            <Form.Item
+                              name={crud ? "modelo" : "modelo"}
+                              rules={
+                                crud
+                                  ? [
+                                      {
+                                        required: true,
+                                        message:
+                                          "Por favor, seleccione un modelo!",
+                                      },
+                                    ]
+                                  : []
+                              }
+                            >
+                              <SelectOpciones
+                                tipo="modelo"
+                                filter={selectedGrupoId}
+                                filter2={selectedMarcaId}
+                                filter3={selectedLineaId}
+                                readOnly={!crud}
+                                setShow={setShow}
+                              />
+                            </Form.Item>
+                            <Form.Item>
+                              <Button
+                                type="dashed"
+                                icon={
+                                  !newModelo ? (
+                                    <EditOutlined />
+                                  ) : (
+                                    <SearchOutlined />
+                                  )
+                                }
+                                onClick={() => setNewModelo(!newModelo)}
+                              />
+                            </Form.Item>
+                          </Space>
+                        ) : (
+                          <Space>
+                            <Form.Item
+                              name={crud ? "modelo" : "modelo"}
+                              rules={
+                                crud
+                                  ? [
+                                      {
+                                        required: true,
+                                        message:
+                                          "Por favor, ingrese un modelo!",
+                                      },
+                                    ]
+                                  : []
+                              }
+                            >
+                              <Input
+                                disabled={!selectedGrupoId ? true : false}
+                                placeholder="Ingrese el modelo"
+                              />
+                            </Form.Item>
+                            <Form.Item>
+                              <Button
+                                type="primary"
+                                icon={
+                                  !newModelo ? (
+                                    <PlusOutlined />
+                                  ) : (
+                                    <SearchOutlined />
+                                  )
+                                }
+                                onClick={() => setNewModelo(!newModelo)}
+                              />
+                            </Form.Item>
+                          </Space>
+                        )
+                      ) : (
+                        <Form.Item name={crud ? "modelo" : "modelo"}>
+                          <Input className="input-type" readOnly={!crud} />
+                        </Form.Item>
+                      )}
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Procedencia"
+                      name="procedencia"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese la procedencia!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <SelectOpciones
+                          tipo="procedencia"
+                          readOnly={!crud}
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Proveedor"
+                      name={crud ? "fk_proveedor_id" : "proveedor"}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, seleccione un proveedor!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <SelectOpciones
+                          tipo="proveedor"
+                          filter={selectedMarcaId}
+                          readOnly={!crud}
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+
+                    {/* {selectedLineaId === "60faeee1a412169c92c778c2" ? (
                     <Form.Item
                       label="Tipo"
                       name={"fk_productotipo_id"}
@@ -1159,44 +1167,45 @@ if (
                     </Form.Item>
                   ) : null} */}
 
-                  <Form.Item
-                    label="Código Interno"
-                    name="codigo_interno"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el código interno!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Input className="input-type" readOnly={true} />
-                  </Form.Item>
-                  <Form.Item
-                    label="Nombre"
-                    name="nombre"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el nombre!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Input
+                    <Form.Item
+                      label="Código Interno"
+                      name="codigo_interno"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el código interno!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <Input className="input-type" readOnly={true} />
+                    </Form.Item>
+                    <Form.Item
+                      label="Nombre"
                       name="nombre"
-                      className="input-type"
-                      readOnly={true}
-                    />
-                  </Form.Item>
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el nombre!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <Input
+                        name="nombre"
+                        className="input-type"
+                        readOnly={true}
+                      />
+                    </Form.Item>
 
-                  {/* <Form.Item
+                    {/* <Form.Item
                     label="Descripción"
                     name="descripcion"
                     rules={
@@ -1216,15 +1225,21 @@ if (
                       readOnly={!crud}
                     />
                   </Form.Item> */}
-                </Col>
-              </Row>
-            </Panel>
-            {selectedLineaId !== "60d4c04b894c18b5e810e025" &&
-              selectedLineaId !== "60faeee1a412169c92c778c2" &&
-              selectedLineaId !== "60d4c04a8e4f5ab5e8b93218" &&
-              selectedLineaId !== "60ff0a8a5d3d71d21abba9d1" &&
-              selectedLineaId !== "61252dc1c2ac82f8cc563b5f" && 
-              selectedLineaId !== "61252dc010658af8cc902179" && (
+                  </Col>
+                </Row>
+              </Panel>
+              {selectedLineaId === "60d4c0476e8514b5e8c66fd5" ||
+              selectedLineaId === "60d4c0477f7255b5e8cca2b7" ||
+              selectedLineaId === "60d4c04851cbd1b5e83632d3" ||
+              selectedLineaId === "60d4c04880c445b5e8b87047" ||
+              selectedLineaId === "60d4c0491b6606b5e836f80f" ||
+              selectedLineaId === "60d4c04ba23e72b5e8f93e11" ||
+              selectedLineaId === "60d4c04bc02e32b5e8ac7b68" ||
+              selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12" ||
+              selectedLineaId === "60d4c046e600f1b5e85d075c" ||
+              selectedLineaId === "60d4c04663852fb5e8ad40d7" ||
+              selectedLineaId === "60db4816d2a990117e29ad6b" ||
+              selectedLineaId === "60d4c04a145bfab5e81b4626" ? (
                 <Panel
                   className="tecnica"
                   header="INFORMACIÓN TÉCNICA"
@@ -1382,9 +1397,7 @@ if (
                           </Form.Item>
                         </div>
                       ) : null}
-                      
 
-                     
                       {infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
                         <div>
                           <Form.Item
@@ -1569,7 +1582,6 @@ if (
                           >
                             <Input readOnly={true} defaultValue="<0.5%" />
                           </Form.Item>
-
                         </div>
                       ) : null}
 
@@ -1627,12 +1639,9 @@ if (
                           </Form.Item>
                         </div>
                       ) : null}
-
                     </Col>
                     <Col span={12}>
-
-                    
-                    {infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
+                      {infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
                         <div>
                           <Form.Item
                             label="Alimentación"
@@ -1684,7 +1693,6 @@ if (
                               parser={(value) => value.replace(" m", "")}
                             />
                           </Form.Item>
-                          
                         </div>
                       ) : null}
                       {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
@@ -2156,8 +2164,6 @@ if (
                         </div>
                       ) : null}
 
-                   
-
                       {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
                         <Form.Item
                           label="Clase Industrial"
@@ -2184,7 +2190,6 @@ if (
                           )}
                         </Form.Item>
                       ) : null}
-
 
                       {infoTecnicaGrupo === "60d61769637c1aca1384fe74" ? (
                         <Form.Item
@@ -2214,7 +2219,6 @@ if (
                         </Form.Item>
                       ) : null}
 
-                      
                       {infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ? (
                         <Form.Item
                           label="Tipo de Hebra"
@@ -2846,253 +2850,515 @@ if (
                   ) : infoTecnicaLinea ===
                     "60db4816d2a990117e29ad6b" ? null : null}
                 </Panel>
-              )}
-            <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    label="Método ABC"
-                    name={["atributos_js", "metodo_abc"]}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el método ABC!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <Radio.Group
-                        onChange={onChangeMetodoABC}
-                        value={metodoABC}
-                        disabled={!crud}
-                      >
-                        <Radio value={"A"}>A</Radio>
-                        <Radio value={"B"}>B</Radio>
-                        <Radio value={"C"}>C</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Tipo"
-                    name="tipo"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el tipo de producto!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <Radio.Group
-                        onChange={onChangeTipoProducto}
-                        value={tipoProducto}
-                        disabled={!crud}
-                      >
-                        <Radio value={"BIENES"}>BIENES</Radio>
-                        <Radio value={"SERVICIOS"}>SERVICIOS</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Tipo de Inventario"
-                    name="tipo_inventario"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione el tipo de inventario!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <Radio.Group
-                        onChange={onChangeTipoInventario}
-                        value={tipoInventario}
-                        disabled={!crud}
-                      >
-                        <Radio value={"PERMANENTE"}>PERMANENTE</Radio>
-                        <Radio value={"BAJO PEDIDO"}>BAJO PEDIDO</Radio>
-                      </Radio.Group>
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
-                  <Form.Item
-                    label="Unidad de Medida"
-                    name={crud ? "fk_unidad_medida_id" : "unidad_medida"}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione una unidad de medida!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <SelectOpciones
-                        tipo="unidad de medida"
-                        readOnly={!crud}
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
+              ) : null}
 
-                  <Form.Item
-                    label="Unidad de Venta"
-                    name={crud ? "fk_unidad_venta_id" : "unidad_venta"}
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, seleccione una unidad de venta!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    {crud ? (
-                      <SelectOpciones
-                        tipo="unidad de venta"
-                        readOnly={!crud}
-                        setShow={setShow}
-                      />
-                    ) : (
-                      <Input className="input-type" readOnly={!crud} />
-                    )}
-                  </Form.Item>
-
-                  <Form.Item
-                    label="Costo"
-                    name="costo"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el costo!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Space>
-                      <Row>
-                        <div
-                          className="ant-input-group-addon"
-                          style={{
-                            paddingTop: "2px",
-                            verticalAlign: "middle",
-                            display: "inline-table",
-                            lineHeight: "24px",
-                            height: "32px",
-                          }}
+              <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Método ABC"
+                      name={["atributos_js", "metodo_abc"]}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el método ABC!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <Radio.Group
+                          onChange={onChangeMetodoABC}
+                          value={metodoABC}
+                          disabled={!crud}
                         >
-                          {"$"}
-                        </div>
-                        <Form.Item name="costo">
-                          <InputNumber
-                            min={0}
-                            precision={2}
-                            readOnly={!crud}
-                            // formatter={(value) =>
-                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            // }
-                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          />
-                        </Form.Item>
-                      </Row>
-                    </Space>
-                  </Form.Item>
-                  <Form.Item
-                    name="precio"
-                    label={
-                      unidadMedida === "60d4ffd26a0c87b992906be4"
-                        ? "Precio sin IVA (M2)"
-                        : unidadMedida === "60d4ffd22c89acb9921b328a"
-                        ? "Precio sin IVA (M)"
-                        : unidadMedida === "60d4ffd21f3a73b992f66054"
-                        ? "Precio sin IVA (GAL)"
-                        : unidadMedida === "60d4ffd377ef4ab9922ed0b2"
-                        ? "Precio sin IVA (ML)"
-                        : unidadMedida === "60f9a66edde7528bd5a5d257"
-                        ? "Precio sin IVA (UD.)"
-                        : "Precio sin IVA ()"
-                    }
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el precio!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <Space>
-                      <Row>
-                        <div
-                          className="ant-input-group-addon"
-                          style={{
-                            paddingTop: "2px",
-                            verticalAlign: "middle",
-                            display: "inline-table",
-                            lineHeight: "24px",
-                            height: "32px",
-                          }}
+                          <Radio value={"A"}>A</Radio>
+                          <Radio value={"B"}>B</Radio>
+                          <Radio value={"C"}>C</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Tipo"
+                      name="tipo"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el tipo de producto!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <Radio.Group
+                          onChange={onChangeTipoProducto}
+                          value={tipoProducto}
+                          disabled={!crud}
                         >
-                          {"$"}
-                        </div>
-                        <Form.Item name="precio">
-                          <InputNumber
-                            min={0}
-                            precision={2}
-                            readOnly={!crud}
-                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                            // formatter={(value) =>
-                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            // }
-                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          />
-                        </Form.Item>
-                      </Row>
-                    </Space>
-                  </Form.Item>
+                          <Radio value={"BIENES"}>BIENES</Radio>
+                          <Radio value={"SERVICIOS"}>SERVICIOS</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Tipo de Inventario"
+                      name="tipo_inventario"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione el tipo de inventario!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <Radio.Group
+                          onChange={onChangeTipoInventario}
+                          value={tipoInventario}
+                          disabled={!crud}
+                        >
+                          <Radio value={"PERMANENTE"}>PERMANENTE</Radio>
+                          <Radio value={"BAJO PEDIDO"}>BAJO PEDIDO</Radio>
+                        </Radio.Group>
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+                    <Form.Item
+                      label="Unidad de Medida"
+                      name={crud ? "fk_unidad_medida_id" : "unidad_medida"}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione una unidad de medida!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <SelectOpciones
+                          tipo="unidad de medida"
+                          readOnly={!crud}
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
 
-                  {!crud ? (
-                    <div>
-                      <Form.Item
-                        label={
-                          "Precio con IVA (" +
-                          form.getFieldValue("unidad_medida_abreviatura") +
-                          ")"
-                        }
-                      >
+                    <Form.Item
+                      label="Unidad de Venta"
+                      name={crud ? "fk_unidad_venta_id" : "unidad_venta"}
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, seleccione una unidad de venta!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      {crud ? (
+                        <SelectOpciones
+                          tipo="unidad de venta"
+                          readOnly={!crud}
+                          setShow={setShow}
+                        />
+                      ) : (
+                        <Input className="input-type" readOnly={!crud} />
+                      )}
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Costo"
+                      name="costo"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el costo!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <Space>
+                        <Row>
+                          <div
+                            className="ant-input-group-addon"
+                            style={{
+                              paddingTop: "2px",
+                              verticalAlign: "middle",
+                              display: "inline-table",
+                              lineHeight: "24px",
+                              height: "32px",
+                            }}
+                          >
+                            {"$"}
+                          </div>
+                          <Form.Item name="costo">
+                            <InputNumber
+                              min={0}
+                              precision={2}
+                              readOnly={!crud}
+                              // formatter={(value) =>
+                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              // }
+                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            />
+                          </Form.Item>
+                        </Row>
+                      </Space>
+                    </Form.Item>
+                    <Form.Item
+                      name="precio"
+                      label={
+                        unidadMedida === "60d4ffd26a0c87b992906be4"
+                          ? "Precio sin IVA (M2)"
+                          : unidadMedida === "60d4ffd22c89acb9921b328a"
+                          ? "Precio sin IVA (M)"
+                          : unidadMedida === "60d4ffd21f3a73b992f66054"
+                          ? "Precio sin IVA (GAL)"
+                          : unidadMedida === "60d4ffd377ef4ab9922ed0b2"
+                          ? "Precio sin IVA (ML)"
+                          : unidadMedida === "60f9a66edde7528bd5a5d257"
+                          ? "Precio sin IVA (UD.)"
+                          : "Precio sin IVA ()"
+                      }
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el precio!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <Space>
+                        <Row>
+                          <div
+                            className="ant-input-group-addon"
+                            style={{
+                              paddingTop: "2px",
+                              verticalAlign: "middle",
+                              display: "inline-table",
+                              lineHeight: "24px",
+                              height: "32px",
+                            }}
+                          >
+                            {"$"}
+                          </div>
+                          <Form.Item name="precio">
+                            <InputNumber
+                              min={0}
+                              precision={2}
+                              readOnly={!crud}
+                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                              // formatter={(value) =>
+                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              // }
+                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            />
+                          </Form.Item>
+                        </Row>
+                      </Space>
+                    </Form.Item>
+
+                    {!crud ? (
+                      <div>
+                        <Form.Item
+                          label={
+                            "Precio con IVA (" +
+                            form.getFieldValue("unidad_medida_abreviatura") +
+                            ")"
+                          }
+                        >
+                          <Space>
+                            <Row>
+                              <div
+                                className="ant-input-group-addon"
+                                style={{
+                                  paddingTop: "2px",
+                                  verticalAlign: "middle",
+                                  display: "inline-table",
+                                  lineHeight: "24px",
+                                  height: "32px",
+                                }}
+                              >
+                                {"$"}
+                              </div>
+                              <InputNumber
+                                value={
+                                  (form.getFieldValue("precio") *
+                                    (parseFloat(form.getFieldValue("iva")) +
+                                      100)) /
+                                  100
+                                }
+                                min={0}
+                                precision={2}
+                                readOnly={!crud}
+                                // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                                // formatter={(value) =>
+                                //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                // }
+                                // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                              />
+                            </Row>
+                          </Space>
+                        </Form.Item>
+                        <Form.Item
+                          label={
+                            "Precio sin IVA (" +
+                            form.getFieldValue("unidad_venta_abreviatura") +
+                            ")"
+                          }
+                        >
+                          <Space>
+                            <Row>
+                              <div
+                                className="ant-input-group-addon"
+                                style={{
+                                  paddingTop: "2px",
+                                  verticalAlign: "middle",
+                                  display: "inline-table",
+                                  lineHeight: "24px",
+                                  height: "32px",
+                                }}
+                              >
+                                {"$"}
+                              </div>
+                              <InputNumber
+                                value={
+                                  form.getFieldValue("precio") *
+                                  form.getFieldValue("dimension_unidad_venta")
+                                }
+                                min={0}
+                                precision={2}
+                                readOnly={!crud}
+                                // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                                // formatter={(value) =>
+                                //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                // }
+                                // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                              />
+                            </Row>
+                          </Space>
+                        </Form.Item>
+                        <Form.Item
+                          label={
+                            "Precio con IVA (" +
+                            form.getFieldValue("unidad_venta_abreviatura") +
+                            ")"
+                          }
+                        >
+                          <Space>
+                            <Row>
+                              <div
+                                className="ant-input-group-addon"
+                                style={{
+                                  paddingTop: "2px",
+                                  verticalAlign: "middle",
+                                  display: "inline-table",
+                                  lineHeight: "24px",
+                                  height: "32px",
+                                }}
+                              >
+                                {"$"}
+                              </div>
+                              <InputNumber
+                                value={
+                                  form.getFieldValue("precio") *
+                                  form.getFieldValue("dimension_unidad_venta") *
+                                  1.12
+                                }
+                                min={0}
+                                precision={2}
+                                readOnly={!crud}
+                                // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                                // formatter={(value) =>
+                                //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                // }
+                                // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                              />
+                            </Row>
+                          </Space>
+                        </Form.Item>
+                      </div>
+                    ) : null}
+
+                    <Form.Item
+                      label="IVA"
+                      name="iva"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el IVA!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        readOnly={!crud}
+                        formatter={(value) => `${value}%`}
+                        parser={(value) => value.replace("%", "")}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item
+                      label="Descuento Especialista"
+                      name="limite_descuento1"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese el limite de descuento 1!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        readOnly={!crud}
+                        formatter={(value) => `${value}%`}
+                        parser={(value) => value.replace("%", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Descuento Líder Retail"
+                      name="limite_descuento2"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el descuento!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        readOnly={!crud}
+                        formatter={(value) => `${value}%`}
+                        parser={(value) => value.replace("%", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Descuento Líder Proyectos"
+                      name="limite_descuento3"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el descuento!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        readOnly={!crud}
+                        formatter={(value) => `${value}%`}
+                        parser={(value) => value.replace("%", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Descuento Eventos"
+                      name="limite_descuento4"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el descuento!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        readOnly={!crud}
+                        formatter={(value) => `${value}%`}
+                        parser={(value) => value.replace("%", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Límite Descuento 5"
+                      name="limite_descuento5"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingrese el descuento!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber
+                        min={0}
+                        readOnly={!crud}
+                        formatter={(value) => `${value}%`}
+                        parser={(value) => value.replace("%", "")}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Dimensión de Unidad de Venta"
+                      name="dimension_unidad_venta"
+                      rules={
+                        crud
+                          ? [
+                              {
+                                required: true,
+                                message:
+                                  "Por favor, ingrese la dimensión de unidad de venta!",
+                              },
+                            ]
+                          : []
+                      }
+                    >
+                      <InputNumber min={0} readOnly={!crud} />
+                    </Form.Item>
+                    {!crud ? (
+                      <Form.Item label="Total con Descuento Especialista">
                         <Space>
                           <Row>
                             <div
@@ -3109,10 +3375,11 @@ if (
                             </div>
                             <InputNumber
                               value={
+                                form.getFieldValue("precio") * 1.12 -
                                 (form.getFieldValue("precio") *
-                                  (parseFloat(form.getFieldValue("iva")) +
-                                    100)) /
-                                100
+                                  1.12 *
+                                  form.getFieldValue("limite_descuento1")) /
+                                  100
                               }
                               min={0}
                               precision={2}
@@ -3126,13 +3393,10 @@ if (
                           </Row>
                         </Space>
                       </Form.Item>
-                      <Form.Item
-                        label={
-                          "Precio sin IVA (" +
-                          form.getFieldValue("unidad_venta_abreviatura") +
-                          ")"
-                        }
-                      >
+                    ) : null}
+
+                    {!crud ? (
+                      <Form.Item label="Total con Descuento Líder Retail">
                         <Space>
                           <Row>
                             <div
@@ -3149,8 +3413,11 @@ if (
                             </div>
                             <InputNumber
                               value={
-                                form.getFieldValue("precio") *
-                                form.getFieldValue("dimension_unidad_venta")
+                                form.getFieldValue("precio") * 1.12 -
+                                (form.getFieldValue("precio") *
+                                  1.12 *
+                                  form.getFieldValue("limite_descuento2")) /
+                                  100
                               }
                               min={0}
                               precision={2}
@@ -3164,13 +3431,9 @@ if (
                           </Row>
                         </Space>
                       </Form.Item>
-                      <Form.Item
-                        label={
-                          "Precio con IVA (" +
-                          form.getFieldValue("unidad_venta_abreviatura") +
-                          ")"
-                        }
-                      >
+                    ) : null}
+                    {!crud ? (
+                      <Form.Item label="Total con Descuento Líder Proyectos">
                         <Space>
                           <Row>
                             <div
@@ -3187,9 +3450,11 @@ if (
                             </div>
                             <InputNumber
                               value={
-                                form.getFieldValue("precio") *
-                                form.getFieldValue("dimension_unidad_venta") *
-                                1.12
+                                form.getFieldValue("precio") * 1.12 -
+                                (form.getFieldValue("precio") *
+                                  1.12 *
+                                  form.getFieldValue("limite_descuento3")) /
+                                  100
                               }
                               min={0}
                               precision={2}
@@ -3203,423 +3468,169 @@ if (
                           </Row>
                         </Space>
                       </Form.Item>
-                    </div>
-                  ) : null}
+                    ) : null}
+                    {!crud ? (
+                      <Form.Item label="Total con Descuento Eventos">
+                        <Space>
+                          <Row>
+                            <div
+                              className="ant-input-group-addon"
+                              style={{
+                                paddingTop: "2px",
+                                verticalAlign: "middle",
+                                display: "inline-table",
+                                lineHeight: "24px",
+                                height: "32px",
+                              }}
+                            >
+                              {"$"}
+                            </div>
+                            <InputNumber
+                              value={
+                                form.getFieldValue("precio") * 1.12 -
+                                (form.getFieldValue("precio") *
+                                  1.12 *
+                                  form.getFieldValue("limite_descuento4")) /
+                                  100
+                              }
+                              min={0}
+                              precision={2}
+                              readOnly={!crud}
+                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                              // formatter={(value) =>
+                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              // }
+                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            />
+                          </Row>
+                        </Space>
+                      </Form.Item>
+                    ) : null}
+                    {!crud ? (
+                      <Row>
+                        <Col span={11}>
+                          <Title level={5}>Stock General: </Title>
+                        </Col>
+                        <Col span={10}>
+                          <Title level={5}>
+                            {stock && stock.cantidad_stock}{" "}
+                            <Tooltip
+                              onClick={() => stockPorBodegas()}
+                              trigger="click"
+                              placement="right"
+                              title={
+                                stockBodegas ? stockBodegas : "Cargando..."
+                              }
+                            >
+                              {stock && stock.cantidad_stock !== "N/A" && (
+                                <InfoCircleOutlined />
+                              )}
+                            </Tooltip>
+                          </Title>
+                        </Col>
+                      </Row>
+                    ) : null}
+                  </Col>
+                </Row>
+              </Panel>
+              <Panel header="OTRA INFORMACIÓN" key="3" extra={genExtra()}>
+                <Row>
+                  <Col span={12}>
+                    <Form.Item
+                      {...tailLayout}
+                      name="en_sistema_externo"
+                      valuePropName="checked"
+                    >
+                      {crud ? (
+                        <Checkbox disabled={!crud}>En Sistema Externo</Checkbox>
+                      ) : editProducto.en_sistema_externo ? (
+                        <p>
+                          En Sistema Externo:{" "}
+                          <CheckCircleFilled style={{ fontSize: 18 }} />
+                        </p>
+                      ) : (
+                        <p>
+                          En Sistema Externo:{" "}
+                          <CloseCircleFilled style={{ fontSize: 18 }} />
+                        </p>
+                      )}
+                    </Form.Item>
+                  </Col>
 
-                  <Form.Item
-                    label="IVA"
-                    name="iva"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el IVA!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      readOnly={!crud}
-                      formatter={(value) => `${value}%`}
-                      parser={(value) => value.replace("%", "")}
-                    />
+                  <Col span={12}>
+                    <Form.Item
+                      {...tailLayout}
+                      name="en_web"
+                      valuePropName="checked"
+                    >
+                      {crud ? (
+                        <Checkbox disabled={!crud}>En Página Web</Checkbox>
+                      ) : editProducto.en_web ? (
+                        <p>
+                          En Página Web:{" "}
+                          <CheckCircleFilled style={{ fontSize: 18 }} />
+                        </p>
+                      ) : (
+                        <p>
+                          En Página Web:{" "}
+                          <CloseCircleFilled style={{ fontSize: 18 }} />
+                        </p>
+                      )}
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Panel>
+            </Collapse>
+            <br />
+            <Row>
+              {crud ? (
+                <Col md={18} xs={15}>
+                  <Form.Item {...tailLayout}>
+                    <Button
+                      icon={<SaveOutlined />}
+                      type="primary"
+                      htmlType="submit"
+                    >
+                      GUARDAR
+                    </Button>
+                    &nbsp;&nbsp;
+                    <Button
+                      className="button button3"
+                      icon={<CloseSquareOutlined />}
+                      type="default"
+                      onClick={cancelConfirm}
+                    >
+                      CANCELAR
+                    </Button>
                   </Form.Item>
                 </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Descuento Especialista"
-                    name="limite_descuento1"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese el limite de descuento 1!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      readOnly={!crud}
-                      formatter={(value) => `${value}%`}
-                      parser={(value) => value.replace("%", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Descuento Líder Retail"
-                    name="limite_descuento2"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el descuento!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      readOnly={!crud}
-                      formatter={(value) => `${value}%`}
-                      parser={(value) => value.replace("%", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Descuento Líder Proyectos"
-                    name="limite_descuento3"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el descuento!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      readOnly={!crud}
-                      formatter={(value) => `${value}%`}
-                      parser={(value) => value.replace("%", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Descuento Eventos"
-                    name="limite_descuento4"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el descuento!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      readOnly={!crud}
-                      formatter={(value) => `${value}%`}
-                      parser={(value) => value.replace("%", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Límite Descuento 5"
-                    name="limite_descuento5"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message: "Por favor, ingrese el descuento!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber
-                      min={0}
-                      readOnly={!crud}
-                      formatter={(value) => `${value}%`}
-                      parser={(value) => value.replace("%", "")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Dimensión de Unidad de Venta"
-                    name="dimension_unidad_venta"
-                    rules={
-                      crud
-                        ? [
-                            {
-                              required: true,
-                              message:
-                                "Por favor, ingrese la dimensión de unidad de venta!",
-                            },
-                          ]
-                        : []
-                    }
-                  >
-                    <InputNumber min={0} readOnly={!crud} />
-                  </Form.Item>
-                  {!crud ? (
-                    <Form.Item label="Total con Descuento Especialista">
-                      <Space>
-                        <Row>
-                          <div
-                            className="ant-input-group-addon"
-                            style={{
-                              paddingTop: "2px",
-                              verticalAlign: "middle",
-                              display: "inline-table",
-                              lineHeight: "24px",
-                              height: "32px",
-                            }}
-                          >
-                            {"$"}
-                          </div>
-                          <InputNumber
-                            value={
-                              form.getFieldValue("precio") * 1.12 -
-                              (form.getFieldValue("precio") *
-                                1.12 *
-                                form.getFieldValue("limite_descuento1")) /
-                                100
-                            }
-                            min={0}
-                            precision={2}
-                            readOnly={!crud}
-                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                            // formatter={(value) =>
-                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            // }
-                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          />
-                        </Row>
-                      </Space>
-                    </Form.Item>
-                  ) : null}
-
-                  {!crud ? (
-                    <Form.Item label="Total con Descuento Líder Retail">
-                      <Space>
-                        <Row>
-                          <div
-                            className="ant-input-group-addon"
-                            style={{
-                              paddingTop: "2px",
-                              verticalAlign: "middle",
-                              display: "inline-table",
-                              lineHeight: "24px",
-                              height: "32px",
-                            }}
-                          >
-                            {"$"}
-                          </div>
-                          <InputNumber
-                            value={
-                              form.getFieldValue("precio") * 1.12 -
-                              (form.getFieldValue("precio") *
-                                1.12 *
-                                form.getFieldValue("limite_descuento2")) /
-                                100
-                            }
-                            min={0}
-                            precision={2}
-                            readOnly={!crud}
-                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                            // formatter={(value) =>
-                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            // }
-                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          />
-                        </Row>
-                      </Space>
-                    </Form.Item>
-                  ) : null}
-                  {!crud ? (
-                    <Form.Item label="Total con Descuento Líder Proyectos">
-                      <Space>
-                        <Row>
-                          <div
-                            className="ant-input-group-addon"
-                            style={{
-                              paddingTop: "2px",
-                              verticalAlign: "middle",
-                              display: "inline-table",
-                              lineHeight: "24px",
-                              height: "32px",
-                            }}
-                          >
-                            {"$"}
-                          </div>
-                          <InputNumber
-                            value={
-                              form.getFieldValue("precio") * 1.12 -
-                              (form.getFieldValue("precio") *
-                                1.12 *
-                                form.getFieldValue("limite_descuento3")) /
-                                100
-                            }
-                            min={0}
-                            precision={2}
-                            readOnly={!crud}
-                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                            // formatter={(value) =>
-                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            // }
-                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          />
-                        </Row>
-                      </Space>
-                    </Form.Item>
-                  ) : null}
-                  {!crud ? (
-                    <Form.Item label="Total con Descuento Eventos">
-                      <Space>
-                        <Row>
-                          <div
-                            className="ant-input-group-addon"
-                            style={{
-                              paddingTop: "2px",
-                              verticalAlign: "middle",
-                              display: "inline-table",
-                              lineHeight: "24px",
-                              height: "32px",
-                            }}
-                          >
-                            {"$"}
-                          </div>
-                          <InputNumber
-                            value={
-                              form.getFieldValue("precio") * 1.12 -
-                              (form.getFieldValue("precio") *
-                                1.12 *
-                                form.getFieldValue("limite_descuento4")) /
-                                100
-                            }
-                            min={0}
-                            precision={2}
-                            readOnly={!crud}
-                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                            // formatter={(value) =>
-                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                            // }
-                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                          />
-                        </Row>
-                      </Space>
-                    </Form.Item>
-                  ) : null}
-                  {!crud ? (
-                    <Row>
-                      <Col span={11}>
-                        <Title level={5}>Stock General: </Title>
-                      </Col>
-                      <Col span={10}>
-                        <Title level={5}>
-                          {stock && stock.cantidad_stock}{" "}
-                          <Tooltip
-                            onClick={() => stockPorBodegas()}
-                            trigger="click"
-                            placement="right"
-                            title={stockBodegas ? stockBodegas : "Cargando..."}
-                          >
-                            {stock && stock.cantidad_stock !== "N/A" && (
-                              <InfoCircleOutlined />
-                            )}
-                          </Tooltip>
-                        </Title>
-                      </Col>
-                    </Row>
-                  ) : null}
-                </Col>
-              </Row>
-            </Panel>
-            <Panel header="OTRA INFORMACIÓN" key="3" extra={genExtra()}>
-              <Row>
-                <Col span={12}>
-                  <Form.Item
-                    {...tailLayout}
-                    name="en_sistema_externo"
-                    valuePropName="checked"
-                  >
-                    {crud ? (
-                      <Checkbox disabled={!crud}>En Sistema Externo</Checkbox>
-                    ) : editProducto.en_sistema_externo ? (
-                      <p>
-                        En Sistema Externo: <CheckCircleFilled style={{ fontSize: 18 }}/>
-                      </p>
-                    ) : (
-                      <p>
-                        En Sistema Externo: <CloseCircleFilled style={{ fontSize: 18 }}/>
-                      </p>
-                    )}
-                  </Form.Item>
-                </Col>
-
-                <Col span={12}>
-                  <Form.Item
-                    {...tailLayout}
-                    name="en_web"
-                    valuePropName="checked"
-                  >
-                    {crud ? (
-                      <Checkbox disabled={!crud}>En Página Web</Checkbox>
-                    ) : editProducto.en_web ? (
-                      <p>
-                        En Página Web: <CheckCircleFilled style={{ fontSize: 18 }}/>
-                      </p>
-                    ) : (
-                      <p>
-                        En Página Web: <CloseCircleFilled style={{ fontSize: 18 }}/>
-                      </p>
-                    )}
-                  </Form.Item>
-                </Col>
-              </Row>
-            </Panel>
-          </Collapse>
-          <br />
-          <Row>
-            {crud ? (
-              <Col md={18} xs={15}>
-                <Form.Item {...tailLayout}>
+              ) : (
+                <Col md={24} xs={15}>
                   <Button
-                    icon={<SaveOutlined />}
+                    icon={<RollbackOutlined />}
                     type="primary"
-                    htmlType="submit"
+                    onClick={goBackHistory}
+                    style={{ marginBottom: 20 }}
                   >
-                    GUARDAR
+                    REGRESAR
                   </Button>
-                  &nbsp;&nbsp;
-                  <Button
-                    className="button button3"
-                    icon={<CloseSquareOutlined />}
-                    type="default"
-                    onClick={cancelConfirm}
-                  >
-                    CANCELAR
-                  </Button>
-                </Form.Item>
-              </Col>
-            ) : (
-              <Col md={24} xs={15}>
-                <Button
-                  icon={<RollbackOutlined />}
-                  type="primary"
-                  onClick={goBackHistory}
-                  style={{ marginBottom:20}}
-                >
-                  REGRESAR
-                </Button>
-              </Col>
-            )}
-          </Row>
-        </Form>
-        <Spin
-          indicator={antIcon}
-          hidden={codigo !== "nuevo" ? !show : true}
-          className="loading-producto"
-        />
-      </>
-    ) : (
-      <Spin indicator={antIcon} className="loading-producto" />
-    );
-  } else {
-    return <Redirect to="/home" />;
+                </Col>
+              )}
+            </Row>
+          </Form>
+          <Spin
+            indicator={antIcon}
+            hidden={codigo !== "nuevo" ? !show : true}
+            className="loading-producto"
+          />
+        </>
+      ) : (
+        <Spin indicator={antIcon} className="loading-producto" />
+      );
+    } else {
+      return <Redirect to="/home" />;
+    }
   }
-}
 };
 
 const ProductoForm = () => {
