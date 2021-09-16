@@ -89,8 +89,13 @@ const ModeloList = () => {
           sorter: {
             compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
+<<<<<<< HEAD
           showSorterTooltip: false,
           width: '25%'
+=======
+          showSorterTooltip: true,
+          width: '30%'
+>>>>>>> 2d2da07195332999093382884b5c19d806f95a83
         },
         {
           title: "PSEUDÓNIMO",
@@ -110,6 +115,7 @@ const ModeloList = () => {
               compare: (a, b) => a.codigo.localeCompare(b.codigo),
             },
             showSorterTooltip: false,
+<<<<<<< HEAD
             width: '20%'
         },
         {
@@ -128,6 +134,12 @@ const ModeloList = () => {
       
       ];  
 
+=======
+            width: '30%'
+          },
+   
+      ]; 
+>>>>>>> 2d2da07195332999093382884b5c19d806f95a83
 
     let { path } = useRouteMatch();
     let history = useHistory();
@@ -197,6 +209,7 @@ const ModeloList = () => {
           />
           <br /><br />
     
+<<<<<<< HEAD
           {modelo_grupos_nn.length > 0 ? (
             <Table
               locale={{ emptyText: 'No hay datos' }}
@@ -224,6 +237,35 @@ const ModeloList = () => {
               }}
             />
           ) : (
+=======
+          {/* {modelos.length > 0 || isEmpty || dataSource?  */}
+          {modelos.length>0?
+                 <Table
+                 locale={{ emptyText: 'No hay datos' }}
+                 columns={JSON.parse(localStorage.getItem("user")).rol === 2?columns:columns2}
+                 dataSource={dataSource}
+                 rowKey='id'
+                 onChange={handleChange}
+                 pagination={{ defaultPageSize: 30 }}
+                 onRow={(record, rowIndex) => {
+                   return {
+                     onClick: (event) => {
+                       if (JSON.parse(localStorage.getItem("user")).rol === 2) {
+                         if (event.clientX < window.innerWidth * 0.8 && rowState) {
+                           // record["permiso"] = false;
+                           // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                           ver(record);
+                         }
+                       } else {
+                         ver(record);
+                       }
+                     },
+                   };
+                 }}
+               />
+              : 
+     
+>>>>>>> 2d2da07195332999093382884b5c19d806f95a83
             <Spin indicator={antIcon} />
           )}
         </div>
