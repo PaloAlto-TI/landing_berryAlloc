@@ -39,7 +39,7 @@ export const SubgrupoList = () => {
       showSorterTooltip: false,
       width: '20%'
     },
-    {
+    /*{
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
       key: "descripcion",
@@ -49,7 +49,7 @@ export const SubgrupoList = () => {
       },
       showSorterTooltip: false,
       width: '20%'
-    },
+    },*/
     /*{
       title: "LÍNEAS",
       dataIndex: "lineas_nn",
@@ -85,7 +85,7 @@ export const SubgrupoList = () => {
       showSorterTooltip: false,
       width: '20%'
     },
-    {
+    /*{
       title: "DESCRIPCIÓN",
       dataIndex: "descripcion",
       key: "descripcion",
@@ -95,7 +95,7 @@ export const SubgrupoList = () => {
       },
       showSorterTooltip: false,
       width: '20%'
-    },
+    },*/
     /*{
       title: "LÍNEAS",
       dataIndex: "lineas_nn",

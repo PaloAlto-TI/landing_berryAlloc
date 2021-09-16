@@ -44,27 +44,34 @@ const SubgrupoForm = () => {
 
   const onFinish = async (values) => {
 
-    let data = null
-    console.log("values " + JSON.stringify(values));
-    console.log("id " + id);
+    // console.log("values " + JSON.stringify(values));
+    let data = null;
+    let messagesOnFinish = operacion === "editar" ? ["EDITAR", "EDITÓ"] : ["CREAR", "CREÓ"];
+    delete values.permiso;
+
     if (id) {
       values["id"] = id;
       data = await updateSubgrupo(values);
-
-      // data = await updateMarca([values, jsonLineasMarcas]);
-
     }
     else {
       data = await createSubgrupo(values)
     }
 
-    message.info(data).then(p => history.push("/home/subgrupo"));
+    // console.log("LA DATA QUE DEVUELVE: ", JSON.stringify(data))
+
+    if (data.message.includes("OK")) {
+
+      message.info(JSON.stringify(data.message) + " -  EL SUBGRUPO: " + JSON.stringify(data.data.nombre) + " SE " + messagesOnFinish[1] + " CON ÉXITO", 2).then((t) => history.push("/home/subgrupo/"));
+
+    } else {
+      message.error("ERROR AL MOMENTO DE " + messagesOnFinish[0] + " EL SUBGRUPO - \n" + JSON.stringify(data.errorDetails.description), 15);
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    message.warning("ERROR AL GUARDAR EL SUBGRUPO");
   };
-  //..................................................................................
+
   const tailLayout = {
     wrapperCol: {
       offset: 8,
@@ -88,26 +95,21 @@ const SubgrupoForm = () => {
     }
   }
 
-
   function goBackHistory() {
     history.push("/home/subgrupo")
   }
   const handleFormValuesChange = async (changedValues) => {
     // console.log("ONCHANGE", form.getFieldsValue());
-
-    formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
-
-    const formFieldName = Object.keys(changedValues)[0];
+    // formHasChanges = operacion === "editar" || codigo === "nuevo" ? true : false;
+    formHasChanges = true;
   };
-  //_-------------------------------------------------------------------------------------------
+
   if (sesions) {
     if (sesions._usuario[0].rol === 2 || operacion === "ver") {
-
       return (
         <>
           {editSubgrupo || codigo === "nuevo" ?
             <Form
-
               name="basic"
               labelCol={{ span: 8 }}
               wrapperCol={{ span: 16 }}
@@ -116,7 +118,6 @@ const SubgrupoForm = () => {
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
             >
-
               <Divider className="titleFont">SUBGRUPO</Divider>
               <br />
               <Row >
@@ -126,43 +127,22 @@ const SubgrupoForm = () => {
                     name="nombre"
                     rules={[{ required: true, message: 'Porfavor ingrese el nombre' }]}
                   >
-                    <Input 
-                    readOnly={!crud} />
+                    <Input
+                      readOnly={!crud} />
                   </Form.Item>
                 </Col>
               </Row >
               <Row >
                 <Col span={18}>
-
-
                   <Form.Item
                     label="Descripcion"
                     name="descripcion"
                     rules={[{ required: false, message: 'Por gavor ingrese su descripcion' }]}
-
                   >
                     <TextArea rows={6} readOnly={!crud} placeholder="Descripción del Subgrupo." />
-
                   </Form.Item>
                 </Col>
               </Row >
-              {/* <Divider className="titleFont" orientation="left" >GRUPOS ASIGNADOS A SUBGRUPO</Divider>
-
-            <Row >
-                <Col span={12}>
-                    <Form.Item
-                        label="Grupo"
-                        name={"subgrupo_nn"}
-                    >
-                        <SelectOpciones
-                            tipo="Grupo"
-                        // readOnly={!crud}
-                        // typeTransaction={typeTransactionSelect} 
-                        />
-                    </Form.Item>
-                </Col>
-            </Row> */}
-
               <Row >
                 {crud ? (
                   <Col md={18} xs={15}>
@@ -197,13 +177,9 @@ const SubgrupoForm = () => {
                   </Col>
                 }
               </Row >
-
-
-
             </Form>
             : null}
         </>
-
       )
     }
     else {

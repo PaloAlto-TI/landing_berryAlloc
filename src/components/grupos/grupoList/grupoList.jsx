@@ -14,7 +14,7 @@ const hashids = new Hashids(REACT_APP_SEED);
 
 const GrupoList = () => {
   var { setMoved, sesions } = useContext(SesionContext);
-  const { grupos, /*grupo_marcas_nn,*/ grupo_marca_subgrupo, setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
+  const { /*grupos,*/ /*grupo_marcas_nn,*/ grupo_marca_subgrupo, setPermiso, setEditGrupo, isEmpty, softDeleteGrupo } = useContext(GrupoContext);
   const [value, setValue] = useState(null);
   const [dataSource, setDataSource] = useState([]);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -203,6 +203,7 @@ const GrupoList = () => {
   function ver(record) {
     record["permiso"] = false;
     // history.push(`${path}/${record.id}/ver`, record);
+    // alert("LO QUE ME DA EN ID: " + JSON.stringify(record.id) + " LO QUE ME CODIFICA: " + hashids.encodeHex(record.id));
     history.push(`${path}/${hashids.encodeHex(record.id)}/ver`, record);
   }
 
@@ -216,7 +217,6 @@ const GrupoList = () => {
   }
 
   useEffect(() => {
-    
     setEditGrupo(null);
     setPermiso(false);
     if (!value) {
@@ -224,6 +224,7 @@ const GrupoList = () => {
       // setDataSource(grupo_marcas_nn)
       setDataSource(grupo_marca_subgrupo)
     }
+    
   })
 
   return (
