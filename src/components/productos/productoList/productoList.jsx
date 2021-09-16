@@ -780,16 +780,7 @@ const ProductoList = () => {
                     // history.push(`${path}/${record.codigo_interno}/ver`, record);
                     ver(record);
                   }
-<<<<<<< HEAD
                 
-=======
-                } else 
-                {
-                  if (event.clientX < window.innerWidth * click && rowState) {
-                  ver(record);
-                }
-                }
->>>>>>> 2d2da07195332999093382884b5c19d806f95a83
               },
             };
           }}
