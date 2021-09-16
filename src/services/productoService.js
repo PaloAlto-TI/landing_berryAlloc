@@ -49,6 +49,7 @@ export class ProductoService {
       }).then(res => res.data);
     }
 
+    
     generateQRPdf(producto){
       return axios.post(baseUrl+"generate-qr-pdf", producto, {
         headers: {
