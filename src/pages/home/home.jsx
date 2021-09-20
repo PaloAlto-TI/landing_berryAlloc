@@ -38,6 +38,7 @@ import SubgrupoForm from "../../components/subgrupo/subgrupoForm/subgrupoForm";
 import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoList";
 import SubgrupoContextProvider from "../../contexts/subgrupoContext";
 import { SesionContext } from "../../contexts/sesionContext";
+import Stocks from "../../components/visualizadores/stocks/stocks";
 const Home = () => {
   var { setMoved, sesions,redirect } = useContext(SesionContext);
   let history = useHistory();
@@ -80,9 +81,16 @@ const Home = () => {
                   <ProductoList />
               </ConfigProvider>
             </Route>
-            <Route path={`${path}/productos/:codigo?/:operacion?`}>
+            <Route exact path={`${path}/stocks`}>
+                <Stocks />
+            </Route>
+            
+            <Route path={`${path}/(productos|stocks)/:codigo?/:operacion?`}>
                 <ProductoForm />
             </Route>
+            
+
+           
             <Route exact path={`${path}`}>
               <Layout
                 style={{

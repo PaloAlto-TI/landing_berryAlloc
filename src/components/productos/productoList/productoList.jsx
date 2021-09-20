@@ -17,9 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getProductos, getProductosByLinea, _softDeleteProducto } from "../../../_redux/ducks/producto.duck";
 import { SesionContext } from "../../../contexts/sesionContext";
 
-const ProductoList = () => {
+const ProductoList = (props) => {
   const {setMoved,sesions} =  useContext(SesionContext);
-
+  const {lineaV, marcaV, grupoV} = props
   // const {
   //   // productos,
   //   setPermiso,
@@ -35,13 +35,13 @@ const ProductoList = () => {
   const producto = useSelector((state) => state.productos.producto);
   const loading = useSelector((state) => state.productos.loading);
   const response = useSelector((state) => state.productos.response);
-  
+  const grupos = useSelector((state) => state.stocks.grupos);
   const [selectedLineaId, setSelectedLineaId] = useState(
-    !producto ? ! response ? '60d4c046e600f1b5e85d075c' : response.data.fk_linea_id : producto.fk_linea_id
+     grupos ? lineaV : !producto ? ! response ? '60d4c046e600f1b5e85d075c' : response.data.fk_linea_id : producto.fk_linea_id
     );
 
-  const [selectedMarcaId, setSelectedMarcaId] = useState(!producto ? !response ? null : response.data.fk_marca_id : producto.fk_marca_id);
-  const [selectedGrupoId, setSelectedGrupoId] = useState(!producto  ? !response ? null : response.data.fk_grupo_id : producto.fk_grupo_id);
+  const [selectedMarcaId, setSelectedMarcaId] = useState(grupos ? marcaV : !producto ? !response ? null : response.data.fk_marca_id : producto.fk_marca_id);
+  const [selectedGrupoId, setSelectedGrupoId] = useState(grupos ? grupoV : !producto  ? !response ? null : response.data.fk_grupo_id : producto.fk_grupo_id);
   const [filtro, setFiltro] = useState(null);
   const [filterAll, setFilterAll] = useState(false)
   const [dataSource, setDataSource] = useState([]);
