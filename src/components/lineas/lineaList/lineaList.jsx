@@ -170,7 +170,6 @@ const LineaList = () => {
       />
       <br />
       <br />
-
       {lineas.length > 0 || isEmpty ? (
         <Table
           locale={{ emptyText: 'No hay datos' }}
