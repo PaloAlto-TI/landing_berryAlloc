@@ -359,7 +359,7 @@ const ProductoList = (props) => {
             key: "x",
             align: "center",
             render: (_, record) =>
-              record.url_pagina_web ? (
+              record.url_pagina_web || !visualizador ? (
                 <CrudButton
                   record={record}
                   softDelete={_softDeleteProducto}
