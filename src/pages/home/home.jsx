@@ -81,12 +81,20 @@ const Home = () => {
                   <ProductoList />
               </ConfigProvider>
             </Route>
-            <Route exact path={`${path}/stocks`}>
+            <Route exact path={`${path}/visualizadores/productos`}>
+              <ConfigProvider locale={es_ES}>
+                  <ProductoList visualizador={true} />
+              </ConfigProvider>
+            </Route>
+            <Route exact path={`${path}/visualizadores/stocks`}>
                 <Stocks />
             </Route>
             
-            <Route path={`${path}/(productos|stocks)/:codigo?/:operacion?`}>
+            <Route path={`${path}/(productos|visualizadores/stocks|visualizadores/productos)/:codigo?/:operacion?`}>
+              <ConfigProvider locale={es_ES}>                
                 <ProductoForm />
+              </ConfigProvider>
+
             </Route>
             
 

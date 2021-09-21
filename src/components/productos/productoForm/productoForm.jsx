@@ -188,6 +188,7 @@ const FormProducto = (props) => {
     );
   });
   const response = useSelector((state) => state.productos.response);
+  const grupos = useSelector((state) => state.stocks.grupos);
 
   useEffect(() => {
     window.onpopstate = (e) => {
@@ -234,7 +235,7 @@ const FormProducto = (props) => {
 
   const editProducto = useSelector((state) => state.productos.producto);
   const serial = useSelector((state) => state.productos.serial);
-  const grupos = useSelector((state) => state.stocks.grupos);
+  const _grupos = useSelector((state) => state.stocks.grupos);
 
   console.log("EL PROD", editProducto);
 
@@ -864,8 +865,14 @@ const FormProducto = (props) => {
   };
 
   function goBackHistory() {
-    history.push("/home/productos", { linea: editProducto.fk_linea_id });
     window.scroll(0, 0);
+    if (_grupos){
+      history.push("/home/visualizadores/stocks", { linea: editProducto.fk_linea_id });
+
+    }else{
+
+      history.push("/home/productos", { linea: editProducto.fk_linea_id });
+    }
   }
   // const handleFormValuesChange = async (changedValues) => {
   //   // console.log("ONCHANGE", form.getFieldsValue());
@@ -875,9 +882,9 @@ const FormProducto = (props) => {
   //   const formFieldName = Object.keys(changedValues)[0];
   // };
 
-  function goBackHistory() {
-    history.push("/home/productos");
-  }
+  // function goBackHistory() {
+  //   history.push("/home/visualizadores/stocks");
+  // }
   // const handleFormValuesChange = async (changedValues) => {
   //   // console.log("ONCHANGE", form.getFieldsValue());
 

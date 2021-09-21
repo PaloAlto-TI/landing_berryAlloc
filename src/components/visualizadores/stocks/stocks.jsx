@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, List } from "antd";
+import { Button, Divider, List } from "antd";
 import { Spin } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, ArrowRightOutlined, LoadingOutlined } from "@ant-design/icons";
 
 import "./stocks.css";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +26,7 @@ const Stocks = () => {
   const [selectedMarcaID, setSelectedMarcaID] = useState(null)
   const [selectedGrupoID, setSelectedGrupoID] = useState(null)
   const [hasReturn, setHasReturn] = useState(false)
+  const [title, setTitle] = useState("TIPO")
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const history = useHistory()
   const dispatch = useDispatch();
@@ -52,6 +53,9 @@ const Stocks = () => {
   }, [productos]);
 
   const goGrupos = (id) => {
+
+    setTitle("GRUPOS")
+
     setSelectedMarcaID(id)
     console.log(
       "los grupos",
@@ -61,6 +65,9 @@ const Stocks = () => {
   };
 
   const goMarcas = (id) => {
+
+    setTitle("MARCAS")
+
     setSelectedLineaID(id);
     
     setMarcas(grupos.filter((g) => g.fk_lineamarca.fk_linea.id === id).map((g) => g.fk_lineamarca.fk_marca)
@@ -70,6 +77,7 @@ const Stocks = () => {
   };
 
   const goLineas = (id) => {
+    setTitle("LÍNEAS")
     setHasReturn(true)
     dispatch(getGruposLineaBySubgrupo(id));
   };
@@ -85,12 +93,15 @@ const Stocks = () => {
       if (!selectedLineaID){
         setHasReturn(false)
         setLineas(null)
+        setTitle("TIPO")
       }else if (!selectedMarcaID){
         setMarcas(null)
         setSelectedLineaID(null)
+        setTitle("LÍNEAS")
       }else if (!selectedGrupoID){
         set_Grupos(null)
         setSelectedMarcaID(null)
+        setTitle("MARCAS")
       }
     }
   };
@@ -98,9 +109,12 @@ const Stocks = () => {
   if (!selectedGrupoID) {
     return !loading ? (
       <>
+  
       { hasReturn &&
-       <Button type="primary" style={{marginLeft:"87vw"}} onClick={()=>goBack()}>REGRESAR</Button>
+       <Button type="primary" style={{marginLeft:"91vw"}} icon={<ArrowLeftOutlined />} onClick={()=>goBack()}/>
       }
+      <Divider orientation="left">{title}</Divider>
+
       <List
         itemLayout="horizontal"
         style={{ marginTop: "8vh" }}
@@ -122,6 +136,8 @@ const Stocks = () => {
               title={<p style={{ fontWeight: "bold" }}>{item.nombre}</p>}
               description={_grupos && item.fk_lineamarca.fk_marca.nombre}
             />
+              <ArrowRightOutlined style={{marginRight:"3vw"}}/>
+
           </List.Item>
         )}
       />
@@ -130,7 +146,7 @@ const Stocks = () => {
       <Spin indicator={antIcon} className="loading" />
     );
   } else {
-    return <ProductoList lineaV={selectedLineaID} marcaV={selectedMarcaID} grupoV={selectedGrupoID} />;
+    return <ProductoList visualizador={true} lineaV={selectedLineaID} marcaV={selectedMarcaID} grupoV={selectedGrupoID}  />;
   }
 };
 

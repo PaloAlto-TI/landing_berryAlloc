@@ -19,7 +19,7 @@ import { SesionContext } from "../../../contexts/sesionContext";
 
 const ProductoList = (props) => {
   const {setMoved,sesions} =  useContext(SesionContext);
-  const {lineaV, marcaV, grupoV} = props
+  const {lineaV, marcaV, grupoV, visualizador} = props
   // const {
   //   // productos,
   //   setPermiso,
@@ -95,6 +95,8 @@ const ProductoList = (props) => {
         setDataSource(productos);
       }
   });
+
+ 
   
   
   useEffect(() => {
@@ -354,6 +356,7 @@ const ProductoList = (props) => {
                 softDelete={_softDeleteProducto}
                 setRowState={setRowState}
                 permiso={sesions&&sesions._usuario[0].rol ===2}
+                visualizador={visualizador}
               />
             ),
             width: '5%'
@@ -596,6 +599,7 @@ const ProductoList = (props) => {
               softDelete={_softDeleteProducto}
               setRowState={setRowState}
               permiso={sesions&&sesions._usuario[0].rol ===2}
+              visualizador={visualizador}
             />: <StopOutlined style={{fontSize: 18, marginLeft: '2vw'}} />
           ),
           width: '5%'
@@ -690,6 +694,8 @@ const ProductoList = (props) => {
       <Divider>PRODUCTOS</Divider>
           <br />
       <Row>
+        
+        {visualizador ? <Col span={1}></Col>  :
         <Col span={3}>
            
             <Button
@@ -703,6 +709,8 @@ const ProductoList = (props) => {
             </Button>
           
         </Col>
+
+      }
         
         <Col span={5}>
           <SelectOpciones
