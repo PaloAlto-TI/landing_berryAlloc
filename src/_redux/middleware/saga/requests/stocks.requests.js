@@ -17,5 +17,14 @@ export function getGruposLineaBySubgrupo(id){
           Authorization: `Bearer ${REACT_APP_API_KEY}`,
         },
       });
+
+    }
+export function getLineasStock(){
+
+    return axios.get(baseUrl+"lineas-stocks", {
+        headers: {
+          Authorization: `Bearer ${REACT_APP_API_KEY}`,
+        },
+      });
 }
 

@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
-import { setGruposLineaBySubgrupo, setSubgrupos } from "../../../ducks/stocks.duck";
-import { getAllSubgrupos, getGruposLineaBySubgrupo } from "../requests/stocks.requests";
+import { setGruposLineaBySubgrupo, setLineas, setSubgrupos } from "../../../ducks/stocks.duck";
+import { getAllSubgrupos, getGruposLineaBySubgrupo, getLineasStock } from "../requests/stocks.requests";
 
 export function* handleGetSubgrupos() {
   try {
@@ -17,6 +17,17 @@ export function* handleGetGruposLineaBySubgrupo(action) {
     const response = yield call(getGruposLineaBySubgrupo, action.id);
     const { data } = response;
     yield put(setGruposLineaBySubgrupo(data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function* handleGetLineas() {
+  try {
+    const response = yield call(getLineasStock);
+    const { data } = response;
+    console.log("LA DATA", data)
+    yield put(setLineas(data));
   } catch (error) {
     console.log(error);
   }
