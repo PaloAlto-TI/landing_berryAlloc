@@ -280,7 +280,6 @@ if(sesions){
                     className="input-type"
                   />
                 </Form.Item>
-                
               </Col>
               <Col span={10}>
                 <Form.Item
@@ -374,7 +373,6 @@ if(sesions){
           </Form>
         </>) : (<Spin indicator={antIcon} className="loading-info" />)
     );
-
   } else {
     return <Redirect to="/home" />;
   }

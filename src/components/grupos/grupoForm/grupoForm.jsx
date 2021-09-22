@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { Form, Input, Button, message, Row, Col, Divider, Spin } from "antd";
+import { Form, Input, Button, message, Row, Col, Divider, Spin, Collapse, Checkbox, Space } from "antd";
 import { useHistory } from "react-router";
-import { SaveOutlined, CloseSquareOutlined, RollbackOutlined, LoadingOutlined } from "@ant-design/icons";
+import {
+  SaveOutlined, CloseSquareOutlined, RollbackOutlined, LoadingOutlined,
+  PushpinFilled, CheckCircleFilled, CloseCircleFilled, MinusCircleOutlined, PlusOutlined
+} from "@ant-design/icons";
 import { GrupoContext } from "../../../contexts/grupoContext";
 import { SecuencialesGrupoService } from "../../../services/secuencialesGrupoService";
 import { LineasMarcasService } from "../../../services/lineasMarcasService";
@@ -14,6 +17,7 @@ import Hashids from 'hashids';
 let { REACT_APP_SEED } = process.env;
 const hashids = new Hashids(REACT_APP_SEED);
 const { TextArea } = Input;
+const { Panel } = Collapse;
 
 const FormGrupo = (props) => {
   var { setMoved, sesions } = useContext(SesionContext);
@@ -31,6 +35,7 @@ const FormGrupo = (props) => {
   );
 
   const [id, setId] = useState(null);
+  const [show, setShow] = useState(null);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaMarcaId, setSelectedLineaMarcaId] = useState(undefined);
@@ -93,6 +98,15 @@ const FormGrupo = (props) => {
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
+  const genExtra = () => (
+    <PushpinFilled
+      onClick={(event) => {
+        // If you don't want click extra trigger collapse, you can prevent this:
+        event.stopPropagation();
+      }}
+    />
+  );
+
   useEffect(() => {
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
@@ -103,6 +117,10 @@ const FormGrupo = (props) => {
 
       form.setFieldsValue({ codigo: codigoInterno[0].code_to_add })
 
+    }
+    if (show === null) {
+      window.scrollTo(0, 0);
+      setShow(crud);
     }
 
     if (editGrupo) {
@@ -372,7 +390,7 @@ const FormGrupo = (props) => {
               <Divider className="titleFont">GRUPO</Divider>
               {/*"EL CRUD:   " + crud + " EL CODIGO TEXT: " + codigo +  " OPERACION: " + operacion*/}
               {/*"LINEA SELECTED: " + selectedLineaId + " MARCA SELECTED: " + selectedMarcaId*/}
-              {/*"EL EDIT GRUPO " + JSON.stringify(editGrupo)*/}
+              {/* {"EL EDIT GRUPO " + JSON.stringify(editGrupo)} */}
               {/*"EL  CODIGO INTERNO " + JSON.stringify(codigoInterno)*/}
               {/*"EL PK LINEA_MARCA " + JSON.stringify(selectedLineaMarcaId)*/}
               {/*JSON.stringify(initialValues)*/}
@@ -381,20 +399,22 @@ const FormGrupo = (props) => {
                 <Col span={10}>
                   <Form.Item
                     label="Línea"
-                    // name={crud ? "grupo_marcas_nn_in" : "linea"} 
-                    // name={["grupo_marcas_nn_in",]}
                     name={crud ? "fk_linea_id" : "linea"}
                     rules={crud ? [
                       {
                         required: true,
                         message: "Por favor, seleccione una Línea!",
-                      },
-                    ] : []}
+                      },] : []}
                   >
-                    <SelectOpciones
-                      tipo="línea"
-                      readOnly={crud ? false : true}
-                    />
+                    {crud ? (
+                      <SelectOpciones
+                        tipo="línea"
+                        readOnly={!crud}
+                      /*setShow={setShow} aca ver si se descomenta esto*/
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -431,18 +451,23 @@ const FormGrupo = (props) => {
                         : []
                     }
                   >
-                    <SelectOpciones
-                      tipo="marca"
-                      readOnly={crud ? false : true}
-                      filter={selectedLineaId}
-                    />
+                    {crud ? (
+                      <SelectOpciones
+                        tipo="marca"
+                        readOnly={crud ? false : true}
+                        filter={selectedLineaId}
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
                     label="Subgrupo"
-                    //name={!crud ? "fk_subgrupo_id" : "subgrupo"}
-                    name="fk_subgrupo_id"
+                    name={!crud ? ["fk_subgrupo", "nombre"] : "fk_subgrupo_id"}
+                    /*name="fk_subgrupo_id"*/
+                    /*name={["fk_subgrupo", "nombre"]}*/
                     rules={[
                       {
                         required: true,
@@ -450,11 +475,15 @@ const FormGrupo = (props) => {
                       },
                     ]}
                   >
-                    <SelectOpciones
-                      tipo="subgrupo"
-                      readOnly={!crud}
-                      typeTransaction={typeTransactionSelect}
-                    />
+                    {crud ? (
+                      <SelectOpciones
+                        tipo="subgrupo"
+                        readOnly={!crud}
+                        typeTransaction={typeTransactionSelect}
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
                   </Form.Item>
                 </Col>
               </Row>
@@ -489,10 +518,56 @@ const FormGrupo = (props) => {
                 </Col>
               </Row>
               <br />
+              <Collapse /*defaultActiveKey={['1']}*/>
+                <Panel
+                  header="INFORMACIÓN TÉCNICA"
+                  key="1"
+                  extra={genExtra()}
+                >
+                  <Row>
+                    <Col md={24}>
+                      <Form.List name="users">
+                        {(fields, { add, remove }) => (
+                          <>
+                            {fields.map(({ key, name, fieldKey, ...restField }) => (
+                              <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                <Form.Item
+                                  {...restField}
+                                  name={[name, 'first']}
+                                  fieldKey={[fieldKey, 'first']}
+                                  rules={[{ required: true, message: 'Missing first name' }]}
+                                >
+                                  <Input placeholder="First Name" />
+                                </Form.Item>
+                                <Form.Item
+                                  {...restField}
+                                  name={[name, 'last']}
+                                  fieldKey={[fieldKey, 'last']}
+                                  rules={[{ required: true, message: 'Missing last name' }]}
+                                >
+                                  <Input placeholder="Last Name" />
+                                </Form.Item>
+                                <MinusCircleOutlined onClick={() => remove(name)} />
+                              </Space>
+                            ))}
+                            <Form.Item>
+                              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                Agregar Atributo
+                              </Button>
+                            </Form.Item>
+                          </>
+                        )}
+                      </Form.List>
+                    </Col>
+                  </Row>
+                </Panel>
+              </Collapse>
+              <br />
               <br />
               <Row>
                 {crud ? (
                   <Col md={18} xs={15}>
+
                     <Form.Item {...tailLayout}>
                       <Button
                         icon={<SaveOutlined />}
