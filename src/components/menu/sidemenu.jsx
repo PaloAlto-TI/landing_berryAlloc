@@ -63,8 +63,9 @@ const SideMenu = () => {
           <Menu.Item key="6" icon={<DollarCircleOutlined />}><a href={`${path}/proveedores`}>PROVEEDORES</a></Menu.Item>
   <Menu.Item key="7" icon={<BarcodeOutlined />}><a href={`${path}/productos`}>PRODUCTOS</a></Menu.Item>*/}
           {/* <Menu.Item key="8" icon={<FormatPainterOutlined />}><a href={`${path}/modelos`}>MODELOS</a></Menu.Item> */}
-          {<SubMenu key="sub2" icon={<LineChartOutlined />} title="REPORTES">
-            <Menu.Item key="8" icon={<BarcodeOutlined />}>STOCKS</Menu.Item>
+          {<SubMenu key="sub2" icon={<LineChartOutlined />} title="VISUALIZADORES">
+            <Menu.Item key="8" icon={<DropboxOutlined />}><a href={`${path}/visualizadores/stocks`}>STOCKS</a></Menu.Item>
+            <Menu.Item key="9" icon={<CodeSandboxOutlined />}><a href={`${path}/visualizadores/productos`}>PRODUCTOS</a></Menu.Item>
           </SubMenu>
           /*<SubMenu key="sub2" icon={<AppstoreOutlined />} title="PERSONAS">
             <Menu.Item key="10">CLIENTES</Menu.Item>
