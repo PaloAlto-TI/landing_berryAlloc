@@ -8,7 +8,7 @@ import Search from 'antd/lib/input/Search';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { SesionContext } from '../../../contexts/sesionContext';
 import Hashids from 'hashids';
-import GoogleDocsViewer from '../../DocsVIewer/DocsViewer';
+
  let { REACT_APP_SEED } = process.env;
 const hashids = new Hashids(REACT_APP_SEED);
 
@@ -160,13 +160,13 @@ export const SubgrupoList = () => {
   fileUrl="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/view"
 /> */}
 
-<Input  placeholder="Basic usage" onChange={e=> setprueba(e.target.value)} />
+{/* <Input  placeholder="Basic usage" onChange={e=> setprueba(e.target.value)} />
 
 {prueba.includes("drive.google.com")?<GoogleDocsViewer
   //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
   source={prueba}
 />:null}
- 
+  */}
 
 
 

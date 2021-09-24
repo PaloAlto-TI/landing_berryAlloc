@@ -8,6 +8,7 @@ import { useHistory } from "react-router";
 import { CloseSquareOutlined, RollbackOutlined, SaveOutlined } from '@ant-design/icons';
 import { SesionContext } from '../../../contexts/sesionContext';
 import Hashids from 'hashids';
+
 let { REACT_APP_SEED } = process.env;
 const hashids = new Hashids(REACT_APP_SEED);
 

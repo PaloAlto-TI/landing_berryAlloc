@@ -28,6 +28,7 @@ import {
   PushpinFilled,
   QrcodeOutlined,
   RollbackOutlined,
+  FilePdfOutlined,
   SaveOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
@@ -58,7 +59,8 @@ import {
   _editProducto,
   _getSerialModelo,
 } from "../../../_redux/ducks/producto.duck";
-import GoogleDocsViewer from '../../DocsVIewer/DocsViewer';
+import GoogleDocsViewerForm from '../../DocsVIewer/DocsViewerForm';
+import GoogleDocsViewerModal from '../../DocsVIewer/DocsViewerModal';
 
 
 const { Title } = Typography;
@@ -107,6 +109,7 @@ const FormProducto = (props) => {
   const [nombre, setNombre] = useState(undefined);
   const [nombreEdit, setNombreEdit] = useState(false);
   const [QR, setQR] = useState(null);
+  const [geturl_fichatecnica, seturl_fichatecnica] = useState(null);
   const [stockBodegas, setstockBodegas] = useState(null);
   const [crud, setCrud] = useState(
     operacion === "editar" || codigo === "nuevo" ? true : false
@@ -118,6 +121,8 @@ const FormProducto = (props) => {
   const [infoTecnicaLinea, setinfoTecnicaLinea] = useState(null);
   const [infoTecnicaGrupo, setinfoTecnicaGrupo] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(null);
+  const [isfichatecnica, setisfichatecnica] = useState(false);
+  const [isQr, setisQr] = useState(false);
   const [_serial, set_Serial] = useState(null);
 
   const [urlfichatecnica, setUrlfichatecnica] = useState("");
@@ -848,6 +853,8 @@ const FormProducto = (props) => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setisfichatecnica(false);
+    setisQr(false);
   };
 
   const handleDownload = async () => {
@@ -859,12 +866,37 @@ const FormProducto = (props) => {
   };
 
   const generarQR = async () => {
+    setisfichatecnica(false);
     if (editProducto.url_pagina_web) {
       await new ProductoService()
         .getQR(editProducto.url_pagina_web)
-        .then((data) => setQR(data));
+        .then((data) => setQR(data), setisQr(true));
     }
+    setisQr(true);
+    setIsModalVisible(true);
+  };
 
+  const fichatecnica = async () => {
+    setisQr(false);
+    if (urlfichatecnica) {
+
+      seturl_fichatecnica(urlfichatecnica);
+      
+    }
+    else{
+      if(editProducto){
+      if(editProducto.url_fichatecnica){
+        
+      
+      seturl_fichatecnica(editProducto.url_fichatecnica);}
+    
+    else{
+
+      seturl_fichatecnica(null);
+    }}
+
+    }
+    setisfichatecnica(true);
     setIsModalVisible(true);
   };
 
@@ -890,13 +922,22 @@ const FormProducto = (props) => {
 
   //   const formFieldName = Object.keys(changedValues)[0];
   // };
+  function close()
+  {
+
+    setQR(false);
+    setisfichatecnica(false);
+    setIsModalVisible(false);
+
+  }
 
   //---------------------------------------------
   if (sesions) {
     if (sesions._usuario[0].rol === 2 || operacion === "ver") {
       return (editProducto && editProducto !== undefined) || codigo === "nuevo" ? (
         <>
-          {codigo !== "nuevo" && (
+         {isQr?
+          codigo !== "nuevo" && (
             <Modal
               title={<b>CÓDIGO QR: {editProducto.nombre}</b>}
               okType="primary"
@@ -904,10 +945,12 @@ const FormProducto = (props) => {
               cancelText="Regresar"
               visible={isModalVisible ? true : false}
               onCancel={handleCancel}
+              onClick={close}
               onOk={handleDownload}
             >
+              
               <Row>
-                <Col span={12} offset={6}>
+                <Col span={12} offset={7}>
                   <Image width={200} src={QR} />
                 </Col>
               </Row>
@@ -918,8 +961,63 @@ const FormProducto = (props) => {
               >
                 {editProducto.url_pagina_web}
               </Button>
+
+
+
+              
             </Modal>
-          )}
+          )
+    :isfichatecnica&&( 
+    
+    <Modal
+    title={<b>FICHA TÉCNICA: {editProducto?editProducto.nombre:null}</b>}
+    okType="primary"
+    okText="Aceptar"
+    cancelText="Cancelar"
+    visible={isModalVisible ? true : false}
+    onCancel={handleCancel}
+    onClick={close}
+    onOk={handleCancel}
+    width="60%"
+  >
+   
+    <Row>
+      <Col span={24} offset={2}>
+       
+      
+      {crud ?
+       
+      codigo==="nuevo" && !urlfichatecnica ?null:   
+      <GoogleDocsViewerModal 
+                        //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                        source={!urlfichatecnica ? editProducto?editProducto.url_fichatecnica:null : urlfichatecnica.includes("drive.google.com") ? urlfichatecnica : null}
+                        heightt="20px" widtht="70%" index="1"/> :
+                      editProducto ? <GoogleDocsViewerModal
+                        //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                        source={urlfichatecnica ? urlfichatecnica:editProducto.url_fichatecnica }
+                        heightt="20px" widtht="70%" index="1"/> :
+                        urlfichatecnica ?
+
+                          urlfichatecnica.includes("drive.google.com") ? <GoogleDocsViewerModal
+                            //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                            source={urlfichatecnica?urlfichatecnica:""} heightt="20px" widtht="90%"index="1"/>
+                          : null
+                          : null}
+
+      </Col>
+    </Row>
+    <Button
+      type="link"
+     // href={urlfichatecnica ? urlfichatecnica:editProducto.url_pagina_web}
+      target="_blank"
+    >
+      {/* {editProducto.url_fichatecnica} */}
+    </Button>
+
+
+
+    
+  </Modal>)}
           <Form
             {...layout}
             form={form}
@@ -930,14 +1028,31 @@ const FormProducto = (props) => {
             onValuesChange={handleFormValuesChange}
             hidden={codigo !== "nuevo" ? show : false}
           >
-            <Divider>
-              PRODUCTO{" "}
+
+            <Row>
+              <Col offset={22}>
               {codigo !== "nuevo" && editProducto.url_pagina_web ? (
                 <QrcodeOutlined
+                title="Código QR"
+                  
                   style={{ fontSize: "25px" }}
                   onClick={() => generarQR()}
                 />
               ) : null}
+              <FilePdfOutlined onClick={fichatecnica} title="Ficha Técnica" style={{
+                marginLeft:20,
+                fontSize: "25px" }
+                
+                }>
+
+              </FilePdfOutlined>
+              </Col>
+              </Row>
+            <Divider>
+              PRODUCTO{" "}
+              
+             
+
             </Divider>
             <br />
 
@@ -2882,7 +2997,7 @@ const FormProducto = (props) => {
                 </Panel>
               ) : null} */}
 
-
+              {codigo==="nuevo" || crud?
               <Panel
                 className="tecnica"
                 header="INFORMACIÓN TÉCNICA"
@@ -2913,7 +3028,7 @@ const FormProducto = (props) => {
                           className="input-type"
                           // readOnly={false}
                           value={!crud ? editProducto.url_fichatecnica : null}
-                          placeholder="Ficha Tecnica"
+                          placeholder="Ficha Técnica"
                           onChange={e => setUrlfichatecnica(e.target.value)}
                           readOnly={!crud}
                         />
@@ -2926,20 +3041,21 @@ const FormProducto = (props) => {
                 <Row>
                   <Col span={24}>
                     {crud ?
-                      <GoogleDocsViewer
+                      <GoogleDocsViewerForm
                         //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
-                        source={!urlfichatecnica ? editProducto.url_fichatecnica : urlfichatecnica.includes("drive.google.com") ? urlfichatecnica : null}
+                        source={!urlfichatecnica ? editProducto?editProducto.url_fichatecnica:null : urlfichatecnica.includes("drive.google.com") ? urlfichatecnica : null}
                       /> :
-                      editProducto ? <GoogleDocsViewer
+                      editProducto ? <GoogleDocsViewerForm
                         //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
                         source={urlfichatecnica ? urlfichatecnica:editProducto.url_fichatecnica }
                       /> :
                         urlfichatecnica ?
 
-                          urlfichatecnica.includes("drive.google.com") ? <GoogleDocsViewer
+                          urlfichatecnica.includes("drive.google.com") ? <GoogleDocsViewerForm
                             //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
                             source={urlfichatecnica}
                           />
+                        
                             : null
                           : null}
 
@@ -2949,7 +3065,7 @@ const FormProducto = (props) => {
                   </Col>
                 </Row>
               </Panel>
-
+:null}
               <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
                 <Row>
                   <Col span={12}>
