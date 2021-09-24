@@ -58,6 +58,8 @@ import {
   _editProducto,
   _getSerialModelo,
 } from "../../../_redux/ducks/producto.duck";
+import GoogleDocsViewer from '../../DocsVIewer/DocsViewer';
+
 
 const { Title } = Typography;
 const { TextArea } = Input;
@@ -117,6 +119,9 @@ const FormProducto = (props) => {
   const [infoTecnicaGrupo, setinfoTecnicaGrupo] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(null);
   const [_serial, set_Serial] = useState(null);
+
+  const [urlfichatecnica, setUrlfichatecnica] = useState("");
+
   // const [precio, setPrecio] = useState(null)
   const [form] = Form.useForm();
   let initialValues = {
@@ -244,7 +249,7 @@ const FormProducto = (props) => {
       form.getFieldValue("fk_grupo_id")
     ) {
 
-      if (operacion === "editar"){
+      if (operacion === "editar") {
         if (form.getFieldValue("fk_grupo_id") !== editProducto.fk_grupo_id) {
           const grupoService = new GrupoService();
           const grupo = await grupoService.getOne(
@@ -263,32 +268,32 @@ const FormProducto = (props) => {
                 serial,
             });
           }
-        }else{
+        } else {
           form.setFieldsValue({
             codigo_interno:
               editProducto.codigo_interno
           });
         }
-      }else{
+      } else {
         const grupoService = new GrupoService();
-          const grupo = await grupoService.getOne(
-            form.getFieldValue("fk_grupo_id")
-          );
-          // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
-          //const serial = await getSerialModelo(changedValues[formFieldName]);
-          // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
-          if (serial) {
-            form.setFieldsValue({
-              codigo_interno:
-                form.getFieldValue("codigo_interno").substring(0, 7) +
-                "-" +
-                grupo.codigo +
-                "-" +
-                serial,
-            });
-          }
+        const grupo = await grupoService.getOne(
+          form.getFieldValue("fk_grupo_id")
+        );
+        // if(form.getFieldValue("fk_grupo_id") === "60d617647b18b7ca135e1d53" ){
+        //const serial = await getSerialModelo(changedValues[formFieldName]);
+        // if (selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12") {
+        if (serial) {
+          form.setFieldsValue({
+            codigo_interno:
+              form.getFieldValue("codigo_interno").substring(0, 7) +
+              "-" +
+              grupo.codigo +
+              "-" +
+              serial,
+          });
+        }
       }
-      
+
     }
   }, [serial]);
 
@@ -347,10 +352,10 @@ const FormProducto = (props) => {
       // }
     }
 
-    if (!infoTecnicaLinea && editProducto) {
-      setinfoTecnicaLinea(editProducto.fk_linea_id);
-      setinfoTecnicaGrupo(editProducto.fk_grupo_id);
-    }
+    // if (!infoTecnicaLinea && editProducto) {
+    //   setinfoTecnicaLinea(editProducto.fk_linea_id);
+    //   setinfoTecnicaGrupo(editProducto.fk_grupo_id);
+    // }
 
     // return () => {
     //   setSelectedLineaId(undefined);
@@ -488,8 +493,8 @@ const FormProducto = (props) => {
         form
           .getFieldValue("nombre")
           .substring(0, form.getFieldValue("nombre").lastIndexOf(" ")) +
-          " " +
-          form.getFieldValue("fk_productotipo_id").label
+        " " +
+        form.getFieldValue("fk_productotipo_id").label
       );
       setNombreEdit(true);
     }
@@ -529,7 +534,7 @@ const FormProducto = (props) => {
     // }
 
     if (formFieldName === "fk_linea_id") {
-      setinfoTecnicaLinea(form.getFieldValue("fk_linea_id"));
+      // setinfoTecnicaLinea(form.getFieldValue("fk_linea_id"));
 
       setinfoTecnicaGrupo(null);
 
@@ -889,7 +894,7 @@ const FormProducto = (props) => {
   //---------------------------------------------
   if (sesions) {
     if (sesions._usuario[0].rol === 2 || operacion === "ver") {
-      return (editProducto && editProducto !==undefined )|| codigo === "nuevo" ? (
+      return (editProducto && editProducto !== undefined) || codigo === "nuevo" ? (
         <>
           {codigo !== "nuevo" && (
             <Modal
@@ -946,11 +951,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, seleccione una linea!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, seleccione una linea!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -970,11 +975,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, seleccione una marca!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, seleccione una marca!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -995,11 +1000,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, seleccione un grupo!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, seleccione un grupo!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -1021,11 +1026,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, seleccione un color!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, seleccione un color!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -1037,12 +1042,12 @@ const FormProducto = (props) => {
                               rules={
                                 crud
                                   ? [
-                                      {
-                                        required: true,
-                                        message:
-                                          "Por favor, seleccione un modelo!",
-                                      },
-                                    ]
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, seleccione un modelo!",
+                                    },
+                                  ]
                                   : []
                               }
                             >
@@ -1076,12 +1081,12 @@ const FormProducto = (props) => {
                               rules={
                                 crud
                                   ? [
-                                      {
-                                        required: true,
-                                        message:
-                                          "Por favor, ingrese un modelo!",
-                                      },
-                                    ]
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese un modelo!",
+                                    },
+                                  ]
                                   : []
                               }
                             >
@@ -1119,11 +1124,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese la procedencia!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese la procedencia!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -1144,11 +1149,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, seleccione un proveedor!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, seleccione un proveedor!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -1197,13 +1202,13 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message:
-                                  "Por favor, ingrese el código interno!",
-                                len: 15
-                              },
-                            ]
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el código interno!",
+                              len: 15
+                            },
+                          ]
                           : []
                       }
                     >
@@ -1215,11 +1220,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el nombre!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el nombre!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -1229,7 +1234,9 @@ const FormProducto = (props) => {
                         readOnly={true}
                       />
                     </Form.Item>
-
+                    </Col>
+                </Row>
+              </Panel>
                     {/* <Form.Item
                     label="Descripción"
                     name="descripcion"
@@ -1250,40 +1257,39 @@ const FormProducto = (props) => {
                       readOnly={!crud}
                     />
                   </Form.Item> */}
-                  </Col>
-                </Row>
-              </Panel>
-              {selectedLineaId === "60d4c0476e8514b5e8c66fd5" ||
-              selectedLineaId === "60d4c0477f7255b5e8cca2b7" ||
-              selectedLineaId === "60d4c04851cbd1b5e83632d3" ||
-              selectedLineaId === "60d4c04880c445b5e8b87047" ||
-              selectedLineaId === "60d4c0491b6606b5e836f80f" ||
-              selectedLineaId === "60d4c04ba23e72b5e8f93e11" ||
-              selectedLineaId === "60d4c04bc02e32b5e8ac7b68" ||
-              selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12" ||
-              selectedLineaId === "60d4c046e600f1b5e85d075c" ||
-              selectedLineaId === "60d4c04663852fb5e8ad40d7" ||
-              selectedLineaId === "60db4816d2a990117e29ad6b" ||
-              selectedLineaId === "60d4c04a145bfab5e81b4626" ? (
-                <Panel
+               
+              {/* {selectedLineaId === "60d4c0476e8514b5e8c66fd5" ||
+                selectedLineaId === "60d4c0477f7255b5e8cca2b7" ||
+                selectedLineaId === "60d4c04851cbd1b5e83632d3" ||
+                selectedLineaId === "60d4c04880c445b5e8b87047" ||
+                selectedLineaId === "60d4c0491b6606b5e836f80f" ||
+                selectedLineaId === "60d4c04ba23e72b5e8f93e11" ||
+                selectedLineaId === "60d4c04bc02e32b5e8ac7b68" ||
+                selectedLineaId === "60d4c04c0a5d5fb5e8e1ce12" ||
+                selectedLineaId === "60d4c046e600f1b5e85d075c" ||
+                selectedLineaId === "60d4c04663852fb5e8ad40d7" ||
+                selectedLineaId === "60db4816d2a990117e29ad6b" ||
+                selectedLineaId === "60d4c04a145bfab5e81b4626" ? ( */}
+              {/* <Panel
                   className="tecnica"
                   header="INFORMACIÓN TÉCNICA"
                   key="4"
                   extra={genExtra()}
                 >
                   <Row>
-                    <Col span={12}>
-                      <Form.Item
+                    <Col span={12}> */}
+
+              {/* <Form.Item
                         label="Formato"
                         name={["atributos_js", "formato"]}
                         rules={
                           crud
                             ? [
-                                {
-                                  required: true,
-                                  message: "Por favor, seleccione el formato!",
-                                },
-                              ]
+                              {
+                                required: true,
+                                message: "Por favor, seleccione el formato!",
+                              },
+                            ]
                             : []
                         }
                       >
@@ -1294,20 +1300,20 @@ const FormProducto = (props) => {
                         )}
                       </Form.Item>
                       {infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+                        infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                        infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
                         <Form.Item
                           label="Capa de Desgaste"
                           name={["atributos_js", "capa_desgaste"]}
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese la capa de desgaste!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese la capa de desgaste!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -1319,21 +1325,21 @@ const FormProducto = (props) => {
                         </Form.Item>
                       ) : null}
                       {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                      infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
-                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
+                        infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                        infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
+                        infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
                         <Form.Item
                           label="Composición"
                           name={["atributos_js", "composicion"]}
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la composicion!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione la composicion!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -1348,9 +1354,9 @@ const FormProducto = (props) => {
                         </Form.Item>
                       ) : null}
                       {infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                      infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                      infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
-                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
+                        infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                        infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
+                        infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" ? (
                         <div>
                           <Form.Item
                             label="Resistencia al Agua"
@@ -1358,12 +1364,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, si es resistente al agua o no!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, si es resistente al agua o no!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1382,11 +1388,11 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message: "Por favor, seleccione el tono!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message: "Por favor, seleccione el tono!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1402,12 +1408,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione la textura!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la textura!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1431,12 +1437,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la medida de largo!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la medida de largo!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1454,12 +1460,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la medida de ancho!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la medida de ancho!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1482,12 +1488,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la potencia!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la potencia!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1505,12 +1511,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la presentación!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la presentación!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1528,12 +1534,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la corriente!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la corriente!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1555,12 +1561,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el proceso de fabricación!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el proceso de fabricación!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1572,12 +1578,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione rectificado o no!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione rectificado o no!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1596,12 +1602,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el valor de absorción de agua!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el valor de absorción de agua!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1611,11 +1617,11 @@ const FormProducto = (props) => {
                       ) : null}
 
                       {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                      infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                      infoTecnicaLinea === "60d4c04880c445b5e8b87047" ? (
+                        infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                        infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                        infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                        infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                        infoTecnicaLinea === "60d4c04880c445b5e8b87047" ? (
                         <div>
                           <Form.Item
                             label="Core"
@@ -1623,11 +1629,11 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message: "Por favor, seleccione el core!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message: "Por favor, seleccione el core!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1644,12 +1650,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione el terminado!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el terminado!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1664,8 +1670,8 @@ const FormProducto = (props) => {
                           </Form.Item>
                         </div>
                       ) : null}
-                    </Col>
-                    <Col span={12}>
+                      </Col>
+                      <Col span={12}>
                       {infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
                         <div>
                           <Form.Item
@@ -1674,12 +1680,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el valor de la alimentación!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el valor de la alimentación!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1701,12 +1707,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la longitud del cable de alimentación!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la longitud del cable de alimentación!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1722,19 +1728,19 @@ const FormProducto = (props) => {
                       ) : null}
                       {(infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
                         infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68") ||
-                      infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
+                        infoTecnicaGrupo === "60d617738d422eca134f6685" ? (
                         <Form.Item
                           label="Espesor"
                           name={["atributos_js", "espesor"]}
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese la medida de espesor!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese la medida de espesor!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -1748,19 +1754,19 @@ const FormProducto = (props) => {
                         </Form.Item>
                       ) : null}
                       {infoTecnicaLinea !== "60d4c04663852fb5e8ad40d7" &&
-                      infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" ? (
+                        infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
+                        infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" ? (
                         <Form.Item
                           label="Densidad"
                           name={["atributos_js", "densidad"]}
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message: "Por favor, ingrese la densidad!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message: "Por favor, ingrese la densidad!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -1775,25 +1781,25 @@ const FormProducto = (props) => {
                       ) : null}
 
                       {infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                      infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
-                      infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                      infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                      infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
-                      infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
-                      infoTecnicaLinea !== "60d4c04880c445b5e8b87047" &&
-                      infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
+                        infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
+                        infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                        infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                        infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                        infoTecnicaLinea !== "60db4816d2a990117e29ad6b" &&
+                        infoTecnicaLinea !== "60d4c04880c445b5e8b87047" &&
+                        infoTecnicaLinea !== "60d4c04b894c18b5e810e025" ? (
                         <Form.Item
                           label="Clase Residencial"
                           name={["atributos_js", "clase_residencial"]}
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la clase residencial!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione la clase residencial!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -1811,11 +1817,11 @@ const FormProducto = (props) => {
                       <Form.Item
                         label={
                           infoTecnicaLinea !== "60d4c0477f7255b5e8cca2b7" &&
-                          infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
-                          infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
-                          infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
-                          infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
-                          infoTecnicaLinea !== "60d4c04b894c18b5e810e025"
+                            infoTecnicaLinea !== "60d4c04a8e4f5ab5e8b93218" &&
+                            infoTecnicaLinea !== "60d4c04a145bfab5e81b4626" &&
+                            infoTecnicaLinea !== "60d4c04ba23e72b5e8f93e11" &&
+                            infoTecnicaLinea !== "60d4c04bc02e32b5e8ac7b68" &&
+                            infoTecnicaLinea !== "60d4c04b894c18b5e810e025"
                             ? "Garantía Residencial (años)"
                             : "Garantía (años)"
                         }
@@ -1823,11 +1829,11 @@ const FormProducto = (props) => {
                         rules={
                           crud
                             ? [
-                                {
-                                  required: true,
-                                  message: "Por favor, ingrese la garantía!",
-                                },
-                              ]
+                              {
+                                required: true,
+                                message: "Por favor, ingrese la garantía!",
+                              },
+                            ]
                             : []
                         }
                       >
@@ -1850,12 +1856,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione el tipo de hebra!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el tipo de hebra!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1874,12 +1880,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el tipo de conexión!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el tipo de conexión!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1895,12 +1901,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el tipo de sensor!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el tipo de sensor!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1916,12 +1922,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione el color del calefactor!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el color del calefactor!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1945,12 +1951,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el/los uso(s)!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el/los uso(s)!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1973,12 +1979,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la aplicación!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la aplicación!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -1994,12 +2000,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione el rango de altura de la hebra!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el rango de altura de la hebra!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2027,12 +2033,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese la altura de la hebra!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese la altura de la hebra!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2048,24 +2054,24 @@ const FormProducto = (props) => {
                       ) : null}
 
                       {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                      infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
-                      infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
-                      infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
-                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ? (
+                        infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
+                        infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
+                        infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
+                        infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                        infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                        infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ? (
                         <Form.Item
                           label="Clase Comercial"
                           name={["atributos_js", "clase_comercial"]}
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la clase comercial!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione la clase comercial!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2081,26 +2087,26 @@ const FormProducto = (props) => {
                       ) : null}
 
                       {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                      infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
-                      infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
-                      infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
-                      infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
-                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
-                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                      infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
-                      infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
+                        infoTecnicaGrupo === "60d6176a3e1331ca13a5f649" ||
+                        infoTecnicaGrupo === "60d4c04c0a5d5fb5e8e1ce12" ||
+                        infoTecnicaGrupo === "60d61769637c1aca1384fe74" ||
+                        infoTecnicaLinea === "60d4c04851cbd1b5e83632d3" ||
+                        infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ||
+                        infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                        infoTecnicaLinea === "60d4c04880c445b5e8b87047" ||
+                        infoTecnicaLinea === "60db4816d2a990117e29ad6b" ? (
                         <Form.Item
                           label="Garantía Comercial (años)"
                           name={["atributos_js", "garantia_comercial"]}
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el tiempo de garantía!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el tiempo de garantía!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2124,12 +2130,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el valor de absorción de agua!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el valor de absorción de agua!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2142,12 +2148,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione la resistencia al deslizamiento!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la resistencia al deslizamiento!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2167,12 +2173,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione la resistencia a la abrasión!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la resistencia a la abrasión!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2196,12 +2202,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la clase industrial!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione la clase industrial!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2223,12 +2229,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el tiempo de garantía!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el tiempo de garantía!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2251,12 +2257,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el tipo de hebra!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el tipo de hebra!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2271,9 +2277,9 @@ const FormProducto = (props) => {
                         </Form.Item>
                       ) : null}
                       {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                      infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                      infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                      infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+                        infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                        infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                        infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
                         <div>
                           <Form.Item
                             label="Biseles"
@@ -2281,12 +2287,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, ingrese el número de biseles!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, ingrese el número de biseles!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2294,8 +2300,8 @@ const FormProducto = (props) => {
                               min={0}
                               precision={0}
                               readOnly={!crud}
-                              // formatter={(value) => `${value} mm`}
-                              // parser={(value) => value.replace(" mm", "")}
+                            // formatter={(value) => `${value} mm`}
+                            // parser={(value) => value.replace(" mm", "")}
                             />
                           </Form.Item>
                           <Form.Item
@@ -2304,12 +2310,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione la resistencia a la abrasión!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione la resistencia a la abrasión!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2328,12 +2334,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione el sistema de click!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione el sistema de click!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2352,12 +2358,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione si la generación de click!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione si la generación de click!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2380,12 +2386,12 @@ const FormProducto = (props) => {
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione si tiene subcapa adherida!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione si tiene subcapa adherida!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2403,15 +2409,14 @@ const FormProducto = (props) => {
                             )}
                           </Form.Item>
                         </div>
-                      ) : null}
-                    </Col>
-                  </Row>
-                  {/* <Divider /> */}
+                      ) : null} */}
+              
+                {/* <Divider /> */}
 
-                  {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
-                  infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
-                  infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
-                  infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
+                {/* {infoTecnicaLinea === "60d4c046e600f1b5e85d075c" ||
+                    infoTecnicaLinea === "60d4c0476e8514b5e8c66fd5" ||
+                    infoTecnicaLinea === "60d4c04c0a5d5fb5e8e1ce12" ||
+                    infoTecnicaLinea === "60d4c0491b6606b5e836f80f" ? (
                     <Row>
                       <Col span={12}></Col>
                       <Col span={12}></Col>
@@ -2425,12 +2430,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el número de puntadas cada 10cm!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el número de puntadas cada 10cm!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2442,12 +2447,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el número de puntadas por m2!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el número de puntadas por m2!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2459,12 +2464,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el número de filamentos por puntada!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el número de filamentos por puntada!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2478,12 +2483,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese el número de filamentos por m2!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese el número de filamentos por m2!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2495,12 +2500,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese la medida de galga!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese la medida de galga!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2517,12 +2522,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el tipo(s) de filamento!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el tipo(s) de filamento!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2550,12 +2555,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el material!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el material!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2573,12 +2578,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el color de la subcapa",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el color de la subcapa",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2598,12 +2603,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el tipo de esponja!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el tipo de esponja!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2618,20 +2623,20 @@ const FormProducto = (props) => {
                         </Form.Item>
 
                         {infoTecnicaLinea === "60d4c04a145bfab5e81b4626" ||
-                        infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ||
-                        infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
+                          infoTecnicaLinea === "60d4c04bc02e32b5e8ac7b68" ||
+                          infoTecnicaLinea === "60d4c04ba23e72b5e8f93e11" ? (
                           <Form.Item
                             label="Uso(s)"
                             name={["atributos_js", "usos"]}
                             rules={
                               crud
                                 ? [
-                                    {
-                                      required: true,
-                                      message:
-                                        "Por favor, seleccione los usos!",
-                                    },
-                                  ]
+                                  {
+                                    required: true,
+                                    message:
+                                      "Por favor, seleccione los usos!",
+                                  },
+                                ]
                                 : []
                             }
                           >
@@ -2646,20 +2651,20 @@ const FormProducto = (props) => {
                                   ? subcapaList
                                   : infoTecnicaGrupo ===
                                     "60d617738d422eca134f6685"
-                                  ? termostatosList
-                                  : infoTecnicaGrupo ===
-                                    "60d61771a442edca131848b6"
-                                  ? cartuchosList
-                                  : infoTecnicaGrupo ===
-                                    "60d61771f30664ca137cf63f"
-                                  ? pegamentosList
-                                  : infoTecnicaGrupo ===
-                                    "60d617724ce2a1ca13e92920"
-                                  ? mallasCeramicaList
-                                  : infoTecnicaGrupo ===
-                                    "60d617724cbea5ca130847e1"
-                                  ? mallasPisosFlotantesList
-                                  : []}
+                                    ? termostatosList
+                                    : infoTecnicaGrupo ===
+                                      "60d61771a442edca131848b6"
+                                      ? cartuchosList
+                                      : infoTecnicaGrupo ===
+                                        "60d61771f30664ca137cf63f"
+                                        ? pegamentosList
+                                        : infoTecnicaGrupo ===
+                                          "60d617724ce2a1ca13e92920"
+                                          ? mallasCeramicaList
+                                          : infoTecnicaGrupo ===
+                                            "60d617724cbea5ca130847e1"
+                                            ? mallasPisosFlotantesList
+                                            : []}
                               </Select>
                             ) : (
                               <TextArea
@@ -2673,20 +2678,20 @@ const FormProducto = (props) => {
                     </Row>
                   ) : infoTecnicaLinea ===
                     "60d4c04851cbd1b5e83632d3" ? null : infoTecnicaLinea ===
-                    "60d4c04ba23e72b5e8f93e11" ? null : infoTecnicaLinea ===
-                    "60d4c0476e8514b5e8c66fd5" ? (
+                      "60d4c04ba23e72b5e8f93e11" ? null : infoTecnicaLinea ===
+                        "60d4c0476e8514b5e8c66fd5" ? (
                     <Form.Item
                       label="Espesor de Capa de Madera"
                       name={["atributos_js", "espesor_capa_madera"]}
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message:
-                                  "Por favor, ingrese el espesor de la capa de madera",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el espesor de la capa de madera",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -2707,12 +2712,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione la capacidad de rodamiento de carga!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione la capacidad de rodamiento de carga!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2735,12 +2740,12 @@ const FormProducto = (props) => {
                               rules={
                                 crud
                                   ? [
-                                      {
-                                        required: true,
-                                        message:
-                                          "Por favor, ingrese el tiempo de trabajo!",
-                                      },
-                                    ]
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el tiempo de trabajo!",
+                                    },
+                                  ]
                                   : []
                               }
                             >
@@ -2758,12 +2763,12 @@ const FormProducto = (props) => {
                               rules={
                                 crud
                                   ? [
-                                      {
-                                        required: true,
-                                        message:
-                                          "Por favor, ingrese el tiempo de oreo!",
-                                      },
-                                    ]
+                                    {
+                                      required: true,
+                                      message:
+                                        "Por favor, ingrese el tiempo de oreo!",
+                                    },
+                                  ]
                                   : []
                               }
                             >
@@ -2783,12 +2788,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, ingrese la presentacion!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, ingrese la presentacion!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2802,11 +2807,11 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message: "Por favor, seleccione el color!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message: "Por favor, seleccione el color!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2826,12 +2831,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el tipo de olor!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el tipo de olor!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2851,12 +2856,12 @@ const FormProducto = (props) => {
                           rules={
                             crud
                               ? [
-                                  {
-                                    required: true,
-                                    message:
-                                      "Por favor, seleccione el tipo adherencia!",
-                                  },
-                                ]
+                                {
+                                  required: true,
+                                  message:
+                                    "Por favor, seleccione el tipo adherencia!",
+                                },
+                              ]
                               : []
                           }
                         >
@@ -2875,7 +2880,75 @@ const FormProducto = (props) => {
                   ) : infoTecnicaLinea ===
                     "60db4816d2a990117e29ad6b" ? null : null}
                 </Panel>
-              ) : null}
+              ) : null} */}
+
+
+              <Panel
+                className="tecnica"
+                header="INFORMACIÓN TÉCNICA"
+                key="4"
+                extra={genExtra()}
+              >
+                <Row>
+                  <Col span={12}>
+                    {crud ?
+                      <Form.Item
+                        label="URL FICHA TECNICA"
+                        name="url_fichatecnica"
+                        rules={
+                          crud
+                            ? [
+                              {
+                                required: false,
+                                message: "Por favor, ingrese la ficha tecnica!",
+                              },
+                            ]
+                            : []
+                        }
+                      >
+
+
+                        <Input
+                          name="url_fichatecnica"
+                          className="input-type"
+                          // readOnly={false}
+                          value={!crud ? editProducto.url_fichatecnica : null}
+                          placeholder="Basic usage"
+                          onChange={e => setUrlfichatecnica(e.target.value)}
+                          readOnly={!crud}
+                        />
+
+                      </Form.Item>
+
+                      : null}
+                  </Col>
+                </Row>
+                <Row>
+                  <Col span={24}>
+                    {crud ?
+                      <GoogleDocsViewer
+                        //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                        source={!urlfichatecnica ? editProducto.url_fichatecnica : urlfichatecnica.includes("drive.google.com") ? urlfichatecnica : null}
+                      /> :
+                      editProducto ? <GoogleDocsViewer
+                        //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                        source={urlfichatecnica ? urlfichatecnica:editProducto.url_fichatecnica }
+                      /> :
+                        urlfichatecnica ?
+
+                          urlfichatecnica.includes("drive.google.com") ? <GoogleDocsViewer
+                            //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                            source={urlfichatecnica}
+                          />
+                            : null
+                          : null}
+
+
+
+
+                  </Col>
+                </Row>
+              </Panel>
 
               <Panel header="INFORMACIÓN COMERCIAL" key="2" extra={genExtra()}>
                 <Row>
@@ -2886,11 +2959,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el método ABC!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el método ABC!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -2914,12 +2987,12 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message:
-                                  "Por favor, seleccione el tipo de producto!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el tipo de producto!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -2942,12 +3015,12 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message:
-                                  "Por favor, seleccione el tipo de inventario!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione el tipo de inventario!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -2970,12 +3043,12 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message:
-                                  "Por favor, seleccione una unidad de medida!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione una unidad de medida!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -2996,12 +3069,12 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message:
-                                  "Por favor, seleccione una unidad de venta!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message:
+                                "Por favor, seleccione una unidad de venta!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3022,11 +3095,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el costo!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el costo!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3049,10 +3122,10 @@ const FormProducto = (props) => {
                               min={0}
                               precision={2}
                               readOnly={!crud}
-                              // formatter={(value) =>
-                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              // }
-                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            // formatter={(value) =>
+                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            // }
+                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                             />
                           </Form.Item>
                         </Row>
@@ -3064,23 +3137,23 @@ const FormProducto = (props) => {
                         unidadMedida === "60d4ffd26a0c87b992906be4"
                           ? "Precio sin IVA (M2)"
                           : unidadMedida === "60d4ffd22c89acb9921b328a"
-                          ? "Precio sin IVA (M)"
-                          : unidadMedida === "60d4ffd21f3a73b992f66054"
-                          ? "Precio sin IVA (GAL)"
-                          : unidadMedida === "60d4ffd377ef4ab9922ed0b2"
-                          ? "Precio sin IVA (ML)"
-                          : unidadMedida === "60f9a66edde7528bd5a5d257"
-                          ? "Precio sin IVA (UD.)"
-                          : "Precio sin IVA ()"
+                            ? "Precio sin IVA (M)"
+                            : unidadMedida === "60d4ffd21f3a73b992f66054"
+                              ? "Precio sin IVA (GAL)"
+                              : unidadMedida === "60d4ffd377ef4ab9922ed0b2"
+                                ? "Precio sin IVA (ML)"
+                                : unidadMedida === "60f9a66edde7528bd5a5d257"
+                                  ? "Precio sin IVA (UD.)"
+                                  : "Precio sin IVA ()"
                       }
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el precio!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el precio!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3103,11 +3176,11 @@ const FormProducto = (props) => {
                               min={0}
                               precision={2}
                               readOnly={!crud}
-                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                              // formatter={(value) =>
-                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              // }
-                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                            // formatter={(value) =>
+                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            // }
+                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                             />
                           </Form.Item>
                         </Row>
@@ -3147,11 +3220,11 @@ const FormProducto = (props) => {
                                 min={0}
                                 precision={2}
                                 readOnly={!crud}
-                                // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                                // formatter={(value) =>
-                                //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                // }
-                                // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                              // formatter={(value) =>
+                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              // }
+                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                               />
                             </Row>
                           </Space>
@@ -3185,11 +3258,11 @@ const FormProducto = (props) => {
                                 min={0}
                                 precision={2}
                                 readOnly={!crud}
-                                // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                                // formatter={(value) =>
-                                //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                // }
-                                // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                              // formatter={(value) =>
+                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              // }
+                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                               />
                             </Row>
                           </Space>
@@ -3224,11 +3297,11 @@ const FormProducto = (props) => {
                                 min={0}
                                 precision={2}
                                 readOnly={!crud}
-                                // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                                // formatter={(value) =>
-                                //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                                // }
-                                // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                              // formatter={(value) =>
+                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                              // }
+                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                               />
                             </Row>
                           </Space>
@@ -3242,11 +3315,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el IVA!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el IVA!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3265,12 +3338,12 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message:
-                                  "Por favor, ingrese el limite de descuento 1!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese el limite de descuento 1!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3287,11 +3360,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el descuento!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el descuento!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3308,11 +3381,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el descuento!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el descuento!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3329,11 +3402,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el descuento!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el descuento!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3350,11 +3423,11 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message: "Por favor, ingrese el descuento!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message: "Por favor, ingrese el descuento!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3371,12 +3444,12 @@ const FormProducto = (props) => {
                       rules={
                         crud
                           ? [
-                              {
-                                required: true,
-                                message:
-                                  "Por favor, ingrese la dimensión de unidad de venta!",
-                              },
-                            ]
+                            {
+                              required: true,
+                              message:
+                                "Por favor, ingrese la dimensión de unidad de venta!",
+                            },
+                          ]
                           : []
                       }
                     >
@@ -3404,16 +3477,16 @@ const FormProducto = (props) => {
                                 (form.getFieldValue("precio") *
                                   1.12 *
                                   form.getFieldValue("limite_descuento1")) /
-                                  100
+                                100
                               }
                               min={0}
                               precision={2}
                               readOnly={!crud}
-                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                              // formatter={(value) =>
-                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              // }
-                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                            // formatter={(value) =>
+                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            // }
+                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                             />
                           </Row>
                         </Space>
@@ -3442,16 +3515,16 @@ const FormProducto = (props) => {
                                 (form.getFieldValue("precio") *
                                   1.12 *
                                   form.getFieldValue("limite_descuento2")) /
-                                  100
+                                100
                               }
                               min={0}
                               precision={2}
                               readOnly={!crud}
-                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                              // formatter={(value) =>
-                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              // }
-                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                            // formatter={(value) =>
+                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            // }
+                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                             />
                           </Row>
                         </Space>
@@ -3479,16 +3552,16 @@ const FormProducto = (props) => {
                                 (form.getFieldValue("precio") *
                                   1.12 *
                                   form.getFieldValue("limite_descuento3")) /
-                                  100
+                                100
                               }
                               min={0}
                               precision={2}
                               readOnly={!crud}
-                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                              // formatter={(value) =>
-                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              // }
-                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                            // formatter={(value) =>
+                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            // }
+                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                             />
                           </Row>
                         </Space>
@@ -3516,16 +3589,16 @@ const FormProducto = (props) => {
                                 (form.getFieldValue("precio") *
                                   1.12 *
                                   form.getFieldValue("limite_descuento4")) /
-                                  100
+                                100
                               }
                               min={0}
                               precision={2}
                               readOnly={!crud}
-                              // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
-                              // formatter={(value) =>
-                              //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                              // }
-                              // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            // onBlur={() => form.setFieldsValue({precio : parseFloat(precio).toFixed(2).toString()})}
+                            // formatter={(value) =>
+                            //   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                            // }
+                            // parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
                             />
                           </Row>
                         </Space>
@@ -3602,6 +3675,65 @@ const FormProducto = (props) => {
                         </p>
                       )}
                     </Form.Item>
+
+
+                    {/* //////////////////////////////////////////////////////////////////////// */}
+                    {/* {crud ?
+                      <Form.Item
+                        label="URL FICHA TECNICA"
+                        name="url_fichatecnica"
+                        rules={
+                          crud
+                            ? [
+                              {
+                                required: true,
+                                message: "Por favor, ingresela ficha tecnica!",
+                              },
+                            ]
+                            : []
+                        }
+                      >
+
+
+                        <Input
+                          name="url_fichatecnica"
+                          className="input-type"
+                          // readOnly={false}
+                          value={!crud ? editProducto.url_fichatecnica : null}
+                          placeholder="Basic usage"
+                          onChange={e => setUrlfichatecnica(e.target.value)}
+                          readOnly={!crud}
+                        />
+
+                      </Form.Item>
+
+                      : null}
+
+                    {crud ?
+                      <GoogleDocsViewer
+                        //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                        source={!urlfichatecnica ? editProducto.url_fichatecnica : urlfichatecnica.includes("drive.google.com") ? urlfichatecnica : null}
+                      /> :
+                      editProducto ? <GoogleDocsViewer
+                        //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                        source={editProducto.url_fichatecnica}
+                      /> :
+                        urlfichatecnica ?
+
+                          urlfichatecnica.includes("drive.google.com") ? <GoogleDocsViewer
+                            //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"
+                            source={urlfichatecnica}
+                          />
+                            : null
+                          : null} */}
+
+
+
+                    {/* //////////////////////////////////////////////////////////////////////// */}
+
+
+
+
                   </Col>
                 </Row>
               </Panel>

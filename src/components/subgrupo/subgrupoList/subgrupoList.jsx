@@ -160,7 +160,7 @@ export const SubgrupoList = () => {
   fileUrl="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/view"
 /> */}
 
-<Input name="123" placeholder="Basic usage" onChange={e=> setprueba(e.target.value)} />
+<Input  placeholder="Basic usage" onChange={e=> setprueba(e.target.value)} />
 
 {prueba.includes("drive.google.com")?<GoogleDocsViewer
   //source="https://drive.google.com/file/d/1rm_6zCtQt7dj29yC_8yEIjYSHa_0asao/preview"

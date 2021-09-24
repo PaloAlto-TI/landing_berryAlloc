@@ -27,7 +27,7 @@ import React from "react";
 
 const DocIframe = ({ source }) => {
   if (!source) {
-    return <div>Loading...</div>;
+    return <div></div>;
   }
 
   const src = source;
