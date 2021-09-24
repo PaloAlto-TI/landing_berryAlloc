@@ -62,7 +62,7 @@ function valid()
   if (sesions){
   if(sesions._usuario[0].rol===2)
   {
-   return ("VENTAS")
+   return ("PALO ALTO")
   }
   else {
     return "PALO ALTO"
