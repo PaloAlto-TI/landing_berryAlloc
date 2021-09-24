@@ -25,7 +25,7 @@
 
 import React from "react";
 
-const DocIframe = ({ source }) => {
+const DocIframe = ({ source,heightt,widtht }) => {
   if (!source) {
     return <div></div>;
   }
@@ -41,7 +41,7 @@ const DocIframe = ({ source }) => {
         //src={"https://docs.google.com/viewer?url=" + src + "&embedded=true"}
         src={ src.replace('view', 'preview') }
         title="file"
-        width="70%"
+        width="87%"
         height="600px"
         allow="autoplay"
       ></iframe>
