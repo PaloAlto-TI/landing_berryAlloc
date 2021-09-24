@@ -986,6 +986,7 @@ const FormProducto = (props) => {
        
       
       {crud ?
+       //hhkhkjhkhkhk
        
       codigo==="nuevo" && !urlfichatecnica ?null:   
       <GoogleDocsViewerModal 
