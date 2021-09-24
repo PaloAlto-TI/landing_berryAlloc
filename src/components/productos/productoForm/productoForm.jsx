@@ -2913,7 +2913,7 @@ const FormProducto = (props) => {
                           className="input-type"
                           // readOnly={false}
                           value={!crud ? editProducto.url_fichatecnica : null}
-                          placeholder="Basic usage"
+                          placeholder="Ficha Tecnica"
                           onChange={e => setUrlfichatecnica(e.target.value)}
                           readOnly={!crud}
                         />
