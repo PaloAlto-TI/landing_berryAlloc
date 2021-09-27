@@ -23,7 +23,11 @@ const SideMenu = () => {
   const onClose = () => {
     setVisible(false);
   };
+<<<<<<< HEAD
   // onClick={e => { history.push(${path}); window.location.reload(); }}
+=======
+  // onClick={e => { history.push(`${path}`); window.location.reload(); }}
+>>>>>>> PRODUCTOS_PA_MC
   return (
     <>
       <Row>
@@ -64,8 +68,8 @@ const SideMenu = () => {
   <Menu.Item key="7" icon={<BarcodeOutlined />}><a href={`${path}/productos`}>PRODUCTOS</a></Menu.Item>*/}
           {/* <Menu.Item key="8" icon={<FormatPainterOutlined />}><a href={`${path}/modelos`}>MODELOS</a></Menu.Item> */}
           {<SubMenu key="sub3" icon={<LineChartOutlined />} title="VISUALIZADORES">
-            <Menu.Item key="8" icon={<DropboxOutlined />}><a href={`${path}/visualizadores/stocks`}>STOCKS </a></Menu.Item>
-            {/* <Menu.Item key="9" icon={<DropboxOutlined />}><a href={`${path}/visualizadores/productoStocks`}>STOCKS</a></Menu.Item> */}
+            {/*<Menu.Item key="8" icon={<DropboxOutlined />}><a href={`${path}/visualizadores/stocks`}>STOCKS - OLD</a></Menu.Item>*/}
+            <Menu.Item key="8" icon={<DropboxOutlined />}><a href={`${path}/visualizadores/productoStocks`}>STOCKS</a></Menu.Item>
             <Menu.Item key="9" icon={<CodeSandboxOutlined />}><a href={`${path}/visualizadores/productos`}>PRODUCTOS</a></Menu.Item>
           </SubMenu>
           /*<SubMenu key="sub2" icon={<AppstoreOutlined />} title="PERSONAS">
