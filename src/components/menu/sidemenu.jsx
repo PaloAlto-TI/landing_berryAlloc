@@ -23,11 +23,7 @@ const SideMenu = () => {
   const onClose = () => {
     setVisible(false);
   };
-<<<<<<< HEAD
-  // onClick={e => { history.push(${path}); window.location.reload(); }}
-=======
   // onClick={e => { history.push(`${path}`); window.location.reload(); }}
->>>>>>> PRODUCTOS_PA_MC
   return (
     <>
       <Row>
