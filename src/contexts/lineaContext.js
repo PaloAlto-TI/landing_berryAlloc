@@ -18,6 +18,16 @@ const LineaContextProvider = (props) => {
     lineaService.get_lineas_marcas_nn().then((data) => { if (data.length===0) setIsEmpty(true) ; set_lineas_marcas_nn(data)});
   }, []);
 
+  const filterLineas = async (id) => {
+    setLineas([]);
+    setIsEmpty(false);
+    if (id === "all") {
+      LineaService.getAllLineas().then((data) => { if (data.length === 0) setIsEmpty(true); setLineas(data) });
+    } else {
+      LineaService.getLineas(/*{ linea_id: id }*/).then((data) => { if (data.length === 0) setIsEmpty(true); setLineas(data) });
+    }
+  }
+
   const createLinea = async (linea) => {
     const data = await lineaService.create(linea);
 
@@ -76,6 +86,7 @@ const LineaContextProvider = (props) => {
           permiso,
           setPermiso,
           setEditLinea,
+          filterLineas,
           isEmpty
       }}>
           {props.children}

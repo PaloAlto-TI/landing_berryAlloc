@@ -2,6 +2,7 @@ import { combineReducers, createStore, applyMiddleware } from "redux";
 import createSagaMiddleware from "redux-saga";
 import productoReducer from "./ducks/producto.duck";
 import stocksReducer from "./ducks/stocks.duck";
+import productostocksReducer from "./ducks/productoStocks.duck"; //CREADO POR MANUEL CORONEL
 import { watcherSaga, watcherSaga2, watcherSaga3, watcherSaga4, watcherSaga5, watcherSaga6, watcherSaga7 } from "./middleware/saga/sagas/producto.sagas";
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { initSagas } from "./middleware/saga";
@@ -9,7 +10,8 @@ import { initSagas } from "./middleware/saga";
 const reducer = combineReducers({
   
   productos: productoReducer,
-  stocks: stocksReducer
+  stocks: stocksReducer,
+  productostocks: productostocksReducer
 });
 
 const sagaMiddleware = createSagaMiddleware();

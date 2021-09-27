@@ -25,6 +25,7 @@ const SubgrupoContextProvider = (props) => {
   }, []);
 
   const filterSubgrupos = async (id) => {
+    console.log("tttttttttttttttttt")
     setSubgrupos([]);
     setIsEmpty(false);
     if (id === "all") {

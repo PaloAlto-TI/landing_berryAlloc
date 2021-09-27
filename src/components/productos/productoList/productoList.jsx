@@ -24,6 +24,7 @@ import { SesionContext } from "../../../contexts/sesionContext";
 const ProductoList = (props) => {
   const { setMoved, sesions } = useContext(SesionContext);
   const { lineaV, marcaV, grupoV, visualizador, stocks } = props;
+  // console.log("LO QUE ME TRAJO EL VI: " + lineaV + " MARCAV : " + marcaV + " EL GRUPO: " + grupoV + " EL VISUALIZADOR: " + visualizador + " LOS STOCKS: " + stocks)
   // const {
   //   // productos,
   //   setPermiso,
@@ -39,7 +40,9 @@ const ProductoList = (props) => {
   const producto = useSelector((state) => state.productos.producto);
   const loading = useSelector((state) => state.productos.loading);
   const response = useSelector((state) => state.productos.response);
-  const grupos = useSelector((state) => state.stocks.grupos);
+  // const grupos = useSelector((state) => state.stocks.grupos);
+  const grupos = useSelector((state) => state.productostocks.grupos); // AGREGADO POR MANUEL CORONEL
+  // console.log("LOS GRUPOS DEL STATE EN LISTADO PRODUCTOS: " + JSON.stringify(grupos))
   const [selectedLineaId, setSelectedLineaId] = useState(
     grupos
       ? lineaV
@@ -692,6 +695,12 @@ const ProductoList = (props) => {
     <div>
       <br />
       <Divider>PRODUCTOS</Divider>
+      {/* const { lineaV, marcaV, grupoV, visualizador, stocks } = props; */}
+      {/* <Divider className="titleFont">{"EL LINEAV: " + lineaV}</Divider>
+      <Divider className="titleFont">{"EL MARCAV: " + marcaV}</Divider>
+      <Divider className="titleFont">{"EL GRUPOV: " + grupoV}</Divider>
+      <Divider className="titleFont">{"EL VISUALIZADOR: " + visualizador}</Divider>
+      <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider> */}
       <br />
       <Row>
         {visualizador ? (

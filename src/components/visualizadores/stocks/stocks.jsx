@@ -22,6 +22,7 @@ import { useHistory, useRouteMatch } from "react-router";
 
 const Stocks = () => {
   const subgrupos = useSelector((state) => state.stocks.subgrupos);
+  // console.log("EL SATESTOCKS: ", subgrupos)
   const productos = useSelector((state) => state.productos.productos);
   const grupos = useSelector((state) => state.stocks.grupos);
   const _lineas = useSelector((state) => state.stocks.lineas);
@@ -44,7 +45,10 @@ const Stocks = () => {
   }, [dispatch]);
 
   useEffect(() => {
+    
     if (grupos) {
+      // alert("hara la magia: ")
+    console.log("hara la magia: ", grupos)
       setLineas(
         grupos
           .map((g) => g.fk_lineamarca.fk_linea)
@@ -54,6 +58,7 @@ const Stocks = () => {
   }, [grupos]);
 
   useEffect(() => {
+    console.log("WWWW: ")
     setLineas(_lineas);
   }, [_lineas]);
 
@@ -82,10 +87,11 @@ const Stocks = () => {
 
   const goMarcas = (id) => {
     setTitle("MARCAS");
-
+    alert("si alert")
     setSelectedLineaID(id);
 
     console.log("ASDF", id)
+    console.log("LA DATA A MAPPEAR DE GRUPOS: ", JSON.stringify(grupos))
     setMarcas(
       grupos
         .filter((g) => g.fk_lineamarca.fk_linea.id === id)
@@ -98,6 +104,7 @@ const Stocks = () => {
 
   const goLineas = (id) => {
     setTitle("LÍNEAS");
+    alert("va al go lineas")
     setHasReturn(true);
     if (id === 'all'){
       dispatch(getLineas());
@@ -126,6 +133,7 @@ const Stocks = () => {
   const goBack = (id) => {
     if (grupos) {
       if (!selectedLineaID) {
+        alert("EN ESTE ENTRAAA   1111"  )
         setHasReturn(false);
         setLineas(null);
         setTitle("TIPO");
@@ -139,6 +147,7 @@ const Stocks = () => {
         setTitle("MARCAS");
       }
        else {
+         alert("EN ESTE ENTRAAA")
         setSelectedGrupoID(null);
         dispatch(getSubgrupos());
       }
@@ -159,6 +168,9 @@ const Stocks = () => {
         )}
 
         <Divider orientation="left">{title}</Divider>
+        <Divider className="titleFont">{"LINEAS DATA: " + JSON.stringify(lineas)}</Divider>
+        <Divider className="titleFont">{"GRUPO SLEECTED: " + selectedGrupoID}</Divider>
+        <Divider className="titleFont">{"GRUPOS DATA: " + JSON.stringify(grupos)}</Divider>
         {/* <Button type="primary" style={{width:'100%', textAlign:'left'}} onClick={(()=>{lineas ? goMarcas('all'): goLineas('all')})}>TODOS <ArrowRightOutlined/></Button> */}
         <List
           itemLayout="horizontal"
