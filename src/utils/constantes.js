@@ -1,10 +1,4 @@
 
 //export const baseUrl="http://localhost:5050/";
-<<<<<<< HEAD
-//export const baseUrl="https://api-palo-alto.herokuapp.com/";
-//export const baseUrl="http://localhost:5050/";
-export const baseUrl="https://api-palo-alto.herokuapp.com/";
-=======
  // export const baseUrl="https://api-palo-alto.herokuapp.com/";
 export const baseUrl="http://localhost:5050/";
->>>>>>> PRODUCTOS_PA_MC
