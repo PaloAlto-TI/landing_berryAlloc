@@ -10,7 +10,7 @@ export function getAllSubgrupos(){
       });
 }
 export function getAllLineas(){
-  return axios.get(baseUrl+"lineas", {
+  return axios.get(baseUrl+"lineas-orden", {
       headers: {
         Authorization: `Bearer ${REACT_APP_API_KEY}`,
       },

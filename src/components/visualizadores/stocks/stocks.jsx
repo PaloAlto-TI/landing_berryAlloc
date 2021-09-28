@@ -279,7 +279,7 @@ const Stocks = () => {
           }
           renderItem={(item) => (
             <List.Item
-              style={{ textAlign: "left", marginLeft: "3.4vw" }}
+              style={{ textAlign: "left", marginLeft: "3.4vw", cursor: "pointer"  }}
               onClick={() =>
                 _grupos
                   ? goProductos(item.id)
@@ -313,12 +313,17 @@ const Stocks = () => {
     return (
       <>
         {hasReturn && (
-          <Button
+         <div> <Button
             type="primary"
             style={{ marginLeft: "91vw" }}
             icon={<ArrowLeftOutlined />}
             onClick={() => goBack()}
-          />
+          />&nbsp;<Button
+          type="primary"
+          // style={{ marginLeft: "91vw" }}
+          icon={<HomeOutlined />}
+         onClick={() => goBackHome()}
+        /></div>
         )}
         <ProductoList
           stocks={true}
