@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext,useState } from 'react';
 import './sidemenu.css';
 import { Menu } from 'antd';
 import { /*StarOutlined, FormatPainterOutlined,*/ PlusCircleOutlined, DollarCircleOutlined,
   MenuOutlined, HighlightOutlined, HomeOutlined, LineChartOutlined, CodeSandboxOutlined,
   FundOutlined, BarcodeOutlined, BlockOutlined, BorderOutlined, DropboxOutlined
 } from '@ant-design/icons';
+import { SesionContext } from "../../contexts/sesionContext";
 // import { useHistory } from "react-router";
 //LDKJVBLKSJDBVKLDBVLK
 import { Row, Col, Drawer } from 'antd';
@@ -12,6 +13,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 const SideMenu = () => {
+  var { setMoved, sesions } = useContext(SesionContext);
   let { path } = useRouteMatch();
   // let history = useHistory();
   const [visible, setVisible] = useState(false);
@@ -44,6 +46,7 @@ const SideMenu = () => {
           style={{ width: "100%" }}
           mode="inline">
           <Menu.Item key="1" icon={<HomeOutlined />}><a href={`${path}`}>INICIO</a></Menu.Item>
+          {sesions?sesions._usuario[0].rol === 2?
           <SubMenu key="sub1" icon={<PlusCircleOutlined />} title="CREAR">
             <Menu.Item key="2" icon={<HighlightOutlined />}><a href={`${path}/lineas`}>LÍNEAS</a></Menu.Item>
             <Menu.Item key="3" icon={<FundOutlined />}><a href={`${path}/marcas`}>MARCAS</a></Menu.Item>
@@ -54,6 +57,8 @@ const SideMenu = () => {
             <Menu.Item key="6" icon={<DollarCircleOutlined />}><a href={`${path}/proveedores`}>PROVEEDORES</a></Menu.Item>
             <Menu.Item key="7" icon={<BarcodeOutlined />}><a href={`${path}/productos`}>PRODUCTOS</a></Menu.Item>
           </SubMenu>
+
+          :null:null}
           {/*<Menu.Item key="2" icon={<HighlightOutlined />}><a href={`${path}/lineas`}>LÍNEAS</a></Menu.Item>
           <Menu.Item key="3" icon={<FundOutlined />}><a href={`${path}/marcas`}>MARCAS</a></Menu.Item>
           <SubMenu key="sub1" title="GRUPOS">
