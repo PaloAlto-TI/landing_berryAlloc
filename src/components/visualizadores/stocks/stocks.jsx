@@ -25,6 +25,7 @@ import { useHistory, useRouteMatch } from "react-router";
 
 const Stocks = () => {
   const subgrupos = useSelector((state) => state.stocks.subgrupos);
+  // console.log("EL SATESTOCKS: ", subgrupos)
   const productos = useSelector((state) => state.productos.productos);
   const grupos = useSelector((state) => state.stocks.grupos);
   const _lineas = useSelector((state) => state.stocks.lineas);
@@ -128,6 +129,7 @@ const Stocks = () => {
   const goLineas = (id) => {
 
     setTitle("LÍNEAS");
+    alert("va al go lineas")
     setHasReturn(true);
     if (id === 'all'){
       dispatch(getLineas());
@@ -187,6 +189,7 @@ const Stocks = () => {
 
    if (_grupos) {
       if (!selectedLineaID) {
+        alert("EN ESTE ENTRAAA   1111"  )
         setHasReturn(false);
         setLineas(null);
         setTitle("TIPO");

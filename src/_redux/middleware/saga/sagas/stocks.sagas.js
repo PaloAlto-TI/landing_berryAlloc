@@ -3,7 +3,9 @@ import { GET_GRUPOS,GET_MARCAS,GET_SUBGRUPOS, GET_GRUPOS_LINEA_BY_SUBGRUPO, GET_
 import { handleGetAlltGrupos,handleGetAllLineas,handleGetAllMarcas,handleGetSubgrupos, handleGetGruposLineaBySubgrupo } from "../handlers/stocks.handlers";
 
 export function* saga() {
+  console.log("ENTRA A LA SAGA DE STOCKS OLD")
   yield takeLatest(GET_SUBGRUPOS, handleGetSubgrupos);
+  // yield takeLatest(GET_LINEAS, );
 }
 
 export function* saga2() {

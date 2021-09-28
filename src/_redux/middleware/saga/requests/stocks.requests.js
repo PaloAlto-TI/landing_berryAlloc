@@ -50,3 +50,14 @@ export function getLineasStock(){
       });
 }
 
+// CREADO POR MANUEL CORONEL
+
+/*export function getAllLineas(){
+
+  return axios.get(baseUrl+"lineas-appsheet", {
+      headers: {
+        Authorization: `Bearer ${REACT_APP_API_KEY}`,
+      },
+    });
+}*/
+

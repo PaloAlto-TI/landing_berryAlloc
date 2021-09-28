@@ -1,8 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Redirect, useParams } from "react-router-dom";
-import { Form, Input, Button, message, Row, Col, Divider, Spin } from "antd";
+import { Form, Input, Button, message, Row, Col, Divider, Spin, Collapse, Checkbox, Space } from "antd";
 import { useHistory } from "react-router";
-import { SaveOutlined, CloseSquareOutlined, RollbackOutlined, LoadingOutlined } from "@ant-design/icons";
+import {
+  SaveOutlined, CloseSquareOutlined, RollbackOutlined, LoadingOutlined,
+  PushpinFilled, CheckCircleFilled, CloseCircleFilled, MinusCircleOutlined, PlusOutlined
+} from "@ant-design/icons";
 import { GrupoContext } from "../../../contexts/grupoContext";
 import { SecuencialesGrupoService } from "../../../services/secuencialesGrupoService";
 import { LineasMarcasService } from "../../../services/lineasMarcasService";
@@ -14,6 +17,7 @@ import Hashids from 'hashids';
 let { REACT_APP_SEED } = process.env;
 const hashids = new Hashids(REACT_APP_SEED);
 const { TextArea } = Input;
+const { Panel } = Collapse;
 
 const FormGrupo = (props) => {
   var { setMoved, sesions } = useContext(SesionContext);
@@ -31,6 +35,7 @@ const FormGrupo = (props) => {
   );
 
   const [id, setId] = useState(null);
+  const [show, setShow] = useState(null);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaMarcaId, setSelectedLineaMarcaId] = useState(undefined);
@@ -93,6 +98,15 @@ const FormGrupo = (props) => {
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
+  const genExtra = () => (
+    <PushpinFilled
+      onClick={(event) => {
+        // If you don't want click extra trigger collapse, you can prevent this:
+        event.stopPropagation();
+      }}
+    />
+  );
+
   useEffect(() => {
     if (crud === null) {
       setCrud(operacion === "editar" || codigo === "nuevo" ? true : false);
@@ -104,30 +118,10 @@ const FormGrupo = (props) => {
       form.setFieldsValue({ codigo: codigoInterno[0].code_to_add })
 
     }
-
-    /*if (form.getFieldValue("codigo") && form.getFieldValue("fk_marca_id")) {
-      // console.log("HAY CAMBIOS EN EL CODIGO DE GRUPO!!!: ")
-      console.log("USEEFFECT - EL EDIT GRUPPO Q TENNGO: ", JSON.stringify(editGrupo))
-
-      if (operacion === "editar") {
-
-        if (form.getFieldValue("fk_marca_id") !== editGrupo.fk_marca_id) {
-
-          console.log("USEEFFECT - DEBE CONSULTAR UN NUEVO CODIGOL")
-
-          // INCIO DE TRAIDA DE SECUENCIAL
-          
-
-        } else {
-
-          console.log("USEEFFECT -DEBE VOLVER AL CODIGO INICIAL")
-          form.setFieldsValue({
-            codigo: editGrupo.codigo
-          });
-
-        }
-      }
-    }*/
+    if (show === null) {
+      window.scrollTo(0, 0);
+      setShow(crud);
+    }
 
     if (editGrupo) {
       // console.log("QUIERO SETEAR CON ESTO:  "+ editGrupo.grupo_marcas_nn[0].grupo_marca.fk_linea_id)
@@ -208,7 +202,7 @@ const FormGrupo = (props) => {
         // console.log("VOY A COMPARAR ESTO: " + data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id)
         // REVISAR return data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId);
 
-        // DEEBE IR IF 
+        // DEBE IR IF 
 
         // console.log("LO QUE QUIERO ASIGNAR: " + data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id);
         // initialValues.fk_linea_marca = data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id;
@@ -296,97 +290,85 @@ const FormGrupo = (props) => {
 
     if (formFieldName === "fk_marca_id") {
       setSelectedMarcaId(changedValues[formFieldName]);
-      const lineasMarcasService = new LineasMarcasService();
-      // console.log("LA MARCA CON LA QUE VA A MAPEAR: " + changedValues[formFieldName])
 
-      const codigoInternoData = await lineasMarcasService.getAll().then((data) => { // OBSERVACIÓN 31/08/2021: DEBE SER EL LLAMADO A UN GETONE() - MC
-        // console.log("LA DATA LINEA_MARCA: ", data);
-        // console.log("CON LO QUE VA A MAPPEAR: ", changedValues[formFieldName])
-        // console.log("CON LO QUE VA A MAPPEAR LINEA ID: ", selectedLineaId)
-        // console.log("LA DATA DE LINEA_MARCA MAPPEADO: " +  JSON.stringify(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)))
-        // setSelectedLineaMarcaId(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId))
-
-        // initialValues.fk_linea_marca = data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id;
-        // console.log("MI VALUES!! " + JSON.stringify(initialValues))
-
-        // setCodigoInterno(data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id);
-        // console.log("VOY A COMPARAR ESTO: " + data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id)
-        // REVISAR return data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId);
-
-        // DEEBE IR IF 
-        // console.log("LO QUE QUIERO ASIGNAR: " + data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id);
-        // initialValues.fk_linea_marca = data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId)[0].id;
-        // setOpciones(data.filter((p) => p.marca_id === filter && p.linea_id === filter2));
-        // setOpciones(data.filter((p) => p.linea_id === filter));
-
-        // console.log("QUIERE FILTRAR PPOR ESTO FK_MARCA_ID : " + changedValues[formFieldName] + " , fk_linea_id == "+  selectedLineaId)
-        return data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId);
-      });
-
-      /*secuencialesService.getOne(typeTransactionData).then((data) => {
-        // console.log("LA DATA QUE DEVUELVE DEL SERVICE: ", data)
-        if (data.message.includes("OK")) {
-          if (data.data) {
-          // console.log("SE VA CON ESTE CODIGO: ", data.data.code_to_add)
-          setCodigoInterno(data.data)
-          }
-          
-        } else {
-
-        }
-      });*/
-
-      // console.log("LENGTH: " + codigoInternoData.length + " LO QUE DEVUELVE EL DATA DE CODIGO: " + JSON.stringify(codigoInternoData));
-
-      if (codigoInternoData.length > 0) {
-        // console.log("QUIERE ASIGNAR ESTOOOOOOOOO: ", codigoInternoData[0])
-        setSelectedLineaMarcaId(codigoInternoData[0])
-        initialValues.fk_linea_marca = codigoInternoData[0].id;
-        // console.log("MI VALUES!! " + JSON.stringify(initialValues))
-
-        if (typeTransactionData) {
-          // 13/09/2021 - OBSERVACIÓN: SE DEBERÍA DEFINIR UN NOMBRE PARA HACER ESE TIPO DE BÚSQUEDA O FILTRO DESDE UNA VISTA
-          // Example: typeTransactionData.filterColumView
-          typeTransactionData.fk_linea_marca = codigoInternoData[0].id;
-
-          const secuencialesGrupoService = new SecuencialesGrupoService();
-          secuencialesGrupoService.getOne(typeTransactionData).then((data) => {
-
-            if (data.message.includes("OK")) {
-              if (data.data) {
-                // console.log("SE VA CON ESTE CODIGO: ", data.data.code_to_add)
-                setCodigoInterno(data.data.code_to_add);
-                form.setFieldsValue({ codigo: data.data.code_to_add });
-                // console.log("EL LENGTH : ", data.data.length)
-                ///console.log("EXISTEEEEEEE: ", tempCodigoInterno.length)
-                // const tempCodigoInterno = data.data;
-                // if (data.data.length > 0) {
-                ///console.log("EXISTEEEEEEE: ", tempCodigoInterno.length)
-                // setCodigoInterno(data.data.code_to_add);
-                // form.setFieldsValue({ codigo: data.data.code_to_add });
-                // } else {
-                // setCodigoInterno("001");
-                // form.setFieldsValue({ codigo: "001" });
-                /// }
-                // setCodigoInterno(tempCodigoInterno[0].code_to_add);
-                // form.setFieldsValue({ codigo: tempCodigoInterno[0].code_to_add });
-              } else {
-                setCodigoInterno("001");
-                form.setFieldsValue({ codigo: "001" });
-              }
-              setCodigoInterno(data.data)
-              // }
-
-            } else {
-              // 09/09/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO O EL MANEJO DE UN CASO QUE NO SE ENCUENTRE UN CÓDIGO
-              // alert("ERROR AL GENERAR EL CÓDIGO INTERNO A INGRESAR: " + data.message)
-              setCodigoInterno(data.data)
-            }
+      if (operacion === "editar") {
+        // console.log("VA A COMPARA ESTO: " + form.getFieldValue("fk_marca_id") + " CON ESTO: " + editGrupo.fk_marca_id)
+        if (form.getFieldValue("fk_marca_id") !== editGrupo.fk_marca_id) {
+          // console.log("DEBE CONSULTAR UN NUEVO CODIGO")
+          const lineasMarcasService = new LineasMarcasService();
+          const codigoInternoData = await lineasMarcasService.getAll().then((data) => { // OBSERVACIÓN 31/08/2021: DEBE SER EL LLAMADO A UN GETONE() - MC
+            return data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId);
           });
-        }// 17/09/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO CUANDO NO TENGA UN typeTransactionData Ó LA ESTRUCTURA CORRECTA EN ESTA VARIABLE
+
+          if (codigoInternoData.length > 0) {
+            setSelectedLineaMarcaId(codigoInternoData[0])
+            initialValues.fk_linea_marca = codigoInternoData[0].id;
+
+            if (typeTransactionData) {
+              typeTransactionData.fk_linea_marca = codigoInternoData[0].id;
+              const secuencialesGrupoService = new SecuencialesGrupoService();
+              secuencialesGrupoService.getOne(typeTransactionData).then((data) => {
+
+                if (data.message.includes("OK")) {
+                  if (data.data) {
+                    // console.log("SE VA CON ESTE CODIGO: ", data.data.code_to_add)
+                    setCodigoInterno(data.data.code_to_add);
+                    form.setFieldsValue({ codigo: data.data.code_to_add });
+                  } else {
+                    setCodigoInterno("001");
+                    form.setFieldsValue({ codigo: "001" });
+                  }
+                  setCodigoInterno(data.data)
+                  // }
+                } else {
+                  setCodigoInterno(data.data)
+                }
+              });
+            }// 17/09/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO CUANDO NO TENGA UN typeTransactionData Ó LA ESTRUCTURA CORRECTA EN ESTA VARIABLE
+          } else {
+            setCodigoInterno("001");
+            form.setFieldsValue({ codigo: "001" });
+          }
+        } else {
+          console.log("DEBE VOLVER AL CODIGO INICIAL")
+          form.setFieldsValue({ codigo: editGrupo.codigo });
+        }
       } else {
-        setCodigoInterno("001");
-        form.setFieldsValue({ codigo: "001" });
+        const lineasMarcasService = new LineasMarcasService();
+        const codigoInternoData = await lineasMarcasService.getAll().then((data) => { // OBSERVACIÓN 31/08/2021: DEBE SER EL LLAMADO A UN GETONE() - MC
+          return data.filter((lm) => lm.fk_marca_id === changedValues[formFieldName] && lm.fk_linea_id === selectedLineaId);
+        });
+
+        if (codigoInternoData.length > 0) {
+          setSelectedLineaMarcaId(codigoInternoData[0])
+          initialValues.fk_linea_marca = codigoInternoData[0].id;
+
+          if (typeTransactionData) {
+            typeTransactionData.fk_linea_marca = codigoInternoData[0].id;
+            const secuencialesGrupoService = new SecuencialesGrupoService();
+            secuencialesGrupoService.getOne(typeTransactionData).then((data) => {
+
+              if (data.message.includes("OK")) {
+                if (data.data) {
+                  // console.log("SE VA CON ESTE CODIGO: ", data.data.code_to_add)
+                  setCodigoInterno(data.data.code_to_add);
+                  form.setFieldsValue({ codigo: data.data.code_to_add });
+
+                } else {
+                  setCodigoInterno("001");
+                  form.setFieldsValue({ codigo: "001" });
+                }
+                setCodigoInterno(data.data)
+
+              } else {
+                setCodigoInterno(data.data)
+              }
+            });
+          }// 17/09/2021 - OBSERVACIÓN: ACÁ SE DEBERÍA CONTROLAR UN CASO CONTRARIO CUANDO NO TENGA UN typeTransactionData Ó LA ESTRUCTURA CORRECTA EN ESTA VARIABLE
+        } else {
+          setCodigoInterno("001");
+          form.setFieldsValue({ codigo: "001" });
+        }
       }
     };
 
@@ -408,7 +390,7 @@ const FormGrupo = (props) => {
               <Divider className="titleFont">GRUPO</Divider>
               {/*"EL CRUD:   " + crud + " EL CODIGO TEXT: " + codigo +  " OPERACION: " + operacion*/}
               {/*"LINEA SELECTED: " + selectedLineaId + " MARCA SELECTED: " + selectedMarcaId*/}
-              {/*"EL EDIT GRUPO " + JSON.stringify(editGrupo)*/}
+              {/* {"EL EDIT GRUPO " + JSON.stringify(editGrupo)} */}
               {/*"EL  CODIGO INTERNO " + JSON.stringify(codigoInterno)*/}
               {/*"EL PK LINEA_MARCA " + JSON.stringify(selectedLineaMarcaId)*/}
               {/*JSON.stringify(initialValues)*/}
@@ -417,21 +399,22 @@ const FormGrupo = (props) => {
                 <Col span={10}>
                   <Form.Item
                     label="Línea"
-                    // name={crud ? "grupo_marcas_nn_in" : "linea"} 
-                    // name={["grupo_marcas_nn_in",]}
                     name={crud ? "fk_linea_id" : "linea"}
                     rules={crud ? [
                       {
                         required: true,
                         message: "Por favor, seleccione una Línea!",
-                      },
-                    ] : []}
+                      },] : []}
                   >
-                    <SelectOpciones
-                      tipo="línea"
-                      readOnly={crud ? false : true}
-
-                    />
+                    {crud ? (
+                      <SelectOpciones
+                        tipo="línea"
+                        readOnly={!crud}
+                      /*setShow={setShow} aca ver si se descomenta esto*/
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
@@ -453,22 +436,6 @@ const FormGrupo = (props) => {
               <br />
               <Row>
                 <Col span={10}>
-                  {/* <Form.Item
-                  label="Aqui va Marca"
-                  name="nombre"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese el Nombre del Grupo!!",
-                    },
-                  ]}
-                >
-                  <Input
-                    readOnly={!crud}
-                    placeholder="Ej: FIRSTLINE PRO"
-                    className="input-type"
-                  />
-                </Form.Item> */}
                   <Form.Item
                     label="Marca"
                     name={crud ? "fk_marca_id" : "marca"}
@@ -484,18 +451,23 @@ const FormGrupo = (props) => {
                         : []
                     }
                   >
-                    <SelectOpciones
-                      tipo="marca"
-                      readOnly={crud ? false : true}
-                      filter={selectedLineaId}
-                    />
+                    {crud ? (
+                      <SelectOpciones
+                        tipo="marca"
+                        readOnly={crud ? false : true}
+                        filter={selectedLineaId}
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
                   </Form.Item>
                 </Col>
                 <Col span={12}>
                   <Form.Item
                     label="Subgrupo"
-                    //name={!crud ? "fk_subgrupo_id" : "subgrupo"}
-                    name="fk_subgrupo_id"
+                    name={!crud ? ["fk_subgrupo", "nombre"] : "fk_subgrupo_id"}
+                    /*name="fk_subgrupo_id"*/
+                    /*name={["fk_subgrupo", "nombre"]}*/
                     rules={[
                       {
                         required: true,
@@ -503,11 +475,15 @@ const FormGrupo = (props) => {
                       },
                     ]}
                   >
-                    <SelectOpciones
-                      tipo="subgrupo"
-                      readOnly={!crud}
-                      typeTransaction={typeTransactionSelect}
-                    />
+                    {crud ? (
+                      <SelectOpciones
+                        tipo="subgrupo"
+                        readOnly={!crud}
+                        typeTransaction={typeTransactionSelect}
+                      />
+                    ) : (
+                      <Input className="input-type" readOnly={!crud} />
+                    )}
                   </Form.Item>
                 </Col>
               </Row>
@@ -542,51 +518,56 @@ const FormGrupo = (props) => {
                 </Col>
               </Row>
               <br />
-              {/* <Row> */}
-              {/* <Col span={12}>
-                <Form.Item
-                  label="Marcas"
-                  //name={crud ? "grupo_marcas_nn_in" : "marca"}
-                  name="grupo_marcas_nn_in"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, seleccione una Marca!",
-                    },
-                  ]}
+              <Collapse /*defaultActiveKey={['1']}*/>
+                <Panel
+                  header="INFORMACIÓN TÉCNICA"
+                  key="1"
+                  extra={genExtra()}
                 >
-                  <SelectOpciones
-                    tipo="marcas"
-                    readOnly={!crud}
-                    filter={selectedLineaId}
-                    typeTransaction={typeTransactionSelectMarca}
-                  />
-                </Form.Item>
-              </Col>
-              <Col span={18}>
-              </Col> */}
-              {/* </Row> */}
-              {/* <Row justify="start">
-              <Col span={18}>
-                <Form.Item
-                  label="Descripción"
-                  name="descripcion"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Por favor, ingrese la descripción del Grupo",
-                    },
-                  ]}
-                >
-                  <TextArea rows={6} readOnly={!crud} placeholder="Descripción del Grupo, esta descripción se visualizará en la página web." />
-                </Form.Item>
-              </Col>
-            </Row>
-            <br /><br /> */}
+                  <Row>
+                    <Col md={24}>
+                      <Form.List name="users">
+                        {(fields, { add, remove }) => (
+                          <>
+                            {fields.map(({ key, name, fieldKey, ...restField }) => (
+                              <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
+                                <Form.Item
+                                  {...restField}
+                                  name={[name, 'first']}
+                                  fieldKey={[fieldKey, 'first']}
+                                  rules={[{ required: true, message: 'Missing first name' }]}
+                                >
+                                  <Input placeholder="First Name" />
+                                </Form.Item>
+                                <Form.Item
+                                  {...restField}
+                                  name={[name, 'last']}
+                                  fieldKey={[fieldKey, 'last']}
+                                  rules={[{ required: true, message: 'Missing last name' }]}
+                                >
+                                  <Input placeholder="Last Name" />
+                                </Form.Item>
+                                <MinusCircleOutlined onClick={() => remove(name)} />
+                              </Space>
+                            ))}
+                            <Form.Item>
+                              <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                                Agregar Atributo
+                              </Button>
+                            </Form.Item>
+                          </>
+                        )}
+                      </Form.List>
+                    </Col>
+                  </Row>
+                </Panel>
+              </Collapse>
+              <br />
               <br />
               <Row>
                 {crud ? (
                   <Col md={18} xs={15}>
+
                     <Form.Item {...tailLayout}>
                       <Button
                         icon={<SaveOutlined />}
@@ -622,7 +603,6 @@ const FormGrupo = (props) => {
             </Form>
           </>) : (<Spin indicator={antIcon} className="loading-info" />)
       );
-
     } else {
       return <Redirect to="/home" />;
     }
