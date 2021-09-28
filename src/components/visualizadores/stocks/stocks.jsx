@@ -141,6 +141,7 @@ const Stocks = () => {
     console.log("linea: ",selectedLineaID);
     console.log("Marca: ",selectedMarcaID);
     console.log("Grupo: ",selectedGrupoID);
+    window.scrollTo(0, 0);
 
    
   };
@@ -325,7 +326,7 @@ const Stocks = () => {
          onClick={() => goBackHome()}
         /></div>
         )}
-        
+
         <ProductoList
           stocks={true}
           visualizador={true}
