@@ -325,6 +325,7 @@ const Stocks = () => {
          onClick={() => goBackHome()}
         /></div>
         )}
+        
         <ProductoList
           stocks={true}
           visualizador={true}
