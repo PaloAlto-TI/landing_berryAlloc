@@ -20,6 +20,7 @@ export function* saga4() {
 }
 export function* saga5() {
   yield takeLatest(GET_MARCAS, handleGetAllMarcas);
+  
 }
 export function* saga6() {
   yield takeLatest(GET_GRUPOS, handleGetAlltGrupos);
