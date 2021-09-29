@@ -206,6 +206,7 @@ const Stocks = () => {
         await setSelectedGrupoID(null);
         dispatch(getLineas());
         // dispatch(getLineas());
+        //bkjbxcvjkbcxv
       }
     }
     else{
