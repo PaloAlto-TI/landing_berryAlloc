@@ -8,9 +8,9 @@ export function* saga() {
   // yield takeLatest(GET_LINEAS, );
 }
 
-export function* saga2() {
-  yield takeLatest(GET_GRUPOS_LINEA_BY_SUBGRUPO, handleGetGruposLineaBySubgrupo);
-}
+// export function* saga2() {
+//   yield takeLatest(GET_GRUPOS_LINEA_BY_SUBGRUPO, handleGetGruposLineaBySubgrupo);
+// }
 
 // export function* saga3() {
 //   yield takeLatest(GET_LINEAS, handleGetGruposLineaBySubgrupo);

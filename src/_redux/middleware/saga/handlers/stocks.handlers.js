@@ -43,28 +43,28 @@ export function* handleGetAllMarcas() {
   }
 }
 
-export function* handleGetGruposLineaBySubgrupo(action) {
-  try {
-    const response = yield call(getGruposLineaBySubgrupo, action.id);
-    const { data } = response;
-    yield put(setGruposLineaBySubgrupo(data));
-    console.log("EL handleGetGruposLineaBySubgrupo SETED: ", JSON.stringify(getGruposLineaBySubgrupo))
-  } catch (error) {
-    console.log(error);
-  }
-}
+// export function* handleGetGruposLineaBySubgrupo(action) {
+//   try {
+//     const response = yield call(getGruposLineaBySubgrupo, action.id);
+//     const { data } = response;
+//     yield put(setGruposLineaBySubgrupo(data));
+//     console.log("EL handleGetGruposLineaBySubgrupo SETED: ", JSON.stringify(getGruposLineaBySubgrupo))
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
-export function* handleGetLineas() {
-  try {
-    console.log("LAS LINEAS Q QUIERE CONSEGUIRRR")
-    const response = yield call(getLineasStock);
-    const { data } = response;
-    console.log("LA DATA", data)
-    yield put(setLineas(data));
-  } catch (error) {
-    console.log(error);
-  }
-}
+// export function* handleGetLineas() {
+//   try {
+//     console.log("LAS LINEAS Q QUIERE CONSEGUIRRR")
+//     const response = yield call(getLineasStock);
+//     const { data } = response;
+//     console.log("LA DATA", data)
+//     yield put(setLineas(data));
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 // HECHO POR MANUEL CORONEL
 /*export function* handleGetLineas() {
   try {

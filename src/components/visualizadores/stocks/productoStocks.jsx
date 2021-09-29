@@ -385,9 +385,13 @@ const ProductoStocks = () => {
                   ? lineas
                   : lineas */}
               <List.Item.Meta
-                avatar={ 
-                  marcas && checkPoint ? item.countgrupos :
-                  lineas ? (item.marcas_nn).length > 0 ? (item.marcas_nn).length : "0" : ""}
+                // avatar={ 
+                //   marcas && checkPoint ? item.countgrupos :
+                //   lineas ? (item.marcas_nn).length > 0 ? (item.marcas_nn).length : "0" : ""}
+
+
+
+
                 // avatar={
                 //   <Avatar
                 //     style={{ color: "black", backgroundColor: "#8a8a8a" }}
