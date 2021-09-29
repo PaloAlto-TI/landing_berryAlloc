@@ -112,12 +112,14 @@ const Home = () => {
                       }}
                     >
                       {/* PALO PRODUCTOS -ALTO */}
-                      <img src={logo} alt="logo" style={{
-                        height: "150px",
-                        width: "150px",
-                        marginLeft: "10px"
+                      <img src={logo} alt="logo" className="logo" 
+                      // style={{
+                      //   height: "300px",
+                      //   width: "300px",
+                      //   marginLeft: "10px"
 
-                      }} />
+                      // }}
+                       />
 
                     </span>
                   </Layout>
