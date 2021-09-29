@@ -18,7 +18,7 @@ import GrupoList from "../../components/grupos/grupoList/grupoList";
 import GrupoForm from "../../components/grupos/grupoForm/grupoForm";
 import GrupoContextProvider from "../../contexts/grupoContext";
 import { useHistory } from "react-router";
-
+import logo from "./imag_planta.png";
 // import ModeloList from "../../components/modelo/modeloList/modeloList";
 // import ModeloForm from "../../components/modelo/modeloForm/modeloForm";
 // import ModeloContextProvider from "../../contexts/modeloContext";
@@ -40,7 +40,7 @@ import SubgrupoContextProvider from "../../contexts/subgrupoContext";
 import { SesionContext } from "../../contexts/sesionContext";
 import Stocks from "../../components/visualizadores/stocks/stocks";
 const Home = () => {
-  var { setMoved, sesions,redirect } = useContext(SesionContext);
+  var { setMoved, sesions, redirect } = useContext(SesionContext);
   let history = useHistory();
   // const Sesion= async()=>{
 
@@ -49,18 +49,15 @@ const Home = () => {
   //     return await usuario();
   // }
 
-  function prueba()
-  {
-    
-  try
-    {
+  function prueba() {
+
+    try {
       console.log("");
     }
-    catch(e)
-    {
+    catch (e) {
 
     }
-      
+
 
   }
   //console.log("SESION: "+Sesion());
@@ -69,106 +66,113 @@ const Home = () => {
 
   return (
     <>
-      {localStorage.getItem("token")?sesions?
-       <>
-     <Header />
-      <main>
-        <SideMenu />
-        <Router>
-          <Switch>
-            <Route exact path={`${path}/productos`}>
-              <ConfigProvider locale={es_ES}>
-                  <ProductoList />
-              </ConfigProvider>
-            </Route>
-            <Route exact path={`${path}/visualizadores/productos`}>
-              <ConfigProvider locale={es_ES}>
-                  <ProductoList visualizador={true} />
-              </ConfigProvider>
-            </Route>
-            <Route exact path={`${path}/visualizadores/stocks`}>
-                <Stocks />
-            </Route>
-            
-            <Route path={`${path}/(productos|visualizadores/stocks|visualizadores/productos)/:codigo?/:operacion?`}>
-              <ConfigProvider locale={es_ES}>                
-                <ProductoForm />
-              </ConfigProvider>
+      {localStorage.getItem("token") ? sesions ?
+        <>
+          <Header />
+          <main>
+            <SideMenu />
+            <Router>
+              <Switch>
+                <Route exact path={`${path}/productos`}>
+                  <ConfigProvider locale={es_ES}>
+                    <ProductoList />
+                  </ConfigProvider>
+                </Route>
+                <Route exact path={`${path}/visualizadores/productos`}>
+                  <ConfigProvider locale={es_ES}>
+                    <ProductoList visualizador={true} />
+                  </ConfigProvider>
+                </Route>
+                <Route exact path={`${path}/visualizadores/stocks`}>
+                  <Stocks />
+                </Route>
 
-            </Route>
-            
+                <Route path={`${path}/(productos|visualizadores/stocks|visualizadores/productos)/:codigo?/:operacion?`}>
+                  <ConfigProvider locale={es_ES}>
+                    <ProductoForm />
+                  </ConfigProvider>
 
-           
-            <Route exact path={`${path}`}>
-              <Layout
-                style={{
-                  height: "62vh",
-                  backgroundColor: "white",
-                  justifyContent: "center",
-                }}
-              >
-                <span
-                  style={{
-                    color: "black",
-                    fontSize: "45px",
-                    fontWeight: "bold",
-                  }}
-                >
-                  PRODUCTOS - PALO ALTO
-                </span>
-              </Layout>
-            </Route>
-            <Route exact path={`${path}/lineas`}>
-              <LineaContextProvider>
-                <LineaList />
-              </LineaContextProvider>
-            </Route>
-            <Route path={`${path}/lineas/:codigo?/:operacion?`}>
-              <LineaContextProvider>
-                <LineaForm />
-              </LineaContextProvider>
-            </Route>
-            <Route exact path={`${path}/marcas`}>
-              <MarcaContextProvider>
-                <MarcaList />
-              </MarcaContextProvider>
-            </Route>
-            <Route path={`${path}/marcas/:codigo?/:operacion?`}>
-              <MarcaContextProvider>
-                <MarcaForm />
-              </MarcaContextProvider>
-            </Route>
-            <Route exact path={`${path}/subgrupo`}>
-              <SubgrupoContextProvider>
-                <SubgrupoList />
-              </SubgrupoContextProvider>
-            </Route>
-            <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
-              <SubgrupoContextProvider>
-                <SubgrupoForm />
-              </SubgrupoContextProvider>
-            </Route>
-            <Route exact path={`${path}/proveedores`}>
-              <ProveedorContextProvider>
-                <ProveedorList />
-              </ProveedorContextProvider>
-            </Route>
-            <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
-              <ProveedorContextProvider>
-                <ProveedorForm />
-              </ProveedorContextProvider>
-            </Route>
-            <Route exact path={`${path}/grupos`}>
-              <GrupoContextProvider>
-                <GrupoList />
-              </GrupoContextProvider>
-            </Route>
-            <Route path={`${path}/grupos/:codigo?/:operacion?`}>
-              <GrupoContextProvider>
-                <GrupoForm />
-              </GrupoContextProvider>
-            </Route>
-            {/* <Route exact path={`${path}/modelos`}>
+                </Route>
+
+
+
+                <Route exact path={`${path}`}>
+                  <Layout
+                    style={{
+                      height: "62vh",
+                      backgroundColor: "white",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: "black",
+                        fontSize: "45px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {/* PALO PRODUCTOS -ALTO */}
+                      <img src={logo} alt="logo" style={{
+                        height: "150px",
+                        width: "150px",
+                        marginLeft: "10px"
+
+                      }} />
+
+                    </span>
+                  </Layout>
+                </Route>
+                <Route exact path={`${path}/lineas`}>
+                  <LineaContextProvider>
+                    <LineaList />
+                  </LineaContextProvider>
+                </Route>
+                <Route path={`${path}/lineas/:codigo?/:operacion?`}>
+                  <LineaContextProvider>
+                    <LineaForm />
+                  </LineaContextProvider>
+                </Route>
+                <Route exact path={`${path}/marcas`}>
+                  <MarcaContextProvider>
+                    <MarcaList />
+                  </MarcaContextProvider>
+                </Route>
+                <Route path={`${path}/marcas/:codigo?/:operacion?`}>
+                  <MarcaContextProvider>
+                    <MarcaForm />
+                  </MarcaContextProvider>
+                </Route>
+                <Route exact path={`${path}/subgrupo`}>
+                  <SubgrupoContextProvider>
+                    <SubgrupoList />
+                  </SubgrupoContextProvider>
+                </Route>
+                <Route path={`${path}/subgrupo/:codigo?/:operacion?`}>
+                  <SubgrupoContextProvider>
+                    <SubgrupoForm />
+                  </SubgrupoContextProvider>
+                </Route>
+                <Route exact path={`${path}/proveedores`}>
+                  <ProveedorContextProvider>
+                    <ProveedorList />
+                  </ProveedorContextProvider>
+                </Route>
+                <Route path={`${path}/proveedores/:codigo?/:operacion?`}>
+                  <ProveedorContextProvider>
+                    <ProveedorForm />
+                  </ProveedorContextProvider>
+                </Route>
+                <Route exact path={`${path}/grupos`}>
+                  <GrupoContextProvider>
+                    <GrupoList />
+                  </GrupoContextProvider>
+                </Route>
+                <Route path={`${path}/grupos/:codigo?/:operacion?`}>
+                  <GrupoContextProvider>
+                    <GrupoForm />
+                  </GrupoContextProvider>
+                </Route>
+                {/* <Route exact path={`${path}/modelos`}>
               <ModeloContextProvider>
                 <ModeloList />
               </ModeloContextProvider>
@@ -178,9 +182,9 @@ const Home = () => {
                 <ModeloForm />
               </ModeloContextProvider>
             </Route> */}
-          </Switch>
+              </Switch>
 
-          {/* <ProveedorContextProvider Provider>
+              {/* <ProveedorContextProvider Provider>
           <Switch>
           <Route exact path={`${path}/proveedores`}>
               <ProveedorList />
@@ -213,15 +217,15 @@ const Home = () => {
             {/*<Route path="*">
               <p>404 NOT FOUND</p>
   </Route>*/}
-        </Router>
-      </main>
-      <Footer />
-      </>
-      :null
-            :history.push("/login")}
+            </Router>
+          </main>
+          <Footer />
+        </>
+        : null
+        : history.push("/login")}
     </>
   );
-          
+
 
 
 

@@ -98,9 +98,10 @@ function valid()
         <img src={logo} alt="logo" style={{
         height:"30px",
         width:"30px",
-        marginLeft:"10px"
-
-      }} />
+        marginLeft:"10px",
+        marginRight:"10px"
+        
+      }} /> PALO ALTO
        </a>
       
       </Col>
