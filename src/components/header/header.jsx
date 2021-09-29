@@ -3,13 +3,15 @@ import { Menu, Button, Dropdown, Row, Col} from "antd";
 import { UserOutlined } from '@ant-design/icons';
 import "./header.css";
 import { SesionContext } from "../../../src/contexts/sesionContext";
-import { useHistory } from "react-router";
+import { useHistory, useRouteMatch } from "react-router";
+import logo from "./logo192.png";
 
 
 
 
 
 const Header = () => {
+  let { path } = useRouteMatch();
     let history = useHistory();
   const { sesions,LogOut} =  useContext(SesionContext);
   const userName = JSON.parse(localStorage.getItem("user"));
@@ -90,7 +92,18 @@ function valid()
     <header className="main-header">
       {/* { localStorage.getItem("token")?sesions? */}
       <Row>
-      <Col span={8} className="labels-header">{ sesions ? valid() :"PALO ALTO - Especialista en Pisos" }</Col>
+      {/* <Col span={8} className="labels-header">{ sesions ? valid() :"PALO ALTO - Especialista en Pisos" }</Col> */}
+      <Col span={8} className="labels-header">
+      <a href={`${path}`}>
+        <img src={logo} alt="logo" style={{
+        height:"30px",
+        width:"30px",
+        marginLeft:"10px"
+
+      }} />
+       </a>
+      
+      </Col>
 
       {/* <Col span={8} className="labels-header">PALO ALTO - Especialista en Pisos</Col> */}
       <Col span={8}></Col>
