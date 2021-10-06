@@ -19,11 +19,30 @@ export const getLineas = () => ({
     loading: true
 });
 
+export const getMarcas = () => ({
+  type: GET_MARCAS,
+  loading: true
+});
+export const getGrupos = () => ({
+  type: GET_GRUPOS,
+  loading: true
+});
+
 
 export const setSubgrupos = (subgrupos) => ({
     type: SET_SUBGRUPOS,
     subgrupos,
     loading: false
+});
+export const setMarcas = (marcas) => ({
+  type: SET_MARCAS,
+  marcas,
+  loading: false
+});
+export const setGrupos = (grupos) => ({
+  type: SET_GRUPOS,
+  grupos,
+  loading: false
 });
 
 export const setLineas = (lineas) => ({
@@ -50,12 +69,16 @@ const initialState = []
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, action) => {
-  const { subgrupos, grupos, lineas } = action;
+  const { subgrupos, grupos, lineas,marcas } = action;
   switch (action.type) {
     case SET_SUBGRUPOS:
       return { ...state, subgrupos:subgrupos.data, loading: false };
     case SET_LINEAS:
       return { ...state, lineas:lineas.data, loading: false };
+      case SET_MARCAS:
+        return { ...state, marcas:marcas.data, loading: false };
+        case SET_GRUPOS:
+        return { ...state, grupos:grupos.data, loading: false };
     case SET_GRUPOS_LINEA_BY_SUBGRUPO:
       return { ...state, grupos:grupos.data, loading: false };
     default:

@@ -3,6 +3,8 @@ export const GET_PRODUCTOS = "GET_PRODUCTOS";
 export const SET_PRODUCTOS = "SET_PRODUCTOS";
 export const GET_PRODUCTO = "GET_PRODUCTO";
 export const SET_PRODUCTO = "SET_PRODUCTO";
+export const GET_PRODUCTOS_BY_ESTADO = "GET_PRODUCTOS_BY_ESTADO";
+export const SET_PRODUCTOS_BY_ESTADO = "SET_PRODUCTOS_BY_ESTADO";
 export const GET_PRODUCTOS_BY_LINEA = "GET_PRODUCTOS_BY_LINEA";
 export const SET_PRODUCTOS_BY_LINEA = "SET_PRODUCTOS_BY_LINEA";
 export const GET_PRODUCTOS_BY_GRUPO = "GET_PRODUCTOS_BY_GRUPO";
@@ -20,6 +22,11 @@ export const getProductos = () => ({
   loading: true
 });
 
+export const getProductosByEstado = (estado) => ({
+  type: GET_PRODUCTOS_BY_ESTADO,
+  estado
+});
+
 export const getProductosByLinea = (id) => ({
   type: GET_PRODUCTOS_BY_LINEA,
   id
@@ -34,6 +41,11 @@ export const setProductos = (productos) => ({
   type: SET_PRODUCTOS,
   productos,
   loading: false
+});
+
+export const setProductosByEstado = (productos) => ({
+  type: SET_PRODUCTOS_BY_ESTADO,
+  productos,
 });
 
 export const setProductosByLinea = (productos) => ({
@@ -94,23 +106,25 @@ const initialState = []
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, action) => {
-  const { productos, producto, response, serial } = action;
+  const { productos, producto, response, serial, productos_estado } = action;
   switch (action.type) {
     case SET_PRODUCTOS:
     case SET_PRODUCTOS_BY_LINEA:
     case SET_PRODUCTOS_BY_GRUPO:
-      return { ...state, productos:productos.data, producto:null, response:null, loading: false };
+      return { ...state, productos: productos.data, producto: null, response: null, loading: false };
+    case SET_PRODUCTOS_BY_ESTADO:
+      return { ...state, productos_estado: productos.data, producto: null, response: null, loading: false };
     case SET_PRODUCTO:
-      return {...state, producto: producto.data[0]?producto.data[0]:undefined};
+      return { ...state, producto: producto.data[0] ? producto.data[0] : undefined };
     case SET_SERIAL_MODELO:
-      return {...state, serial: serial};
+      return { ...state, serial: serial };
     case GET_SERIAL_MODELO:
-      return {...state, serial: null};
+      return { ...state, serial: null };
     case PRODUCTO_RESPONSE:
-      return {...state, response: response, loading:false};
-     case SOFT_DELETE_PRODUCTO:
-      return {...state, productos: state.productos.filter((entry) => entry.id !== producto.id )};
+      return { ...state, response: response, loading: false };
+    case SOFT_DELETE_PRODUCTO:
+      return { ...state, productos: state.productos.filter((entry) => entry.id !== producto.id) };
     default:
-      return {...state, loading: true };
+      return { ...state, loading: true };
   }
 };

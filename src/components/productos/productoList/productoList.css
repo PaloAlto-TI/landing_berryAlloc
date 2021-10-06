@@ -14,3 +14,19 @@ p{
     margin-top: 15vh;
 }
 
+.spaceMarginDivider {
+    margin-bottom: 12.5vh;
+}
+
+.containerRadio {
+    display:flex;
+    position: relative;
+    cursor: pointer;
+    font-size: 8px;
+    margin-bottom: -4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin: -4px;
+  }

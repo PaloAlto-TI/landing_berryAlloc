@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Divider, Row, Spin } from "antd";
+import { Col, Divider, Row, Spin, Space, Radio, Select } from "antd";
 import { Button } from "antd";
 import { Table } from "antd";
 import { PlusOutlined, SmileOutlined, StopOutlined } from "@ant-design/icons";
@@ -17,10 +17,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getProductos,
   getProductosByLinea,
+  getProductosByEstado,
   _softDeleteProducto,
 } from "../../../_redux/ducks/producto.duck";
 import { SesionContext } from "../../../contexts/sesionContext";
 
+const { Option } = Select;
 const ProductoList = (props) => {
   const { setMoved, sesions } = useContext(SesionContext);
   const { lineaV, marcaV, grupoV, visualizador, stocks } = props;
@@ -36,52 +38,129 @@ const ProductoList = (props) => {
   // } = useContext(ProductoContext);
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
-  const productos = useSelector((state) => state.productos.productos);
+  // const [valueRadio, setValueRadio] = useState(null);
+  const [valueEstado, setValueEstado] = useState(null);
+ const productos = useSelector((state) => state.productos.productos);
+ const prueba = useSelector((state) => state);
+
   const producto = useSelector((state) => state.productos.producto);
+  
   const loading = useSelector((state) => state.productos.loading);
   const response = useSelector((state) => state.productos.response);
   // const grupos = useSelector((state) => state.stocks.grupos);
   const grupos = useSelector((state) => state.productostocks.grupos); // AGREGADO POR MANUEL CORONEL
   // console.log("LOS GRUPOS DEL STATE EN LISTADO PRODUCTOS: " + JSON.stringify(grupos))
+  // const [selectedLineaId, setSelectedLineaId] = useState(
+  //   grupos
+  //     ? lineaV
+  //     : !producto
+  //       ? !response
+  //         ? "60d4c046e600f1b5e85d075c"
+  //         : response.data.fk_linea_id
+  //       : producto.fk_linea_id
+  // );
   const [selectedLineaId, setSelectedLineaId] = useState(
     grupos
       ? lineaV
       : !producto
-      ? !response
-        ? "60d4c046e600f1b5e85d075c"
-        : response.data.fk_linea_id
-      : producto.fk_linea_id
+        ? !response
+          ? null
+          : response.data.fk_linea_id
+        : producto.fk_linea_id
   );
 
   const [selectedMarcaId, setSelectedMarcaId] = useState(
     grupos
       ? marcaV
       : !producto
-      ? !response
-        ? null
-        : response.data.fk_marca_id
-      : producto.fk_marca_id
+        ? !response
+          ? null
+          : response.data.fk_marca_id
+        : producto.fk_marca_id
   );
   const [selectedGrupoId, setSelectedGrupoId] = useState(
     grupos
       ? grupoV
       : !producto
-      ? !response
-        ? null
-        : response.data.fk_grupo_id
-      : producto.fk_grupo_id
+        ? !response
+          ? null
+          : response.data.fk_grupo_id
+        : producto.fk_grupo_id
   );
+  function handleChangeEstado(value) {
+    // console.log(value);
+    setValueEstado(value);
+    
+    if (value == 1) {
+      alert("LE DIO CLICK A TODOS")
+      setSelectedLineaId(null);
+      setSelectedMarcaId(null);
+      setSelectedGrupoId(null);
+      setFilterAll(true);
+
+    } else if (value == 2) {
+      setSelectedLineaId("60d4c046e600f1b5e85d075c");
+      setFilterAll(false);
+
+    } else if (value == 3) {
+      setSelectedLineaId(null);
+      setSelectedMarcaId(null);
+      setSelectedGrupoId(null);
+      setFilterAll(false);
+    }
+  }
+
+  const onChangeEstado = e => {
+    
+    console.log('radio checked', e.target.value);
+    setValueEstado(e.target.value);
+
+    if (e.target.value == 1) {
+      alert("LE DIO CLICK A TODOS")
+      setSelectedLineaId(null);
+      setSelectedMarcaId(null);
+      setSelectedGrupoId(null);
+      setFilterAll(true);
+
+    } else if (e.target.value == 2) {
+      setSelectedLineaId("60d4c046e600f1b5e85d075c");
+      setFilterAll(false);
+    } else if (e.target.value == 3) {
+
+      setSelectedLineaId(null);
+      setSelectedMarcaId(null);
+      setSelectedGrupoId(null);
+      setFilterAll(false);
+    }
+
+
+    /*
+    const filtroGlobal = (e) => {
+    if (e.target.checked) {
+      //filterProductos("all");
+      setSelectedLineaId(null);
+      setSelectedMarcaId(null);
+      setSelectedGrupoId(null);
+    } else {
+      console.log("AQUI!!!!");
+      setSelectedLineaId("60d4c046e600f1b5e85d075c");
+      //filterProductos("60d4c046e600f1b5e85d075c");
+    }
+
+    setFilterAll(e.target.checked);
+    setFiltro(null);
+  };*/
+  };
+
   const [filtro, setFiltro] = useState(null);
   const [filterAll, setFilterAll] = useState(false);
   const [dataSource, setDataSource] = useState([]);
   const [rowState, setRowState] = useState(true);
   const [click, setClick] = useState(0.8);
-  console.log("path");
+
   const [filteredInfo, setFilteredInfo] = useState([]);
-  // const size = useWindowSize();
   const handleChange = (pagination, filters, sorter) => {
     console.log("Various parameters", pagination, filters, sorter);
-
     setFilteredInfo(filters);
   };
 
@@ -93,16 +172,35 @@ const ProductoList = (props) => {
   //     setDataSource(productos);
   //   }
   // });
-  console.log("state", productos);
+  // console.log("state", productos);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    //dispatch(getProducto('005-004-001-001'));
-    //dispatch(getProductosByLinea('60d4c0476e8514b5e8c66fd5'));
-    dispatch(
-      selectedLineaId ? getProductosByLinea(selectedLineaId) : getProductos()
-    );
-  }, [dispatch, selectedLineaId]);
+  // useEffect(() => { -- COMENTADO FUNCIONAL
+  //   //dispatch(getProducto('005-004-001-001'));
+  //   //dispatch(getProductosByLinea('60d4c0476e8514b5e8c66fd5'));
+  //   console.log(" QUIERE HACER DISPATCH")
+  //   dispatch(
+  //     selectedLineaId ? getProductosByLinea(selectedLineaId) : getProductos()
+  //   );
+  // }, [dispatch, selectedLineaId]);
+
+ useEffect(() => {
+  //dispatch(getProducto('005-004-001-001'));
+  //dispatch(getProductosByLinea('60d4c0476e8514b5e8c66fd5'));
+  
+  console.log(" QUIERE HACER DISPATCH de productos por estado: ", valueEstado)
+  dispatch(
+    valueEstado ? getProductosByEstado(valueEstado) : getProductos()
+  );
+
+  console.log(" VA EL OTRO DISPACTH ")
+  dispatch(getProductosByEstado(2))
+
+
+  console.log("DISPACTH DE PRODUCTOS: ", prueba)
+}, [dispatch, valueEstado]);
+
+  // getProductosByEstado
 
   useEffect(() => {
     //dispatch(getProducto('005-004-001-001'));
@@ -121,13 +219,20 @@ const ProductoList = (props) => {
     //   }
     // }
 
-    if (!value && !filtro) {
+    // if (!value && !filtro) {
+    if (valueEstado && !value && !filtro) {
+      // console.log("ENTRA AL !VALUE !FILTRO CON : ", JSON.stringify(productos))
+      // setDataSource(null);
       setDataSource(productos);
+    } else {
+      console.log("ENTRA EN ELSEEEEEEEEEEEEEEEEE")
+      setDataSource(null);
     }
   });
 
   useEffect(() => {
     // filtrarG(producto.fk_grupo_id)
+    // console.log("VA A ENTRAR A SETEAR TODO LOS PRODUCTOS, ", JSON.stringify(productos))
     setDataSource(productos);
 
     if (productos) {
@@ -145,335 +250,251 @@ const ProductoList = (props) => {
   const columns =
     sesions && sesions._usuario[0].rol === 2
       ? [
-          {
-            title: "CÓDIGO",
-            dataIndex: "codigo_interno",
-            key: "codigo_interno",
-            sorter: {
-              compare: (a, b) =>
-                a.codigo_interno.localeCompare(b.codigo_interno),
-            },
-            showSorterTooltip: false,
-            width: "16%",
+        {
+          title: "CÓDIGO",
+          dataIndex: "codigo_interno",
+          key: "codigo_interno",
+          sorter: {
+            compare: (a, b) =>
+              a.codigo_interno.localeCompare(b.codigo_interno),
           },
-          {
-            title: "PRODUCTO",
-            dataIndex: "nombre",
-            key: "nombre",
-            sorter: {
-              compare: (a, b) => a.nombre.localeCompare(b.nombre),
-            },
-            showSorterTooltip: false,
-            width: "34%",
+          showSorterTooltip: false,
+          width: "15%",
+          align: "center",
+        },
+        {
+          title: "PRODUCTO",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
+          showSorterTooltip: false,
+          width: "30%",
+          align: "center",
+        },
+        {
+          title: "UND. MED.",
+          dataIndex: "unidad_medida_abreviatura",
+          key: "unidad_medida_abreviatura",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
+          showSorterTooltip: false,
+          width: "10%",
+          align: "center",
+        },
+        // {
+        //   title: "COSTO",
+        //   dataIndex: "costo",
+        //   key: "costo",
+        //   sorter: {
+        //     compare: (a, b) => a.nombre.localeCompare(b.nombre),
+        //   },
+        //   showSorterTooltip: false,
+        //   width: "5%",
+        //   align: "center",
+        //   render: (text, record) =>
+        //     record.costo && (
+        //       <p>
+        //         {"$" + text}
+        //       </p>
+        //     ),
+        // },
+        {
+          title: "PRECIO",
+          dataIndex: "precio",
+          key: "precio",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
+          },
+          align: "center",
+          width: "10%",
+          showSorterTooltip: false,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {"$" + text}
+            </p>
+          ),
+        },
 
-            // render:(text)=><Link to='/inicio'>{text}</Link>
+        {
+          title: "DESC. 1",
+          dataIndex: "limite_descuento1",
+          key: "limite_descuento1",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
           },
-          {
-            title: "UNIDAD MEDIDA",
-            dataIndex: "unidad_medida_abreviatura",
-            key: "unidad_medida_abreviatura",
-            sorter: {
-              compare: (a, b) => a.nombre.localeCompare(b.nombre),
-            },
-            showSorterTooltip: false,
-            width: "5%",
-            align: "center",
+          align: "center",
+          width: "10%",
+          showSorterTooltip: false,
+          filters: [
+            { text: "0%", value: "0" },
+            { text: "5%", value: "5" },
+            { text: "10%", value: "10" },
+            { text: "40%", value: "40" },
+            { text: "50%", value: "50" },
+          ],
+          filteredValue: filteredInfo.limite_descuento1 || null,
+          onFilter: (value, record) => record.limite_descuento1 === value,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {text + "%"}
+            </p>
+          ),
+        },
 
-            // render:(text)=><Link to='/inicio'>{text}</Link>
+        {
+          title: "DESC. 2",
+          dataIndex: "limite_descuento2",
+          key: "limite_descuento2",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
           },
-          {
-            title: "COSTO",
-            dataIndex: "costo",
-            key: "costo",
-            sorter: {
-              compare: (a, b) => a.nombre.localeCompare(b.nombre),
-            },
-            showSorterTooltip: false,
-            width: "5%",
-            align: "center",
-            render: (text, record) =>
-              record.costo && (
-                <p
-                // onClick={() => {
-                //   record["permiso"] = false;
-                //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-                // }}
-                >
-                  {"$" + text}
-                </p>
-              ),
-            // render:(text)=><Link to='/inicio'>{text}</Link>
+          align: "center",
+          width: "10%",
+          filters: [
+            { text: "0%", value: "0" },
+            { text: "5%", value: "5" },
+            { text: "10%", value: "10" },
+            { text: "15%", value: "15" },
+          ],
+          filteredValue: filteredInfo.limite_descuento2 || null,
+          onFilter: (value, record) => record.limite_descuento2 === value,
+          showSorterTooltip: false,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {text + "%"}
+            </p>
+          ),
+        },
+
+        {
+          title: "DESC. 3",
+          dataIndex: "limite_descuento3",
+          key: "limite_descuento3",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
           },
-          // {
-          //   title: "TIPO DE INVENTARIO",
-          //   dataIndex: "tipo_inventario",
-          //   key: "tipo_inventario",
-          //   align:'center',
-          //   sorter: {
-          //     compare: (a, b) =>
-          //       a.tipo_inventario.localeCompare(b.tipo_inventario),
-          //   },
-          //   filters: [
-          //     { text: "PERMANENTE", value: "PERMANENTE" },
-          //     { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
-          //   ],
-          //   filteredValue: filteredInfo.tipo_inventario || null,
-          //   onFilter: (value, record) => record.tipo_inventario.includes(value),
-          //   ellipsis: true,
-          //   showSorterTooltip: false,
-          //   render: (text, record) =>
-          //     record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
-          //       <p style={{ color: "blue" }}>
-          //         {" "}
-          //         <SmileOutlined /> {text}
-          //       </p>
-          //     ) : (
-          //       <p style={{ color: "black" }}>{text}</p>
-          //     ),
-          // },
-          {
-            title: "PRECIO",
-            dataIndex: "precio",
-            key: "precio",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align: "center",
-            width: "5%",
-            showSorterTooltip: false,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {"$" + text}
-              </p>
+          align: "center",
+          width: "10%",
+          showSorterTooltip: false,
+          filters: [
+            { text: "0%", value: "0" },
+            { text: "5%", value: "5" },
+            { text: "15%", value: "15" },
+            { text: "18%", value: "18" },
+            { text: "20%", value: "20" },
+            { text: "25%", value: "25" },
+            { text: "35%", value: "35" },
+          ],
+          filteredValue: filteredInfo.limite_descuento3 || null,
+          onFilter: (value, record) => record.limite_descuento3 === value,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {text + "%"}
+            </p>
+          ),
+        },
+
+        {
+          title: "STOCK",
+          dataIndex: "",
+          key: "y",
+          render: (_, record) => <QueryButton record={record} />,
+          align: "center",
+          width: "5%",
+        },
+
+        {
+          title: "ACCIONES",
+          dataIndex: "",
+          key: "x",
+          align: "center",
+          render: (_, record) =>
+            record.url_pagina_web || !visualizador ? (
+              <CrudButton
+                record={record}
+                softDelete={_softDeleteProducto}
+                setRowState={setRowState}
+                permiso={sesions && sesions._usuario[0].rol === 2}
+                visualizador={visualizador}
+              />
+            ) : (
+              <StopOutlined style={{ fontSize: 18, marginLeft: "2vw" }} />
             ),
-          },
-
-          {
-            title: "ESPECIALISTA",
-            dataIndex: "limite_descuento1",
-            key: "limite_descuento1",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align: "center",
-            width: "5%",
-            showSorterTooltip: false,
-            filters: [
-              { text: "0%", value: "0" },
-              { text: "5%", value: "5" },
-              { text: "10%", value: "10" },
-              { text: "40%", value: "40" },
-              { text: "50%", value: "50" },
-            ],
-            filteredValue: filteredInfo.limite_descuento1 || null,
-            onFilter: (value, record) => record.limite_descuento1 === value,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {text + "%"}
-              </p>
-            ),
-          },
-
-          {
-            title: "LÍDER RETAIL",
-            dataIndex: "limite_descuento2",
-            key: "limite_descuento2",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align: "center",
-            width: "5%",
-            filters: [
-              { text: "0%", value: "0" },
-              { text: "5%", value: "5" },
-              { text: "10%", value: "10" },
-              { text: "15%", value: "15" },
-            ],
-            filteredValue: filteredInfo.limite_descuento2 || null,
-            onFilter: (value, record) => record.limite_descuento2 === value,
-            showSorterTooltip: false,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {text + "%"}
-              </p>
-            ),
-          },
-
-          {
-            title: "LÍDER PROYECTOS",
-            dataIndex: "limite_descuento3",
-            key: "limite_descuento3",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align: "center",
-            width: "5%",
-            showSorterTooltip: false,
-            filters: [
-              { text: "0%", value: "0" },
-              { text: "5%", value: "5" },
-              { text: "15%", value: "15" },
-              { text: "18%", value: "18" },
-              { text: "20%", value: "20" },
-              { text: "25%", value: "25" },
-              { text: "35%", value: "35" },
-            ],
-            filteredValue: filteredInfo.limite_descuento3 || null,
-            onFilter: (value, record) => record.limite_descuento3 === value,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {text + "%"}
-              </p>
-            ),
-          },
-
-          {
-            title: "STOCK GENERAL",
-            dataIndex: "",
-            key: "y",
-            render: (_, record) => <QueryButton record={record} />,
-            align: "center",
-            width: "5%",
-          },
-
-          {
-            title: "ACCIONES",
-            dataIndex: "",
-            key: "x",
-            align: "center",
-            render: (_, record) =>
-              record.url_pagina_web || !visualizador ? (
-                <CrudButton
-                  record={record}
-                  softDelete={_softDeleteProducto}
-                  setRowState={setRowState}
-                  permiso={sesions && sesions._usuario[0].rol === 2}
-                  visualizador={visualizador}
-                />
-              ) : (
-                <StopOutlined style={{ fontSize: 18, marginLeft: "2vw" }} />
-              ),
-            width: "5%",
-          },
-        ]
+          width: "5%",
+        },
+      ]
       : [
-          {
-            title: "CÓDIGO",
-            dataIndex: "codigo_interno",
-            key: "codigo_interno",
-            sorter: {
-              compare: (a, b) =>
-                a.codigo_interno.localeCompare(b.codigo_interno),
-            },
-            showSorterTooltip: false,
-            width: "16%",
+        {
+          title: "CÓDIGO",
+          dataIndex: "codigo_interno",
+          key: "codigo_interno",
+          sorter: {
+            compare: (a, b) =>
+              a.codigo_interno.localeCompare(b.codigo_interno),
           },
-          {
-            title: "PRODUCTO",
-            dataIndex: "nombre",
-            key: "nombre",
-            sorter: {
-              compare: (a, b) => a.nombre.localeCompare(b.nombre),
-            },
-            showSorterTooltip: false,
-            width: "34%",
+          showSorterTooltip: false,
+          width: "16%",
+        },
+        {
+          title: "PRODUCTO",
+          dataIndex: "nombre",
+          key: "nombre",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
+          },
+          showSorterTooltip: false,
+          width: "34%",
 
-            // render:(text)=><Link to='/inicio'>{text}</Link>
+          // render:(text)=><Link to='/inicio'>{text}</Link>
+        },
+        {
+          title: "UNIDAD MEDIDA",
+          dataIndex: "unidad_medida_abreviatura",
+          key: "unidad_medida_abreviatura",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
-          {
-            title: "UNIDAD MEDIDA",
-            dataIndex: "unidad_medida_abreviatura",
-            key: "unidad_medida_abreviatura",
-            sorter: {
-              compare: (a, b) => a.nombre.localeCompare(b.nombre),
-            },
-            showSorterTooltip: false,
-            width: "5%",
-            align: "center",
+          showSorterTooltip: false,
+          width: "5%",
+          align: "center",
 
-            // render:(text)=><Link to='/inicio'>{text}</Link>
+          // render:(text)=><Link to='/inicio'>{text}</Link>
+        },
+        {
+          title: "COSTO",
+          dataIndex: "costo",
+          key: "costo",
+          sorter: {
+            compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
-          {
-            title: "COSTO",
-            dataIndex: "costo",
-            key: "costo",
-            sorter: {
-              compare: (a, b) => a.nombre.localeCompare(b.nombre),
-            },
-            showSorterTooltip: false,
-            width: "5%",
-            align: "center",
-            render: (text, record) =>
-              record.costo && (
-                <p
-                // onClick={() => {
-                //   record["permiso"] = false;
-                //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-                // }}
-                >
-                  {"$" + text}
-                </p>
-              ),
-            // render:(text)=><Link to='/inicio'>{text}</Link>
-          },
-          // {
-          //   title: "TIPO DE INVENTARIO",
-          //   dataIndex: "tipo_inventario",
-          //   key: "tipo_inventario",
-          //   align:'center',
-          //   sorter: {
-          //     compare: (a, b) =>
-          //       a.tipo_inventario.localeCompare(b.tipo_inventario),
-          //   },
-          //   filters: [
-          //     { text: "PERMANENTE", value: "PERMANENTE" },
-          //     { text: "BAJO PEDIDO", value: "BAJO PEDIDO" },
-          //   ],
-          //   filteredValue: filteredInfo.tipo_inventario || null,
-          //   onFilter: (value, record) => record.tipo_inventario.includes(value),
-          //   ellipsis: true,
-          //   showSorterTooltip: false,
-          //   render: (text, record) =>
-          //     record.fk_linea_id === "60a7d6e408be1a4c6d9f019d" ? (
-          //       <p style={{ color: "blue" }}>
-          //         {" "}
-          //         <SmileOutlined /> {text}
-          //       </p>
-          //     ) : (
-          //       <p style={{ color: "black" }}>{text}</p>
-          //     ),
-          // },
-          {
-            title: "PRECIO",
-            dataIndex: "precio",
-            key: "precio",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align: "center",
-            width: "5%",
-            showSorterTooltip: false,
-            render: (text, record) => (
+          showSorterTooltip: false,
+          width: "5%",
+          align: "center",
+          render: (text, record) =>
+            record.costo && (
               <p
               // onClick={() => {
               //   record["permiso"] = false;
@@ -483,133 +504,155 @@ const ProductoList = (props) => {
                 {"$" + text}
               </p>
             ),
+          // render:(text)=><Link to='/inicio'>{text}</Link>
+        },
+        {
+          title: "PRECIO",
+          dataIndex: "precio",
+          key: "precio",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
           },
+          align: "center",
+          width: "5%",
+          showSorterTooltip: false,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {"$" + text}
+            </p>
+          ),
+        },
 
-          {
-            title: "ESPECIALISTA",
-            dataIndex: "limite_descuento1",
-            key: "limite_descuento1",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align: "center",
-            width: "5%",
-            showSorterTooltip: false,
-            filters: [
-              { text: "0%", value: "0" },
-              { text: "5%", value: "5" },
-              { text: "10%", value: "10" },
-              { text: "40%", value: "40" },
-              { text: "50%", value: "50" },
-            ],
-            filteredValue: filteredInfo.limite_descuento1 || null,
-            onFilter: (value, record) => record.limite_descuento1 === value,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {text + "%"}
-              </p>
+        {
+          title: "ESPECIALISTA",
+          dataIndex: "limite_descuento1",
+          key: "limite_descuento1",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
+          },
+          align: "center",
+          width: "5%",
+          showSorterTooltip: false,
+          filters: [
+            { text: "0%", value: "0" },
+            { text: "5%", value: "5" },
+            { text: "10%", value: "10" },
+            { text: "40%", value: "40" },
+            { text: "50%", value: "50" },
+          ],
+          filteredValue: filteredInfo.limite_descuento1 || null,
+          onFilter: (value, record) => record.limite_descuento1 === value,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {text + "%"}
+            </p>
+          ),
+        },
+
+        {
+          title: "LÍDER RETAIL",
+          dataIndex: "limite_descuento2",
+          key: "limite_descuento2",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
+          },
+          align: "center",
+          width: "5%",
+          filters: [
+            { text: "0%", value: "0" },
+            { text: "5%", value: "5" },
+            { text: "10%", value: "10" },
+            { text: "15%", value: "15" },
+          ],
+          filteredValue: filteredInfo.limite_descuento2 || null,
+          onFilter: (value, record) => record.limite_descuento2 === value,
+          showSorterTooltip: false,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {text + "%"}
+            </p>
+          ),
+        },
+
+        {
+          title: "LÍDER PROYECTOS",
+          dataIndex: "limite_descuento3",
+          key: "limite_descuento3",
+          sorter: {
+            compare: (a, b) => a.precio - b.precio,
+          },
+          align: "center",
+          width: "5%",
+          showSorterTooltip: false,
+          filters: [
+            { text: "0%", value: "0" },
+            { text: "5%", value: "5" },
+            { text: "15%", value: "15" },
+            { text: "18%", value: "18" },
+            { text: "20%", value: "20" },
+            { text: "25%", value: "25" },
+            { text: "35%", value: "35" },
+          ],
+          filteredValue: filteredInfo.limite_descuento3 || null,
+          onFilter: (value, record) => record.limite_descuento3 === value,
+          render: (text, record) => (
+            <p
+            // onClick={() => {
+            //   record["permiso"] = false;
+            //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+            // }}
+            >
+              {text + "%"}
+            </p>
+          ),
+        },
+
+        {
+          title: "STOCK GENERAL",
+          dataIndex: "",
+          key: "y",
+          render: (_, record) => (
+            <QueryButton record={record} setClick={setClick} />
+          ),
+          align: "center",
+          width: "5%",
+        },
+
+        {
+          title: "ACCIONES",
+          dataIndex: "",
+          key: "x",
+          align: "center",
+          render: (_, record) =>
+            record.url_pagina_web ? (
+              <CrudButton
+                record={record}
+                softDelete={_softDeleteProducto}
+                setRowState={setRowState}
+                permiso={sesions && sesions._usuario[0].rol === 2}
+                visualizador={visualizador}
+              />
+            ) : (
+              <StopOutlined style={{ fontSize: 18, marginLeft: "2vw" }} />
             ),
-          },
-
-          {
-            title: "LÍDER RETAIL",
-            dataIndex: "limite_descuento2",
-            key: "limite_descuento2",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align: "center",
-            width: "5%",
-            filters: [
-              { text: "0%", value: "0" },
-              { text: "5%", value: "5" },
-              { text: "10%", value: "10" },
-              { text: "15%", value: "15" },
-            ],
-            filteredValue: filteredInfo.limite_descuento2 || null,
-            onFilter: (value, record) => record.limite_descuento2 === value,
-            showSorterTooltip: false,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {text + "%"}
-              </p>
-            ),
-          },
-
-          {
-            title: "LÍDER PROYECTOS",
-            dataIndex: "limite_descuento3",
-            key: "limite_descuento3",
-            sorter: {
-              compare: (a, b) => a.precio - b.precio,
-            },
-            align: "center",
-            width: "5%",
-            showSorterTooltip: false,
-            filters: [
-              { text: "0%", value: "0" },
-              { text: "5%", value: "5" },
-              { text: "15%", value: "15" },
-              { text: "18%", value: "18" },
-              { text: "20%", value: "20" },
-              { text: "25%", value: "25" },
-              { text: "35%", value: "35" },
-            ],
-            filteredValue: filteredInfo.limite_descuento3 || null,
-            onFilter: (value, record) => record.limite_descuento3 === value,
-            render: (text, record) => (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {text + "%"}
-              </p>
-            ),
-          },
-
-          {
-            title: "STOCK GENERAL",
-            dataIndex: "",
-            key: "y",
-            render: (_, record) => (
-              <QueryButton record={record} setClick={setClick} />
-            ),
-            align: "center",
-            width: "5%",
-          },
-
-          {
-            title: "ACCIONES",
-            dataIndex: "",
-            key: "x",
-            align: "center",
-            render: (_, record) =>
-              record.url_pagina_web ? (
-                <CrudButton
-                  record={record}
-                  softDelete={_softDeleteProducto}
-                  setRowState={setRowState}
-                  permiso={sesions && sesions._usuario[0].rol === 2}
-                  visualizador={visualizador}
-                />
-              ) : (
-                <StopOutlined style={{ fontSize: 18, marginLeft: "2vw" }} />
-              ),
-            width: "5%",
-          },
-        ];
+          width: "5%",
+        },
+      ];
 
   let history = useHistory();
 
@@ -644,6 +687,17 @@ const ProductoList = (props) => {
         (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
         (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
     );
+
+    setDataSource(filteredData);
+  };
+
+  const filtrarE = (e) => {
+    alert("VA A FILTRAR X ESTADOS: " + e)
+    setFiltro(e);
+
+    const filteredData = productos.filter((entry) => entry.fk_marca_id === e);
+
+    console.log("FILTRADOS X MARCA", filteredData);
 
     setDataSource(filteredData);
   };
@@ -695,18 +749,30 @@ const ProductoList = (props) => {
     <div>
       <br />
       <Divider>PRODUCTOS</Divider>
+      <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
+      <Divider className="titleFont">{"EL VALUE: " + value + " EL VALUE ESTADO: " + valueEstado +  "  EL FILTRO: " + filtro}</Divider>
+      {/* <Divider className="titleFont">{"RESPONSE: " + response}</Divider> */}
+      {/* <Space ><Search
+        placeholder="Buscar producto..."
+        value={value}
+        onChange={(e) => filtrarB(e)}
+        style={{ width: 200 }}
+      /></Space> */}
+      {/* <Divider className="titleFont">{"EL visualizador: " + visualizador}</Divider> */}
       {/* const { lineaV, marcaV, grupoV, visualizador, stocks } = props; */}
       {/* <Divider className="titleFont">{"EL LINEAV: " + lineaV}</Divider>
       <Divider className="titleFont">{"EL MARCAV: " + marcaV}</Divider>
-      <Divider className="titleFont">{"EL GRUPOV: " + grupoV}</Divider>
-      <Divider className="titleFont">{"EL VISUALIZADOR: " + visualizador}</Divider>
-      <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider> */}
+      <Divider className="titleFont">{"EL GRUPOV: " + grupoV}</Divider>*/}
+      {/* <Divider className="titleFont">{"LOS PRODUCTOS: " + JSON.stringify(productos)}</Divider> */}
+      <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider> 
+      <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider> 
+      <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider> 
       <br />
       <Row>
         {visualizador ? (
           <Col span={1}></Col>
         ) : (
-          <Col span={3}>
+          <Col span={2}>
             <Button
               type="primary"
               className="success"
@@ -718,7 +784,41 @@ const ProductoList = (props) => {
             </Button>
           </Col>
         )}
-
+        {/* <Col span={2}> */}
+          {/* <Radio.Group options={plainOptions} onChange={this.onChange1} value = { value1 } /> */}
+          {/* {/* < Radio.Group onChange={onChangeRadio} value={valueRadio}> */}
+            {/*<Radio className="containerRadio" value={1}>TODOS</Radio>
+            <Radio className="containerRadio" value={2}>ACTIVOS</Radio>
+            <Radio className="containerRadio" value={3}>DESCONTINUADOS</Radio>
+          </Radio.Group>
+        </Col> */}
+        <Col span={4}>
+          <Select
+            showSearch
+            style={{ width: 180 }}
+            placeholder="Seleccione Estado"
+            // onChange={handleChangeEstado}
+            onChange={(e) => {
+              // dispatch(getProductosByLinea(e));
+              setValueEstado(e);
+              setSelectedLineaId(null);
+              setSelectedMarcaId(null);
+              setSelectedGrupoId(null);
+              setFiltro(null);
+              setValue(null);
+              setFilterAll(false);
+            }}
+          >
+            <Option value={3}>TODOS</Option>
+            <Option value={1}>ACTIVOS</Option>
+            <Option value={2}>DESCONTINUADOS</Option>
+          </Select>
+        </Col>
+        {/* <Col span={2}>
+          <Checkbox onChange={(e) => filtroGlobal(e)} checked={filterAll}>
+            Todos
+          </Checkbox>
+        </Col> */}
         <Col span={5}>
           <SelectOpciones
             tipo="línea"
@@ -747,7 +847,7 @@ const ProductoList = (props) => {
             value={selectedMarcaId}
           />
         </Col>
-        <Col span={5}>
+        <Col span={4}>
           <SelectOpciones
             tipo="grupo"
             filter={selectedMarcaId}
@@ -759,7 +859,7 @@ const ProductoList = (props) => {
             value={selectedGrupoId}
           />
         </Col>
-        <Col span={4}>
+        <Col span={5}>
           <Search
             placeholder="Buscar producto..."
             value={value}
@@ -767,11 +867,12 @@ const ProductoList = (props) => {
             style={{ width: 200 }}
           />
         </Col>
-        <Col span={2}>
+        
+        {/* <Col span={2}>
           <Checkbox onChange={(e) => filtroGlobal(e)} checked={filterAll}>
             Todos
           </Checkbox>
-        </Col>
+        </Col> */}
       </Row>
 
       <br />
@@ -809,22 +910,4 @@ const ProductoList = (props) => {
   );
 };
 
-// function useWindowSize() {
-//   const [windowSize, setWindowSize] = useState({
-//     width: undefined,
-//     height: undefined,
-//   });
-//   useEffect(() => {
-//     function handleResize() {
-//       setWindowSize({
-//         width: window.innerWidth,
-//         height: window.innerHeight,
-//       });
-//     }
-//     window.addEventListener("resize", handleResize);
-//     handleResize();
-//     return () => window.removeEventListener("resize", handleResize);
-//   }, []);
-//   return windowSize;
-// }
 export default ProductoList;

@@ -9,6 +9,28 @@ export function getAllSubgrupos(){
         },
       });
 }
+export function getAllLineas(){
+  return axios.get(baseUrl+"lineas-orden", {
+      headers: {
+        Authorization: `Bearer ${REACT_APP_API_KEY}`,
+      },
+    });
+}
+export function getAllGrupos(){
+  return axios.get(baseUrl+"grupos", {
+      headers: {
+        Authorization: `Bearer ${REACT_APP_API_KEY}`,
+      },
+    });
+}
+
+export function getAllMarcas(){
+  return axios.get(baseUrl+"linea-marca-vista-helper", {
+      headers: {
+        Authorization: `Bearer ${REACT_APP_API_KEY}`,
+      },
+    });
+}
 
 export function getGruposLineaBySubgrupo(id){
 

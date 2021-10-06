@@ -315,7 +315,8 @@ const FormProducto = (props) => {
 
     if (!stock && editProducto && !crud) {
       new ProductoService()
-        .getStock(editProducto.codigo_temporal)
+        // .getStock(editProducto.codigo_temporal)
+        .getStock(editProducto.codigo_interno)
         .then((data) => setStock(data));
     }
 
@@ -1040,13 +1041,16 @@ const FormProducto = (props) => {
                   onClick={() => generarQR()}
                 />
               ) : null}
+              {codigo !== "nuevo" && (editProducto.url_fichatecnica || urlfichatecnica)  ?
               <FilePdfOutlined onClick={fichatecnica} title="Ficha Técnica" style={{
                 marginLeft:20,
                 fontSize: "25px" }
-                
-                }>
-
+              }>
               </FilePdfOutlined>
+                : null}
+                
+                  
+
               </Col>
               </Row>
             <Divider>

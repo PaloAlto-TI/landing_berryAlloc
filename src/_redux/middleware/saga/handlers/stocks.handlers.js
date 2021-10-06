@@ -1,6 +1,6 @@
 import { call, put } from "redux-saga/effects";
-import { setGruposLineaBySubgrupo, setLineas, setSubgrupos } from "../../../ducks/stocks.duck";
-import { getAllSubgrupos, getGruposLineaBySubgrupo, getLineasStock, getAllLineas } from "../requests/stocks.requests";
+import { setGrupos,setMarcas,setGruposLineaBySubgrupo, setLineas, setSubgrupos } from "../../../ducks/stocks.duck";
+import { getAllGrupos,getAllMarcas,getAllLineas,getAllSubgrupos, getGruposLineaBySubgrupo, getLineasStock } from "../requests/stocks.requests";
 
 export function* handleGetSubgrupos() {
   try {
@@ -8,6 +8,36 @@ export function* handleGetSubgrupos() {
     console.log("WENTROOOOOOOO  ASTOCK HABDEL")
     const { data } = response;
     yield put(setSubgrupos(data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+export function* handleGetAlltGrupos() {
+  try {
+    const response = yield call(getAllGrupos);
+    const { data } = response;
+    yield put(setGrupos(data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+export function* handleGetAllLineas() {
+  try {
+    const response = yield call(getAllLineas);
+    const { data } = response;
+    yield put(setLineas(data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export function* handleGetAllMarcas() {
+  try {
+    const response = yield call(getAllMarcas);
+    const { data } = response;
+    yield put(setMarcas(data));
   } catch (error) {
     console.log(error);
   }
