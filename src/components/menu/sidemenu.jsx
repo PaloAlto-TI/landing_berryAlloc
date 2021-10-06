@@ -58,7 +58,7 @@ const SideMenu = () => {
             <Menu.Item key="7" icon={<BarcodeOutlined />}><a href={`${path}/productos`}>PRODUCTOS</a></Menu.Item>
           </SubMenu>
 
-          :null:null}
+          : <Menu.Item key="0" icon={<HomeOutlined />}style={{backgroundColor:"white"}}>CREAR</Menu.Item>:null}
           {/*<Menu.Item key="2" icon={<HighlightOutlined />}><a href={`${path}/lineas`}>LÍNEAS</a></Menu.Item>
           <Menu.Item key="3" icon={<FundOutlined />}><a href={`${path}/marcas`}>MARCAS</a></Menu.Item>
           <SubMenu key="sub1" title="GRUPOS">
