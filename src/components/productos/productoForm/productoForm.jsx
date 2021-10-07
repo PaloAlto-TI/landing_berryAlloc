@@ -315,7 +315,8 @@ const FormProducto = (props) => {
 
     if (!stock && editProducto && !crud) {
       new ProductoService()
-        .getStock(editProducto.codigo_temporal)
+        // .getStock(editProducto.codigo_temporal)
+        .getStock(editProducto.codigo_interno)
         .then((data) => setStock(data));
     }
 

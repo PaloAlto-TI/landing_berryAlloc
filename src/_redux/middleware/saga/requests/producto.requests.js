@@ -17,6 +17,17 @@ export function getProducto(id){
     },
   })
 }
+// view-productos-by-estado
+
+export function getProductosByEstado(estado){
+  console.log("el estado dentor de request: ", estado)
+  return axios.get(baseUrl+"view-productos-by-estado/"+ estado, {
+      headers: {
+        Authorization: `Bearer ${REACT_APP_API_KEY}`,
+      },
+    })
+}
+
 
 export function getProductosByLinea(id){
   console.log("el id", id)
