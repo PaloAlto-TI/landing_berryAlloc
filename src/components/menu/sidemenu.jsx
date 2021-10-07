@@ -3,7 +3,7 @@ import './sidemenu.css';
 import { Menu } from 'antd';
 import { /*StarOutlined, FormatPainterOutlined,*/ PlusCircleOutlined, DollarCircleOutlined,
   MenuOutlined, HighlightOutlined, HomeOutlined, LineChartOutlined, CodeSandboxOutlined,
-  FundOutlined, BarcodeOutlined, BlockOutlined, BorderOutlined, DropboxOutlined
+  FundOutlined, BarcodeOutlined, BlockOutlined, BorderOutlined, DropboxOutlined, AppstoreAddOutlined
 } from '@ant-design/icons';
 import { SesionContext } from "../../contexts/sesionContext";
 // import { useHistory } from "react-router";
@@ -41,7 +41,9 @@ const SideMenu = () => {
         closable={true}
         onClose={onClose}
         visible={visible}
-        footer="2021 PA - TI | All Rights Reserved.">
+        width="270px"
+       
+        footer="2021 PA - TI | All Rights Reserved." >
         <Menu
           style={{ width: "100%" }}
           mode="inline">
@@ -50,7 +52,7 @@ const SideMenu = () => {
           <SubMenu key="sub1" icon={<PlusCircleOutlined />} title="CREAR">
             <Menu.Item key="2" icon={<HighlightOutlined />}><a href={`${path}/lineas`}>LÍNEAS</a></Menu.Item>
             <Menu.Item key="3" icon={<FundOutlined />}><a href={`${path}/marcas`}>MARCAS</a></Menu.Item>
-            <SubMenu key="sub2" title="GRUPOS">
+            <SubMenu key="sub2" icon={<AppstoreAddOutlined />}title="GRUPOS">
               <Menu.Item key="4" icon={<BorderOutlined />}><a href={`${path}/grupos`}>GRUPOS</a></Menu.Item>
               <Menu.Item key="5" icon={<BlockOutlined />}><a href={`${path}/subgrupo`}>SUBGRUPOS</a></Menu.Item>
             </SubMenu>
