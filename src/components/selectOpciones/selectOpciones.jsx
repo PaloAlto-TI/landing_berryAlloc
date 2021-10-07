@@ -111,6 +111,94 @@ const SelectOpciones = (props) => {
             setOpciones(data);
           });
         }
+      } else if (tipo === "_marcas" && filter) {
+        console.log("ENTRA A SELECT DE MARCAS CON: ", filter)
+        setOpciones(filter);
+      
+      } else if (tipo === "_grupos" && filter) {
+        console.log("ENTRA A SELECT DE GRUPOS CON: ", filter)
+        setOpciones(filter);
+      
+      } else if (tipo === "lineas" && filter) {
+        
+        /*console.log("ENTRAAA!!! A SELECT DE LINEAS Y FILTER CON: ", filter)
+        const uniqueTags = [];
+        filter.map(item => {                  
+          var findItem = uniqueTags.find(x => x.tag === item.tag);
+          if (!findItem)
+              uniqueTags.push(item);
+      });
+        
+      console.log("LOS UNIQUE: ", uniqueTags)*/
+      // const datarr = [
+      //   { group: 'A', name: 'SD' }, 
+      //   { group: 'B', name: 'FI' }, 
+      //   { group: 'A', name: 'MM' },
+      //   { group: 'B', name: 'CO'}
+      // ];
+      // const uniquet = [...new Set(datarr.map(item => item.group))]; // [ 'A', 'B']
+      // console.log("EL EXAMPLE: ", uniquet)
+
+// console.log("EL EXAMPLE22: ", reformattedArray)
+        // console.log("COMO ESTA QUEDANDO: ", filter.map((g) => (g.fk_linea_id, g.linea)))
+        // console.log("COMO ESTA QUEDANDO: ", filter.map((g) => g.linea))
+        // console.log("COMO ESTA QUEDANDO FILTRADO: ", [...new Set(filter.map(item => item.linea))])
+
+
+         /*console.log("COMO ESTA QUEDANDO AHORA: ", [...new Set(filter.map(function(item){
+           const rObj = {};
+           rObj.id = item.fk_linea_id;
+           rObj.nombre = item.linea;
+           return rObj;
+           }))])
+*/
+// const lineasMapped = {}
+
+        /*const lineasMapped = filter.map(function(item){
+          const rObj = {};
+          rObj.id = item.fk_linea_id;
+          rObj.nombre = item.linea;
+          return rObj;
+          }) ---------ESTO SE BORRO!!!
+*/
+
+
+         /* console.log("COMO ESTA QUEDANDO: ", filter.map(function(item){
+            const rObj = {};
+            rObj.id = item.fk_linea_id;
+            rObj.nombre = item.linea;
+            return rObj;
+            }))*/
+
+            // console.log("COMO ESTA QUEDANDO AARAYOBJ: ", lineasMapped)
+
+            // onst uniquePeople = [... new Set(people.map(JSON.stringify))].map(JSON.parse)
+            // console.log("COMO YAAAAAAAAA: ", [... new Set(lineasMapped.map(JSON.stringify))].map(JSON.parse))
+  
+
+           // const uniquePeople = [... new Set(people.map(JSON.stringify))].map(JSON.parse)
+
+        // const lineaMarcaService = new LineaMarcaService();
+/**setLineas(
+        grupos
+          .map((g) => g.fk_lineamarca.fk_linea)
+          .filter((v, i, a) => a.findIndex((t) => t.id === v.id) === i)
+      ); */
+        // lineaMarcaService.getAll().then((data) => {
+          // if (cancel) return;
+          // setOpciones(data.filter((p) => p.linea_id === filter));
+          // setOpciones(filter);
+
+
+
+          //setOpciones([... new Set(lineasMapped.map(JSON.stringify))].map(JSON.parse)); -- ESTO SE BORROOO
+
+          setOpciones(filter);
+
+
+
+       // });
+
       } else if (tipo === "marca" && filter) {
         const lineaMarcaService = new LineaMarcaService();
         lineaMarcaService.getAll().then((data) => {
@@ -258,6 +346,7 @@ const SelectOpciones = (props) => {
   }
 
   var opcionesList = opciones.map(function (opcion) {
+   // console.log("LA DATA QUE VA A MAPPEAR: ", opcion)
     if (opcion.codigo) {
       return (
         <Option key={opcion.id} value={opcion.id}>

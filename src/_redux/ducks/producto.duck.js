@@ -43,9 +43,10 @@ export const setProductos = (productos) => ({
   loading: false
 });
 
-export const setProductosByEstado = (productos) => ({
+export const setProductosByEstado = (productos_estado) => ({
   type: SET_PRODUCTOS_BY_ESTADO,
-  productos,
+  productos_estado,
+  loading: false
 });
 
 export const setProductosByLinea = (productos) => ({
@@ -113,7 +114,7 @@ export default (state = initialState, action) => {
     case SET_PRODUCTOS_BY_GRUPO:
       return { ...state, productos: productos.data, producto: null, response: null, loading: false };
     case SET_PRODUCTOS_BY_ESTADO:
-      return { ...state, productos_estado: productos.data, producto: null, response: null, loading: false };
+      return { ...state, productos_estado: productos_estado.data, producto: null, response: null, loading: false };
     case SET_PRODUCTO:
       return { ...state, producto: producto.data[0] ? producto.data[0] : undefined };
     case SET_SERIAL_MODELO:

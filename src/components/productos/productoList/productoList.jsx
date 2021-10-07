@@ -40,11 +40,17 @@ const ProductoList = (props) => {
   const [value, setValue] = useState(null);
   // const [valueRadio, setValueRadio] = useState(null);
   const [valueEstado, setValueEstado] = useState(null);
- const productos = useSelector((state) => state.productos.productos);
- const prueba = useSelector((state) => state);
+  const productos = useSelector((state) => state.productos.productos);
+  const productos_estado = useSelector((state) => state.productos.productos_estado);
+  const prueba = useSelector((state) => state);
+
+  const [lineasDropdown, setlineasDropdown] = useState(null);
+  const [marcasDropdown, setmarcasDropdown] = useState(null);
+  const [gruposDropdown, setgruposDropdown] = useState(null);
+  // const [valueEstado, setValueEstado] = useState(null);
 
   const producto = useSelector((state) => state.productos.producto);
-  
+
   const loading = useSelector((state) => state.productos.loading);
   const response = useSelector((state) => state.productos.response);
   // const grupos = useSelector((state) => state.stocks.grupos);
@@ -60,14 +66,7 @@ const ProductoList = (props) => {
   //       : producto.fk_linea_id
   // );
   const [selectedLineaId, setSelectedLineaId] = useState(
-    grupos
-      ? lineaV
-      : !producto
-        ? !response
-          ? null
-          : response.data.fk_linea_id
-        : producto.fk_linea_id
-  );
+    null);
 
   const [selectedMarcaId, setSelectedMarcaId] = useState(
     grupos
@@ -90,7 +89,7 @@ const ProductoList = (props) => {
   function handleChangeEstado(value) {
     // console.log(value);
     setValueEstado(value);
-    
+
     if (value == 1) {
       alert("LE DIO CLICK A TODOS")
       setSelectedLineaId(null);
@@ -111,7 +110,7 @@ const ProductoList = (props) => {
   }
 
   const onChangeEstado = e => {
-    
+
     console.log('radio checked', e.target.value);
     setValueEstado(e.target.value);
 
@@ -184,62 +183,101 @@ const ProductoList = (props) => {
   //   );
   // }, [dispatch, selectedLineaId]);
 
- useEffect(() => {
-  //dispatch(getProducto('005-004-001-001'));
-  //dispatch(getProductosByLinea('60d4c0476e8514b5e8c66fd5'));
-  
-  console.log(" QUIERE HACER DISPATCH de productos por estado: ", valueEstado)
-  dispatch(
-    valueEstado ? getProductosByEstado(valueEstado) : getProductos()
-  );
-
-  console.log(" VA EL OTRO DISPACTH ")
-  dispatch(getProductosByEstado(2))
-
-
-  console.log("DISPACTH DE PRODUCTOS: ", prueba)
-}, [dispatch, valueEstado]);
-
-  // getProductosByEstado
-
   useEffect(() => {
     //dispatch(getProducto('005-004-001-001'));
     //dispatch(getProductosByLinea('60d4c0476e8514b5e8c66fd5'));
-    //  console.log("el filtro", filtro)
-    // if (productos && producto){
 
-    //   if (selectedMarcaId){
+    console.log(" QUIERE HACER DISPATCH de productos por estado: ", valueEstado)
+    // dispatch(
+    //   valueEstado ? getProductosByEstado(valueEstado) : getProductos()
+    // );
+    // 
+    // // console.log(" VA EL OTRO DISPACTH ")
+    // 
+    // dispatch(getProductosByEstado(2))
+    // console.log(" VA CON ESTE ESTADO:  ", valueEstado)
+    // alert("VALUE ESTADO: " + valueEstado)
 
-    //       filtrarM(selectedMarcaId)
-    //   }
+    if (valueEstado !== null) {
+      if (valueEstado === 0) {
+        console.log("entra a dispac")
+        dispatch(getProductos())
+      } else {
+        console.log("entra a OTROOOO dispac")
+        dispatch(getProductosByEstado(valueEstado))
+      }
+    }
 
-    //   if (selectedGrupoId){
+    console.log("DISPACTH DE PRODUCTOS PRUBEA: ", prueba)
+  }, [dispatch, valueEstado]);
 
-    //       filtrarG(selectedGrupoId);
-    //   }
-    // }
+  useEffect(() => {
+    // console.log("ENTRA A USEEFFECT NUEVO MC JC con: " +  valueEstado +  " yyy dataSource:  " +  dataSource)
+    if (valueEstado !== null && !dataSource) {
+      if (valueEstado === 0) {
+        // dispatch(getProductos())
+        console.log("ENTRA A SET CON PRODUCTOS CON PRODUCTOS: ", productos)
+        setDataSource(productos);
 
-    // if (!value && !filtro) {
-    if (valueEstado && !value && !filtro) {
-      // console.log("ENTRA AL !VALUE !FILTRO CON : ", JSON.stringify(productos))
-      // setDataSource(null);
-      setDataSource(productos);
-    } else {
-      console.log("ENTRA EN ELSEEEEEEEEEEEEEEEEE")
-      setDataSource(null);
+        if (productos) { // --- ACA SE DEBE REVISAR
+          setlineasDropdown([... new Set(productos.map(function (item) {
+            const rObj = {};
+            rObj.id = item.fk_linea_id;
+            rObj.nombre = item.linea;
+            return rObj;
+          }).map(JSON.stringify))].map(JSON.parse))
+        }
+      } else {
+        setDataSource(productos_estado);
+        // dispatch(getProductosByEstado(valueEstado))
+        if (productos_estado) {
+          setlineasDropdown([... new Set(productos_estado.map(function (item) {
+            const rObj = {};
+            rObj.id = item.fk_linea_id;
+            rObj.nombre = item.linea;
+            return rObj;
+          }).map(JSON.stringify))].map(JSON.parse))
+        }
+      }
+
     }
   });
 
+  // useEffect(() => { COMENTADO X MC & JC
+  //   //dispatch(getProducto('005-004-001-001'));
+  //   //dispatch(getProductosByLinea('60d4c0476e8514b5e8c66fd5'));
+  //   //  console.log("el filtro", filtro)
+  //   // if (productos && producto){
+
+  //   //   if (selectedMarcaId){
+
+  //   //       filtrarM(selectedMarcaId)
+  //   //   }
+
+  //   //   if (selectedGrupoId){
+
+  //   //       filtrarG(selectedGrupoId);
+  //   //   }
+  //   // }
+
+  //   // if (!value && !filtro) {
+  //   if (valueEstado && !value && !filtro) {
+  //     console.log("ENTRA AL !VALUE !FILTRO CON : ",productos)
+  //     // setDataSource(null);
+  //     setDataSource(productos);
+  //   } else {
+  //     console.log("ENTRA EN ELSEEEEEEEEEEEEEEEEE")
+  //     setDataSource(null);
+  //   }
+  // });
+
   useEffect(() => {
-    // filtrarG(producto.fk_grupo_id)
-    // console.log("VA A ENTRAR A SETEAR TODO LOS PRODUCTOS, ", JSON.stringify(productos))
     setDataSource(productos);
 
     if (productos) {
       if (selectedMarcaId) {
         filtrarM(selectedMarcaId);
       }
-
       if (selectedGrupoId) {
         filtrarG(selectedGrupoId);
       }
@@ -284,7 +322,7 @@ const ProductoList = (props) => {
           width: "10%",
           align: "center",
         },
-        // {
+        // { //--- SE DEBE AGREGAR EN OTRAS VALIDACIONES O VISUALIZADORES
         //   title: "COSTO",
         //   dataIndex: "costo",
         //   key: "costo",
@@ -432,7 +470,7 @@ const ProductoList = (props) => {
           key: "x",
           align: "center",
           render: (_, record) =>
-            record.url_pagina_web || !visualizador ? (
+            record.url_pagina_web /*|| !visualizador*/ ? (
               <CrudButton
                 record={record}
                 softDelete={_softDeleteProducto}
@@ -471,7 +509,7 @@ const ProductoList = (props) => {
           // render:(text)=><Link to='/inicio'>{text}</Link>
         },
         {
-          title: "UNIDAD MEDIDA",
+          title: "UND. MED.",
           dataIndex: "unidad_medida_abreviatura",
           key: "unidad_medida_abreviatura",
           sorter: {
@@ -483,29 +521,29 @@ const ProductoList = (props) => {
 
           // render:(text)=><Link to='/inicio'>{text}</Link>
         },
-        {
-          title: "COSTO",
-          dataIndex: "costo",
-          key: "costo",
-          sorter: {
-            compare: (a, b) => a.nombre.localeCompare(b.nombre),
-          },
-          showSorterTooltip: false,
-          width: "5%",
-          align: "center",
-          render: (text, record) =>
-            record.costo && (
-              <p
-              // onClick={() => {
-              //   record["permiso"] = false;
-              //   history.push(`${path}/${record.codigo_interno}/ver`, record);
-              // }}
-              >
-                {"$" + text}
-              </p>
-            ),
-          // render:(text)=><Link to='/inicio'>{text}</Link>
-        },
+        //{
+        //  title: "COSTO",
+        //  dataIndex: "costo",
+        //  key: "costo",
+        //  sorter: {
+        //    compare: (a, b) => a.nombre.localeCompare(b.nombre),
+        //  },
+        //  showSorterTooltip: false,
+        //  width: "5%",
+        //  align: "center",
+        //  render: (text, record) =>
+        //    record.costo && (
+        //      <p
+        //      // onClick={() => {
+        //      //   record["permiso"] = false;
+        //      //   history.push(`${path}/${record.codigo_interno}/ver`, record);
+        //      // }}
+        //      >
+        //        {"$" + text}
+        //      </p>
+        //    ),
+        //  // render:(text)=><Link to='/inicio'>{text}</Link>
+        //},
         {
           title: "PRECIO",
           dataIndex: "precio",
@@ -529,7 +567,7 @@ const ProductoList = (props) => {
         },
 
         {
-          title: "ESPECIALISTA",
+          title: "DESC. 1",
           dataIndex: "limite_descuento1",
           key: "limite_descuento1",
           sorter: {
@@ -560,7 +598,7 @@ const ProductoList = (props) => {
         },
 
         {
-          title: "LÍDER RETAIL",
+          title: "DESC. 2",
           dataIndex: "limite_descuento2",
           key: "limite_descuento2",
           sorter: {
@@ -590,7 +628,7 @@ const ProductoList = (props) => {
         },
 
         {
-          title: "LÍDER PROYECTOS",
+          title: "DESC. 3",
           dataIndex: "limite_descuento3",
           key: "limite_descuento3",
           sorter: {
@@ -623,7 +661,7 @@ const ProductoList = (props) => {
         },
 
         {
-          title: "STOCK GENERAL",
+          title: "STOCK",
           dataIndex: "",
           key: "y",
           render: (_, record) => (
@@ -674,55 +712,222 @@ const ProductoList = (props) => {
   }
 
   const filtrarB = (e) => {
+
     const currValue = e.target.value;
     setValue(currValue);
-    const filteredData = productos.filter(
-      (entry) =>
-        (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
-          entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-          entry.unidad_medida_abreviatura
-            .toLowerCase()
-            .includes(currValue.toLowerCase()) ||
-          entry.precio.toString().includes(currValue)) &&
-        (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
-        (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
-    );
 
-    setDataSource(filteredData);
+    if (valueEstado !== null){
+      if (valueEstado === 0){
+        const filteredData = productos.filter(
+          (entry) =>
+            (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
+              entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
+              entry.unidad_medida_abreviatura
+                .toLowerCase()
+                .includes(currValue.toLowerCase()) ||
+              entry.precio.toString().includes(currValue)) &&
+            (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
+            (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
+        );
+        setDataSource(filteredData);
+      } else {
+
+        const filteredData = productos_estado.filter(
+          (entry) =>
+            (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
+              entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
+              entry.unidad_medida_abreviatura
+                .toLowerCase()
+                .includes(currValue.toLowerCase()) ||
+              entry.precio.toString().includes(currValue)) &&
+            (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
+            (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
+        );
+        setDataSource(filteredData);
+        
+      }
+    }
+
+    // controlar la busqueda en null
+
+    /* const filteredData = productos.filter(
+       (entry) =>
+         (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
+           entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
+           entry.unidad_medida_abreviatura
+             .toLowerCase()
+             .includes(currValue.toLowerCase()) ||
+           entry.precio.toString().includes(currValue)) &&
+         (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
+         (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
+     );
+     setDataSource(filteredData);*/
+
+
   };
 
-  const filtrarE = (e) => {
-    alert("VA A FILTRAR X ESTADOS: " + e)
-    setFiltro(e);
+  const filtrarL = (e) => {
+    // console.log("ENTRA A FILTARL CON: ", e)
+    // console.log("ENTRA A FILTARL  CON ESTADO: ", valueEstado)
+    // console.log("EL DATA SOURCE", dataSource);
+    // setDataSource(null);
+    // console.log("EL DATA SOURCE NULL", dataSource);
+    // setFiltro(e);
 
-    const filteredData = productos.filter((entry) => entry.fk_marca_id === e);
+    // const filteredData = productos.filter((entry) => entry.fk_marca_id === e);
+    // console.log("FILTRADOS X MARCA", filteredData);
+    // setDataSource(filteredData);
 
-    console.log("FILTRADOS X MARCA", filteredData);
+    // const filteredData = dataSource.filter((entry) => entry.fk_linea_id === e);
+    // console.log("FILTRADOS X LINEA", filteredData);
+    // setDataSource(filteredData);
 
-    setDataSource(filteredData);
+    //  --- ACA DEBES CAMBIAR CON LOGICA COMO LA QUE ESTABAS USANDO ANTES DE COMENTAR 
+
+    // ESTO ES NUEVO - MC
+    if (valueEstado !== null) {
+      if (valueEstado === 0) {
+        // setDataSource(productos);
+        console.log("QUIERE FILTRAR ESTA DATA EN LINEAS: ", productos)
+        const filteredData = productos.filter((entry) => entry.fk_linea_id === e);
+        console.log("FILTRADOS X LINEA: ", filteredData);
+        setDataSource(filteredData);
+
+        setmarcasDropdown([... new Set(filteredData.map(function (item) {
+          const rObj = {};
+          rObj.id = item.fk_marca_id;
+          rObj.nombre = item.marca;
+          return rObj;
+        }).map(JSON.stringify))].map(JSON.parse))
+
+      } else {
+        // setDataSource(productos_estado);
+        console.log("QUIERE FILTRAR ESTA DATA EN LINEAS _ESTADO: ", productos_estado)
+        const filteredData = productos_estado.filter((entry) => entry.fk_linea_id === e);
+        console.log("FILTRADOS X LINEA _ESTADO: ", filteredData);
+        setDataSource(filteredData);
+
+        setmarcasDropdown([... new Set(filteredData.map(function (item) {
+          const rObj = {};
+          rObj.id = item.fk_marca_id;
+          rObj.nombre = item.marca;
+          return rObj;
+        }).map(JSON.stringify))].map(JSON.parse))
+      }
+    }
   };
 
   const filtrarM = (e) => {
+    console.log("ENTRA A FILTARM CON: ", e)
     setFiltro(e);
 
-    const filteredData = productos.filter((entry) => entry.fk_marca_id === e);
-
+    /* console.log("QUIERE FILTRAR ESTA DATA EN MARCAS: ", dataSource)
+    const filteredData = dataSource.filter((entry) => entry.fk_marca_id === e);
     console.log("FILTRADOS X MARCA", filteredData);
-
     setDataSource(filteredData);
+     ---COMENTADO!!! */
+
+
+    if (valueEstado !== null) {
+      if (valueEstado === 0) {
+        // setDataSource(productos);
+        console.log("QUIERE FILTRAR ESTA DATA EN MARCAS: ", productos)
+        const filteredData = productos.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
+        console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
+        setDataSource(filteredData);
+
+        /*setmarcasDropdown([... new Set(filteredData.map(function (item) {
+          const rObj = {};
+          rObj.id = item.fk_marca_id;
+          rObj.nombre = item.marca;
+          return rObj;
+        }).map(JSON.stringify))].map(JSON.parse))*/
+        setgruposDropdown([... new Set(filteredData.map(function (item) {
+          const rObj = {};
+          rObj.id = item.fk_grupo_id;
+          rObj.nombre = item.grupo;
+          return rObj;
+        }).map(JSON.stringify))].map(JSON.parse))
+
+      } else {
+        // setDataSource(productos_estado);
+        console.log("QUIERE FILTRAR ESTA DATA EN MARCAS _ESTADO: ", productos_estado)
+        // const filteredData = productos_estado.filter((entry) => entry.fk_linea_id === e);
+        const filteredData = productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
+        console.log("FILTRADOS X LINEA & MARCA _ESTADO: ", filteredData);
+        setDataSource(filteredData);
+
+        /*setmarcasDropdown([... new Set(filteredData.map(function (item) {
+          const rObj = {};
+          rObj.id = item.fk_marca_id;
+          rObj.nombre = item.marca;
+          return rObj;
+        }).map(JSON.stringify))].map(JSON.parse))*/
+        setgruposDropdown([... new Set(filteredData.map(function (item) {
+          const rObj = {};
+          rObj.id = item.fk_grupo_id;
+          rObj.nombre = item.grupo;
+          return rObj;
+        }).map(JSON.stringify))].map(JSON.parse))
+      }
+    }
+
+    /*setgruposDropdown([... new Set(filteredData.map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_grupo_id;
+      rObj.nombre = item.grupo;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))*/
+
+
+    // ESTO ES NUEVO - MC
+    /*if (valueEstado !== null) {
+      if (valueEstado === 0) {
+        // setDataSource(productos);
+        console.log("QUIERE FILTRAR ESTA DATA EN MARCAS: ", productos)
+        const filteredData = productos.filter((entry) => entry.fk_marca_id === e);
+        setDataSource(filteredData);
+
+      } else {
+        // setDataSource(productos_estado);
+        console.log("QUIERE FILTRAR ESTA DATA EN MARCAS _ESTADO: ", productos_estado)
+        const filteredData = productos_estado.filter((entry) => entry.fk_marca_id === e);
+        setDataSource(filteredData);
+      }
+    }*/
   };
 
   const filtrarG = (e) => {
+    console.log("ENTRA A FILTARG CON: ", e)
     setFiltro(e);
 
-    const filteredData = productos.filter(
+    /*const filteredData = productos.filter(
       (entry) =>
         entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId
     );
-
     console.log("FILTRADOS X GRUPO", filteredData);
+    setDataSource(filteredData);*/
 
+    console.log("QUIERE FILTRAR ESTA DATA EN GRUPOS: ", dataSource)
+    const filteredData = dataSource.filter((entry) => entry.fk_grupo_id === e);
+    console.log("FILTRADOS X GRUPO", filteredData);
     setDataSource(filteredData);
+
+    // ESTO ES NUEVO - MC
+    /* if (valueEstado !== null) {
+       if (valueEstado === 0) {
+         // setDataSource(productos);
+         console.log("QUIERE FILTRAR ESTA DATA: ", productos)
+         const filteredData = productos.filter((entry) => entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId);
+         setDataSource(filteredData);
+ 
+       } else {
+         // setDataSource(productos_estado);
+         console.log("QUIERE FILTRAR ESTA DATA: ", productos_estado)
+         const filteredData = productos_estado.filter((entry) => entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId);
+         setDataSource(filteredData);
+       }
+     }*/
   };
 
   const filtroGlobal = (e) => {
@@ -749,8 +954,8 @@ const ProductoList = (props) => {
     <div>
       <br />
       <Divider>PRODUCTOS</Divider>
-      <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
-      <Divider className="titleFont">{"EL VALUE: " + value + " EL VALUE ESTADO: " + valueEstado +  "  EL FILTRO: " + filtro}</Divider>
+      {/* <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
+      <Divider className="titleFont">{"EL VALUE: " + value + " EL VALUE ESTADO: " + valueEstado + "  EL FILTRO: " + filtro}</Divider> */}
       {/* <Divider className="titleFont">{"RESPONSE: " + response}</Divider> */}
       {/* <Space ><Search
         placeholder="Buscar producto..."
@@ -759,14 +964,19 @@ const ProductoList = (props) => {
         style={{ width: 200 }}
       /></Space> */}
       {/* <Divider className="titleFont">{"EL visualizador: " + visualizador}</Divider> */}
+      {/* <Divider className="titleFont">{"EL visualizador: " + visualizador}</Divider> */}
       {/* const { lineaV, marcaV, grupoV, visualizador, stocks } = props; */}
       {/* <Divider className="titleFont">{"EL LINEAV: " + lineaV}</Divider>
       <Divider className="titleFont">{"EL MARCAV: " + marcaV}</Divider>
       <Divider className="titleFont">{"EL GRUPOV: " + grupoV}</Divider>*/}
       {/* <Divider className="titleFont">{"LOS PRODUCTOS: " + JSON.stringify(productos)}</Divider> */}
-      <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider> 
-      <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider> 
-      <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider> 
+      {/* <Divider className="titleFont">{"DATA SOURCE: " + dataSource}</Divider>  */}
+      {/*<Divider className="titleFont">{"LINEAS DROPDOWN: " + JSON.stringify(lineasDropdown)}</Divider>
+      <Divider className="titleFont">{"MARCAS DROPDOWN: " + JSON.stringify(marcasDropdown)}</Divider>
+      <Divider className="titleFont">{"GRUPOS DROPDOWN: " + JSON.stringify(gruposDropdown)}</Divider>
+      <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider>
+      <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider>
+    <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
       <br />
       <Row>
         {visualizador ? (
@@ -785,16 +995,15 @@ const ProductoList = (props) => {
           </Col>
         )}
         {/* <Col span={2}> */}
-          {/* <Radio.Group options={plainOptions} onChange={this.onChange1} value = { value1 } /> */}
-          {/* {/* < Radio.Group onChange={onChangeRadio} value={valueRadio}> */}
-            {/*<Radio className="containerRadio" value={1}>TODOS</Radio>
+        {/* <Radio.Group options={plainOptions} onChange={this.onChange1} value = { value1 } /> */}
+        {/* {/* < Radio.Group onChange={onChangeRadio} value={valueRadio}> */}
+        {/*<Radio className="containerRadio" value={1}>TODOS</Radio>
             <Radio className="containerRadio" value={2}>ACTIVOS</Radio>
             <Radio className="containerRadio" value={3}>DESCONTINUADOS</Radio>
           </Radio.Group>
         </Col> */}
         <Col span={4}>
           <Select
-            showSearch
             style={{ width: 180 }}
             placeholder="Seleccione Estado"
             // onChange={handleChangeEstado}
@@ -804,12 +1013,16 @@ const ProductoList = (props) => {
               setSelectedLineaId(null);
               setSelectedMarcaId(null);
               setSelectedGrupoId(null);
+              setDataSource(null);
+              setlineasDropdown(null);
+              setmarcasDropdown(null);
+              setgruposDropdown(null);
               setFiltro(null);
               setValue(null);
               setFilterAll(false);
             }}
           >
-            <Option value={3}>TODOS</Option>
+            <Option value={0}>TODOS</Option>
             <Option value={1}>ACTIVOS</Option>
             <Option value={2}>DESCONTINUADOS</Option>
           </Select>
@@ -820,7 +1033,7 @@ const ProductoList = (props) => {
           </Checkbox>
         </Col> */}
         <Col span={5}>
-          <SelectOpciones
+          {/* <SelectOpciones
             tipo="línea"
             onChange={(e) => {
               dispatch(getProductosByLinea(e));
@@ -832,16 +1045,38 @@ const ProductoList = (props) => {
               setFilterAll(false);
             }}
             value={selectedLineaId}
+          /> */}
+          <SelectOpciones
+            // tipo="línea"
+            tipo="lineas"
+            filter={lineasDropdown}
+            onChange={(e) => {
+              // dispatch(getProductosByLinea(e));
+              // setDataSource(null);
+              setSelectedLineaId(e);
+              setSelectedMarcaId(null);
+              setSelectedGrupoId(null);
+
+              setmarcasDropdown(null);
+              setgruposDropdown(null);
+
+              filtrarL(e);
+              // setFiltro(null);
+              // setValue(null);
+              // setFilterAll(false);
+            }}
+            value={selectedLineaId}
           />
         </Col>
         <Col span={5}>
           <SelectOpciones
-            tipo="marca"
-            filter={selectedLineaId}
+            tipo="_marcas"
+            filter={marcasDropdown}
             onChange={(e) => {
               setSelectedMarcaId(e);
               setSelectedGrupoId(null);
-              setDataSource(null);
+              setgruposDropdown(null);
+              // setDataSource(null);
               filtrarM(e);
             }}
             value={selectedMarcaId}
@@ -849,9 +1084,11 @@ const ProductoList = (props) => {
         </Col>
         <Col span={4}>
           <SelectOpciones
-            tipo="grupo"
-            filter={selectedMarcaId}
-            filter2={selectedLineaId}
+            tipo="_grupos"
+            // filter={selectedMarcaId}
+            filter={gruposDropdown}
+
+            // filter2={selectedLineaId}
             onChange={(e) => {
               setSelectedGrupoId(e);
               filtrarG(e);
@@ -867,7 +1104,7 @@ const ProductoList = (props) => {
             style={{ width: 200 }}
           />
         </Col>
-        
+
         {/* <Col span={2}>
           <Checkbox onChange={(e) => filtroGlobal(e)} checked={filterAll}>
             Todos
@@ -876,35 +1113,36 @@ const ProductoList = (props) => {
       </Row>
 
       <br />
-      {!loading ? (
-        <Table
-          locale={{ emptyText: "No hay productos" }}
-          columns={columns}
-          dataSource={dataSource}
-          rowKey="id"
-          onChange={handleChange}
-          pagination={{ defaultPageSize: 20 }}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                console.log(event);
+      {/* {!loading ? ( */}
+      <Table
+        locale={{ emptyText: "No hay productos" }}
+        columns={columns}
+        dataSource={dataSource ? dataSource : null}
+        // dataSource={productos_estado}
+        rowKey="id"
+        onChange={handleChange}
+        pagination={{ defaultPageSize: 20 }}
+        onRow={(record, rowIndex) => {
+          return {
+            onClick: (event) => {
+              console.log(event);
 
-                if (
-                  event.clientX < window.innerWidth * click &&
-                  rowState &&
-                  !stocks
-                ) {
-                  // record["permiso"] = false;
-                  // history.push(`${path}/${record.codigo_interno}/ver`, record);
-                  ver(record);
-                }
-              },
-            };
-          }}
-        />
-      ) : (
+              if (
+                event.clientX < window.innerWidth * click &&
+                rowState &&
+                !stocks
+              ) {
+                // record["permiso"] = false;
+                // history.push(`${path}/${record.codigo_interno}/ver`, record);
+                ver(record);
+              }
+            },
+          };
+        }}
+      />
+      {/* ) : (
         <Spin indicator={antIcon} className="loading" />
-      )}
+      )} */}
       {/* {JSON.stringify(productos)}  */}
     </div>
   );
