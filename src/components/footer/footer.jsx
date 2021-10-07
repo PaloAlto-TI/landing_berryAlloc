@@ -2,7 +2,7 @@ import React from 'react'
 import "./footer.css";
 import { HeartOutlined } from '@ant-design/icons';
 import { Row, Col } from 'antd';
-import imagentaco from "./taco1.png"
+import imagentaco from "./taco2.svg"
 
 const Footer = () => {
     return (
