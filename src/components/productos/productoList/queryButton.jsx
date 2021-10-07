@@ -5,7 +5,7 @@ import { ProductoService } from '../../../services/productoService';
 
 const QueryButton = (props) => {
 
-    console.log(props.record);
+    console.log("PROPS QUERYBUTTON: ", props.record);
     const [stock, setStock] = useState("CONSULTAR")
     const [isLoading, setIsLoading] = useState(false)
   const [stockBodegas, setstockBodegas] = useState(null);
@@ -23,7 +23,8 @@ const QueryButton = (props) => {
 
     return (
         stock === "CONSULTAR" && !isLoading  ?
-        <Button style={{fontSize:12}} icon={<SearchOutlined />} onClick={() => {  setIsLoading(true); new ProductoService().getStock(props.record.codigo_temporal ? props.record.codigo_temporal : 'N/A').then(data => {setStock(data); setIsLoading(false)}) }}>
+        // <Button style={{fontSize:12}} icon={<SearchOutlined />} onClick={() => {  setIsLoading(true); new ProductoService().getStock(props.record.codigo_temporal ? props.record.codigo_temporal : 'N/A').then(data => {setStock(data); setIsLoading(false)}) }}>
+        <Button style={{fontSize:12}} icon={<SearchOutlined />} onClick={() => {  setIsLoading(true); new ProductoService().getStock(props.record.codigo_interno ? props.record.codigo_interno : 'N/A').then(data => {setStock(data); setIsLoading(false)}) }}>
             {stock}
         </Button> : isLoading ?  <Spin indicator={antIcon} /> : <p>{stock.cantidad_stock} <Tooltip
                             onClick={() => stockPorBodegas()}
