@@ -44,7 +44,7 @@ const ProductoList = (props) => {
   const productos_estado = useSelector((state) => state.productos.productos_estado);
   const producto = useSelector((state) => state.productos.producto);
 
-  
+
   const [product, setProduct] = useState(null);
 
   const prueba = useSelector((state) => state);
@@ -192,38 +192,38 @@ const ProductoList = (props) => {
 
   useEffect(async () => {
     await dispatch(getProductosByEstado(""));
-   
-    
-   
-    },[]);
 
-    // }, [valueEstado]);
+
+    // HAY QUE ARREGLAR ESTO JONNATHAN, SE HABLLÓ E DÍA JUEVES
+  }, []);
+
+  // }, [valueEstado]);
   // useEffect(async () => {
   // console.log("entra en state dispatch")
 
   //   if (valueEstado !== null) {
   //     if (valueEstado === 0) {
-    
+
   //       await dispatch(getProductos())
 
   //       await setDataSource(productos?productos:null);
   //       console.log("esto en data source:sç ",dataSource);
   //     } else {
-      
+
   //      await dispatch(getProductosByEstado(valueEstado))
   //       await setDataSource(productos_estado?productos_estado:null);
   //     }
   //   }
 
-   
+
   // }, [valueEstado]);
 
-  
+
   // useEffect(() => {
-  
+
   //   if (valueEstado !== null && !dataSource) {
   //     if (valueEstado === 0) {
-       
+
   //       // setDataSource(productos);
 
   //       if (productos) { // --- ACA SE DEBE REVISAR
@@ -236,7 +236,7 @@ const ProductoList = (props) => {
   //       }
   //     } else {
   //       // setDataSource(productos_estado);
-       
+
   //       if (productos_estado) {
   //         setlineasDropdown([... new Set(productos_estado.map(function (item) {
   //           const rObj = {};
@@ -291,7 +291,7 @@ const ProductoList = (props) => {
   //     }
   //   }
   // }, [productos]);
-//------------------------------------------------------------------------
+  //------------------------------------------------------------------------
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const columns =
@@ -725,8 +725,8 @@ const ProductoList = (props) => {
     const currValue = e.target.value;
     setValue(currValue);
 
-    if (valueEstado !== null){
-      if (valueEstado === 0){
+    if (valueEstado !== null) {
+      if (valueEstado === 0) {
         const filteredData = productos_estado.filter(
           (entry) =>
             (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
@@ -753,7 +753,7 @@ const ProductoList = (props) => {
             (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
         );
         setDataSource(filteredData);
-        
+
       }
     }
 
@@ -775,49 +775,47 @@ const ProductoList = (props) => {
 
   };
   const filtrarE = async (e) => {
-    console.log("entra con E<<<> ",e);
-  if (productos_estado)
-  {
-    if (e === 0) {
-      const filteredData = productos_estado;
-      setDataSource(filteredData);
-      console.log("entra con E1<<<> ",filteredData);
-      
+    console.log("entra con E<<<> ", e);
+    if (productos_estado) {
+      if (e === 0) {
+        const filteredData = productos_estado;
+        setDataSource(filteredData);
+        console.log("entra con E1<<<> ", filteredData);
+
         // setDataSource(productos);
 
-      
-          setlineasDropdown([... new Set(filteredData.map(function (item) {
-            const rObj = {};
-            rObj.id = item.fk_linea_id;
-            rObj.nombre = item.linea;
-            return rObj;
-          }).map(JSON.stringify))].map(JSON.parse))
-       
-      } 
-      else
-      {
+
+        setlineasDropdown([... new Set(filteredData.map(function (item) {
+          const rObj = {};
+          rObj.id = item.fk_linea_id;
+          rObj.nombre = item.linea;
+          return rObj;
+        }).map(JSON.stringify))].map(JSON.parse))
+
+      }
+      else {
         const filteredData = productos_estado.filter((entry) => entry.estado === e);
         setDataSource(filteredData);
-        console.log("entra con E2<<<> ",filteredData);
-        
-          // setDataSource(productos);
-  
-        
-            setlineasDropdown([... new Set(filteredData.map(function (item) {
-              const rObj = {};
-              rObj.id = item.fk_linea_id;
-              rObj.nombre = item.linea;
-              return rObj;
-            }).map(JSON.stringify))].map(JSON.parse))
-         
+        console.log("entra con E2<<<> ", filteredData);
+
+        // setDataSource(productos);
+
+
+        setlineasDropdown([... new Set(filteredData.map(function (item) {
+          const rObj = {};
+          rObj.id = item.fk_linea_id;
+          rObj.nombre = item.linea;
+          return rObj;
+        }).map(JSON.stringify))].map(JSON.parse))
+
 
 
       }
 
-  
 
 
-  }
+
+    }
 
 
   }
@@ -839,28 +837,28 @@ const ProductoList = (props) => {
 
     //  --- ACA DEBES CAMBIAR CON LOGICA COMO LA QUE ESTABAS USANDO ANTES DE COMENTAR 
 
-    
-        // setDataSource(productos);
-        //console.log("QUIERE FILTRAR ESTA DATA EN LINEAS: ", productos)
-      
-   
-          const filteredData =valueEstado===0? productos_estado.filter((entry) => entry.fk_linea_id === e):productos_estado.filter((entry) =>entry.estado===valueEstado && entry.fk_linea_id === e);
 
-     
-         
-        
-        //console.log("FILTRADOS X LINEA: ", filteredData);
-        setDataSource(filteredData);
+    // setDataSource(productos);
+    //console.log("QUIERE FILTRAR ESTA DATA EN LINEAS: ", productos)
 
-        setmarcasDropdown([... new Set(filteredData.map(function (item) {
-          const rObj = {};
-          rObj.id = item.fk_marca_id;
-          rObj.nombre = item.marca;
-          return rObj;
-        }).map(JSON.stringify))].map(JSON.parse))
 
-      
-    
+    const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === e);
+
+
+
+
+    //console.log("FILTRADOS X LINEA: ", filteredData);
+    setDataSource(filteredData);
+
+    setmarcasDropdown([... new Set(filteredData.map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_marca_id;
+      rObj.nombre = item.marca;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+
+
+
   };
 
   const filtrarM = (e) => {
@@ -874,32 +872,32 @@ const ProductoList = (props) => {
      ---COMENTADO!!! */
 
 
-   
-        // setDataSource(productos);
-        //console.log("QUIERE FILTRAR ESTA DATA EN MARCAS: ", productos)
-        
-       // const filteredData =valueEstado===0? productos_estado.filter((entry) => entry.fk_linea_id === e):productos_estado.filter((entry) =>entry.estado===valueEstado && entry.fk_linea_id === e);
 
-        const filteredData = valueEstado===0?productos_estado.filter((entry) =>  entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e):productos_estado.filter((entry) => entry.estado===valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
+    // setDataSource(productos);
+    //console.log("QUIERE FILTRAR ESTA DATA EN MARCAS: ", productos)
+
+    // const filteredData =valueEstado===0? productos_estado.filter((entry) => entry.fk_linea_id === e):productos_estado.filter((entry) =>entry.estado===valueEstado && entry.fk_linea_id === e);
+
+    const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
 
 
-        //console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
-        setDataSource(filteredData);
+    //console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
+    setDataSource(filteredData);
 
-        /*setmarcasDropdown([... new Set(filteredData.map(function (item) {
-          const rObj = {};
-          rObj.id = item.fk_marca_id;
-          rObj.nombre = item.marca;
-          return rObj;
-        }).map(JSON.stringify))].map(JSON.parse))*/
-        setgruposDropdown([... new Set(filteredData.map(function (item) {
-          const rObj = {};
-          rObj.id = item.fk_grupo_id;
-          rObj.nombre = item.grupo;
-          return rObj;
-        }).map(JSON.stringify))].map(JSON.parse))
+    /*setmarcasDropdown([... new Set(filteredData.map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_marca_id;
+      rObj.nombre = item.marca;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))*/
+    setgruposDropdown([... new Set(filteredData.map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_grupo_id;
+      rObj.nombre = item.grupo;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
 
-    
+
     /*setgruposDropdown([... new Set(filteredData.map(function (item) {
       const rObj = {};
       rObj.id = item.fk_grupo_id;
@@ -937,9 +935,9 @@ const ProductoList = (props) => {
     setDataSource(filteredData);*/
 
     //console.log("QUIERE FILTRAR ESTA DATA EN GRUPOS: ", dataSource)
-    
 
-     const filteredData = valueEstado===0?productos_estado.filter((entry) =>  entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === selectedMarcaId && entry.fk_grupo_id===e):productos_estado.filter((entry) => entry.estado===valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === selectedMarcaId && entry.fk_grupo_id===e);
+
+    const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === selectedMarcaId && entry.fk_grupo_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === selectedMarcaId && entry.fk_grupo_id === e);
     //console.log("FILTRADOS X GRUPO", filteredData);
     setDataSource(filteredData);
 
@@ -1001,12 +999,12 @@ const ProductoList = (props) => {
       <Divider className="titleFont">{"EL GRUPOV: " + grupoV}</Divider>*/}
       {/* <Divider className="titleFont">{"LOS PRODUCTOS: " + JSON.stringify(productos)}</Divider> */}
       {/* <Divider className="titleFont">{"DATA SOURCE: " + dataSource}</Divider>  */}
-      {/* <Divider className="titleFont">{"LINEAS DROPDOWN: " + JSON.stringify(lineasDropdown)}</Divider>
+      {/*<Divider className="titleFont">{"LINEAS DROPDOWN: " + JSON.stringify(lineasDropdown)}</Divider>
       <Divider className="titleFont">{"MARCAS DROPDOWN: " + JSON.stringify(marcasDropdown)}</Divider>
       <Divider className="titleFont">{"GRUPOS DROPDOWN: " + JSON.stringify(gruposDropdown)}</Divider>
       <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider>
       <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider>
-    <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider> */}
+    <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
       <br />
       <Row>
         {visualizador ? (
@@ -1038,7 +1036,7 @@ const ProductoList = (props) => {
             placeholder="Seleccione Estado"
             // onChange={handleChangeEstado}
             onChange={(e) => {
-             
+
               // dispatch(getProductosByLinea(e));
               // dispatch(getProductos())
               // dispatch(getProductosByEstado(valueEstado))
@@ -1080,7 +1078,33 @@ const ProductoList = (props) => {
             }}
             value={selectedLineaId}
           /> */}
-          <SelectOpciones
+          <Select
+            style={{ width: 180 }}
+            placeholder="Seleccione Línea"
+            value={selectedLineaId}
+            onChange={(e) => {
+              setSelectedLineaId(e);
+              setSelectedMarcaId(null);
+              setSelectedGrupoId(null);
+              setmarcasDropdown(null);
+              setgruposDropdown(null);
+              filtrarL(e);
+            }}
+          >
+            {lineasDropdown ? lineasDropdown.map((option, index) =>
+              <Select.Option key={option.id} value={option.id}>
+                {option.nombre}
+              </Select.Option>
+            ): null }
+          </Select>
+          {/* <select onChange={handleChange}>
+     {this.props.listOption.map((option, index) =>
+       <option key={index} value={index}>
+        {option.name}
+       </option>
+      )}
+    </select> */}
+          {/* <SelectOpciones
             // tipo="línea"
             tipo="lineas"
             filter={lineasDropdown}
@@ -1100,12 +1124,29 @@ const ProductoList = (props) => {
               // setFilterAll(false);
             }}
             value={selectedLineaId}
-          />
+          /> */}
         </Col>
         <Col span={5}>
-          <SelectOpciones
+        <Select
+            style={{ width: 180 }}
+            placeholder="Seleccione Marca"
+            onChange={(e) => {
+              setSelectedMarcaId(e);
+              setSelectedGrupoId(null);
+              setgruposDropdown(null);
+              filtrarM(e);
+            }}
+            value={selectedMarcaId}
+          >
+            {marcasDropdown ? marcasDropdown.map((option, index) =>
+              <Select.Option key={option.id} value={option.id}>
+                {option.nombre}
+              </Select.Option>
+            ): null }
+          </Select>
+          {/* <SelectOpciones
             tipo="_marcas"
-            filter={marcasDropdown?marcasDropdown:null}
+            filter={marcasDropdown ? marcasDropdown : null}
             onChange={(e) => {
               setSelectedMarcaId(e);
               setSelectedGrupoId(null);
@@ -1114,10 +1155,25 @@ const ProductoList = (props) => {
               filtrarM(e);
             }}
             value={selectedMarcaId}
-          />
+          /> */}
         </Col>
         <Col span={4}>
-          <SelectOpciones
+        <Select
+            style={{ width: 180 }}
+            placeholder="Seleccione Grupo"
+            onChange={(e) => {
+              setSelectedGrupoId(e);
+              filtrarG(e);
+            }}
+            value={selectedGrupoId}
+          >
+            {gruposDropdown ? gruposDropdown.map((option, index) =>
+              <Select.Option key={option.id} value={option.id}>
+                {option.nombre}
+              </Select.Option>
+            ): null }
+          </Select>
+          {/* <SelectOpciones
             tipo="_grupos"
             // filter={selectedMarcaId}
             filter={gruposDropdown}
@@ -1128,7 +1184,7 @@ const ProductoList = (props) => {
               filtrarG(e);
             }}
             value={selectedGrupoId}
-          />
+          /> */}
         </Col>
         <Col span={5}>
           <Search
