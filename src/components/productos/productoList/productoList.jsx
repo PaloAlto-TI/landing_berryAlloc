@@ -61,7 +61,7 @@ const ProductoList = (props) => {
   const loading = useSelector((state) => state.productos.loading);
   const response = useSelector((state) => state.productos.response);
   // const grupos = useSelector((state) => state.stocks.grupos);
-  const grupos = useSelector((state) => state.productostocks.grupos); // AGREGADO POR MANUEL CORONEL
+  const grupos = null; // AGREGADO POR MANUEL CORONEL
   //console.log("LOS GRUPOS DEL STATE EN LISTADO PRODUCTOS: " + JSON.stringify(grupos))
   console.log("estado location: ",(location.state&&location.state.estadoProd)?location.state.estadoProd:null)
   const [valueEstado, setValueEstado] = useState(
@@ -107,6 +107,16 @@ const ProductoList = (props) => {
           : response.data.fk_grupo_id
         : producto.fk_grupo_id
   );
+
+  const strForSearch = (str) => {
+    return str
+      ? str
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase()
+      : str;
+  };
+
   function handleChangeEstado(value) {
     // //console.log(value);
     setValueEstado(value);
@@ -210,7 +220,6 @@ const ProductoList = (props) => {
   useEffect(async () => {
     console.log("location PASADOS: ",location);
     await dispatch(getProductosByEstado(""));
-
 
     // HAY QUE ARREGLAR ESTO JONNATHAN, SE HABLLÓ E DÍA JUEVES
     // }, [valueEstado,dispatch]);
@@ -860,11 +869,13 @@ const ProductoList = (props) => {
         const filteredData = productos_estado;
         setDataSource(filteredData);
         console.log("entra con E1<<<> ", filteredData);
-
+      
         // setDataSource(productos);
-
-
-        setlineasDropdown([... new Set(filteredData.map(function (item) {
+        setlineasDropdown([... new Set(filteredData.sort(function(a, b) {
+          if(a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
+          if(a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
+          return 0;
+         }).map(function (item) {
           const rObj = {};
           rObj.id = item.fk_linea_id;
           rObj.nombre = item.linea;
@@ -878,25 +889,18 @@ const ProductoList = (props) => {
         console.log("entra con E2<<<> ", filteredData);
 
         // setDataSource(productos);
-
-
-        setlineasDropdown([... new Set(filteredData.map(function (item) {
+        setlineasDropdown([... new Set(filteredData.sort(function(a, b) {
+          if(a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
+          if(a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
+          return 0;
+         }).map(function (item) {
           const rObj = {};
           rObj.id = item.fk_linea_id;
           rObj.nombre = item.linea;
           return rObj;
         }).map(JSON.stringify))].map(JSON.parse))
-
-
-
       }
-
-
-
-
     }
-
-
   }
   const filtrarL = (e) => {
     // //console.log("ENTRA A FILTARL CON: ", e)
@@ -918,26 +922,23 @@ const ProductoList = (props) => {
 
 
     // setDataSource(productos);
-    console.log("QUIERE FILTRAR ESTA DATA EN LINEAS: ", productos_estado)
+   // console.log("QUIERE FILTRAR ESTA DATA EN LINEAS: ", productos_estado)
 
 
     const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === e);
-
-
-
-
-    //console.log("FILTRADOS X LINEA: ", filteredData);
+    // console.log("FILTRADOS X LINEA: ", filteredData);
     setDataSource(filteredData);
 
-    setmarcasDropdown([... new Set(filteredData.map(function (item) {
+    setmarcasDropdown([... new Set(filteredData.sort(function(a, b) {
+      if(a.marca.toLowerCase() < b.marca.toLowerCase()) return -1;
+      if(a.marca.toLowerCase() > b.marca.toLowerCase()) return 1;
+      return 0;
+     }).map(function (item) {
       const rObj = {};
       rObj.id = item.fk_marca_id;
       rObj.nombre = item.marca;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
-
-
-
   };
 
   const filtrarM = (e) => {
@@ -960,16 +961,14 @@ const ProductoList = (props) => {
     const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
 
 
-    //console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
+    // console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
     setDataSource(filteredData);
 
-    /*setmarcasDropdown([... new Set(filteredData.map(function (item) {
-      const rObj = {};
-      rObj.id = item.fk_marca_id;
-      rObj.nombre = item.marca;
-      return rObj;
-    }).map(JSON.stringify))].map(JSON.parse))*/
-    setgruposDropdown([... new Set(filteredData.map(function (item) {
+    setgruposDropdown([... new Set(filteredData.sort(function(a, b) {
+      if(a.grupo.toLowerCase() < b.grupo.toLowerCase()) return -1;
+      if(a.grupo.toLowerCase() > b.grupo.toLowerCase()) return 1;
+      return 0;
+     }).map(function (item) {
       const rObj = {};
       rObj.id = item.fk_grupo_id;
       rObj.nombre = item.grupo;
@@ -984,22 +983,6 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))*/
 
-
-    // ESTO ES NUEVO - MC
-    /*if (valueEstado !== null) {
-      if (valueEstado === 0) {
-        // setDataSource(productos);
-        //console.log("QUIERE FILTRAR ESTA DATA EN MARCAS: ", productos)
-        const filteredData = productos.filter((entry) => entry.fk_marca_id === e);
-        setDataSource(filteredData);
-
-      } else {
-        // setDataSource(productos_estado);
-        //console.log("QUIERE FILTRAR ESTA DATA EN MARCAS _ESTADO: ", productos_estado)
-        const filteredData = productos_estado.filter((entry) => entry.fk_marca_id === e);
-        setDataSource(filteredData);
-      }
-    }*/
   };
 
   const filtrarG = (e) => {
@@ -1020,21 +1003,6 @@ const ProductoList = (props) => {
     //console.log("FILTRADOS X GRUPO", filteredData);
     setDataSource(filteredData);
 
-    // ESTO ES NUEVO - MC
-    /* if (valueEstado !== null) {
-       if (valueEstado === 0) {
-         // setDataSource(productos);
-         //console.log("QUIERE FILTRAR ESTA DATA: ", productos)
-         const filteredData = productos.filter((entry) => entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId);
-         setDataSource(filteredData);
- 
-       } else {
-         // setDataSource(productos_estado);
-         //console.log("QUIERE FILTRAR ESTA DATA: ", productos_estado)
-         const filteredData = productos_estado.filter((entry) => entry.fk_grupo_id === e && entry.fk_marca_id === selectedMarcaId);
-         setDataSource(filteredData);
-       }
-     }*/
   };
 
   const filtroGlobal = (e) => {
@@ -1053,10 +1021,6 @@ const ProductoList = (props) => {
     setFiltro(null);
   };
 
-  //---------------------------------------------------------------------
-
-  //-----------------------------------------------------------------------
-
   return (
     <div>
       
@@ -1065,12 +1029,6 @@ const ProductoList = (props) => {
       {/* <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
       <Divider className="titleFont">{"EL VALUE: " + value + " EL VALUE ESTADO: " + valueEstado + "  EL FILTRO: " + filtro}</Divider> */}
       {/* <Divider className="titleFont">{"RESPONSE: " + response}</Divider> */}
-      {/* <Space ><Search
-        placeholder="Buscar producto..."
-        value={value}
-        onChange={(e) => filtrarB(e)}
-        style={{ width: 200 }}
-      /></Space> */}
       {/* <Divider className="titleFont">{"EL visualizador: " + visualizador}</Divider> */}
       {/* <Divider className="titleFont">{"EL visualizador: " + visualizador}</Divider> */}
       {/* const { lineaV, marcaV, grupoV, visualizador, stocks } = props; */}
@@ -1110,12 +1068,11 @@ const ProductoList = (props) => {
             <Radio className="containerRadio" value={3}>DESCONTINUADOS</Radio>
           </Radio.Group>
         </Col> */}
-         </Row> <br />
-         <Row>
+          </Row> <br />
+         <Row >
         <Col span={4}>
           <Select
-          // showSearch
-            style={{ width: 180 }}
+            style={{ width: 200 }}
             placeholder="Seleccione Estado"
             value={valueEstado}
             // onChange={handleChangeEstado}
@@ -1163,10 +1120,22 @@ const ProductoList = (props) => {
             value={selectedLineaId}
           /> */}
           <Select
-          // showSearch
-            style={{ width: 180 }}
+            showSearch
+            showArrow
+            notFoundContent="No hay coincidencias"
+            style={{ width: 250 }}
             placeholder="Seleccione Línea"
-             value={selectedLineaId}
+            value={selectedLineaId}
+            // option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            filterOption={(input, option) => {
+              if (option.props.value) {
+                return strForSearch(option.props.children).includes(
+                  strForSearch(input)
+                );
+              } else {
+                return false;
+              }
+            }}
             onChange={(e) => {
               setSelectedLineaId(e);
               setSelectedMarcaId(null);
@@ -1177,10 +1146,10 @@ const ProductoList = (props) => {
             }}
           >
             {lineasDropdown ? lineasDropdown.map((option, index) =>
-              <Select.Option key={option.id} value={option.id}>
+              <Option key={option.id} value={option.id}>
                 {option.nombre}
-              </Select.Option>
-            ): null }
+              </Option>
+            ) : null}
           </Select>
           {/* <select onChange={handleChange}>
      {this.props.listOption.map((option, index) =>
@@ -1199,10 +1168,8 @@ const ProductoList = (props) => {
               setSelectedLineaId(e);
               setSelectedMarcaId(null);
               setSelectedGrupoId(null);
-
               setmarcasDropdown(null);
               setgruposDropdown(null);
-
               filtrarL(e);
               // setFiltro(null);
               // setValue(null);
@@ -1212,9 +1179,19 @@ const ProductoList = (props) => {
           /> */}
         </Col>
         <Col span={5}>
-        <Select
-        // showSearch
-            style={{ width: 180 }}
+          <Select
+            showSearch
+            notFoundContent="No hay coincidencias"
+            filterOption={(input, option) => {
+              if (option.props.value) {
+                return strForSearch(option.props.children).includes(
+                  strForSearch(input)
+                );
+              } else {
+                return false;
+              }
+            }}
+            style={{ width: 250 }}
             placeholder="Seleccione Marca"
             onChange={(e) => {
               setSelectedMarcaId(e);
@@ -1225,10 +1202,10 @@ const ProductoList = (props) => {
             value={selectedMarcaId}
           >
             {marcasDropdown ? marcasDropdown.map((option, index) =>
-              <Select.Option key={option.id} value={option.id}>
+              <Option key={option.id} value={option.id}>
                 {option.nombre}
-              </Select.Option>
-            ): null }
+              </Option>
+            ) : null}
           </Select>
           {/* <SelectOpciones
             tipo="_marcas"
@@ -1244,9 +1221,19 @@ const ProductoList = (props) => {
           /> */}
         </Col>
         <Col span={4}>
-        <Select
-        // showSearch
-            style={{ width: 180 }}
+          <Select
+            showSearch
+            filterOption={(input, option) => {
+              if (option.props.value) {
+                return strForSearch(option.props.children).includes(
+                  strForSearch(input)
+                );
+              } else {
+                return false;
+              }
+            }}
+            notFoundContent="No hay coincidencias"
+            style={{ width: 250 }}
             placeholder="Seleccione Grupo"
             onChange={(e) => {
               setSelectedGrupoId(e);
@@ -1255,10 +1242,10 @@ const ProductoList = (props) => {
             value={selectedGrupoId}
           >
             {gruposDropdown ? gruposDropdown.map((option, index) =>
-              <Select.Option key={option.id} value={option.id}>
+              <Option key={option.id} value={option.id}>
                 {option.nombre}
-              </Select.Option>
-            ): null }
+              </Option>
+            ) : null}
           </Select>
           {/* <SelectOpciones
             tipo="_grupos"
