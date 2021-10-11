@@ -77,7 +77,7 @@ export function* handleAddProducto(action) {
 
 export function* handleEditProducto(action) {
   try {
-    console.log("PRODUCTO!!!", action)
+    console.log("PRODUCTO edit!!!", action)
 
     const response = yield call(updateProducto, action.producto);
     const { data } = response;

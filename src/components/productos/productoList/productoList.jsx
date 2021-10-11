@@ -20,12 +20,15 @@ import {
   getProductosByEstado,
   _softDeleteProducto,
 } from "../../../_redux/ducks/producto.duck";
+import { useLocation } from 'react-router-dom';
 import { SesionContext } from "../../../contexts/sesionContext";
 
 const { Option } = Select;
 const ProductoList = (props) => {
+  const location = useLocation();
   const { setMoved, sesions } = useContext(SesionContext);
   const { lineaV, marcaV, grupoV, visualizador, stocks } = props;
+  const praps = props;
   // //console.log("LO QUE ME TRAJO EL VI: " + lineaV + " MARCAV : " + marcaV + " EL GRUPO: " + grupoV + " EL VISUALIZADOR: " + visualizador + " LOS STOCKS: " + stocks)
   // const {
   //   // productos,
@@ -39,45 +42,57 @@ const ProductoList = (props) => {
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
   // const [valueRadio, setValueRadio] = useState(null);
-  const [valueEstado, setValueEstado] = useState(null);
+  
   const productos = useSelector((state) => state.productos.productos);
   const productos_estado = useSelector((state) => state.productos.productos_estado);
   const producto = useSelector((state) => state.productos.producto);
-
-
+  
+  
   const [product, setProduct] = useState(null);
-
+  
   const prueba = useSelector((state) => state);
-
+  
   const [lineasDropdown, setlineasDropdown] = useState(null);
   const [marcasDropdown, setmarcasDropdown] = useState(null);
   const [gruposDropdown, setgruposDropdown] = useState(null);
   // const [valueEstado, setValueEstado] = useState(null);
-
-
+  
+  
   const loading = useSelector((state) => state.productos.loading);
   const response = useSelector((state) => state.productos.response);
   // const grupos = useSelector((state) => state.stocks.grupos);
   const grupos = useSelector((state) => state.productostocks.grupos); // AGREGADO POR MANUEL CORONEL
-  // //console.log("LOS GRUPOS DEL STATE EN LISTADO PRODUCTOS: " + JSON.stringify(grupos))
-  // const [selectedLineaId, setSelectedLineaId] = useState(
-  //   grupos
-  //     ? lineaV
-  //     : !producto
-  //       ? !response
-  //         ? "60d4c046e600f1b5e85d075c"
-  //         : response.data.fk_linea_id
-  //       : producto.fk_linea_id
-  // );
-
-
-  const [selectedLineaId, setSelectedLineaId] = useState(
-    null);
-
-  const [selectedMarcaId, setSelectedMarcaId] = useState(
+  //console.log("LOS GRUPOS DEL STATE EN LISTADO PRODUCTOS: " + JSON.stringify(grupos))
+  console.log("estado location: ",(location.state&&location.state.estadoProd)?location.state.estadoProd:null)
+  const [valueEstado, setValueEstado] = useState(
     grupos
-      ? marcaV
-      : !producto
+    ? lineaV
+    : !producto
+      ? !response
+        ? null
+        : 0
+      : location.state?location.state.estadoProd:null
+    
+    
+    );
+  const [selectedLineaId, setSelectedLineaId] = useState(
+    grupos
+    ? lineaV
+    : !producto
+    ? !response
+    ? null
+    : response.data.fk_linea_id
+    : producto.fk_linea_id
+    );
+    
+    
+    // const [selectedLineaId, setSelectedLineaId] = useState(
+      //   null);
+      
+      const [selectedMarcaId, setSelectedMarcaId] = useState(
+        grupos
+        ? marcaV
+        : !producto
         ? !response
           ? null
           : response.data.fk_marca_id
@@ -190,12 +205,57 @@ const ProductoList = (props) => {
   // }, [dispatch, selectedLineaId]);
 
 
+
+
   useEffect(async () => {
+    console.log("location PASADOS: ",location);
     await dispatch(getProductosByEstado(""));
 
 
     // HAY QUE ARREGLAR ESTO JONNATHAN, SE HABLLÓ E DÍA JUEVES
+    // }, [valueEstado,dispatch]);
   }, []);
+
+  useEffect( () => {
+
+    if(valueEstado!==null){
+
+      filtrarE(valueEstado);
+      console.log("PRODUCTOS: ",productos_estado);
+
+    
+    if(selectedLineaId){
+
+      filtrarL(selectedLineaId);
+      console.log("filtrar L: ",selectedLineaId);
+    }
+  
+    if(selectedMarcaId){
+
+      filtrarM(selectedMarcaId);
+      console.log("filtrar L: ",selectedMarcaId);
+
+
+    }
+    
+    if(selectedGrupoId){
+
+      filtrarG(selectedGrupoId);
+      console.log("filtrar G: ",selectedGrupoId);
+
+
+    }
+  
+  }
+  else{
+    setSelectedLineaId(null);
+    setSelectedMarcaId(null);
+    setSelectedGrupoId(null);
+
+
+  }
+    // HAY QUE ARREGLAR ESTO JONNATHAN, SE HABLLÓ E DÍA JUEVES
+  },[valueEstado,dispatch]);
 
   // }, [valueEstado]);
   // useEffect(async () => {
@@ -713,11 +773,27 @@ const ProductoList = (props) => {
 
     history.push(`${path}/nuevo/`, record);
   }
-
+  const recordParams = { // OBSERVACIÓN: 17/08/2021 ESTA VARIABLE SE DEBE TRAER POR PROPS, PERO COMO EL COMPONENTE QUE LA TRAE USAN TODAS LAS RAMAS QUEDA AL PENDIENTE EL CAMBIO -MC
+    isVisualizador: visualizador,
+    incomingPath:location.pathname,
+    estadoProd:valueEstado
+   
+  };
   function ver(record) {
     //filterProductos(record.fk_linea_id);
+    
+   
+    // record.recordParams=typeTransactionData;
     record["permiso"] = false;
-    history.push(`${path}/${record.codigo_interno}/ver`, record);
+    //history.push(`${path}/${record.codigo_interno}/ver`, record);
+    history.push({
+      pathname:`${path}/${record.codigo_interno}/ver`, 
+    
+      recordParams}
+    );
+    // console.log("ver path1: ",`${path}/`);
+    // console.log("ver path2: ",location.pathname);
+    console.log("ver record: ",record);
   }
 
   const filtrarB = (e) => {
@@ -775,8 +851,11 @@ const ProductoList = (props) => {
 
   };
   const filtrarE = async (e) => {
-    console.log("entra con E<<<> ", e);
+  
+    
+    console.log("entra con E<<<> ", e?e:valueEstado);
     if (productos_estado) {
+      console.log("productos Estado: ",productos_estado);
       if (e === 0) {
         const filteredData = productos_estado;
         setDataSource(filteredData);
@@ -794,7 +873,7 @@ const ProductoList = (props) => {
 
       }
       else {
-        const filteredData = productos_estado.filter((entry) => entry.estado === e);
+        const filteredData = productos_estado.filter((entry) => entry.estado === (e?e:valueEstado));
         setDataSource(filteredData);
         console.log("entra con E2<<<> ", filteredData);
 
@@ -839,7 +918,7 @@ const ProductoList = (props) => {
 
 
     // setDataSource(productos);
-    //console.log("QUIERE FILTRAR ESTA DATA EN LINEAS: ", productos)
+    console.log("QUIERE FILTRAR ESTA DATA EN LINEAS: ", productos_estado)
 
 
     const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === e);
@@ -980,6 +1059,7 @@ const ProductoList = (props) => {
 
   return (
     <div>
+      
       <br />
       <Divider>PRODUCTOS</Divider>
       {/* <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
@@ -1004,7 +1084,7 @@ const ProductoList = (props) => {
       <Divider className="titleFont">{"GRUPOS DROPDOWN: " + JSON.stringify(gruposDropdown)}</Divider>
       <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider>
       <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider>
-    <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
+     <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
      
       <Row >
         {visualizador ? (
@@ -1037,6 +1117,7 @@ const ProductoList = (props) => {
           // showSearch
             style={{ width: 180 }}
             placeholder="Seleccione Estado"
+            value={valueEstado}
             // onChange={handleChangeEstado}
             onChange={(e) => {
 
@@ -1085,7 +1166,7 @@ const ProductoList = (props) => {
           // showSearch
             style={{ width: 180 }}
             placeholder="Seleccione Línea"
-            value={selectedLineaId}
+             value={selectedLineaId}
             onChange={(e) => {
               setSelectedLineaId(e);
               setSelectedMarcaId(null);
@@ -1107,7 +1188,7 @@ const ProductoList = (props) => {
         {option.name}
        </option>
       )}
-    </select> */}
+      </select> */}
           {/* <SelectOpciones
             // tipo="línea"
             tipo="lineas"
@@ -1230,6 +1311,7 @@ const ProductoList = (props) => {
               ) {
                 // record["permiso"] = false;
                 // history.push(`${path}/${record.codigo_interno}/ver`, record);
+               
                 ver(record);
               }
             },
