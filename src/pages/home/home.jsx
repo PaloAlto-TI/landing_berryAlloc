@@ -39,7 +39,6 @@ import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoLis
 import SubgrupoContextProvider from "../../contexts/subgrupoContext";
 import { SesionContext } from "../../contexts/sesionContext";
 import Stocks from "../../components/visualizadores/stocks/stocks";
-import ProductoStocks from "../../components/visualizadores/stocks/productoStocks";
 const Home = () => {
   var { setMoved, sesions, redirect } = useContext(SesionContext);
   let history = useHistory();
