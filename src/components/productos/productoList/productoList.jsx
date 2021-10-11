@@ -479,7 +479,7 @@ const ProductoList = (props) => {
           key: "x",
           align: "center",
           render: (_, record) =>
-            record.url_pagina_web /*|| !visualizador*/ ? (
+            record.url_pagina_web || !visualizador ? (
               <CrudButton
                 record={record}
                 softDelete={_softDeleteProducto}
@@ -1005,12 +1005,12 @@ const ProductoList = (props) => {
       <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider>
       <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider>
     <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
-      <br />
-      <Row>
+     
+      <Row >
         {visualizador ? (
           <Col span={1}></Col>
         ) : (
-          <Col span={2}>
+          <Col span={24}>
             <Button
               type="primary"
               className="success"
@@ -1030,8 +1030,11 @@ const ProductoList = (props) => {
             <Radio className="containerRadio" value={3}>DESCONTINUADOS</Radio>
           </Radio.Group>
         </Col> */}
+         </Row> <br />
+         <Row>
         <Col span={4}>
           <Select
+          // showSearch
             style={{ width: 180 }}
             placeholder="Seleccione Estado"
             // onChange={handleChangeEstado}
@@ -1079,6 +1082,7 @@ const ProductoList = (props) => {
             value={selectedLineaId}
           /> */}
           <Select
+          // showSearch
             style={{ width: 180 }}
             placeholder="Seleccione Línea"
             value={selectedLineaId}
@@ -1128,6 +1132,7 @@ const ProductoList = (props) => {
         </Col>
         <Col span={5}>
         <Select
+        // showSearch
             style={{ width: 180 }}
             placeholder="Seleccione Marca"
             onChange={(e) => {
@@ -1159,6 +1164,7 @@ const ProductoList = (props) => {
         </Col>
         <Col span={4}>
         <Select
+        // showSearch
             style={{ width: 180 }}
             placeholder="Seleccione Grupo"
             onChange={(e) => {
