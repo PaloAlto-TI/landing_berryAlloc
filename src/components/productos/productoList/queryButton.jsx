@@ -5,7 +5,7 @@ import { ProductoService } from '../../../services/productoService';
 
 const QueryButton = (props) => {
 
-    console.log("PROPS QUERYBUTTON: ", props.record);
+    // console.log("PROPS QUERYBUTTON: ", props.record);
     const [stock, setStock] = useState("CONSULTAR")
     const [isLoading, setIsLoading] = useState(false)
   const [stockBodegas, setstockBodegas] = useState(null);

@@ -43,7 +43,7 @@ const SelectOpciones = (props) => {
     let cancel = false;
 
     async function fetch() {
-      // console.log(" tipo . "+tipo)
+     console.log(" tipo . "+tipo)
       if (tipo === "línea") {
         const lineaService = new LineaService();
         lineaService.getAll().then((data) => {
@@ -258,6 +258,7 @@ const SelectOpciones = (props) => {
   }
 
   var opcionesList = opciones.map(function (opcion) {
+   // console.log("LA DATA QUE VA A MAPPEAR: ", opcion)
     if (opcion.codigo) {
       return (
         <Option key={opcion.id} value={opcion.id}>
