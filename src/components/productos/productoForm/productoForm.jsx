@@ -14,7 +14,7 @@ import {
 import { Form, Input, Button, Checkbox, InputNumber, Radio } from "antd";
 import SelectOpciones from "../../selectOpciones/selectOpciones";
 import { ProductoContext } from "../../../contexts/productoContext";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { Redirect, useParams, useRouteMatch } from "react-router-dom";
 import "./productoForm.css";
 import {
@@ -87,10 +87,14 @@ const FormProducto = (props) => {
   // } = useContext(ProductoContext);
 
   let history = useHistory();
+  let location = useLocation();
   let { codigo, operacion } = useParams();
+  const allparams =useParams();
 
   console.log("codigo", codigo);
   console.log("operacion", operacion);
+  console.log("record allparams", allparams);
+  console.log("record location", location.recordParams);
 
   const [selectedMarcaId, setSelectedMarcaId] = useState(undefined);
   const [selectedLineaId, setSelectedLineaId] = useState(undefined);
@@ -209,10 +213,10 @@ const FormProducto = (props) => {
   useEffect(() => {
     if (response) {
       if (response.message.includes("OK")) {
-        console.log(response);
+        console.log("Aqui response: ",response);
         //setPermiso(false);
         window.scrollTo(0, 0);
-        message.info("OK", 2).then((t) => history.push("/home/productos/"));
+        message.info("OK", 2).then((t) => history.push("/home/productos/",{estadoProd: null}));
       } else {
         message.warning(response.message);
       }
@@ -833,11 +837,11 @@ const FormProducto = (props) => {
             "¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN."
           )
         ) {
-          history.push("/home/productos");
+          history.push("/home/productos",{estadoProd: 0});
           window.scroll(0, 0);
         }
       } else {
-        history.push("/home/productos/");
+        history.push("/home/productos/",{estadoProd: 0});
         window.scroll(0, 0);
       }
     } else {
@@ -846,7 +850,7 @@ const FormProducto = (props) => {
           "¿ ESTÁ SEGURO QUE DESEA SALIR ?, LOS CAMBIOS NO SE GUARDARÁN."
         )
       ) {
-        history.push("/home/productos/");
+        history.push("/home/productos/",{estadoProd: 0});
         window.scroll(0, 0);
       }
     }
@@ -902,8 +906,21 @@ const FormProducto = (props) => {
   };
 
   function goBackHistory() {
-    history.push("/home/productos", { linea: editProducto.fk_linea_id });
-    window.scroll(0, 0);
+    console.log(">>>>>>RECORD params: ",location.recordParams)
+    if(location.recordParams){
+
+      history.push(location.recordParams.incomingPath, { linea: editProducto.fk_linea_id,estadoProd: location.recordParams.estadoProd?location.recordParams.estadoProd:0});
+      window.scroll(0, 0);
+    }
+    else if(sesions._usuario[0].rol === 2 ){
+
+      history.push("/home/productos");
+      window.scroll(0, 0);
+    }
+    else{
+      history.push("/home/visualizadores/productos");
+      window.scroll(0, 0);
+    }
   }
   // const handleFormValuesChange = async (changedValues) => {
   //   // console.log("ONCHANGE", form.getFieldsValue());
@@ -913,9 +930,11 @@ const FormProducto = (props) => {
   //   const formFieldName = Object.keys(changedValues)[0];
   // };
 
-  function goBackHistory() {
-    history.push("/home/productos");
-  }
+  // function goBackHistory() {
+
+  //   // history.push("/home/productos");
+  //   history.push(location.recordParams.incomingPath);
+  // }
   // const handleFormValuesChange = async (changedValues) => {
   //   // console.log("ONCHANGE", form.getFieldsValue());
 
@@ -1279,7 +1298,7 @@ const FormProducto = (props) => {
                     >
                       {crud ? (
                         <SelectOpciones
-                          tipo="proveedor"
+                          tipo="proveedor"selectedMarcaId
                           filter={selectedMarcaId}
                           readOnly={!crud}
                           setShow={setShow}
@@ -3902,7 +3921,7 @@ const FormProducto = (props) => {
             className="loading-producto"
           />
         </>
-      ) : editProducto === undefined ? <Redirect to="/home/productos" /> : (
+      ) : editProducto === undefined ? /*<Redirect to="/home/productos" />*/null : (
         <Spin indicator={antIcon} className="loading-producto" />
       );
     } else {
