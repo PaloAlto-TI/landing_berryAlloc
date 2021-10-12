@@ -862,63 +862,30 @@ const ProductoList = (props) => {
   };
   const filtrarE = async (e) => {
 
-
-    //console.log("entra con E<<<> ", e?e:valueEstado);
-    if (productos_estado) {
-      // console.log("productos Estado: ",productos_estado);
-      if (e === 0) {
-        const filteredData = productos_estado;
+  
+      const filteredData = productos_estado.filter((entry) => (e===0?productos_estado:entry.estado === e));
+      console.log("FILTRADOS X ESTADO: ", filteredData);
         setDataSource(filteredData);
-        // console.log("entra con E1<<<> ", filteredData);
-
-        // setDataSource(productos);
-        setlineasDropdown([... new Set(filteredData.sort(function (a, b) {
-          if (a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
-          if (a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
-          return 0;
-        }).map(function (item) {
-          const rObj = {};
-          rObj.id = item.fk_linea_id;
-          rObj.nombre = item.linea;
-          return rObj;
-        }).map(JSON.stringify))].map(JSON.parse))
-
-      }
-      else {
-        const filteredData = productos_estado.filter((entry) => entry.estado === (e ? e : valueEstado));
-        setDataSource(filteredData);
-        // console.log("entra con E2<<<> ", filteredData);
-
-        // setDataSource(productos);
-        setlineasDropdown([... new Set(filteredData.sort(function (a, b) {
-          if (a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
-          if (a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
-          return 0;
-        }).map(function (item) {
-          const rObj = {};
-          rObj.id = item.fk_linea_id;
-          rObj.nombre = item.linea;
-          return rObj;
-        }).map(JSON.stringify))].map(JSON.parse))
-      }
-    }
+        
+      setlineasDropdown([... new Set(filteredData.sort(function (a, b) {
+        if (a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
+        if (a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
+        return 0;
+      }).map(function (item) {
+        const rObj = {};
+        rObj.id = item.fk_linea_id;
+        rObj.nombre = item.linea;
+        return rObj;
+      }).map(JSON.stringify))].map(JSON.parse))
+    
   }
   const filtrarL = (e) => {
 
 
-    let filteredData =  valueEstado === 0 ? productos_estado.filter((entry) => (e===0?productos_estado:entry.fk_linea_id === e)) : productos_estado.filter((entry) => entry.estado === valueEstado && (e===0?productos_estado:entry.fk_linea_id === e));
+    let filteredData =  productos_estado.filter((entry) => (valueEstado===0?productos_estado:entry.estado === valueEstado) && (e===0?productos_estado:entry.fk_linea_id === e));
 
-    console.log("FILTRADOS X LINEA: ", e);
-    // if (e === 0) {
-
-
-    //   filteredData = valueEstado === 0 ? productos_estado : productos_estado.filter((entry) => entry.estado === valueEstado);
-
-    // }
-    // else {
-    //   filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === e);
-    // }
-    console.log("productos en tabla: ", filteredData);
+    console.log("FILTRADOS X LINEA: ", filteredData);
+ 
     setDataSource(filteredData);
 
     setmarcasDropdown([... new Set(filteredData.sort(function (a, b) {
@@ -949,38 +916,39 @@ const ProductoList = (props) => {
     //console.log("QUIERE FILTRAR ESTA DATA EN MARCAS: ", productos)
 
     // const filteredData =valueEstado===0? productos_estado.filter((entry) => entry.fk_linea_id === e):productos_estado.filter((entry) =>entry.estado===valueEstado && entry.fk_linea_id === e);
-    let filteredData = null;
+    let filteredData =   productos_estado.filter((entry) => (valueEstado===0?productos_estado:entry.estado === valueEstado) && (selectedLineaId===0?productos_estado:entry.fk_linea_id === selectedLineaId) && (e===0?productos_estado:entry.fk_marca_id === e));
+
 
     // filteredData=selectedMarcaId===0?selectedLineaId===0? valueEstado === 0 ? productos_estado : productos_estado.filter((entry) => entry.estado === valueEstado)
     //  :valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId ) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId ) 
     //  :selectedLineaId===0?valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado  && entry.fk_marca_id === e) 
     //  : valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
-    if (e === 0) {
-      if (selectedLineaId === 0) {
-        filteredData = valueEstado === 0 ? productos_estado : productos_estado.filter((entry) => entry.estado === valueEstado);
+    // if (e === 0) {
+    //   if (selectedLineaId === 0) {
+    //     filteredData = valueEstado === 0 ? productos_estado : productos_estado.filter((entry) => entry.estado === valueEstado);
 
-      }
-      else {
+    //   }
+    //   else {
 
-        filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId);
-      }
+    //     filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId);
+    //   }
 
-    }
-    else {
-      if (selectedLineaId === 0) {
-        filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_marca_id === e);
+    // }
+    // else {
+    //   if (selectedLineaId === 0) {
+    //     filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_marca_id === e);
 
-      }
-      else {
+    //   }
+    //   else {
 
-        filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
-      }
+    //     filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
+    //   }
 
-    }
+    // }
 
 
 
-    console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
+    console.log("FILTRADOS X MARCA: ", filteredData);
     setDataSource(filteredData);
 
     setgruposDropdown([... new Set(filteredData.sort(function (a, b) {
