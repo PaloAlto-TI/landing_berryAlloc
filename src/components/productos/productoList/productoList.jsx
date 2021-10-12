@@ -96,9 +96,9 @@ const ProductoList = (props) => {
   const strForSearch = (str) => {
     return str
       ? str
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
       : str;
   };
 
@@ -796,13 +796,13 @@ const ProductoList = (props) => {
         const filteredData = productos_estado;
         setDataSource(filteredData);
         console.log("entra con E1<<<> ", filteredData);
-      
+
         // setDataSource(productos);
-        setlineasDropdown([... new Set(filteredData.sort(function(a, b) {
-          if(a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
-          if(a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
+        setlineasDropdown([... new Set(filteredData.sort(function (a, b) {
+          if (a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
+          if (a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
           return 0;
-         }).map(function (item) {
+        }).map(function (item) {
           const rObj = {};
           rObj.id = item.fk_linea_id;
           rObj.nombre = item.linea;
@@ -815,11 +815,11 @@ const ProductoList = (props) => {
         console.log("entra con E2<<<> ", filteredData);
 
         // setDataSource(productos);
-        setlineasDropdown([... new Set(filteredData.sort(function(a, b) {
-          if(a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
-          if(a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
+        setlineasDropdown([... new Set(filteredData.sort(function (a, b) {
+          if (a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
+          if (a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
           return 0;
-         }).map(function (item) {
+        }).map(function (item) {
           const rObj = {};
           rObj.id = item.fk_linea_id;
           rObj.nombre = item.linea;
@@ -845,14 +845,14 @@ const ProductoList = (props) => {
     // setDataSource(filteredData);
 
     const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === e);
-    // console.log("FILTRADOS X LINEA: ", filteredData);
+    console.log("FILTRADOS X LINEA: ", filteredData);
     setDataSource(filteredData);
 
-    setmarcasDropdown([... new Set(filteredData.sort(function(a, b) {
-      if(a.marca.toLowerCase() < b.marca.toLowerCase()) return -1;
-      if(a.marca.toLowerCase() > b.marca.toLowerCase()) return 1;
+    setmarcasDropdown([... new Set(filteredData.sort(function (a, b) {
+      if (a.marca.toLowerCase() < b.marca.toLowerCase()) return -1;
+      if (a.marca.toLowerCase() > b.marca.toLowerCase()) return 1;
       return 0;
-     }).map(function (item) {
+    }).map(function (item) {
       const rObj = {};
       rObj.id = item.fk_marca_id;
       rObj.nombre = item.marca;
@@ -883,11 +883,11 @@ const ProductoList = (props) => {
     // console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
     setDataSource(filteredData);
 
-    setgruposDropdown([... new Set(filteredData.sort(function(a, b) {
-      if(a.grupo.toLowerCase() < b.grupo.toLowerCase()) return -1;
-      if(a.grupo.toLowerCase() > b.grupo.toLowerCase()) return 1;
+    setgruposDropdown([... new Set(filteredData.sort(function (a, b) {
+      if (a.grupo.toLowerCase() < b.grupo.toLowerCase()) return -1;
+      if (a.grupo.toLowerCase() > b.grupo.toLowerCase()) return 1;
       return 0;
-     }).map(function (item) {
+    }).map(function (item) {
       const rObj = {};
       rObj.id = item.fk_grupo_id;
       rObj.nombre = item.grupo;
@@ -1035,8 +1035,8 @@ const ProductoList = (props) => {
             value={selectedLineaId}
           /> */}
           <Select
+            virtual={false}
             showSearch
-            showArrow
             notFoundContent="No hay coincidencias"
             style={{ width: 250 }}
             placeholder="Seleccione Línea"
