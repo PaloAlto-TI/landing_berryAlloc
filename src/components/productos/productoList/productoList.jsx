@@ -42,57 +42,57 @@ const ProductoList = (props) => {
   let { path } = useRouteMatch();
   const [value, setValue] = useState(null);
   // const [valueRadio, setValueRadio] = useState(null);
-  
+
   const productos = useSelector((state) => state.productos.productos);
   const productos_estado = useSelector((state) => state.productos.productos_estado);
   const producto = useSelector((state) => state.productos.producto);
-  
-  
+
+
   const [product, setProduct] = useState(null);
-  
+
   const prueba = useSelector((state) => state);
-  
+
   const [lineasDropdown, setlineasDropdown] = useState(null);
   const [marcasDropdown, setmarcasDropdown] = useState(null);
   const [gruposDropdown, setgruposDropdown] = useState(null);
   // const [valueEstado, setValueEstado] = useState(null);
-  
-  
+
+
   const loading = useSelector((state) => state.productos.loading);
   const response = useSelector((state) => state.productos.response);
   // const grupos = useSelector((state) => state.stocks.grupos);
   const grupos = null; // AGREGADO POR MANUEL CORONEL
   //console.log("LOS GRUPOS DEL STATE EN LISTADO PRODUCTOS: " + JSON.stringify(grupos))
-  console.log("estado location: ",(location.state&&location.state.estadoProd)?location.state.estadoProd:null)
+  //console.log("estado location: ",(location.state&&location.state.estadoProd)?location.state.estadoProd:null)
   const [valueEstado, setValueEstado] = useState(
     grupos
-    ? lineaV
-    : !producto
-      ? !response
-        ? null
-        : 0
-      : location.state?location.state.estadoProd:null
-    
-    
-    );
+      ? lineaV
+      : !producto
+        ? !response
+          ? null
+          : 0
+        : location.state ? location.state.estadoProd : null
+
+
+  );
   const [selectedLineaId, setSelectedLineaId] = useState(
     grupos
-    ? lineaV
-    : !producto
-    ? !response
-    ? null
-    : response.data.fk_linea_id
-    : producto.fk_linea_id
-    );
-    
-    
-    // const [selectedLineaId, setSelectedLineaId] = useState(
-      //   null);
-      
-      const [selectedMarcaId, setSelectedMarcaId] = useState(
-        grupos
-        ? marcaV
-        : !producto
+      ? lineaV
+      : !producto
+        ? !response
+          ? null
+          : response.data.fk_linea_id
+        : producto.fk_linea_id
+  );
+
+
+  // const [selectedLineaId, setSelectedLineaId] = useState(
+  //   null);
+
+  const [selectedMarcaId, setSelectedMarcaId] = useState(
+    grupos
+      ? marcaV
+      : !producto
         ? !response
           ? null
           : response.data.fk_marca_id
@@ -111,9 +111,9 @@ const ProductoList = (props) => {
   const strForSearch = (str) => {
     return str
       ? str
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
       : str;
   };
 
@@ -218,53 +218,53 @@ const ProductoList = (props) => {
 
 
   useEffect(async () => {
-    console.log("location PASADOS: ",location);
+    //console.log("location PASADOS: ",location);
     await dispatch(getProductosByEstado(""));
 
     // HAY QUE ARREGLAR ESTO JONNATHAN, SE HABLLÓ E DÍA JUEVES
     // }, [valueEstado,dispatch]);
   }, []);
 
-  useEffect( () => {
+  useEffect(() => {
 
-    if(valueEstado!==null){
+    if (valueEstado !== null) {
 
       filtrarE(valueEstado);
-      console.log("PRODUCTOS: ",productos_estado);
+      //console.log("PRODUCTOS: ",productos_estado);
 
-    
-    if(selectedLineaId){
 
-      filtrarL(selectedLineaId);
-      console.log("filtrar L: ",selectedLineaId);
+      if (selectedLineaId) {
+
+        filtrarL(selectedLineaId);
+        //console.log("filtrar L: ",selectedLineaId);
+      }
+
+      if (selectedMarcaId) {
+
+        filtrarM(selectedMarcaId);
+        //console.log("filtrar L: ",selectedMarcaId);
+
+
+      }
+
+      if (selectedGrupoId) {
+
+        filtrarG(selectedGrupoId);
+        //console.log("filtrar G: ",selectedGrupoId);
+
+
+      }
+
     }
-  
-    if(selectedMarcaId){
-
-      filtrarM(selectedMarcaId);
-      console.log("filtrar L: ",selectedMarcaId);
-
-
-    }
-    
-    if(selectedGrupoId){
-
-      filtrarG(selectedGrupoId);
-      console.log("filtrar G: ",selectedGrupoId);
+    else {
+      setSelectedLineaId(null);
+      setSelectedMarcaId(null);
+      setSelectedGrupoId(null);
 
 
     }
-  
-  }
-  else{
-    setSelectedLineaId(null);
-    setSelectedMarcaId(null);
-    setSelectedGrupoId(null);
-
-
-  }
     // HAY QUE ARREGLAR ESTO JONNATHAN, SE HABLLÓ E DÍA JUEVES
-  },[valueEstado,dispatch]);
+  }, [valueEstado, dispatch]);
 
   // }, [valueEstado]);
   // useEffect(async () => {
@@ -784,25 +784,26 @@ const ProductoList = (props) => {
   }
   const recordParams = { // OBSERVACIÓN: 17/08/2021 ESTA VARIABLE SE DEBE TRAER POR PROPS, PERO COMO EL COMPONENTE QUE LA TRAE USAN TODAS LAS RAMAS QUEDA AL PENDIENTE EL CAMBIO -MC
     isVisualizador: visualizador,
-    incomingPath:location.pathname,
-    estadoProd:valueEstado
-   
+    incomingPath: location.pathname,
+    estadoProd: valueEstado
+
   };
   function ver(record) {
     //filterProductos(record.fk_linea_id);
-    
-   
+
+
     // record.recordParams=typeTransactionData;
     record["permiso"] = false;
     //history.push(`${path}/${record.codigo_interno}/ver`, record);
     history.push({
-      pathname:`${path}/${record.codigo_interno}/ver`, 
-    
-      recordParams}
+      pathname: `${path}/${record.codigo_interno}/ver`,
+
+      recordParams
+    }
     );
     // console.log("ver path1: ",`${path}/`);
     // console.log("ver path2: ",location.pathname);
-    console.log("ver record: ",record);
+    //console.log("ver record: ",record);
   }
 
   const filtrarB = (e) => {
@@ -860,22 +861,22 @@ const ProductoList = (props) => {
 
   };
   const filtrarE = async (e) => {
-  
-    
-    console.log("entra con E<<<> ", e?e:valueEstado);
+
+
+    //console.log("entra con E<<<> ", e?e:valueEstado);
     if (productos_estado) {
-      console.log("productos Estado: ",productos_estado);
+      // console.log("productos Estado: ",productos_estado);
       if (e === 0) {
         const filteredData = productos_estado;
         setDataSource(filteredData);
-        console.log("entra con E1<<<> ", filteredData);
-      
+        // console.log("entra con E1<<<> ", filteredData);
+
         // setDataSource(productos);
-        setlineasDropdown([... new Set(filteredData.sort(function(a, b) {
-          if(a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
-          if(a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
+        setlineasDropdown([... new Set(filteredData.sort(function (a, b) {
+          if (a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
+          if (a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
           return 0;
-         }).map(function (item) {
+        }).map(function (item) {
           const rObj = {};
           rObj.id = item.fk_linea_id;
           rObj.nombre = item.linea;
@@ -884,16 +885,16 @@ const ProductoList = (props) => {
 
       }
       else {
-        const filteredData = productos_estado.filter((entry) => entry.estado === (e?e:valueEstado));
+        const filteredData = productos_estado.filter((entry) => entry.estado === (e ? e : valueEstado));
         setDataSource(filteredData);
-        console.log("entra con E2<<<> ", filteredData);
+        // console.log("entra con E2<<<> ", filteredData);
 
         // setDataSource(productos);
-        setlineasDropdown([... new Set(filteredData.sort(function(a, b) {
-          if(a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
-          if(a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
+        setlineasDropdown([... new Set(filteredData.sort(function (a, b) {
+          if (a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
+          if (a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
           return 0;
-         }).map(function (item) {
+        }).map(function (item) {
           const rObj = {};
           rObj.id = item.fk_linea_id;
           rObj.nombre = item.linea;
@@ -903,37 +904,28 @@ const ProductoList = (props) => {
     }
   }
   const filtrarL = (e) => {
-    // //console.log("ENTRA A FILTARL CON: ", e)
-    // //console.log("ENTRA A FILTARL  CON ESTADO: ", valueEstado)
-    // //console.log("EL DATA SOURCE", dataSource);
-    // setDataSource(null);
-    // //console.log("EL DATA SOURCE NULL", dataSource);
-    // setFiltro(e);
-
-    // const filteredData = productos.filter((entry) => entry.fk_marca_id === e);
-    // //console.log("FILTRADOS X MARCA", filteredData);
-    // setDataSource(filteredData);
-
-    // const filteredData = dataSource.filter((entry) => entry.fk_linea_id === e);
-    // //console.log("FILTRADOS X LINEA", filteredData);
-    // setDataSource(filteredData);
-
-    //  --- ACA DEBES CAMBIAR CON LOGICA COMO LA QUE ESTABAS USANDO ANTES DE COMENTAR 
 
 
-    // setDataSource(productos);
-   // console.log("QUIERE FILTRAR ESTA DATA EN LINEAS: ", productos_estado)
+    let filteredData =  valueEstado === 0 ? productos_estado.filter((entry) => (e===0?productos_estado:entry.fk_linea_id === e)) : productos_estado.filter((entry) => entry.estado === valueEstado && (e===0?productos_estado:entry.fk_linea_id === e));
+
+    console.log("FILTRADOS X LINEA: ", e);
+    // if (e === 0) {
 
 
-    const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === e);
-    // console.log("FILTRADOS X LINEA: ", filteredData);
+    //   filteredData = valueEstado === 0 ? productos_estado : productos_estado.filter((entry) => entry.estado === valueEstado);
+
+    // }
+    // else {
+    //   filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === e);
+    // }
+    console.log("productos en tabla: ", filteredData);
     setDataSource(filteredData);
 
-    setmarcasDropdown([... new Set(filteredData.sort(function(a, b) {
-      if(a.marca.toLowerCase() < b.marca.toLowerCase()) return -1;
-      if(a.marca.toLowerCase() > b.marca.toLowerCase()) return 1;
+    setmarcasDropdown([... new Set(filteredData.sort(function (a, b) {
+      if (a.marca.toLowerCase() < b.marca.toLowerCase()) return -1;
+      if (a.marca.toLowerCase() > b.marca.toLowerCase()) return 1;
       return 0;
-     }).map(function (item) {
+    }).map(function (item) {
       const rObj = {};
       rObj.id = item.fk_marca_id;
       rObj.nombre = item.marca;
@@ -957,18 +949,45 @@ const ProductoList = (props) => {
     //console.log("QUIERE FILTRAR ESTA DATA EN MARCAS: ", productos)
 
     // const filteredData =valueEstado===0? productos_estado.filter((entry) => entry.fk_linea_id === e):productos_estado.filter((entry) =>entry.estado===valueEstado && entry.fk_linea_id === e);
+    let filteredData = null;
 
-    const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
+    // filteredData=selectedMarcaId===0?selectedLineaId===0? valueEstado === 0 ? productos_estado : productos_estado.filter((entry) => entry.estado === valueEstado)
+    //  :valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId ) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId ) 
+    //  :selectedLineaId===0?valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado  && entry.fk_marca_id === e) 
+    //  : valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
+    if (e === 0) {
+      if (selectedLineaId === 0) {
+        filteredData = valueEstado === 0 ? productos_estado : productos_estado.filter((entry) => entry.estado === valueEstado);
+
+      }
+      else {
+
+        filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId);
+      }
+
+    }
+    else {
+      if (selectedLineaId === 0) {
+        filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_marca_id === e);
+
+      }
+      else {
+
+        filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === e);
+      }
+
+    }
 
 
-    // console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
+
+    console.log("FILTRADOS X LINEA & MARCA: ", filteredData);
     setDataSource(filteredData);
 
-    setgruposDropdown([... new Set(filteredData.sort(function(a, b) {
-      if(a.grupo.toLowerCase() < b.grupo.toLowerCase()) return -1;
-      if(a.grupo.toLowerCase() > b.grupo.toLowerCase()) return 1;
+    setgruposDropdown([... new Set(filteredData.sort(function (a, b) {
+      if (a.grupo.toLowerCase() < b.grupo.toLowerCase()) return -1;
+      if (a.grupo.toLowerCase() > b.grupo.toLowerCase()) return 1;
       return 0;
-     }).map(function (item) {
+    }).map(function (item) {
       const rObj = {};
       rObj.id = item.fk_grupo_id;
       rObj.nombre = item.grupo;
@@ -997,10 +1016,15 @@ const ProductoList = (props) => {
     setDataSource(filteredData);*/
 
     //console.log("QUIERE FILTRAR ESTA DATA EN GRUPOS: ", dataSource)
+ 
 
+    //const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === selectedMarcaId && entry.fk_grupo_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === selectedMarcaId && entry.fk_grupo_id === e);
 
-    const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === selectedMarcaId && entry.fk_grupo_id === e) : productos_estado.filter((entry) => entry.estado === valueEstado && entry.fk_linea_id === selectedLineaId && entry.fk_marca_id === selectedMarcaId && entry.fk_grupo_id === e);
+//    const filteredData = valueEstado === 0 ? productos_estado.filter((entry) => (selectedLineaId===0?productos_estado:entry.fk_linea_id === selectedLineaId) && (selectedMarcaId===0?productos_estado:entry.fk_marca_id === selectedMarcaId) && (e===0?productos_estado:entry.fk_grupo_id === e)) : productos_estado.filter((entry) => entry.estado === valueEstado && (selectedLineaId===0?productos_estado:entry.fk_linea_id === selectedLineaId) && (selectedMarcaId===0?productos_estado:entry.fk_marca_id === selectedMarcaId) && (e===0?productos_estado:entry.fk_grupo_id === e));
+    const filteredData =   productos_estado.filter((entry) => (valueEstado===0?productos_estado:entry.estado === valueEstado) && (selectedLineaId===0?productos_estado:entry.fk_linea_id === selectedLineaId) && (selectedMarcaId===0?productos_estado:entry.fk_marca_id === selectedMarcaId) && (e===0?productos_estado:entry.fk_grupo_id === e));
+
     //console.log("FILTRADOS X GRUPO", filteredData);
+    console.log("productos en GRUPO: ", filteredData);
     setDataSource(filteredData);
 
   };
@@ -1023,7 +1047,7 @@ const ProductoList = (props) => {
 
   return (
     <div>
-      
+
       <br />
       <Divider>PRODUCTOS</Divider>
       {/* <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
@@ -1043,7 +1067,8 @@ const ProductoList = (props) => {
       <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider>
       <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider>
      <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
-     
+{productos_estado?
+<div>
       <Row >
         {visualizador ? (
           <Col span={1}></Col>
@@ -1068,8 +1093,8 @@ const ProductoList = (props) => {
             <Radio className="containerRadio" value={3}>DESCONTINUADOS</Radio>
           </Radio.Group>
         </Col> */}
-          </Row> <br />
-         <Row >
+      </Row> <br />
+      <Row >
         <Col span={4}>
           <Select
             style={{ width: 200 }}
@@ -1145,10 +1170,15 @@ const ProductoList = (props) => {
               filtrarL(e);
             }}
           >
+            {lineasDropdown ? <Option value={0}>TODOS</Option> : null}
+
             {lineasDropdown ? lineasDropdown.map((option, index) =>
+
+
               <Option key={option.id} value={option.id}>
                 {option.nombre}
               </Option>
+
             ) : null}
           </Select>
           {/* <select onChange={handleChange}>
@@ -1201,6 +1231,7 @@ const ProductoList = (props) => {
             }}
             value={selectedMarcaId}
           >
+            {marcasDropdown ? <Option value={0}>TODOS</Option> : null}
             {marcasDropdown ? marcasDropdown.map((option, index) =>
               <Option key={option.id} value={option.id}>
                 {option.nombre}
@@ -1241,6 +1272,7 @@ const ProductoList = (props) => {
             }}
             value={selectedGrupoId}
           >
+            {gruposDropdown ? <Option value={0}>TODOS</Option> : null}
             {gruposDropdown ? gruposDropdown.map((option, index) =>
               <Option key={option.id} value={option.id}>
                 {option.nombre}
@@ -1260,12 +1292,12 @@ const ProductoList = (props) => {
             value={selectedGrupoId}
           /> */}
         </Col>
-        <Col span={5}>
+        <Col span={6}>
           <Search
             placeholder="Buscar producto..."
             value={value}
             onChange={(e) => filtrarB(e)}
-            style={{ width: 200 }}
+            style={{ width: 250 }}
           />
         </Col>
 
@@ -1298,7 +1330,7 @@ const ProductoList = (props) => {
               ) {
                 // record["permiso"] = false;
                 // history.push(`${path}/${record.codigo_interno}/ver`, record);
-               
+
                 ver(record);
               }
             },
@@ -1309,6 +1341,8 @@ const ProductoList = (props) => {
         <Spin indicator={antIcon} className="loading" />
       )} */}
       {/* {JSON.stringify(productos)}  */}
+    </div>
+    :  <Spin indicator={antIcon} className="loading" />}
     </div>
   );
 };
