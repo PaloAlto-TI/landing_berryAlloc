@@ -65,7 +65,7 @@ const SesionContextProvider = (props) => {
     await softDeleteSesion(data);
     localStorage.clear();
 
-    message.success('Log Out');
+    message.success('Ha salido con éxito');
     setSesions();
     setMoved(false);
     //history.push("/login");

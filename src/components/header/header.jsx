@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Menu, Button, Dropdown, Row, Col } from "antd";
-import { UserOutlined } from '@ant-design/icons';
+import { ExportOutlined, UserOutlined } from '@ant-design/icons';
 import "./header.css";
 import { SesionContext } from "../../../src/contexts/sesionContext";
 import { useHistory, useRouteMatch } from "react-router";
@@ -35,17 +35,14 @@ const Header = () => {
   const menu = (
     <Menu>
 
-      <Menu.Item key="1">
+      {/* <Menu.Item key="1">
         <a target="_blank" rel="noopener noreferrer" href="./">
           Account Info
         </a>
-      </Menu.Item>
-      <Menu.Item key="2" onClick={e => { logOut(); }}>
-
-
-
-
-        Log Out
+      </Menu.Item> */}
+      <Menu.Item key="2" onClick={e => { logOut(); }} style={{alignContent:"center"}} >
+        <ExportOutlined  style={{alignSelf:"center",transform:"rotate(180deg)", paddingLeft:"10px"}}/>
+        <a>Salir </a>
       </Menu.Item>
 
     </Menu>
@@ -99,6 +96,8 @@ const Header = () => {
               width: "150px",
               marginTop: "5px",
               marginRight: "10px",
+              alignContent:"center"
+              
 
             }} 
             />
