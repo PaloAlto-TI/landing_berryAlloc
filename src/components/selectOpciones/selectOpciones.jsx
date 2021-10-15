@@ -44,9 +44,11 @@ const SelectOpciones = (props) => {
 
     async function fetch() {
      console.log(" tipo . "+tipo)
+     
       if (tipo === "línea") {
         const lineaService = new LineaService();
         lineaService.getAll().then((data) => {
+          console.log(" data : ",data)
           if (cancel) return;
           setOpciones(data);
         });
