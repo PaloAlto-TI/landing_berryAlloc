@@ -8,7 +8,7 @@ import { useHistory } from "react-router";
 export const SesionContext = createContext();
 
 const SesionContextProvider = (props) => {
-  let history = useHistory();
+  //let history = useHistory();
   const sesionService = new SesionService();
 
   const [sesions, setSesions] = useState();

@@ -13,7 +13,7 @@ let { REACT_APP_SEED } = process.env;
 const hashids = new Hashids(REACT_APP_SEED);
 
 const LineaList = () => {
-  var {setMoved,sesions} =  useContext(SesionContext);
+  var {sesions} =  useContext(SesionContext);
   const { lineas, setPermiso, setEditLinea, isEmpty, softDeleteLinea } = useContext(LineaContext);
   // const [filteredInfo, setFilteredInfo] = useState([]);
   const [value, setValue] = useState(null);

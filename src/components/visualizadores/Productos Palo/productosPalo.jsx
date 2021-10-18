@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 
 
-import "./productosHoja.css";
+import "./productosPalo.css";
 
-import ProductoList from "../../productos/productoList/productoList";
+import ProductoListPalo from "../../productos/productoList/productoListPalo";
+import { Divider } from "antd";
 
 const ProductosHoja = () => {
   
@@ -18,8 +19,7 @@ const ProductosHoja = () => {
    
     return (
       <>
-    
-        <ProductoList
+        <ProductoListPalo
           visualizador={true}
         
         />

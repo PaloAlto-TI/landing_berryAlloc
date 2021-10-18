@@ -14,7 +14,7 @@ const hashids = new Hashids(REACT_APP_SEED);
 const { TextArea } = Input;
 
 const FormProveedor = (props) => {
-  var {setMoved,sesions} =  useContext(SesionContext);
+  var {sesions} =  useContext(SesionContext);
   // console.log("SESIONS. ", sesions)
   const { createProveedor, updateProveedor, findProveedor, editProveedor } = useContext(ProveedorContext);
 

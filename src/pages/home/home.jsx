@@ -3,6 +3,7 @@ import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
 import SideMenu from "../../components/menu/sidemenu";
 import ProductoList from "../../components/productos/productoList/productoList";
+
 import ProductoForm from "../../components/productos/productoForm/productoForm";
 import ProductoContextProvider from "../../contexts/productoContext";
 import LineaList from "../../components/lineas/lineaList/lineaList";
@@ -39,6 +40,8 @@ import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoLis
 import SubgrupoContextProvider from "../../contexts/subgrupoContext";
 import { SesionContext } from "../../contexts/sesionContext";
 import Stocks from "../../components/visualizadores/stocks/stocks";
+import ProductosHoja from "../../components/visualizadores/Productos Hoja/productosHoja";
+import ProductosPalo from "../../components/visualizadores/Productos Palo/productosPalo";
 const Home = () => {
   var { setMoved, sesions, redirect } = useContext(SesionContext);
   let history = useHistory();
@@ -78,16 +81,27 @@ const Home = () => {
                     <ProductoList />
                   </ConfigProvider>
                 </Route>
-                <Route exact path={`${path}/visualizadores/productos`}>
+
+                <Route exact path={`${path}/visualizadores/productoshoja`}>
                   <ConfigProvider locale={es_ES}>
-                    <ProductoList visualizador={true} />
+                    {/* <ProductoList visualizador={true} /> */}
+                    <ProductosHoja visualizador={true} />
                   </ConfigProvider>
                 </Route>
+
+                <Route exact path={`${path}/visualizadores/productospalo`}>
+                  <ConfigProvider locale={es_ES}>
+                    {/* <ProductoList visualizador={true} /> */}
+                    <ProductosPalo  />
+                  </ConfigProvider>
+                </Route>
+
                 <Route exact path={`${path}/visualizadores/stocks`}>
                   <Stocks />
                 </Route>
+                
 
-                <Route path={`${path}/(productos|visualizadores/stocks|visualizadores/productos)/:codigo?/:operacion?`}>
+                <Route path={`${path}/(productos|visualizadores/stocks|visualizadores/productos|visualizadores/productospalo|visualizadores/productoshoja)/:codigo?/:operacion?`}>
                   <ConfigProvider locale={es_ES}>
                     <ProductoForm />
                   </ConfigProvider>
