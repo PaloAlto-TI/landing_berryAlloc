@@ -52,6 +52,7 @@ const ProductoList = (props) => {
   const [marcasDropdown, setmarcasDropdown] = useState(null);
   const [gruposDropdown, setgruposDropdown] = useState(null);
   const [subgrupoDropdown, setsubgrupoDropdown] = useState(null);
+  const [metodoabcDropdown, setmetodoabcDropdown] = useState(null);
   const [inventarioDropdown, setinventarioDropdown] = useState(null);
   const [stop, setstop] = useState(null);
   // const [valueEstado, setValueEstado] = useState(null);
@@ -61,6 +62,7 @@ const ProductoList = (props) => {
   const grupos = null; // AGREGADO POR MANUEL CORONEL
   const [selectedSubgrupoId, setSelectedSubgrupoId] = useState();
   const [selectedInventarioId, setSelectedInventarioId] = useState();
+  const [selectedMetodoabcId, setMetodoabcId] = useState();
 
   const [valueEstado, setValueEstado] = useState(
     grupos
@@ -160,6 +162,19 @@ const ProductoList = (props) => {
         return rObj;
       }).map(JSON.stringify))].map(JSON.parse))
       console.log("dropdown inventario: ", inventarioDropdown);
+
+      setmetodoabcDropdown([... new Set(productos_estado.sort(function (a, b) {
+        if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+        if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+        return 0;
+      }).map(function (item) {
+        //console.log("data en item<<<<: ",item);
+        const rObj = {};
+        rObj.id = item.fk_metodo_abc_id;
+        rObj.nombre = item.metodo_abc;
+        return rObj;
+      }).map(JSON.stringify))].map(JSON.parse))
+      console.log("dropdown metodo_abc: ", metodoabcDropdown);
 
 
 
@@ -1046,7 +1061,6 @@ const ProductoList = (props) => {
                 value={selectedSubgrupoId}
                 onChange={(e) => {
                   setSelectedSubgrupoId(e);
-
                   filtrarSub(e,0);
                 }}
               >
@@ -1058,7 +1072,7 @@ const ProductoList = (props) => {
                 ) : null}
               </Select>
             </Col>
-            <Col span={8}>
+            <Col span={5}>
               <Select
                 style={{ width: 200 }}
                 placeholder="Seleccione Inventario"
@@ -1077,6 +1091,26 @@ const ProductoList = (props) => {
                 ) : null}
               </Select>
             </Col>
+
+            <Col span={4}>
+              <Select
+                style={{ width: 200 }}
+                placeholder="Seleccione metodo abc"
+                value={selectedMetodoabcId}
+                onChange={(e) => {
+                  setMetodoabcId(e);
+                }}
+              >
+                {metodoabcDropdown ? <Option value={0}>TODOS</Option> : null}
+                {metodoabcDropdown ? metodoabcDropdown.map((option, index) =>
+                  <Option key={option.id} value={option.id}>
+                    {option.nombre}
+                  </Option>
+                ) : null}
+              </Select>
+            </Col>
+
+
           </Row>
 
 
