@@ -129,7 +129,7 @@ const ProductoList = (props) => {
   }, []);
 
   useEffect(async () => {
-    if (productos_estado  ) {
+    if (productos_estado) {
       console.log("ERRORRR<<<<<<<<<<<<<<<<<")
       setstop(1);
       console.log("Ya cargo.....");
@@ -174,6 +174,7 @@ const ProductoList = (props) => {
         rObj.nombre = item.metodo_abc;
         return rObj;
       }).map(JSON.stringify))].map(JSON.parse))
+
       console.log("dropdown metodo_abc: ", metodoabcDropdown);
 
 
@@ -204,7 +205,7 @@ const ProductoList = (props) => {
       setSelectedMarcaId(null);
       setSelectedGrupoId(null);
     }
-  }, [valueEstado, dispatch, selectedSubgrupoId,selectedInventarioId]);
+  }, [valueEstado, dispatch, selectedSubgrupoId, selectedInventarioId]);
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const columns =
@@ -632,7 +633,7 @@ const ProductoList = (props) => {
 
 
 
-    const filteredData = productos_estado.filter((entry) => (e === 0 ? productos_estado : entry.estado === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId)&& (selectedInventarioId === 0 || !selectedInventarioId? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
+    const filteredData = productos_estado.filter((entry) => (e === 0 ? productos_estado : entry.estado === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
     console.log("FILTRADOS X ESTADO: ", filteredData);
     //console.log("productos estado: ", productos_estado);
 
@@ -650,17 +651,19 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
 
-    filtrarSub(selectedSubgrupoId,1);
+    filtrarSub(selectedSubgrupoId, 1);
 
 
     filtrarInventario(selectedInventarioId, 1);
+    filtrarMetodoabc  (selectedMetodoabcId, 1);
+
 
 
 
 
   }
   const filtrarL = (e) => {
-    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (e === 0 ? productos_estado : entry.fk_linea_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId)&& (selectedInventarioId === 0 || !selectedInventarioId? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
+    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (e === 0 ? productos_estado : entry.fk_linea_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
     // console.log("FILTRADOS X LINEA: ", filteredData);
     setDataSource(filteredData);
     setmarcasDropdown([... new Set(filteredData.sort(function (a, b) {
@@ -675,10 +678,12 @@ const ProductoList = (props) => {
     }).map(JSON.stringify))].map(JSON.parse))
 
 
-    filtrarSub(selectedSubgrupoId,1);
+    filtrarSub(selectedSubgrupoId, 1);
 
 
     filtrarInventario(selectedInventarioId, 1);
+    filtrarMetodoabc  (selectedMetodoabcId, 1);
+
 
     // //dropdown tipo
 
@@ -702,7 +707,7 @@ const ProductoList = (props) => {
   };
 
   const filtrarM = (e) => {
-    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 ? productos_estado : entry.fk_marca_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId)&& (selectedInventarioId === 0 || !selectedInventarioId? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
+    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 ? productos_estado : entry.fk_marca_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
     // console.log("FILTRADOS X MARCA: ", filteredData);
     setDataSource(filteredData);
 
@@ -717,62 +722,34 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
 
-    filtrarSub(selectedSubgrupoId,1);
+    filtrarSub(selectedSubgrupoId, 1);
 
 
     filtrarInventario(selectedInventarioId, 1);
+    filtrarMetodoabc  (selectedMetodoabcId, 1);
 
-    // //dropdown tipo
 
-
-    // const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 ? productos_estado : entry.fk_marca_id === e));
-
-    // setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
-    //   if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
-    //   if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
-    //   return 0;
-    // }).map(function (item) {
-    //   const rObj = {};
-    //   rObj.id = item.fk_subgrupo_id;
-    //   rObj.nombre = item.subgrupo;
-    //   return rObj;
-    // }).map(JSON.stringify))].map(JSON.parse))
-
-    // //---------------------------------------------------------------------------------
 
   };
 
   const filtrarG = (e) => {
-    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 ? productos_estado : entry.fk_grupo_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId)&& (selectedInventarioId === 0 || !selectedInventarioId? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
+    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 ? productos_estado : entry.fk_grupo_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
     //console.log("FILTRADOS X GRUPO", filteredData);
     // console.log("productos en GRUPO: ", filteredData);
     setDataSource(filteredData);
 
     //dropdown tipo
-    filtrarSub(selectedSubgrupoId,1);
+    filtrarSub(selectedSubgrupoId, 1);
 
 
     filtrarInventario(selectedInventarioId, 1);
 
-    // const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 ? productos_estado : entry.fk_grupo_id === e));
 
-    // setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
-    //   if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
-    //   if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
-    //   return 0;
-    // }).map(function (item) {
-    //   const rObj = {};
-    //   rObj.id = item.fk_subgrupo_id;
-    //   rObj.nombre = item.subgrupo;
-    //   return rObj;
-    // }).map(JSON.stringify))].map(JSON.parse))
-
-    // //---------------------------------------------------------------------------------
   };
 
-  const filtrarSub = (e,flag) => {
+  const filtrarSub = (e, flag) => {
     console.log("este es el id de subgrupo: ", e)
-    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
+    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
     console.log("SUBGRUPO DATA: ", filteredData)
 
 
@@ -783,7 +760,7 @@ const ProductoList = (props) => {
     }
 
     //dropdown tipo
-    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
     setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
@@ -799,10 +776,10 @@ const ProductoList = (props) => {
 
     console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
 
-    //---------------------------------------------------------------------------------
-    
+    //-----------------------------INVENTARIO----------------------------------------------------
+
     //dropdown Inventario
-    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e));
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
     setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
@@ -820,23 +797,41 @@ const ProductoList = (props) => {
 
     //---------------------------------------------------------------------------------
 
+     //-----------------------------METODO ABC----------------------------------------------------
+
+     const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e));
+
+     setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+       if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+       if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+       return 0;
+     }).map(function (item) {
+       //console.log("data en item<<<<: ",item);
+       const rObj = {};
+       rObj.id = item.fk_metodo_abc_id;
+       rObj.nombre = item.metodo_abc;
+       return rObj;
+     }).map(JSON.stringify))].map(JSON.parse))
+ //-----------------------------------------------------------------------------------------------------
+
 
   }
 
   const filtrarInventario = (e, flag) => {
-    console.log("este es el id de inventario: ", e)
-    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (e === 0 || !e  ? productos_estado : entry.fk_tipo_inventario_id === e));
-    console.log("estos son los datos filtrados: ",filteredData)
 
-    console.log("flag inventario: ",flag)
+    console.log("este es el id de inventario: ", e)
+    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (e === 0 || !e ? productos_estado : entry.fk_tipo_inventario_id === e) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    console.log("estos son los datos filtrados: ", filteredData)
+
+    console.log("flag inventario: ", flag)
     if (flag === 0) {
 
       setDataSource(filteredData);
       console.log("INVENTARIO DATA: ", filteredData)
     }
 
-    //dropdown INVENTARIO
-    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
+    //------------------------dropdown INVENTARIO--------------------------------------
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
     setinventarioDropdown([... new Set(filteredData1.sort(function (a, b) {
@@ -851,9 +846,9 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
     console.log("dropdown inventario: ", inventarioDropdown);
-    //---------------------------------------------------------------------------------
+    //---------------------------------SUBGRUPO------------------------------------------------
 
-    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e? productos_estado : entry.fk_tipo_inventario_id === e));
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_tipo_inventario_id === e)&& (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
     setsubgrupoDropdown([... new Set(filteredData2.sort(function (a, b) {
@@ -866,15 +861,88 @@ const ProductoList = (props) => {
       rObj.nombre = item.subgrupo;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
+    //-----------------------------METODO ABC----------------------------------------------------
 
-    
+    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_tipo_inventario_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
+
+    setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+      if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+      if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_metodo_abc_id;
+      rObj.nombre = item.metodo_abc;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+//-----------------------------------------------------------------------------------------------------
+
+
+
+
+  }
+
+  const filtrarMetodoabc = (e, flag) => {
+    console.log("este es el id de metodo_abc: ", e)
+    console.log("productos sin filtro: ", productos_estado)
+    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (e === 0 || !e ? productos_estado : entry.fk_metodo_abc_id === e));
+    console.log("estos son los datos filtrados, metodo_abc: ", filteredData)
+    console.log("flag metodo_abc: ", flag)
+    if (flag === 0) {
+      setDataSource(filteredData);
+      console.log("metodo_abc DATA: ", filteredData)
+    }
+    //---------------------------------METODO ABC-----------------------------------------
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
+    setmetodoabcDropdown([... new Set(filteredData1.sort(function (a, b) {
+      if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+      if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_metodo_abc_id;
+      rObj.nombre = item.metodo_abc;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    //---------------------------------------------------------------------------------------
+     //---------------------------------SUBGRUPO------------------------------------------------
+
+     const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&& (e=== 0 || !e ? productos_estado : entry.fk_metodo_abc_id === e));
+
+
+     setsubgrupoDropdown([... new Set(filteredData2.sort(function (a, b) {
+       if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
+       if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
+       return 0;
+     }).map(function (item) {
+       const rObj = {};
+       rObj.id = item.fk_subgrupo_id;
+       rObj.nombre = item.subgrupo;
+       return rObj;
+     }).map(JSON.stringify))].map(JSON.parse))
+    //-------------------------------------dropdown Inventario---------------------------------------------------
+    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (e === 0 || !e ? productos_estado : entry.fk_metodo_abc_id === e));
+
+
+    setinventarioDropdown([... new Set(filteredData3.sort(function (a, b) {
+      if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
+      if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_tipo_inventario_id;
+      rObj.nombre = item.tipo_inventario;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
 
     //---------------------------------------------------------------------------------
 
 
   }
-
-
 
   return (
     <div>
@@ -1061,7 +1129,7 @@ const ProductoList = (props) => {
                 value={selectedSubgrupoId}
                 onChange={(e) => {
                   setSelectedSubgrupoId(e);
-                  filtrarSub(e,0);
+                  filtrarSub(e, 0);
                 }}
               >
                 {subgrupoDropdown ? <Option value={0}>TODOS</Option> : null}
@@ -1099,6 +1167,7 @@ const ProductoList = (props) => {
                 value={selectedMetodoabcId}
                 onChange={(e) => {
                   setMetodoabcId(e);
+                  filtrarMetodoabc(e, 0);
                 }}
               >
                 {metodoabcDropdown ? <Option value={0}>TODOS</Option> : null}
@@ -1109,8 +1178,6 @@ const ProductoList = (props) => {
                 ) : null}
               </Select>
             </Col>
-
-
           </Row>
 
 
