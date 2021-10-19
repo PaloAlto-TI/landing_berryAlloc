@@ -205,7 +205,7 @@ const ProductoList = (props) => {
       setSelectedMarcaId(null);
       setSelectedGrupoId(null);
     }
-  }, [valueEstado, dispatch, selectedSubgrupoId, selectedInventarioId]);
+  }, [valueEstado, dispatch, selectedSubgrupoId, selectedInventarioId,selectedMetodoabcId]);
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const columns =
@@ -627,10 +627,9 @@ const ProductoList = (props) => {
       }
     }
   };
+
+
   const filtrarE = async (e) => {
-
-
-
 
 
     const filteredData = productos_estado.filter((entry) => (e === 0 ? productos_estado : entry.estado === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
@@ -651,15 +650,60 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
 
-    filtrarSub(selectedSubgrupoId, 1);
+    //--------------------------------------------------TIPO------------------------------------------------------
+    const filteredData1 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
-    filtrarInventario(selectedInventarioId, 1);
-    filtrarMetodoabc  (selectedMetodoabcId, 1);
+    setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
+      if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
+      if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_subgrupo_id;
+      rObj.nombre = item.subgrupo;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
 
+    console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
 
+    //-----------------------------INVENTARIO----------------------------------------------------
 
+    //filtrarInventario(selectedInventarioId,1)
+    const filteredData2 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
+      if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
+      if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_tipo_inventario_id;
+      rObj.nombre = item.tipo_inventario;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
 
+    //---------------------------------------------------------------------------------
+
+     //-----------------------------METODO ABC----------------------------------------------------
+
+     //filtrarMetodoabc(selectedMetodoabcId,1)
+
+     const filteredData3 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
+
+     setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+       if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+       if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+       return 0;
+     }).map(function (item) {
+       //console.log("data en item<<<<: ",item);
+       const rObj = {};
+       rObj.id = item.fk_metodo_abc_id;
+       rObj.nombre = item.metodo_abc;
+       return rObj;
+     }).map(JSON.stringify))].map(JSON.parse))
+ //-----------------------------------------------------------------------------------------------------
 
   }
   const filtrarL = (e) => {
@@ -678,36 +722,67 @@ const ProductoList = (props) => {
     }).map(JSON.stringify))].map(JSON.parse))
 
 
-    filtrarSub(selectedSubgrupoId, 1);
+    //--------------------------------------------------TIPO------------------------------------------------------
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
-    filtrarInventario(selectedInventarioId, 1);
-    filtrarMetodoabc  (selectedMetodoabcId, 1);
+    setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
+      if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
+      if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_subgrupo_id;
+      rObj.nombre = item.subgrupo;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
 
+    console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
 
-    // //dropdown tipo
+    //-----------------------------INVENTARIO----------------------------------------------------
 
+    //filtrarInventario(selectedInventarioId,1)
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
+      if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
+      if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_tipo_inventario_id;
+      rObj.nombre = item.tipo_inventario;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
 
-    // const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (e === 0 ? productos_estado : entry.fk_linea_id === e));
+    //---------------------------------------------------------------------------------
 
-    // setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
-    //   if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
-    //   if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
-    //   return 0;
-    // }).map(function (item) {
-    //   const rObj = {};
-    //   rObj.id = item.fk_subgrupo_id;
-    //   rObj.nombre = item.subgrupo;
-    //   return rObj;
-    // }).map(JSON.stringify))].map(JSON.parse))
+     //-----------------------------METODO ABC----------------------------------------------------
 
-    // //---------------------------------------------------------------------------------
+     //filtrarMetodoabc(selectedMetodoabcId,1)
+
+     const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
+
+     setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+       if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+       if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+       return 0;
+     }).map(function (item) {
+       //console.log("data en item<<<<: ",item);
+       const rObj = {};
+       rObj.id = item.fk_metodo_abc_id;
+       rObj.nombre = item.metodo_abc;
+       return rObj;
+     }).map(JSON.stringify))].map(JSON.parse))
+ //-----------------------------------------------------------------------------------------------------
+
 
 
   };
 
   const filtrarM = (e) => {
-    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 ? productos_estado : entry.fk_marca_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId));
+    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 ? productos_estado : entry.fk_marca_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&& (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
     // console.log("FILTRADOS X MARCA: ", filteredData);
     setDataSource(filteredData);
 
@@ -722,11 +797,60 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
 
-    filtrarSub(selectedSubgrupoId, 1);
+    //--------------------------------------------------TIPO------------------------------------------------------
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
-    filtrarInventario(selectedInventarioId, 1);
-    filtrarMetodoabc  (selectedMetodoabcId, 1);
+    setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
+      if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
+      if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_subgrupo_id;
+      rObj.nombre = item.subgrupo;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+
+    console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
+
+    //-----------------------------INVENTARIO----------------------------------------------------
+
+    //filtrarInventario(selectedInventarioId,1)
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
+      if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
+      if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_tipo_inventario_id;
+      rObj.nombre = item.tipo_inventario;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
+
+    //---------------------------------------------------------------------------------
+
+     //-----------------------------METODO ABC----------------------------------------------------
+
+     //filtrarMetodoabc(selectedMetodoabcId,1)
+
+     const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
+
+     setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+       if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+       if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+       return 0;
+     }).map(function (item) {
+       //console.log("data en item<<<<: ",item);
+       const rObj = {};
+       rObj.id = item.fk_metodo_abc_id;
+       rObj.nombre = item.metodo_abc;
+       return rObj;
+     }).map(JSON.stringify))].map(JSON.parse))
+ //-----------------------------------------------------------------------------------------------------
 
 
 
@@ -737,13 +861,60 @@ const ProductoList = (props) => {
     //console.log("FILTRADOS X GRUPO", filteredData);
     // console.log("productos en GRUPO: ", filteredData);
     setDataSource(filteredData);
+//--------------------------------------------------TIPO------------------------------------------------------
+const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
-    //dropdown tipo
-    filtrarSub(selectedSubgrupoId, 1);
 
+setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
+  if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
+  if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
+  return 0;
+}).map(function (item) {
+  const rObj = {};
+  rObj.id = item.fk_subgrupo_id;
+  rObj.nombre = item.subgrupo;
+  return rObj;
+}).map(JSON.stringify))].map(JSON.parse))
 
-    filtrarInventario(selectedInventarioId, 1);
+console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
 
+//-----------------------------INVENTARIO----------------------------------------------------
+
+//filtrarInventario(selectedInventarioId,1)
+const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
+  if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
+  if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
+  return 0;
+}).map(function (item) {
+  //console.log("data en item<<<<: ",item);
+  const rObj = {};
+  rObj.id = item.fk_tipo_inventario_id;
+  rObj.nombre = item.tipo_inventario;
+  return rObj;
+}).map(JSON.stringify))].map(JSON.parse))
+console.log("dropdown inventario: ", inventarioDropdown);
+
+//---------------------------------------------------------------------------------
+
+ //-----------------------------METODO ABC----------------------------------------------------
+
+ //filtrarMetodoabc(selectedMetodoabcId,1)
+
+ const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
+
+ setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+   if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+   if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+   return 0;
+ }).map(function (item) {
+   //console.log("data en item<<<<: ",item);
+   const rObj = {};
+   rObj.id = item.fk_metodo_abc_id;
+   rObj.nombre = item.metodo_abc;
+   return rObj;
+ }).map(JSON.stringify))].map(JSON.parse))
+//-----------------------------------------------------------------------------------------------------
 
   };
 
@@ -759,7 +930,7 @@ const ProductoList = (props) => {
       console.log("INVENTARIO DATA: ", filteredData)
     }
 
-    //dropdown tipo
+    //--------------------------------------------------TIPO------------------------------------------------------
     const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
@@ -778,10 +949,8 @@ const ProductoList = (props) => {
 
     //-----------------------------INVENTARIO----------------------------------------------------
 
-    //dropdown Inventario
+    //filtrarInventario(selectedInventarioId,1)
     const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
-
-
     setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
       if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
       if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
@@ -798,6 +967,8 @@ const ProductoList = (props) => {
     //---------------------------------------------------------------------------------
 
      //-----------------------------METODO ABC----------------------------------------------------
+
+     //filtrarMetodoabc(selectedMetodoabcId,1)
 
      const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e));
 
@@ -994,8 +1165,8 @@ const ProductoList = (props) => {
                 style={{ width: 200 }}
                 placeholder="Seleccione Estado"
                 value={valueEstado}
-                onChange={(e) => {
-                  setValueEstado(e);
+                onChange={async (e) => {
+                  await setValueEstado(e);
                   setSelectedLineaId(null);
                   setSelectedMarcaId(null);
                   setSelectedGrupoId(null);
@@ -1031,8 +1202,8 @@ const ProductoList = (props) => {
                     return false;
                   }
                 }}
-                onChange={(e) => {
-                  setSelectedLineaId(e);
+                onChange={async (e) => {
+                 await  setSelectedLineaId(e);
                   setSelectedMarcaId(null);
                   setSelectedGrupoId(null);
                   setmarcasDropdown(null);
@@ -1065,8 +1236,8 @@ const ProductoList = (props) => {
                 }}
                 style={{ width: 250 }}
                 placeholder="Seleccione Marca"
-                onChange={(e) => {
-                  setSelectedMarcaId(e);
+                onChange={async (e) => {
+                 await setSelectedMarcaId(e);
                   setSelectedGrupoId(null);
                   setgruposDropdown(null);
                   filtrarM(e);
@@ -1097,8 +1268,8 @@ const ProductoList = (props) => {
                 notFoundContent="No hay coincidencias"
                 style={{ width: 250 }}
                 placeholder="Seleccione Grupo"
-                onChange={(e) => {
-                  setSelectedGrupoId(e);
+                onChange={async (e) => {
+                  await setSelectedGrupoId(e);
                   filtrarG(e);
                 }}
                 value={selectedGrupoId}
@@ -1127,8 +1298,8 @@ const ProductoList = (props) => {
                 style={{ width: 200 }}
                 placeholder="Seleccione Tipo"
                 value={selectedSubgrupoId}
-                onChange={(e) => {
-                  setSelectedSubgrupoId(e);
+                onChange={async (e) => {
+                 await setSelectedSubgrupoId(e);
                   filtrarSub(e, 0);
                 }}
               >
@@ -1142,11 +1313,11 @@ const ProductoList = (props) => {
             </Col>
             <Col span={5}>
               <Select
-                style={{ width: 200 }}
+                style={{ width: 250 }}
                 placeholder="Seleccione Inventario"
                 value={selectedInventarioId}
-                onChange={(e) => {
-                  setSelectedInventarioId(e);
+                onChange={async (e) => {
+                 await setSelectedInventarioId(e);
 
                   filtrarInventario(e, 0);
                 }}
@@ -1160,13 +1331,13 @@ const ProductoList = (props) => {
               </Select>
             </Col>
 
-            <Col span={4}>
+            <Col span={5}>
               <Select
-                style={{ width: 200 }}
-                placeholder="Seleccione metodo abc"
+                style={{ width: 250 }}
+                placeholder="Seleccione Método ABC"
                 value={selectedMetodoabcId}
-                onChange={(e) => {
-                  setMetodoabcId(e);
+                onChange={async (e) => {
+                  await setMetodoabcId(e);
                   filtrarMetodoabc(e, 0);
                 }}
               >
