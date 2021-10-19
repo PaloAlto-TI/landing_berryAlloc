@@ -358,25 +358,25 @@ const ProductoList = (props) => {
           width: "5%",
         },
 
-        {
-          title: "ACCIONES",
-          dataIndex: "",
-          key: "x",
-          align: "center",
-          render: (_, record) =>
-            record.url_pagina_web || !visualizador ? (
-              <CrudButton
-                record={record}
-                softDelete={_softDeleteProducto}
-                setRowState={setRowState}
-                permiso={sesions && sesions._usuario[0].rol === 2}
-                visualizador={visualizador}
-              />
-            ) : (
-              <StopOutlined style={{ fontSize: 18, marginLeft: "2vw" }} />
-            ),
-          width: "5%",
-        },
+        // {
+        //   title: "ACCIONES",
+        //   dataIndex: "",
+        //   key: "x",
+        //   align: "center",
+        //   render: (_, record) =>
+        //     record.url_pagina_web || !visualizador ? (
+        //       <CrudButton
+        //         record={record}
+        //         softDelete={_softDeleteProducto}
+        //         setRowState={setRowState}
+        //         permiso={sesions && sesions._usuario[0].rol === 2}
+        //         visualizador={visualizador}
+        //       />
+        //     ) : (
+        //       <StopOutlined style={{ fontSize: 18, marginLeft: "2vw" }} />
+        //     ),
+        //   width: "5%",
+        // },
       ]
       : [
         {
@@ -538,25 +538,25 @@ const ProductoList = (props) => {
           width: "5%",
         },
 
-        {
-          title: "ACCIONES",
-          dataIndex: "",
-          key: "x",
-          align: "center",
-          render: (_, record) =>
-            record.url_pagina_web ? (
-              <CrudButton
-                record={record}
-                softDelete={_softDeleteProducto}
-                setRowState={setRowState}
-                permiso={sesions && sesions._usuario[0].rol === 2}
-                visualizador={visualizador}
-              />
-            ) : (
-              <StopOutlined style={{ fontSize: 18, marginLeft: "2vw" }} />
-            ),
-          width: "5%",
-        },
+        // {
+        //   title: "ACCIONES",
+        //   dataIndex: "",
+        //   key: "x",
+        //   align: "center",
+        //   render: (_, record) =>
+        //     record.url_pagina_web ? (
+        //       <CrudButton
+        //         record={record}
+        //         softDelete={_softDeleteProducto}
+        //         setRowState={setRowState}
+        //         permiso={sesions && sesions._usuario[0].rol === 2}
+        //         visualizador={visualizador}
+        //       />
+        //     ) : (
+        //       <StopOutlined style={{ fontSize: 18, marginLeft: "2vw" }} />
+        //     ),
+        //   width: "5%",
+        // },
       ];
 
   let history = useHistory();
@@ -596,7 +596,7 @@ const ProductoList = (props) => {
     const currValue = e.target.value;
     setValue(currValue);
 
-    if (valueEstado !== null) {
+    // if (valueEstado !== null) {
       if (valueEstado === 0) {
         const filteredData = productos_estado.filter(
           (entry) =>
@@ -625,7 +625,7 @@ const ProductoList = (props) => {
         );
         setDataSource(filteredData);
       }
-    }
+    // }
   };
 
 
@@ -1120,21 +1120,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
 
       <br />
       <Divider>PRODUCTOS</Divider>
-      {/* <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
-      {/* <Divider className="titleFont">{"RESPONSE: " + response}</Divider> */}
-      {/* <Divider className="titleFont">{"EL visualizador: " + visualizador}</Divider> */}
-      {/* const { lineaV, marcaV, grupoV, visualizador, stocks } = props; */}
-      {/* <Divider className="titleFont">{"EL LINEAV: " + lineaV}</Divider>
-      <Divider className="titleFont">{"EL MARCAV: " + marcaV}</Divider>
-      <Divider className="titleFont">{"EL GRUPOV: " + grupoV}</Divider>*/}
-      {/* <Divider className="titleFont">{"LOS PRODUCTOS: " + JSON.stringify(productos)}</Divider> */}
-      {/* <Divider className="titleFont">{"DATA SOURCE: " + dataSource}</Divider>  */}
-      {/*<Divider className="titleFont">{"LINEAS DROPDOWN: " + JSON.stringify(lineasDropdown)}</Divider>
-      <Divider className="titleFont">{"MARCAS DROPDOWN: " + JSON.stringify(marcasDropdown)}</Divider>
-      <Divider className="titleFont">{"GRUPOS DROPDOWN: " + JSON.stringify(gruposDropdown)}</Divider>
-      <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider>
-      <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider>
-     <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
+     
       {productos_estado ?
         <div>
           <Row >
@@ -1285,6 +1271,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
             <Col span={6}>
               <Search
                 placeholder="Buscar producto..."
+                
                 value={value}
                 onChange={(e) => filtrarB(e)}
                 style={{ width: 250 }}
@@ -1297,6 +1284,8 @@ console.log("dropdown inventario: ", inventarioDropdown);
               <Select
                 style={{ width: 200 }}
                 placeholder="Seleccione Tipo"
+                showSearch
+                notFoundContent="No hay coincidencias"
                 value={selectedSubgrupoId}
                 onChange={async (e) => {
                  await setSelectedSubgrupoId(e);
@@ -1313,6 +1302,8 @@ console.log("dropdown inventario: ", inventarioDropdown);
             </Col>
             <Col span={5}>
               <Select
+              showSearch
+              notFoundContent="No hay coincidencias"
                 style={{ width: 250 }}
                 placeholder="Seleccione Inventario"
                 value={selectedInventarioId}
@@ -1333,6 +1324,8 @@ console.log("dropdown inventario: ", inventarioDropdown);
 
             <Col span={5}>
               <Select
+              showSearch
+              notFoundContent="No hay coincidencias"
                 style={{ width: 250 }}
                 placeholder="Seleccione Método ABC"
                 value={selectedMetodoabcId}
