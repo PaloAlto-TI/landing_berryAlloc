@@ -21,7 +21,7 @@ import {
   getProductosByEstado,
   _softDeleteProducto,
 } from "../../../../../_redux/ducks/producto.duck";
-
+//M DF,SD
 
 import { useLocation } from 'react-router-dom';
 import { SesionContext } from "../../../../../contexts/sesionContext";
