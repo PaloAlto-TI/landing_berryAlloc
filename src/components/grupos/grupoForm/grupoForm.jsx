@@ -518,7 +518,7 @@ const FormGrupo = (props) => {
                 </Col>
               </Row>
               <br />
-              <Collapse /*defaultActiveKey={['1']}*/>
+              {/* <Collapse /*defaultActiveKey={['1']}*>
                 <Panel
                   header="INFORMACIÓN TÉCNICA"
                   key="1"
@@ -561,7 +561,7 @@ const FormGrupo = (props) => {
                     </Col>
                   </Row>
                 </Panel>
-              </Collapse>
+              </Collapse> */}
               <br />
               <br />
               <Row>
