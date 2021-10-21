@@ -4,24 +4,24 @@ import { Button } from "antd";
 import { Table } from "antd";
 import { FilterFilled, PlusOutlined, SmileOutlined, StopOutlined } from "@ant-design/icons";
 import { LoadingOutlined } from "@ant-design/icons";
-import { ProductoContext } from "../../../contexts/productoContext";
-import CrudButton from "../../crudButton/crudButton";
+import { ProductoContext } from "../../../../../contexts/productoContext";
+import CrudButton from "../../../../crudButton/crudButton";
 import { useHistory } from "react-router";
 import { useRouteMatch } from "react-router-dom";
 import Search from "antd/lib/input/Search";
-import "./productoList.css";
+import "./productoPaloList.css";
 // import SelectOpciones from "../../selectOpciones/selectOpciones";
 // import Checkbox from "antd/lib/checkbox/Checkbox";
-import QueryButton from "./queryButton";
+import QueryButton from "../../queryButton";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProductos,
   getProductosByLinea,
   getProductosByEstado,
   _softDeleteProducto,
-} from "../../../_redux/ducks/producto.duck";
+} from "../../../../../_redux/ducks/producto.duck";
 import { useLocation } from 'react-router-dom';
-import { SesionContext } from "../../../contexts/sesionContext";
+import { SesionContext } from "../../../../../contexts/sesionContext";
 
 const { Option } = Select;
 const ProductoList = (props) => {
@@ -205,6 +205,11 @@ const ProductoList = (props) => {
       setSelectedMarcaId(null);
       setSelectedGrupoId(null);
     }
+
+    // filtrarSub(selectedSubgrupoId,1);
+    // filtrarInventario(selectedInventarioId,1);
+    // filtrarMetodoabc(selectedMetodoabcId,1);
+
   }, [valueEstado, dispatch, selectedSubgrupoId, selectedInventarioId,selectedMetodoabcId]);
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
@@ -231,7 +236,7 @@ const ProductoList = (props) => {
             compare: (a, b) => a.nombre.localeCompare(b.nombre),
           },
           showSorterTooltip: false,
-          width: "30%",
+          width: "25%",
           align: "center",
         },
         {
@@ -251,6 +256,20 @@ const ProductoList = (props) => {
           key: "precio",
           sorter: {
             compare: (a, b) => a.precio - b.precio,
+          },
+          align: "center",
+          width: "10%",
+          showSorterTooltip: false,
+          render: (text, record) => (
+            <p>{"$" + text}</p>
+          ),
+        },
+        {
+          title: "COSTO",
+          dataIndex: "costo",
+          key: "costo",
+          sorter: {
+            compare: (a, b) => a.costo - b.costo,
           },
           align: "center",
           width: "10%",
@@ -1119,7 +1138,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
     <div>
 
       <br />
-      <Divider>PRODUCTOS</Divider>
+      <Divider>PRODUCTOS PALO</Divider>
      
       {productos_estado ?
         <div>
@@ -1140,10 +1159,6 @@ console.log("dropdown inventario: ", inventarioDropdown);
               </Col>
             )}
           </Row> <br />
-
-
-
-
 
           <Row >
             <Col span={4}>

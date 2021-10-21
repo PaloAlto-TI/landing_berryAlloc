@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 import "./productosPalo.css";
 
-import ProductoListPalo from "../../productos/productoList/productoListPalo";
+import ProductoListPalo from "../../productos/productoList/visualizadores/palo/productosPaloList";
 import { Divider } from "antd";
 
 const ProductosHoja = () => {

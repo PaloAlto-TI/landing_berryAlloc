@@ -1,0 +1,42 @@
+.new-button{
+    background-color: black;
+}
+
+.success{
+    text-align: left;
+}
+
+p{
+    margin-bottom: 0em;
+}
+
+.loading{
+    margin-top: 15vh;
+}
+
+.spaceMarginDivider {
+    margin-bottom: 12.5vh;
+}
+
+.containerRadio {
+    display:flex;
+    position: relative;
+    cursor: pointer;
+    font-size: 8px;
+    margin-bottom: -4px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin: -4px;
+  }
+  
+  ::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: rgba(0,0,0,.3);
+    -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+  }

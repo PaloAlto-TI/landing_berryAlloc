@@ -40,8 +40,8 @@ import { SubgrupoList } from "../../components/subgrupo/subgrupoList/subgrupoLis
 import SubgrupoContextProvider from "../../contexts/subgrupoContext";
 import { SesionContext } from "../../contexts/sesionContext";
 import Stocks from "../../components/visualizadores/stocks/stocks";
-import ProductosHoja from "../../components/visualizadores/Productos Hoja/productosHoja";
-import ProductosPalo from "../../components/visualizadores/Productos Palo/productosPalo";
+import ProductosHoja from "../../components/visualizadores/productosHoja/productosHoja";
+import ProductosPalo from "../../components/visualizadores/productosPalo/productosPalo";
 const Home = () => {
   var { setMoved, sesions, redirect } = useContext(SesionContext);
   let history = useHistory();

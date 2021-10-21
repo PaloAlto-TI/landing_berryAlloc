@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 
 import "./productosHoja.css";
 
-import ProductoList from "../../productos/productoList/productoList";
+import ProductoList from "../../productos/productoList/visualizadores/hoja/productoHojaList";
 
 const ProductosHoja = () => {
   
