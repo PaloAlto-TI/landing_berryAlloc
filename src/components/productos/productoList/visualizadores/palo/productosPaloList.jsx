@@ -1415,6 +1415,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
                     return false;
                   }
                 }}
+                //kcmlsdmclsdmc
                 onChange={async (e) => {
                   await setSelectedLineaId(e);
                   setSelectedMarcaId(null);
