@@ -54,6 +54,7 @@ const ProductoList = (props) => {
   const [subgrupoDropdown, setsubgrupoDropdown] = useState(null);
   const [metodoabcDropdown, setmetodoabcDropdown] = useState(null);
   const [inventarioDropdown, setinventarioDropdown] = useState(null);
+  const [enpaginawebDropdown, setenpaginawebDropdown] = useState(null);
   const [stop, setstop] = useState(null);
   // const [valueEstado, setValueEstado] = useState(null);
 
@@ -63,6 +64,7 @@ const ProductoList = (props) => {
   const [selectedSubgrupoId, setSelectedSubgrupoId] = useState();
   const [selectedInventarioId, setSelectedInventarioId] = useState();
   const [selectedMetodoabcId, setMetodoabcId] = useState();
+  const [selectedEnpaginaId, setEnpaginawebId] = useState();
 
   const [valueEstado, setValueEstado] = useState(
     grupos
@@ -177,6 +179,20 @@ const ProductoList = (props) => {
 
       console.log("dropdown metodo_abc: ", metodoabcDropdown);
 
+      setenpaginawebDropdown([... new Set(productos_estado.sort(function (a, b) {
+        if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+        if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+        return 0;
+      }).map(function (item) {
+        //console.log("data en item<<<<: ",item);
+        const rObj = {};
+        rObj.id = item.fk_en_web_id;
+        rObj.nombre = item.en_web;
+        return rObj;
+      }).map(JSON.stringify))].map(JSON.parse))
+
+      console.log("dropdown en web: ", enpaginawebDropdown);
+
 
 
     }
@@ -210,7 +226,7 @@ const ProductoList = (props) => {
     // filtrarInventario(selectedInventarioId,1);
     // filtrarMetodoabc(selectedMetodoabcId,1);
 
-  }, [valueEstado, dispatch, selectedSubgrupoId, selectedInventarioId,selectedMetodoabcId]);
+  }, [valueEstado, dispatch, selectedSubgrupoId, selectedInventarioId, selectedMetodoabcId]);
 
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   const columns =
@@ -616,34 +632,34 @@ const ProductoList = (props) => {
     setValue(currValue);
 
     // if (valueEstado !== null) {
-      if (valueEstado === 0) {
-        const filteredData = productos_estado.filter(
-          (entry) =>
-            (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.unidad_medida_abreviatura
-                .toLowerCase()
-                .includes(currValue.toLowerCase()) ||
-              entry.precio.toString().includes(currValue)) &&
-            (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
-            (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
-        );
-        setDataSource(filteredData);
-      } else {
+    if (valueEstado === 0) {
+      const filteredData = productos_estado.filter(
+        (entry) =>
+          (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
+            entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
+            entry.unidad_medida_abreviatura
+              .toLowerCase()
+              .includes(currValue.toLowerCase()) ||
+            entry.precio.toString().includes(currValue)) &&
+          (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
+          (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
+      );
+      setDataSource(filteredData);
+    } else {
 
-        const filteredData = productos_estado.filter(
-          (entry) =>
-            (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.unidad_medida_abreviatura
-                .toLowerCase()
-                .includes(currValue.toLowerCase()) ||
-              entry.precio.toString().includes(currValue)) &&
-            (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
-            (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
-        );
-        setDataSource(filteredData);
-      }
+      const filteredData = productos_estado.filter(
+        (entry) =>
+          (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
+            entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
+            entry.unidad_medida_abreviatura
+              .toLowerCase()
+              .includes(currValue.toLowerCase()) ||
+            entry.precio.toString().includes(currValue)) &&
+          (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
+          (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
+      );
+      setDataSource(filteredData);
+    }
     // }
   };
 
@@ -651,13 +667,13 @@ const ProductoList = (props) => {
   const filtrarE = async (e) => {
 
 
-    const filteredData = productos_estado.filter((entry) => (e === 0 ? productos_estado : entry.estado === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData = productos_estado.filter((entry) => (e === 0 ? productos_estado : entry.estado === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     console.log("FILTRADOS X ESTADO: ", filteredData);
     //console.log("productos estado: ", productos_estado);
-
-
+    
+    
     setDataSource(filteredData);
-
+    
     setlineasDropdown([... new Set(filteredData.sort(function (a, b) {
       if (a.linea.toLowerCase() < b.linea.toLowerCase()) return -1;
       if (a.linea.toLowerCase() > b.linea.toLowerCase()) return 1;
@@ -668,11 +684,11 @@ const ProductoList = (props) => {
       rObj.nombre = item.linea;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
-
+    
     //--------------------------------------------------TIPO------------------------------------------------------
-    const filteredData1 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
-
-
+    const filteredData1 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    
+    
     setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
       if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
       if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
@@ -683,13 +699,13 @@ const ProductoList = (props) => {
       rObj.nombre = item.subgrupo;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
-
+    
     console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
-
+    
     //-----------------------------INVENTARIO----------------------------------------------------
-
+    
     //filtrarInventario(selectedInventarioId,1)
-    const filteredData2 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData2 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
       if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
       if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
@@ -702,31 +718,48 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
     console.log("dropdown inventario: ", inventarioDropdown);
+    
+    //---------------------------------------------------------------------------------
+    
+    //-----------------------------METODO ABC----------------------------------------------------
+    
+    //filtrarMetodoabc(selectedMetodoabcId,1)
+    
+    const filteredData3 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    
+    setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+      if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+      if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_metodo_abc_id;
+      rObj.nombre = item.metodo_abc;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    //-----------------------------------------------------------------------------------------------------
+    const filteredData4 = productos_estado.filter((entry) => (e === 0 ? productos_estado : entry.estado === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    //-------------------------------------dropdown En pagina Web---------------------------------------------------
+    
+    setenpaginawebDropdown([... new Set(filteredData4.sort(function (a, b) {
+      if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+      if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_en_web_id;
+      rObj.nombre = item.en_web;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
 
     //---------------------------------------------------------------------------------
 
-     //-----------------------------METODO ABC----------------------------------------------------
-
-     //filtrarMetodoabc(selectedMetodoabcId,1)
-
-     const filteredData3 = productos_estado.filter((entry) => (e === 0 || !e ? productos_estado : entry.estado === e) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
-
-     setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
-       if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
-       if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
-       return 0;
-     }).map(function (item) {
-       //console.log("data en item<<<<: ",item);
-       const rObj = {};
-       rObj.id = item.fk_metodo_abc_id;
-       rObj.nombre = item.metodo_abc;
-       return rObj;
-     }).map(JSON.stringify))].map(JSON.parse))
- //-----------------------------------------------------------------------------------------------------
-
   }
   const filtrarL = (e) => {
-    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (e === 0 ? productos_estado : entry.fk_linea_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (e === 0 ? productos_estado : entry.fk_linea_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     // console.log("FILTRADOS X LINEA: ", filteredData);
     setDataSource(filteredData);
     setmarcasDropdown([... new Set(filteredData.sort(function (a, b) {
@@ -739,12 +772,12 @@ const ProductoList = (props) => {
       rObj.nombre = item.marca;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
-
-
+    
+    
     //--------------------------------------------------TIPO------------------------------------------------------
-    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
-
-
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    
+    
     setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
       if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
       if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
@@ -755,13 +788,13 @@ const ProductoList = (props) => {
       rObj.nombre = item.subgrupo;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
-
+    
     console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
-
+    
     //-----------------------------INVENTARIO----------------------------------------------------
-
+    
     //filtrarInventario(selectedInventarioId,1)
-    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
       if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
       if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
@@ -774,37 +807,51 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
     console.log("dropdown inventario: ", inventarioDropdown);
+    
+    //---------------------------------------------------------------------------------
+    
+    //-----------------------------METODO ABC----------------------------------------------------
+    
+    //filtrarMetodoabc(selectedMetodoabcId,1)
+    
+    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    
+    setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+      if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+      if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_metodo_abc_id;
+      rObj.nombre = item.metodo_abc;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    //-----------------------------------------------------------------------------------------------------
+    let filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (e === 0 ? productos_estado : entry.fk_linea_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    //-------------------------------------dropdown En pagina Web---------------------------------------------------
+    
+     setenpaginawebDropdown([... new Set(filteredData4.sort(function (a, b) {
+      if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+      if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_en_web_id;
+      rObj.nombre = item.en_web;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
 
     //---------------------------------------------------------------------------------
-
-     //-----------------------------METODO ABC----------------------------------------------------
-
-     //filtrarMetodoabc(selectedMetodoabcId,1)
-
-     const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (e === 0 || !e ? productos_estado : entry.fk_linea_id === e) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
-
-     setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
-       if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
-       if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
-       return 0;
-     }).map(function (item) {
-       //console.log("data en item<<<<: ",item);
-       const rObj = {};
-       rObj.id = item.fk_metodo_abc_id;
-       rObj.nombre = item.metodo_abc;
-       return rObj;
-     }).map(JSON.stringify))].map(JSON.parse))
- //-----------------------------------------------------------------------------------------------------
-
-
-
   };
 
   const filtrarM = (e) => {
-    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 ? productos_estado : entry.fk_marca_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&& (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    let filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 ? productos_estado : entry.fk_marca_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     // console.log("FILTRADOS X MARCA: ", filteredData);
     setDataSource(filteredData);
-
+    
     setgruposDropdown([... new Set(filteredData.sort(function (a, b) {
       if (a.grupo.toLowerCase() < b.grupo.toLowerCase()) return -1;
       if (a.grupo.toLowerCase() > b.grupo.toLowerCase()) return 1;
@@ -815,11 +862,11 @@ const ProductoList = (props) => {
       rObj.nombre = item.grupo;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
-
+    
     //--------------------------------------------------TIPO------------------------------------------------------
-    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
-
-
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    
+    
     setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
       if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
       if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
@@ -830,13 +877,13 @@ const ProductoList = (props) => {
       rObj.nombre = item.subgrupo;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
-
+    
     console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
-
+    
     //-----------------------------INVENTARIO----------------------------------------------------
-
+    
     //filtrarInventario(selectedInventarioId,1)
-    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
       if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
       if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
@@ -849,97 +896,131 @@ const ProductoList = (props) => {
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
     console.log("dropdown inventario: ", inventarioDropdown);
+    
+    //---------------------------------------------------------------------------------
+    
+    //-----------------------------METODO ABC----------------------------------------------------
+    
+    //filtrarMetodoabc(selectedMetodoabcId,1)
+    
+    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    
+    setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+      if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+      if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_metodo_abc_id;
+      rObj.nombre = item.metodo_abc;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    //-----------------------------------------------------------------------------------------------------
+    let filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 ? productos_estado : entry.fk_marca_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    //-------------------------------------dropdown En pagina Web---------------------------------------------------
+    
+    setenpaginawebDropdown([... new Set(filteredData4.sort(function (a, b) {
+      if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+      if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_en_web_id;
+      rObj.nombre = item.en_web;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
 
     //---------------------------------------------------------------------------------
-
-     //-----------------------------METODO ABC----------------------------------------------------
-
-     //filtrarMetodoabc(selectedMetodoabcId,1)
-
-     const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (e === 0 || !e ? productos_estado : entry.fk_marca_id === e) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
-
-     setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
-       if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
-       if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
-       return 0;
-     }).map(function (item) {
-       //console.log("data en item<<<<: ",item);
-       const rObj = {};
-       rObj.id = item.fk_metodo_abc_id;
-       rObj.nombre = item.metodo_abc;
-       return rObj;
-     }).map(JSON.stringify))].map(JSON.parse))
- //-----------------------------------------------------------------------------------------------------
 
 
 
   };
 
   const filtrarG = (e) => {
-    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 ? productos_estado : entry.fk_grupo_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 ? productos_estado : entry.fk_grupo_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     //console.log("FILTRADOS X GRUPO", filteredData);
     // console.log("productos en GRUPO: ", filteredData);
     setDataSource(filteredData);
-//--------------------------------------------------TIPO------------------------------------------------------
-const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    //--------------------------------------------------TIPO------------------------------------------------------
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    
+    
+    setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
+      if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
+      if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_subgrupo_id;
+      rObj.nombre = item.subgrupo;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    
+    console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
+    
+    //-----------------------------INVENTARIO----------------------------------------------------
+    
+    //filtrarInventario(selectedInventarioId,1)
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
+      if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
+      if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_tipo_inventario_id;
+      rObj.nombre = item.tipo_inventario;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
+    
+    //---------------------------------------------------------------------------------
+    
+    //-----------------------------METODO ABC----------------------------------------------------
+    
+    //filtrarMetodoabc(selectedMetodoabcId,1)
+    
+    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
+    
+    setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+      if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+      if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_metodo_abc_id;
+      rObj.nombre = item.metodo_abc;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    //-----------------------------------------------------------------------------------------------------
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 ? productos_estado : entry.fk_grupo_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    //-------------------------------------dropdown En pagina Web---------------------------------------------------
+    
+    setenpaginawebDropdown([... new Set(filteredData4.sort(function (a, b) {
+      if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+      if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_en_web_id;
+      rObj.nombre = item.en_web;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
 
-
-setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
-  if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
-  if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
-  return 0;
-}).map(function (item) {
-  const rObj = {};
-  rObj.id = item.fk_subgrupo_id;
-  rObj.nombre = item.subgrupo;
-  return rObj;
-}).map(JSON.stringify))].map(JSON.parse))
-
-console.log("dropdown subgrupos (ESTADO): ", subgrupoDropdown);
-
-//-----------------------------INVENTARIO----------------------------------------------------
-
-//filtrarInventario(selectedInventarioId,1)
-const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
-setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
-  if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
-  if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
-  return 0;
-}).map(function (item) {
-  //console.log("data en item<<<<: ",item);
-  const rObj = {};
-  rObj.id = item.fk_tipo_inventario_id;
-  rObj.nombre = item.tipo_inventario;
-  return rObj;
-}).map(JSON.stringify))].map(JSON.parse))
-console.log("dropdown inventario: ", inventarioDropdown);
-
-//---------------------------------------------------------------------------------
-
- //-----------------------------METODO ABC----------------------------------------------------
-
- //filtrarMetodoabc(selectedMetodoabcId,1)
-
- const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (e === 0 || !e ? productos_estado : entry.fk_grupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId));
-
- setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
-   if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
-   if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
-   return 0;
- }).map(function (item) {
-   //console.log("data en item<<<<: ",item);
-   const rObj = {};
-   rObj.id = item.fk_metodo_abc_id;
-   rObj.nombre = item.metodo_abc;
-   return rObj;
- }).map(JSON.stringify))].map(JSON.parse))
-//-----------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------
 
   };
 
   const filtrarSub = (e, flag) => {
     console.log("este es el id de subgrupo: ", e)
-    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     console.log("SUBGRUPO DATA: ", filteredData)
 
 
@@ -950,7 +1031,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
     }
 
     //--------------------------------------------------TIPO------------------------------------------------------
-    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
 
 
     setsubgrupoDropdown([... new Set(filteredData1.sort(function (a, b) {
@@ -969,7 +1050,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
     //-----------------------------INVENTARIO----------------------------------------------------
 
     //filtrarInventario(selectedInventarioId,1)
-    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     setinventarioDropdown([... new Set(filteredData2.sort(function (a, b) {
       if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
       if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
@@ -985,24 +1066,43 @@ console.log("dropdown inventario: ", inventarioDropdown);
 
     //---------------------------------------------------------------------------------
 
-     //-----------------------------METODO ABC----------------------------------------------------
+    //-----------------------------METODO ABC----------------------------------------------------
 
-     //filtrarMetodoabc(selectedMetodoabcId,1)
+    //filtrarMetodoabc(selectedMetodoabcId,1)
 
-     const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&  (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e));
+    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
 
-     setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
-       if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
-       if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
-       return 0;
-     }).map(function (item) {
-       //console.log("data en item<<<<: ",item);
-       const rObj = {};
-       rObj.id = item.fk_metodo_abc_id;
-       rObj.nombre = item.metodo_abc;
-       return rObj;
-     }).map(JSON.stringify))].map(JSON.parse))
- //-----------------------------------------------------------------------------------------------------
+    setmetodoabcDropdown([... new Set(filteredData3.sort(function (a, b) {
+      if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+      if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_metodo_abc_id;
+      rObj.nombre = item.metodo_abc;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    //-----------------------------------------------------------------------------------------------------
+    //-------------------------------------dropdown En pagina Web---------------------------------------------------
+    // const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    // const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (e === 0 || !e ? productos_estado : entry.fk_tipo_inventario_id === e) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_subgrupo_id === e) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+
+    setenpaginawebDropdown([... new Set(filteredData4.sort(function (a, b) {
+      if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+      if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_en_web_id;
+      rObj.nombre = item.en_web;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
+
+    //---------------------------------------------------------------------------------
 
 
   }
@@ -1038,7 +1138,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
     console.log("dropdown inventario: ", inventarioDropdown);
     //---------------------------------SUBGRUPO------------------------------------------------
 
-    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_tipo_inventario_id === e)&& (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (e === 0 || !e ? productos_estado : entry.fk_tipo_inventario_id === e) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
 
 
     setsubgrupoDropdown([... new Set(filteredData2.sort(function (a, b) {
@@ -1066,7 +1166,25 @@ console.log("dropdown inventario: ", inventarioDropdown);
       rObj.nombre = item.metodo_abc;
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
-//-----------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------
+    //-------------------------------------dropdown En pagina Web---------------------------------------------------
+    // const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (e === 0 || !e ? productos_estado : entry.fk_tipo_inventario_id === e) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+
+    setenpaginawebDropdown([... new Set(filteredData4.sort(function (a, b) {
+      if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+      if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_en_web_id;
+      rObj.nombre = item.en_web;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
+
+    //---------------------------------------------------------------------------------
 
 
 
@@ -1097,23 +1215,23 @@ console.log("dropdown inventario: ", inventarioDropdown);
       return rObj;
     }).map(JSON.stringify))].map(JSON.parse))
     //---------------------------------------------------------------------------------------
-     //---------------------------------SUBGRUPO------------------------------------------------
+    //---------------------------------SUBGRUPO------------------------------------------------
 
-     const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&& (e=== 0 || !e ? productos_estado : entry.fk_metodo_abc_id === e));
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (e === 0 || !e ? productos_estado : entry.fk_metodo_abc_id === e));
 
 
-     setsubgrupoDropdown([... new Set(filteredData2.sort(function (a, b) {
-       if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
-       if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
-       return 0;
-     }).map(function (item) {
-       const rObj = {};
-       rObj.id = item.fk_subgrupo_id;
-       rObj.nombre = item.subgrupo;
-       return rObj;
-     }).map(JSON.stringify))].map(JSON.parse))
+    setsubgrupoDropdown([... new Set(filteredData2.sort(function (a, b) {
+      if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
+      if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_subgrupo_id;
+      rObj.nombre = item.subgrupo;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
     //-------------------------------------dropdown Inventario---------------------------------------------------
-    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (e === 0 || !e ? productos_estado : entry.fk_metodo_abc_id === e));
+    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (e === 0 || !e ? productos_estado : entry.fk_metodo_abc_id === e)&& (selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
 
 
     setinventarioDropdown([... new Set(filteredData3.sort(function (a, b) {
@@ -1130,7 +1248,101 @@ console.log("dropdown inventario: ", inventarioDropdown);
     console.log("dropdown inventario: ", inventarioDropdown);
 
     //---------------------------------------------------------------------------------
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (e === 0 || !e ? productos_estado : entry.fk_metodo_abc_id === e));
+//-------------------------------------dropdown En pagina Web---------------------------------------------------
 
+setenpaginawebDropdown([... new Set(filteredData4.sort(function (a, b) {
+  if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+  if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+  return 0;
+}).map(function (item) {
+  //console.log("data en item<<<<: ",item);
+  const rObj = {};
+  rObj.id = item.fk_en_web_id;
+  rObj.nombre = item.en_web;
+  return rObj;
+}).map(JSON.stringify))].map(JSON.parse))
+console.log("dropdown inventario: ", inventarioDropdown);
+
+//---------------------------------------------------------------------------------
+
+  }
+
+
+
+  const filtrarEnpaginaweb = (e, flag) => {
+    console.log("este es el id de pgina_web: ", e)
+    console.log("productos sin filtro: ", productos_estado)
+    const filteredData = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId) && (e === 0 || !e ? productos_estado : entry.fk_en_web_id === e));
+    console.log("estos son los datos filtrados, en pagina web: ", filteredData)
+    
+    if (flag === 0) {
+      setDataSource(filteredData);
+      console.log("metodo_abc DATA: ", filteredData)
+    }
+
+    //---------------------------------METODO ABC-----------------------------------------
+    const filteredData1 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&& (e === 0 || !e ? productos_estado : entry.fk_en_web_id === e));
+    setmetodoabcDropdown([... new Set(filteredData1.sort(function (a, b) {
+      if (a.metodo_abc.toLowerCase() < b.metodo_abc.toLowerCase()) return -1;
+      if (a.metodo_abc.toLowerCase() > b.metodo_abc.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_metodo_abc_id;
+      rObj.nombre = item.metodo_abc;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    //---------------------------------------------------------------------------------------
+    //---------------------------------SUBGRUPO------------------------------------------------
+
+    const filteredData2 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (e === 0 || !e ? productos_estado : entry.fk_en_web_id === e));
+
+
+    setsubgrupoDropdown([... new Set(filteredData2.sort(function (a, b) {
+      if (a.subgrupo.toLowerCase() < b.subgrupo.toLowerCase()) return -1;
+      if (a.subgrupo.toLowerCase() > b.subgrupo.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      const rObj = {};
+      rObj.id = item.fk_subgrupo_id;
+      rObj.nombre = item.subgrupo;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    //-------------------------------------dropdown Inventario---------------------------------------------------
+    const filteredData3 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&& (selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&& (e === 0 || !e ? productos_estado : entry.fk_en_web_id === e));
+
+    setinventarioDropdown([... new Set(filteredData3.sort(function (a, b) {
+      if (a.tipo_inventario.toLowerCase() < b.tipo_inventario.toLowerCase()) return -1;
+      if (a.tipo_inventario.toLowerCase() > b.tipo_inventario.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_tipo_inventario_id;
+      rObj.nombre = item.tipo_inventario;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+
+    //---------------------------------------------------------------------------------
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId));
+    //-------------------------------------dropdown En pagina Web---------------------------------------------------
+
+    setenpaginawebDropdown([... new Set(filteredData4.sort(function (a, b) {
+      if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
+      if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+      return 0;
+    }).map(function (item) {
+      //console.log("data en item<<<<: ",item);
+      const rObj = {};
+      rObj.id = item.fk_en_web_id;
+      rObj.nombre = item.en_web;
+      return rObj;
+    }).map(JSON.stringify))].map(JSON.parse))
+    console.log("dropdown inventario: ", inventarioDropdown);
+
+    //---------------------------------------------------------------------------------
 
   }
 
@@ -1139,7 +1351,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
 
       <br />
       <Divider>PRODUCTOS PALO</Divider>
-     
+
       {productos_estado ?
         <div>
           <Row >
@@ -1204,7 +1416,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
                   }
                 }}
                 onChange={async (e) => {
-                 await  setSelectedLineaId(e);
+                  await setSelectedLineaId(e);
                   setSelectedMarcaId(null);
                   setSelectedGrupoId(null);
                   setmarcasDropdown(null);
@@ -1238,7 +1450,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
                 style={{ width: 250 }}
                 placeholder="Seleccione Marca"
                 onChange={async (e) => {
-                 await setSelectedMarcaId(e);
+                  await setSelectedMarcaId(e);
                   setSelectedGrupoId(null);
                   setgruposDropdown(null);
                   filtrarM(e);
@@ -1286,7 +1498,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
             <Col span={6}>
               <Search
                 placeholder="Buscar producto..."
-                
+
                 value={value}
                 onChange={(e) => filtrarB(e)}
                 style={{ width: 250 }}
@@ -1303,7 +1515,7 @@ console.log("dropdown inventario: ", inventarioDropdown);
                 notFoundContent="No hay coincidencias"
                 value={selectedSubgrupoId}
                 onChange={async (e) => {
-                 await setSelectedSubgrupoId(e);
+                  await setSelectedSubgrupoId(e);
                   filtrarSub(e, 0);
                 }}
               >
@@ -1317,13 +1529,13 @@ console.log("dropdown inventario: ", inventarioDropdown);
             </Col>
             <Col span={5}>
               <Select
-              showSearch
-              notFoundContent="No hay coincidencias"
+                showSearch
+                notFoundContent="No hay coincidencias"
                 style={{ width: 250 }}
                 placeholder="Seleccione Inventario"
                 value={selectedInventarioId}
                 onChange={async (e) => {
-                 await setSelectedInventarioId(e);
+                  await setSelectedInventarioId(e);
 
                   filtrarInventario(e, 0);
                 }}
@@ -1339,8 +1551,8 @@ console.log("dropdown inventario: ", inventarioDropdown);
 
             <Col span={5}>
               <Select
-              showSearch
-              notFoundContent="No hay coincidencias"
+                showSearch
+                notFoundContent="No hay coincidencias"
                 style={{ width: 250 }}
                 placeholder="Seleccione Método ABC"
                 value={selectedMetodoabcId}
@@ -1357,6 +1569,27 @@ console.log("dropdown inventario: ", inventarioDropdown);
                 ) : null}
               </Select>
             </Col>
+            <Col span={4}>
+              <Select
+                showSearch
+                notFoundContent="No hay coincidencias"
+                style={{ width: 250 }}
+                placeholder="En pagina Web"
+                value={selectedEnpaginaId}
+                onChange={async (e) => {
+                  await setEnpaginawebId(e);
+                  filtrarEnpaginaweb(e, 0);
+                }}
+              >
+                {enpaginawebDropdown ? <Option value={0}>TODOS</Option> : null}
+                {enpaginawebDropdown ? enpaginawebDropdown.map((option, index) =>
+                  <Option key={option.id} value={option.id}>
+                    {option.nombre}
+                  </Option>
+                ) : null}
+              </Select>
+            </Col>
+
           </Row>
 
 
