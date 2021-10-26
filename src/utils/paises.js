@@ -28,6 +28,10 @@ export const paises= [
         "nombre":"NORUEGA"
     },
     {
+        "id":"ECUADOR",
+        "nombre":"ECUADOR"
+    },
+    {
         "id":"N/A",
         "nombre":"N/A"
     },
