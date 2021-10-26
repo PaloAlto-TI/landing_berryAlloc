@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Divider, Row, Spin, Space, Radio, Select } from "antd";
+import { Col, Divider, Row, Spin, Space, Radio, Select, Affix } from "antd";
 import { Button } from "antd";
 import { Table } from "antd";
-import { PlusOutlined, SmileOutlined, StopOutlined } from "@ant-design/icons";
+import { DownloadOutlined, PlusOutlined, SmileOutlined, StopOutlined } from "@ant-design/icons";
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProductoContext } from "../../../contexts/productoContext";
 import CrudButton from "../../crudButton/crudButton";
@@ -22,6 +22,7 @@ import {
 } from "../../../_redux/ducks/producto.duck";
 import { useLocation } from 'react-router-dom';
 import { SesionContext } from "../../../contexts/sesionContext";
+let JsontoXls = require('json-as-xlsx')
 
 const { Option } = Select;
 const ProductoList = (props) => {
@@ -623,35 +624,98 @@ const ProductoList = (props) => {
     // console.log("productos en GRUPO: ", filteredData);
     setDataSource(filteredData);
   };
+  //......................export SETTINGS..................................
+  let settings = {
+    fileName: 'PRODUCTOS MySpreadsheet', // Name of the spreadsheet
+    extraLength: 3, // A bigger number means that columns will be wider
+    writeOptions: {} // Style options from https://github.com/SheetJS/sheetjs#writing-options
+  }
+  //----------------------------------------------------------
+  //-------------------------------EXPORT----------------------------------
+  const ExportToExcel = () => {
+    // exportFromJSON({ dataSource, fileName, exportType })
+
+    console.log("DATA SOURCE: ", dataSource);
+    let data = [
+      {
+        sheet: 'productos',
+        columns: [
+          { label: 'Codigo', value: 'codigo_interno' }, // Top level data
+          // { label: 'Línea', value: row => (row.linea ) }, // Run functions
+          // { label: 'Marca', value: row => (row.marca ) }, // Run functions
+          { label: 'Subcategoria', value: row => (row.grupo) }, // Run functions
+          { label: 'Nombre', value: row => (row.nombre) }, // Run functions
+          { label: 'Descripcion', value: row => (row.nombre) }, // Run functions
+          { label: 'Codigo Catalogo', value: '' }, // Run functions
+          { label: 'Unidad de Medida', value: 'unidad_medida' }, // Run functions
+          { label: 'Unidad de Venta', value: 'unidad_venta' }, // Run functions
+          { label: 'Tipo', value: 'tipo' }, // Run functions
+          { label: 'Para la Venta', value: row => ("SI") }, // Run functions
+          { label: 'Cuenta Venta', value: '' }, // Run functions
+          { label: 'Para la Compra', value: row => ("SI") }, // Run functions
+          { label: 'Cuenta Compra', value: '' }, // Run functions
+          { label: 'Inventariable', value: '' }, // Run functions
+          { label: 'Cuenta Costo', value: '' }, // Run functions
+          { label: 'Seriado', value: '' }, // Run functions
+          { label: 'PVP1 (Sin IVA)', value: 'costo' }, // Run functions
+          { label: 'PVP2 (Sin IVA)', value: '' }, // Run functions
+          { label: 'PVP3 (Sin IVA)', value: '' }, // Run functions
+          { label: 'PVP DIST', value: '' }, // Run functions
+          { label: 'IVA', value: '' }, // Run functions
+          { label: 'ICE', value: '' }, // Run functions
+          { label: 'Minimo', value: '' }, // Run functions
+          { label: 'Codigo de Barra', value: '' }, // Run functions
+          { label: 'Para Pos', value: row => ("SI") }, // Run functions
+          { label: 'Tipo Producto', value: '' }, // Run functions
+          { label: 'Marca', value: row => (row.marca) }, // Run functions
+          { label: 'PVP Manual', value: '' }, // Run functions
+          { label: 'Precio Máx.', value: '' }, // Run functions
+          { label: 'Para Orden Compra', value: '' }, // Run functions
+          { label: 'Días Plazo', value: '' }, // Run functions
+          { label: 'Maneja Nombre Manual', value: '' }, // Run functions
+          { label: 'Para Importación', value: '' }, // Run functions
+          //{ label: 'Phone', value: row => (row.marca ? row.more.phone || '' : '') }, // Deep props
+        ],
+        content: dataSource
+      }
+    ]
+    JsontoXls(data, settings)
+  }
+  //--------------------------------------------
 
   return (
     <div>
+   
+      {/* {dataSource ?
+            <Button style={{ position: 'fixed', bottom: 50, right: 50,zIndex:1 }} type="primary" shape="circle" icon={<DownloadOutlined />} size='large' onClick={() => ExportToExcel()} />
+            : null} */}
 
-      <br />
-      <Divider>PRODUCTOS</Divider>
-      {/* <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
-      {/* <Divider className="titleFont">{"RESPONSE: " + response}</Divider> */}
-      {/* <Divider className="titleFont">{"EL visualizador: " + visualizador}</Divider> */}
-      {/* const { lineaV, marcaV, grupoV, visualizador, stocks } = props; */}
-      {/* <Divider className="titleFont">{"EL LINEAV: " + lineaV}</Divider>
-      <Divider className="titleFont">{"EL MARCAV: " + marcaV}</Divider>
-      <Divider className="titleFont">{"EL GRUPOV: " + grupoV}</Divider>*/}
-      {/* <Divider className="titleFont">{"LOS PRODUCTOS: " + JSON.stringify(productos)}</Divider> */}
-      {/* <Divider className="titleFont">{"DATA SOURCE: " + dataSource}</Divider>  */}
-      {/*<Divider className="titleFont">{"LINEAS DROPDOWN: " + JSON.stringify(lineasDropdown)}</Divider>
-      <Divider className="titleFont">{"MARCAS DROPDOWN: " + JSON.stringify(marcasDropdown)}</Divider>
-      <Divider className="titleFont">{"GRUPOS DROPDOWN: " + JSON.stringify(gruposDropdown)}</Divider>
-      <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider>
-      <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider>
-     <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
+      <Row align="middle">
+        <Col span={14} >
+
+          <Divider orientation="right">PRODUCTOS</Divider>
+
+        </Col>
+        <Col span={10} >
+        <Divider  orientation="right">
+
+          {dataSource ?
+            <Button style={{background:"black"}} type="primary" shape="circle" icon={<DownloadOutlined />} size='large' onClick={() => ExportToExcel() } />
+            : null}
+            </Divider>
+        </Col>
+
+      </Row>
       {productos_estado ?
         <div>
-          <Row >
+          <Row align="middle">
             {visualizador ? (
               <Col span={1}></Col>
             ) : (
-              <Col span={24}>
+              <Col span={24} orientation="right">
+               
                 <Button
+                title="Nuevo"
                   type="primary"
                   className="success"
                   icon={<PlusOutlined />}
@@ -660,8 +724,15 @@ const ProductoList = (props) => {
                 >
                   Nuevo
                 </Button>
+                
+
               </Col>
+              
             )}
+            <Col span={10} >
+           
+       
+        </Col>
           </Row> <br />
           <Row >
             <Col span={4}>
