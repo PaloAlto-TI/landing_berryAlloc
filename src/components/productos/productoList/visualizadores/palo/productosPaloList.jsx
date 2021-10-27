@@ -187,8 +187,8 @@ const ProductoList = (props) => {
       //console.log("dropdown metodo_abc: ", metodoabcDropdown);
 
       setenpaginawebDropdown([... new Set(productos_estado.sort(function (a, b) {
-        if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return -1;
-        if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return 1;
+        if (a.en_web.toLowerCase() > b.en_web.toLowerCase()) return -1;
+        if (a.en_web.toLowerCase() < b.en_web.toLowerCase()) return 1;
         return 0;
       }).map(function (item) {
         //console.log("data en item<<<<: ",item);

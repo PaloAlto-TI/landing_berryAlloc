@@ -31,6 +31,8 @@ import {
   FilePdfOutlined,
   SaveOutlined,
   SearchOutlined,
+  DownloadOutlined,
+  FallOutlined,
 } from "@ant-design/icons";
 import { ColorService } from "../../../services/colorService";
 import { GrupoService } from "../../../services/grupoService";
@@ -339,7 +341,7 @@ const FormProducto = (props) => {
         }
       }
 
-   
+
 
       if (!crud && editProducto.atributos_js) {
         if (editProducto.atributos_js.garantia_residencial === -1) {
@@ -913,7 +915,7 @@ const FormProducto = (props) => {
 
 
 
- 
+
 
   function goBackHistory() {
     console.log(">>>>>>RECORD params: ", location.recordParams)
@@ -1082,6 +1084,11 @@ const FormProducto = (props) => {
 
               </Col>
             </Row>
+            
+            {/* { !crud?
+            <Button style={{ position: 'fixed', bottom: 70, right: 50,zIndex:1,background:"black" }} type="primary" shape="circle" icon={<FallOutlined  />} size='large' onClick={() => setCrud(true)} />
+            : null} */}
+
             <Divider>
               PRODUCTO{" "}
 
@@ -3106,7 +3113,7 @@ const FormProducto = (props) => {
 
                     <Form.Item
                       label="Estado"
-                      name={crud?"estado":null}
+                      name={crud ? "estado" : null}
                       rules={
                         crud
                           ? [
@@ -3120,7 +3127,7 @@ const FormProducto = (props) => {
                     >
 
                       {/* {crud? */}
-                    {crud?
+                      {crud ?
                         <Select
                           defaultValue={1}
                           name="estado"
@@ -3129,7 +3136,7 @@ const FormProducto = (props) => {
                           value={!crud ? editProducto.estado : null}
                           placeholder="Estado"
                           onChange={e => setEstado(e)}
-                          style={{ width: 200 } }
+                          style={{ width: 200 }}
                           disabled={!crud}
                         >
 
@@ -3138,19 +3145,19 @@ const FormProducto = (props) => {
 
 
                         </Select>
-                    :<Input
-                   
-                    className="input-type"
-                    // readOnly={false}
-                    value={editProducto.estado===1?"ACTIVO":editProducto.estado===2?"DESCONTINUADO":null}
-                    
-                    readOnly={!crud}
-                  />
-                  }
+                        : <Input
 
-                      
+                          className="input-type"
+                          // readOnly={false}
+                          value={editProducto.estado === 1 ? "ACTIVO" : editProducto.estado === 2 ? "DESCONTINUADO" : null}
 
-                  
+                          readOnly={!crud}
+                        />
+                      }
+
+
+
+
 
                     </Form.Item>
 

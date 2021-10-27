@@ -679,15 +679,18 @@ const ProductoList = (props) => {
         content: dataSource
       }
     ]
-    JsontoXls(data, settings)
+  
+
+      JsontoXls(data, settings)
+  
   }
   //--------------------------------------------
 
   return (
     <div>
    
-      {/* {dataSource ?
-            <Button style={{ position: 'fixed', bottom: 50, right: 50,zIndex:1 }} type="primary" shape="circle" icon={<DownloadOutlined />} size='large' onClick={() => ExportToExcel()} />
+      {/* { dataSource.length > 0?
+            <Button style={{ position: 'fixed', bottom: 70, right: 50,zIndex:1,background:"black" }} type="primary" shape="circle" icon={<DownloadOutlined />} size='large' onClick={() => ExportToExcel()} />
             : null} */}
 
       <Row align="middle">
@@ -699,7 +702,7 @@ const ProductoList = (props) => {
         <Col span={10} >
         <Divider  orientation="right">
 
-          {dataSource ?
+          {dataSource.length > 0?
             <Button style={{background:"black"}} type="primary" shape="circle" icon={<DownloadOutlined />} size='large' onClick={() => ExportToExcel() } />
             : null}
             </Divider>
