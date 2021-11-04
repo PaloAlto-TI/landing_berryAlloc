@@ -515,29 +515,25 @@ const ProductoList = (props) => {
 
   };
   function ver(record) {
-    //filterProductos(record.fk_linea_id);
-    // record.recordParams=typeTransactionData;
+
     record["permiso"] = false;
-    //history.push(`${path}/${record.codigo_interno}/ver`, record);
     history.push({
       pathname: `${path}/${record.codigo_interno}/ver`,
 
       recordParams
     }
     );
-    // console.log("ver path1: ",`${path}/`);
-    // console.log("ver path2: ",location.pathname);
-    //console.log("ver record: ",record);
+  
   }
 
   const filtrarB = (e) => {
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId));
 
     const currValue = e.target.value;
     setValue(currValue);
 
-    if (valueEstado !== null) {
-      if (valueEstado === 0) {
-        const filteredData = productos_estado.filter(
+   
+        const filteredData = filteredData4.filter(
           (entry) =>
             (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
               entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
@@ -549,22 +545,8 @@ const ProductoList = (props) => {
             (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
         );
         setDataSource(filteredData);
-      } else {
-
-        const filteredData = productos_estado.filter(
-          (entry) =>
-            (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.unidad_medida_abreviatura
-                .toLowerCase()
-                .includes(currValue.toLowerCase()) ||
-              entry.precio.toString().includes(currValue)) &&
-            (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
-            (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
-        );
-        setDataSource(filteredData);
-      }
-    }
+   
+    
   };
   const filtrarE = async (e) => {
 
@@ -624,89 +606,19 @@ const ProductoList = (props) => {
     // console.log("productos en GRUPO: ", filteredData);
     setDataSource(filteredData);
   };
-  //......................export SETTINGS..................................
-  let settings = {
-    fileName: 'PRODUCTOS MySpreadsheet', // Name of the spreadsheet
-    extraLength: 3, // A bigger number means that columns will be wider
-    writeOptions: {} // Style options from https://github.com/SheetJS/sheetjs#writing-options
-  }
-  //----------------------------------------------------------
-  //-------------------------------EXPORT----------------------------------
-  const ExportToExcel = () => {
-    // exportFromJSON({ dataSource, fileName, exportType })
-
-    console.log("DATA SOURCE: ", dataSource);
-    let data = [
-      {
-        sheet: 'productos',
-        columns: [
-          { label: 'Codigo', value: 'codigo_interno' }, // Top level data
-          // { label: 'Línea', value: row => (row.linea ) }, // Run functions
-          // { label: 'Marca', value: row => (row.marca ) }, // Run functions
-          { label: 'Subcategoria', value: row => (row.grupo) }, // Run functions
-          { label: 'Nombre', value: row => (row.nombre) }, // Run functions
-          { label: 'Descripcion', value: row => (row.nombre) }, // Run functions
-          { label: 'Codigo Catalogo', value: '' }, // Run functions
-          { label: 'Unidad de Medida', value: 'unidad_medida' }, // Run functions
-          { label: 'Unidad de Venta', value: 'unidad_venta' }, // Run functions
-          { label: 'Tipo', value: 'tipo' }, // Run functions
-          { label: 'Para la Venta', value: row => ("SI") }, // Run functions
-          { label: 'Cuenta Venta', value: '' }, // Run functions
-          { label: 'Para la Compra', value: row => ("SI") }, // Run functions
-          { label: 'Cuenta Compra', value: '' }, // Run functions
-          { label: 'Inventariable', value: '' }, // Run functions
-          { label: 'Cuenta Costo', value: '' }, // Run functions
-          { label: 'Seriado', value: '' }, // Run functions
-          { label: 'PVP1 (Sin IVA)', value: 'costo' }, // Run functions
-          { label: 'PVP2 (Sin IVA)', value: '' }, // Run functions
-          { label: 'PVP3 (Sin IVA)', value: '' }, // Run functions
-          { label: 'PVP DIST', value: '' }, // Run functions
-          { label: 'IVA', value: '' }, // Run functions
-          { label: 'ICE', value: '' }, // Run functions
-          { label: 'Minimo', value: '' }, // Run functions
-          { label: 'Codigo de Barra', value: '' }, // Run functions
-          { label: 'Para Pos', value: row => ("SI") }, // Run functions
-          { label: 'Tipo Producto', value: '' }, // Run functions
-          { label: 'Marca', value: row => (row.marca) }, // Run functions
-          { label: 'PVP Manual', value: '' }, // Run functions
-          { label: 'Precio Máx.', value: '' }, // Run functions
-          { label: 'Para Orden Compra', value: '' }, // Run functions
-          { label: 'Días Plazo', value: '' }, // Run functions
-          { label: 'Maneja Nombre Manual', value: '' }, // Run functions
-          { label: 'Para Importación', value: '' }, // Run functions
-          //{ label: 'Phone', value: row => (row.marca ? row.more.phone || '' : '') }, // Deep props
-        ],
-        content: dataSource
-      }
-    ]
   
-
-      JsontoXls(data, settings)
-  
-  }
-  //--------------------------------------------
 
   return (
-    <div>
-   
-      {/* { dataSource.length > 0?
-            <Button style={{ position: 'fixed', bottom: 70, right: 50,zIndex:1,background:"black" }} type="primary" shape="circle" icon={<DownloadOutlined />} size='large' onClick={() => ExportToExcel()} />
-            : null} */}
+    <>
+  
 
       <Row align="middle">
-        <Col span={14} >
+        <Col span={24} >
 
-          <Divider orientation="right">PRODUCTOS</Divider>
+          <Divider orientation="MIDDLE">PRODUCTOS</Divider>
 
         </Col>
-        <Col span={10} >
-        <Divider  orientation="right">
-
-          {dataSource.length > 0?
-            <Button style={{background:"black"}} type="primary" shape="circle" icon={<DownloadOutlined />} size='large' onClick={() => ExportToExcel() } />
-            : null}
-            </Divider>
-        </Col>
+     
 
       </Row>
       {productos_estado ?
@@ -897,7 +809,7 @@ const ProductoList = (props) => {
           {/* {JSON.stringify(productos)}  */}
         </div>
         : <Spin indicator={antIcon} className="loading" />}
-    </div>
+    </>
   );
 };
 

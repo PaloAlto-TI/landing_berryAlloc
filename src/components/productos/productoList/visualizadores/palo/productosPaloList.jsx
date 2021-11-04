@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Divider, Row, Spin, Space, Radio, Select } from "antd";
+import { Col, Divider, Row, Spin, Space, Radio, Select, Dropdown, Menu, message } from "antd";
 import { Button } from "antd";
 import { Table } from "antd";
-import { DownloadOutlined, FilterFilled, PlusOutlined, SmileOutlined, StopOutlined } from "@ant-design/icons";
+import { DownloadOutlined, DownOutlined, FallOutlined, FileExcelOutlined, FilterFilled, PlusOutlined, SmileOutlined, StopOutlined } from "@ant-design/icons";
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProductoContext } from "../../../../../contexts/productoContext";
 import CrudButton from "../../../../crudButton/crudButton";
@@ -20,8 +20,10 @@ import {
   getProductosByEstado,
   _softDeleteProducto,
 } from "../../../../../_redux/ducks/producto.duck";
+
 import { useLocation } from 'react-router-dom';
 import { SesionContext } from "../../../../../contexts/sesionContext";
+
 let JsontoXls = require('json-as-xlsx')
 
 const { Option } = Select;
@@ -56,15 +58,10 @@ const ProductoList = (props) => {
   const [metodoabcDropdown, setmetodoabcDropdown] = useState(null);
   const [inventarioDropdown, setinventarioDropdown] = useState(null);
   const [enpaginawebDropdown, setenpaginawebDropdown] = useState(null);
+  const [selectedData, setSelectedData] = useState([]);
   const [stop, setstop] = useState(null);
   // const [valueEstado, setValueEstado] = useState(null);
-  //......................export..................................
-  let settings = {
-    fileName: 'PRODUCTOS MySpreadsheet', // Name of the spreadsheet
-    extraLength: 3, // A bigger number means that columns will be wider
-    writeOptions: {} // Style options from https://github.com/SheetJS/sheetjs#writing-options
-  }
-  //----------------------------------------------------------
+
   const loading = useSelector((state) => state.productos.loading);
   const response = useSelector((state) => state.productos.response);
   const grupos = null; // AGREGADO POR MANUEL CORONEL
@@ -122,7 +119,7 @@ const ProductoList = (props) => {
       : str;
   };
 
-  const [dataSource, setDataSource] = useState([]);
+  const [dataSource, setDataSource] = useState(null);
   const [rowState, setRowState] = useState(true);
   const [click, setClick] = useState(0.8);
   const [filteredInfo, setFilteredInfo] = useState([]);
@@ -139,7 +136,7 @@ const ProductoList = (props) => {
 
   useEffect(async () => {
     if (productos_estado) {
-     // console.log("ERRORRR<<<<<<<<<<<<<<<<<")
+      // console.log("ERRORRR<<<<<<<<<<<<<<<<<")
       setstop(1);
       //console.log("Ya cargo.....");
       // setsubgrupoDropdown
@@ -207,7 +204,7 @@ const ProductoList = (props) => {
 
   useEffect(() => {
     if (valueEstado !== null) {
-     // console.log("ERRORRR<<<<<<<<<<<<<<<<<")
+      // console.log("ERRORRR<<<<<<<<<<<<<<<<<")
       filtrarE(valueEstado);
       //console.log("PRODUCTOS: ",productos_estado);
       if (selectedLineaId) {
@@ -634,13 +631,13 @@ const ProductoList = (props) => {
   }
 
   const filtrarB = (e) => {
-
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado ? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId) && (selectedSubgrupoId === 0 || !selectedSubgrupoId ? productos_estado : entry.fk_subgrupo_id === selectedSubgrupoId) && (selectedMetodoabcId === 0 || !selectedMetodoabcId ? productos_estado : entry.fk_metodo_abc_id === selectedMetodoabcId)&&(selectedInventarioId === 0 || !selectedInventarioId ? productos_estado : entry.fk_tipo_inventario_id === selectedInventarioId)&&(selectedEnpaginaId === 0 || !selectedEnpaginaId ? productos_estado : entry.fk_en_web_id === selectedEnpaginaId));
     const currValue = e.target.value;
     setValue(currValue);
 
     // if (valueEstado !== null) {
-    if (valueEstado === 0) {
-      const filteredData = productos_estado.filter(
+    // if (valueEstado) {
+      const filteredData = filteredData4.filter(
         (entry) =>
           (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
             entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
@@ -652,21 +649,21 @@ const ProductoList = (props) => {
           (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
       );
       setDataSource(filteredData);
-    } else {
+    // } else {
 
-      const filteredData = productos_estado.filter(
-        (entry) =>
-          (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
-            entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-            entry.unidad_medida_abreviatura
-              .toLowerCase()
-              .includes(currValue.toLowerCase()) ||
-            entry.precio.toString().includes(currValue)) &&
-          (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
-          (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
-      );
-      setDataSource(filteredData);
-    }
+    //   const filteredData = productos_estado.filter(
+    //     (entry) =>
+    //       (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
+    //         entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
+    //         entry.unidad_medida_abreviatura
+    //           .toLowerCase()
+    //           .includes(currValue.toLowerCase()) ||
+    //         entry.precio.toString().includes(currValue)) &&
+    //       (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
+    //       (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
+    //   );
+    //   setDataSource(filteredData);
+    // }
     // }
   };
 
@@ -1352,65 +1349,207 @@ const ProductoList = (props) => {
     //---------------------------------------------------------------------------------
 
   }
+  //......................export..................................
+  let settings = {
+    fileName: 'PRODUCTOS', // Name of the spreadsheet
+    extraLength: 3, // A bigger number means that columns will be wider
+    writeOptions: {} // Style options from https://github.com/SheetJS/sheetjs#writing-options
+  }
+  //----------------------------------------------------------
   //-----------------------------------------
-  const ExportToExcel = () => {  
-   // exportFromJSON({ dataSource, fileName, exportType })
+  const ExportToExcel = (e) => {
+    // exportFromJSON({ dataSource, fileName, exportType })
 
-   console.log("DATA SOURCE: ",dataSource);
-   let data = [
-    {
-      sheet: 'productos',
-      columns: [
-        { label: 'Codigo', value: 'codigo_interno' }, // Top level data
-        // { label: 'Línea', value: row => (row.linea ) }, // Run functions
-        // { label: 'Marca', value: row => (row.marca ) }, // Run functions
-        { label: 'Subcategoria', value: row => (row.grupo ) }, // Run functions
-        { label: 'Nombre', value: row => (row.nombre ) }, // Run functions
-        { label: 'Descripcion', value: row => (row.nombre ) }, // Run functions
-        { label: 'Codigo Catalogo', value: '' }, // Run functions
-        { label: 'Unidad de Medida', value: 'unidad_medida' }, // Run functions
-        { label: 'Unidad de Venta', value: 'unidad_venta' }, // Run functions
-        { label: 'Tipo', value: 'tipo' }, // Run functions
-        { label: 'Para la Venta', value: row => ("SI" )}, // Run functions
-        { label: 'Cuenta Venta', value: '' }, // Run functions
-        { label: 'Para la Compra', value: row => ("SI" )}, // Run functions
-        { label: 'Cuenta Compra', value: '' }, // Run functions
-        { label: 'Inventariable', value: '' }, // Run functions
-        { label: 'Cuenta Costo', value: '' }, // Run functions
-        { label: 'Seriado', value: '' }, // Run functions
-        { label: 'PVP1 (Sin IVA)', value: 'costo' }, // Run functions
-        { label: 'PVP2 (Sin IVA)', value: '' }, // Run functions
-        { label: 'PVP3 (Sin IVA)', value: '' }, // Run functions
-        { label: 'PVP DIST', value: '' }, // Run functions
-        { label: 'IVA', value: '' }, // Run functions
-        { label: 'ICE', value: '' }, // Run functions
-        { label: 'Minimo', value: '' }, // Run functions
-        { label: 'Codigo de Barra', value: '' }, // Run functions
-        { label: 'Para Pos', value: row => ("SI" ) }, // Run functions
-        { label: 'Tipo Producto', value: '' }, // Run functions
-        { label: 'Marca', value: row => (row.marca ) }, // Run functions
-        { label: 'PVP Manual', value: ''}, // Run functions
-        { label: 'Precio Máx.', value: '' }, // Run functions
-        { label: 'Para Orden Compra', value: '' }, // Run functions
-        { label: 'Días Plazo', value: '' }, // Run functions
-        { label: 'Maneja Nombre Manual', value: '' }, // Run functions
-        { label: 'Para Importación', value: '' }, // Run functions
-        //{ label: 'Phone', value: row => (row.marca ? row.more.phone || '' : '') }, // Deep props
-      ],
-      content: dataSource
+    console.log("DATA SOURCE: ", selectedData);
+    console.log("QUE ME MANDA EN E: ", e.key)
+    let data = null
+    if (e.key === "1" || e.key === "2") {
+      if (e.key === "1" && selectedData.length === 0) {
+
+        message.warning('No hay nada seleccionado para exportar');
+      }
+      else {
+        data = [
+          {
+            sheet: 'productos',
+            columns: [
+              { label: 'Codigo', value: 'codigo_interno' }, // Top level data
+              { label: 'Línea', value: 'marca' }, // Run functions
+              { label: 'Marca', value: 'linea' }, // Run functions
+              { label: 'Grupo', value: 'grupo' }, // Run functions
+              { label: 'Modelo', value: 'modelo' }, // Run functions
+              { label: 'Procedencia', value: 'procedencia' }, // Run functions
+              { label: 'Proveedor', value: 'proveedor' }, // Run functions
+              { label: 'Nombre', value: 'nombre' }, // Run functions
+              { label: 'Estado', value: row => (row.estado === 1 ? 'ACTIVO' : 'DESCONTINUADO') }, // Run functions
+              { label: 'Metodo ABC', value: 'metodo_abc' }, // Run functions
+              { label: 'Tipo', value: 'tipo' }, // Run functions
+              { label: 'Tipo Inventario', value: 'tipo_inventario' }, // Run functions
+              { label: 'Unidad de Medida', value: 'unidad_medida' }, // Run functions
+              { label: 'Unidad de Venta', value: 'unidad_venta' }, // Run functions
+              { label: 'Costo', value: 'costo' }, // Run functions
+              { label: 'Precio sin Iva (UNIDAD DE VENTA)', value: row => (row.precio ? row.precio : '') }, // Run functions
+              { label: 'Precio con Iva (UNIDAD DE VENTA)', value: row => (row.precio ? (row.precio * (parseFloat(row.iva) + 100) / 100).toFixed(2) : '') }, // Run functions
+              { label: 'Precio sin Iva (UNIDAD DE MEDIDA)', value: row => (row.precio ? (row.precio * row.dimension_unidad_venta).toFixed(2) : '') }, // Run functions
+              { label: 'Precio con Iva (UNIDAD DE MEDIDA)', value: row => (row.precio ? (((row.precio * row.dimension_unidad_venta) * (parseFloat(row.iva) + 100)) / 100).toFixed(2) : '') }, // Run functions
+              { label: 'Iva', value: 'iva' }, // Run functions
+              { label: 'Descuento Especialista', value: 'limite_descuento1' }, // Run functions
+              { label: 'Descuento Líder Retail', value: 'limite_descuento2' }, // Run functions
+              { label: 'Descuento Líder Proyectos', value: 'limite_descuento3' }, // Run functions
+              { label: 'Descuento Eventos', value: 'limite_descuento4' }, // Run functions
+              { label: 'Límite Descuento 5', value: 'limite_descuento5' }, // Run functions
+              { label: 'Dimensión de Unidad de Venta', value: 'dimension_unidad_venta' }, // Run functions
+              { label: 'Total con Descuento Especialista', value: row => (row.precio ? ((row.precio * (parseFloat(row.iva) + 100) / 100) - ((row.precio * (parseFloat(row.iva) + 100) / 100) * (row.limite_descuento1 / 100))).toFixed(2) : '') }, // Run functions
+              { label: 'Total con Descuento Líder Retail', value: row => (row.precio ? ((row.precio * (parseFloat(row.iva) + 100) / 100) - ((row.precio * (parseFloat(row.iva) + 100) / 100) * (row.limite_descuento2 / 100))).toFixed(2) : '') }, // Run functions
+              { label: 'Total con Descuento Líder Proyecto', value: row => (row.precio ? ((row.precio * (parseFloat(row.iva) + 100) / 100) - ((row.precio * (parseFloat(row.iva) + 100) / 100) * (row.limite_descuento3 / 100))).toFixed(2) : '') }, // Run functions
+              { label: 'Total con Descuento Eventos', value: row => (row.precio ? ((row.precio * (parseFloat(row.iva) + 100) / 100) - ((row.precio * (parseFloat(row.iva) + 100) / 100) * (row.limite_descuento4 / 100))).toFixed(2) : '') }, // Run functions
+
+
+
+
+              // { label: 'Subcategoria', value: row => (row.grupo) }, // Run functions
+              // { label: 'Descripcion', value: row => (row.nombre) }, // Run functions
+              // { label: 'Codigo Catalogo', value: '' }, // Run functions
+              // { label: 'Unidad de Medida', value: 'unidad_medida' }, // Run functions
+              // { label: 'Unidad de Venta', value: 'unidad_venta' }, // Run functions
+              // { label: 'Tipo', value: 'tipo' }, // Run functions
+              // { label: 'Para la Venta', value: row => ("SI") }, // Run functions
+              // { label: 'Cuenta Venta', value: '' }, // Run functions
+              // { label: 'Para la Compra', value: row => ("SI") }, // Run functions
+              // { label: 'Cuenta Compra', value: '' }, // Run functions
+              // { label: 'Inventariable', value: '' }, // Run functions
+              // { label: 'Cuenta Costo', value: '' }, // Run functions
+              // { label: 'Seriado', value: '' }, // Run functions
+              // { label: 'PVP1 (Sin IVA)', value: 'precio' }, // Run functions
+              // { label: 'PVP2 (Sin IVA)', value: '' }, // Run functions
+              // { label: 'PVP3 (Sin IVA)', value: '' }, // Run functions
+              // { label: 'PVP DIST', value: '' }, // Run functions
+              // { label: 'IVA', value: '' }, // Run functions
+              // { label: 'ICE', value: '' }, // Run functions
+              // { label: 'Minimo', value: '' }, // Run functions
+              // { label: 'Codigo de Barra', value: '' }, // Run functions
+              // { label: 'Para Pos', value: row => ("SI") }, // Run functions
+              // { label: 'Tipo Producto', value: '' }, // Run functions
+              // { label: 'Marca', value: row => (row.marca) }, // Run functions
+              // { label: 'PVP Manual', value: '' }, // Run functions
+              // { label: 'Precio Máx.', value: '' }, // Run functions
+              // { label: 'Para Orden Compra', value: '' }, // Run functions
+              // { label: 'Días Plazo', value: '' }, // Run functions
+              // { label: 'Maneja Nombre Manual', value: '' }, // Run functions
+              // { label: 'Para Importación', value: '' }, // Run functions
+              //{ label: 'Phone', value: row => (row.marca ? row.more.phone || '' : '') }, // Deep props
+            ],
+            content: e.key === "1" ? selectedData : productos_estado
+          }
+        ];
+        JsontoXls(data, settings);
+
+        message.success(data[0].content.length + ' Productos fueron Exportados');
+
+      }
+
+
+
+    } else {
+      data = [
+        {
+          sheet: 'productos',
+          columns: [
+            { label: 'Codigo', value: 'codigo_interno' }, // Top level data
+            // { label: 'Línea', value: row => (row.linea ) }, // Run functions
+            // { label: 'Marca', value: row => (row.marca ) }, // Run functions
+            { label: 'Subcategoria', value: row => (row.grupo) }, // Run functions
+            { label: 'Nombre', value: row => (row.nombre) }, // Run functions
+            { label: 'Descripcion', value: row => (row.nombre) }, // Run functions
+            { label: 'Codigo Catalogo', value: '' }, // Run functions
+            { label: 'Unidad de Medida', value: 'unidad_medida' }, // Run functions
+            { label: 'Unidad de Venta', value: 'unidad_venta' }, // Run functions
+            { label: 'Tipo', value: 'tipo' }, // Run functions
+            { label: 'Para la Venta', value: row => ("SI") }, // Run functions
+            { label: 'Cuenta Venta', value: '' }, // Run functions
+            { label: 'Para la Compra', value: row => ("SI") }, // Run functions
+            { label: 'Cuenta Compra', value: '' }, // Run functions
+            { label: 'Inventariable', value: '' }, // Run functions
+            { label: 'Cuenta Costo', value: '' }, // Run functions
+            { label: 'Seriado', value: '' }, // Run functions
+            { label: 'PVP1 (Sin IVA)', value: 'precio' }, // Run functions
+            { label: 'PVP2 (Sin IVA)', value: '' }, // Run functions
+            { label: 'PVP3 (Sin IVA)', value: '' }, // Run functions
+            { label: 'PVP DIST', value: '' }, // Run functions
+            { label: 'IVA', value: '' }, // Run functions
+            { label: 'ICE', value: '' }, // Run functions
+            { label: 'Minimo', value: '' }, // Run functions
+            { label: 'Codigo de Barra', value: '' }, // Run functions
+            { label: 'Para Pos', value: row => ("SI") }, // Run functions
+            { label: 'Tipo Producto', value: '' }, // Run functions
+            { label: 'Marca', value: row => (row.marca) }, // Run functions
+            { label: 'PVP Manual', value: '' }, // Run functions
+            { label: 'Precio Máx.', value: '' }, // Run functions
+            { label: 'Para Orden Compra', value: '' }, // Run functions
+            { label: 'Días Plazo', value: '' }, // Run functions
+            { label: 'Maneja Nombre Manual', value: '' }, // Run functions
+            { label: 'Para Importación', value: '' }, // Run functions
+            //{ label: 'Phone', value: row => (row.marca ? row.more.phone || '' : '') }, // Deep props
+          ],
+          content: productos_estado
+        }
+      ];
+      JsontoXls(data, settings)
+      message.success(data[0].content.length + ' Productos fueron Exportados');
     }
-  ]
-   JsontoXls(data, settings)
-  }  
+
+
+
+
+
+    // message.success(selectedData.length + ' Productos fueron Exportados');
+
+
+
+  }
   //--------------------------------------------
+  const menu = (
+    <Menu  >
+
+
+      <Menu.Item key="1" icon={<DownloadOutlined />} onClick={(e) => ExportToExcel(e)}>
+        Exportar a Excel Seleccion ({selectedData.length > 0 ? JSON.stringify(selectedData.length) : null})  </Menu.Item>
+      <Menu.Item key="2" icon={<DownloadOutlined />} onClick={(e) => ExportToExcel(e)}>
+        Exportar a Excel Todo ({productos_estado && productos_estado.length > 0 ? JSON.stringify(productos_estado.length) : null})  </Menu.Item>
+      <Menu.Item key="3" icon={<DownloadOutlined />} onClick={(e) => ExportToExcel(e)} >
+        Exportar Excel para Contifico ({productos_estado && productos_estado.length > 0 ? JSON.stringify(productos_estado.length) : null})  </Menu.Item>
+      {/* <Menu.Item key="3" icon={<DownloadOutlined />}>
+    3rd menu item
+  </Menu.Item> */}
+    </Menu>
+  );
+
+  useEffect(() => { console.log("Selected Data", selectedData) }, [selectedData])
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      setSelectedData(selectedRows)
+
+    }
+  };
+  const [selectionType, setSelectionType] = useState('checkbox');
+  //..-------------------------
 
   return (
-    <div>
-      <br />
-      {/* {dataSource?
+    <>
+      <Row>
+        <Col offset={22}>
+          {dataSource ?
+            <Dropdown overlay={menu}>
+              <Button style={{ height: "40" }}>
+                <FileExcelOutlined style={{ color: "green" }} />
+                <DownOutlined />
+              </Button>
+            </Dropdown>
+            : <br />}
+        </Col>
+      </Row>
 
-        <Button type="primary" shape="circle" icon={<DownloadOutlined />} size='large' onClick={() =>ExportToExcel()} />
-        : null} */}
+
       <Divider>PRODUCTOS PALO</Divider>
 
       {productos_estado ?
@@ -1654,12 +1793,14 @@ const ProductoList = (props) => {
 
           </Row>
 
-
-
           <br />
           <Table
             locale={{ emptyText: "No hay productos" }}
             columns={columns}
+            rowSelection={{
+              type: selectionType,
+              ...rowSelection,
+            }}
             dataSource={dataSource ? dataSource : null}
             // dataSource={productos_estado}
             rowKey="id"
@@ -1685,7 +1826,7 @@ const ProductoList = (props) => {
           {/* {JSON.stringify(productos)}  */}
         </div>
         : <Spin indicator={antIcon} className="loading" />}
-    </div>
+    </>
   );
 };
 

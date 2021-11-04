@@ -63,6 +63,7 @@ import {
 } from "../../../_redux/ducks/producto.duck";
 import GoogleDocsViewerForm from '../../DocsVIewer/DocsViewerForm';
 import GoogleDocsViewerModal from '../../DocsVIewer/DocsViewerModal';
+import Menu from "rc-menu/lib/Menu";
 
 
 const { Title } = Typography;
@@ -551,9 +552,7 @@ const FormProducto = (props) => {
 
     if (formFieldName === "fk_linea_id") {
       // setinfoTecnicaLinea(form.getFieldValue("fk_linea_id"));
-
       setinfoTecnicaGrupo(null);
-
       setSelectedLineaId(changedValues[formFieldName]);
       setSelectedMarcaId(null);
       setSelectedGrupoId(null);
@@ -963,6 +962,9 @@ const FormProducto = (props) => {
   }
 
   //---------------------------------------------
+
+
+  //.-----------------------------------
   if (sesions) {
     if (sesions._usuario[0].rol === 2 || operacion === "ver") {
       return (editProducto && editProducto !== undefined) || codigo === "nuevo" ? (
@@ -1084,8 +1086,8 @@ const FormProducto = (props) => {
 
               </Col>
             </Row>
-            
-            {/* { !crud?
+{/*             
+            { !crud?
             <Button style={{ position: 'fixed', bottom: 70, right: 50,zIndex:1,background:"black" }} type="primary" shape="circle" icon={<FallOutlined  />} size='large' onClick={() => setCrud(true)} />
             : null} */}
 
@@ -3428,8 +3430,7 @@ const FormProducto = (props) => {
                                 value={
                                   (form.getFieldValue("precio") *
                                     (parseFloat(form.getFieldValue("iva")) +
-                                      100)) /
-                                  100
+                                      100)) / 100
                                 }
                                 min={0}
                                 precision={2}
