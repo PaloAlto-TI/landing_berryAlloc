@@ -536,10 +536,9 @@ const ProductoList = (props) => {
 
     const currValue = e.target.value;
     setValue(currValue);
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId));
 
-    if (valueEstado !== null) {
-      if (valueEstado === 0) {
-        const filteredData = productos_estado.filter(
+        const filteredData = filteredData4.filter(
           (entry) =>
             (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
               entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
@@ -550,23 +549,7 @@ const ProductoList = (props) => {
             (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
             (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
         );
-        setDataSource(filteredData);
-      } else {
-
-        const filteredData = productos_estado.filter(
-          (entry) =>
-            (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.unidad_medida_abreviatura
-                .toLowerCase()
-                .includes(currValue.toLowerCase()) ||
-              entry.precio.toString().includes(currValue)) &&
-            (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
-            (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
-        );
-        setDataSource(filteredData);
-      }
-    }
+        setDataSource(filteredData);  
   };
   const filtrarE = async (e) => {
 

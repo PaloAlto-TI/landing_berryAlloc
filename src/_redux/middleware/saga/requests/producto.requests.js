@@ -48,6 +48,7 @@ export function getProductosByGrupo(id){
 }
 
 export function createProducto(producto){
+  console.log("producto crear: ",producto)
   return axios.post(baseUrl+"producto/", producto, {
       headers: {
         Authorization: `Bearer ${REACT_APP_API_KEY}`,

@@ -31,6 +31,8 @@ import {
   FilePdfOutlined,
   SaveOutlined,
   SearchOutlined,
+  DownloadOutlined,
+  FallOutlined,
 } from "@ant-design/icons";
 import { ColorService } from "../../../services/colorService";
 import { GrupoService } from "../../../services/grupoService";
@@ -61,6 +63,7 @@ import {
 } from "../../../_redux/ducks/producto.duck";
 import GoogleDocsViewerForm from '../../DocsVIewer/DocsViewerForm';
 import GoogleDocsViewerModal from '../../DocsVIewer/DocsViewerModal';
+import Menu from "rc-menu/lib/Menu";
 
 
 const { Title } = Typography;
@@ -339,7 +342,7 @@ const FormProducto = (props) => {
         }
       }
 
-   
+
 
       if (!crud && editProducto.atributos_js) {
         if (editProducto.atributos_js.garantia_residencial === -1) {
@@ -549,9 +552,7 @@ const FormProducto = (props) => {
 
     if (formFieldName === "fk_linea_id") {
       // setinfoTecnicaLinea(form.getFieldValue("fk_linea_id"));
-
       setinfoTecnicaGrupo(null);
-
       setSelectedLineaId(changedValues[formFieldName]);
       setSelectedMarcaId(null);
       setSelectedGrupoId(null);
@@ -913,7 +914,7 @@ const FormProducto = (props) => {
 
 
 
- 
+
 
   function goBackHistory() {
     console.log(">>>>>>RECORD params: ", location.recordParams)
@@ -961,6 +962,9 @@ const FormProducto = (props) => {
   }
 
   //---------------------------------------------
+
+
+  //.-----------------------------------
   if (sesions) {
     if (sesions._usuario[0].rol === 2 || operacion === "ver") {
       return (editProducto && editProducto !== undefined) || codigo === "nuevo" ? (
@@ -1082,6 +1086,11 @@ const FormProducto = (props) => {
 
               </Col>
             </Row>
+{/*             
+            { !crud?
+            <Button style={{ position: 'fixed', bottom: 70, right: 50,zIndex:1,background:"black" }} type="primary" shape="circle" icon={<FallOutlined  />} size='large' onClick={() => setCrud(true)} />
+            : null} */}
+
             <Divider>
               PRODUCTO{" "}
 
@@ -3106,7 +3115,7 @@ const FormProducto = (props) => {
 
                     <Form.Item
                       label="Estado"
-                      name={crud?"estado":null}
+                      name={crud ? "estado" : null}
                       rules={
                         crud
                           ? [
@@ -3120,7 +3129,7 @@ const FormProducto = (props) => {
                     >
 
                       {/* {crud? */}
-                    {crud?
+                      {crud ?
                         <Select
                           defaultValue={1}
                           name="estado"
@@ -3129,7 +3138,7 @@ const FormProducto = (props) => {
                           value={!crud ? editProducto.estado : null}
                           placeholder="Estado"
                           onChange={e => setEstado(e)}
-                          style={{ width: 200 } }
+                          style={{ width: 200 }}
                           disabled={!crud}
                         >
 
@@ -3138,19 +3147,19 @@ const FormProducto = (props) => {
 
 
                         </Select>
-                    :<Input
-                   
-                    className="input-type"
-                    // readOnly={false}
-                    value={editProducto.estado===1?"ACTIVO":editProducto.estado===2?"DESCONTINUADO":null}
-                    
-                    readOnly={!crud}
-                  />
-                  }
+                        : <Input
 
-                      
+                          className="input-type"
+                          // readOnly={false}
+                          value={editProducto.estado === 1 ? "ACTIVO" : editProducto.estado === 2 ? "DESCONTINUADO" : null}
 
-                  
+                          readOnly={!crud}
+                        />
+                      }
+
+
+
+
 
                     </Form.Item>
 
@@ -3421,8 +3430,7 @@ const FormProducto = (props) => {
                                 value={
                                   (form.getFieldValue("precio") *
                                     (parseFloat(form.getFieldValue("iva")) +
-                                      100)) /
-                                  100
+                                      100)) / 100
                                 }
                                 min={0}
                                 precision={2}

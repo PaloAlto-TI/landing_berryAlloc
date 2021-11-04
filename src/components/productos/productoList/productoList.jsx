@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Divider, Row, Spin, Space, Radio, Select } from "antd";
+import { Col, Divider, Row, Spin, Space, Radio, Select, Affix } from "antd";
 import { Button } from "antd";
 import { Table } from "antd";
-import { PlusOutlined, SmileOutlined, StopOutlined } from "@ant-design/icons";
+import { DownloadOutlined, PlusOutlined, SmileOutlined, StopOutlined } from "@ant-design/icons";
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProductoContext } from "../../../contexts/productoContext";
 import CrudButton from "../../crudButton/crudButton";
@@ -22,6 +22,7 @@ import {
 } from "../../../_redux/ducks/producto.duck";
 import { useLocation } from 'react-router-dom';
 import { SesionContext } from "../../../contexts/sesionContext";
+let JsontoXls = require('json-as-xlsx')
 
 const { Option } = Select;
 const ProductoList = (props) => {
@@ -514,29 +515,25 @@ const ProductoList = (props) => {
 
   };
   function ver(record) {
-    //filterProductos(record.fk_linea_id);
-    // record.recordParams=typeTransactionData;
+
     record["permiso"] = false;
-    //history.push(`${path}/${record.codigo_interno}/ver`, record);
     history.push({
       pathname: `${path}/${record.codigo_interno}/ver`,
 
       recordParams
     }
     );
-    // console.log("ver path1: ",`${path}/`);
-    // console.log("ver path2: ",location.pathname);
-    //console.log("ver record: ",record);
+  
   }
 
   const filtrarB = (e) => {
+    const filteredData4 = productos_estado.filter((entry) => (valueEstado === 0 || !valueEstado? productos_estado : entry.estado === valueEstado) && (selectedLineaId === 0 || !selectedLineaId ? productos_estado : entry.fk_linea_id === selectedLineaId) && (selectedMarcaId === 0 || !selectedMarcaId ? productos_estado : entry.fk_marca_id === selectedMarcaId) && (selectedGrupoId === 0 || !selectedGrupoId ? productos_estado : entry.fk_grupo_id === selectedGrupoId));
 
     const currValue = e.target.value;
     setValue(currValue);
 
-    if (valueEstado !== null) {
-      if (valueEstado === 0) {
-        const filteredData = productos_estado.filter(
+   
+        const filteredData = filteredData4.filter(
           (entry) =>
             (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
               entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
@@ -548,22 +545,8 @@ const ProductoList = (props) => {
             (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
         );
         setDataSource(filteredData);
-      } else {
-
-        const filteredData = productos_estado.filter(
-          (entry) =>
-            (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-              entry.unidad_medida_abreviatura
-                .toLowerCase()
-                .includes(currValue.toLowerCase()) ||
-              entry.precio.toString().includes(currValue)) &&
-            (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
-            (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
-        );
-        setDataSource(filteredData);
-      }
-    }
+   
+    
   };
   const filtrarE = async (e) => {
 
@@ -623,35 +606,31 @@ const ProductoList = (props) => {
     // console.log("productos en GRUPO: ", filteredData);
     setDataSource(filteredData);
   };
+  
 
   return (
-    <div>
+    <>
+  
 
-      <br />
-      <Divider>PRODUCTOS</Divider>
-      {/* <Divider className="titleFont">{"EL TODODS- ACT -DESC: " + valueEstado}</Divider>
-      {/* <Divider className="titleFont">{"RESPONSE: " + response}</Divider> */}
-      {/* <Divider className="titleFont">{"EL visualizador: " + visualizador}</Divider> */}
-      {/* const { lineaV, marcaV, grupoV, visualizador, stocks } = props; */}
-      {/* <Divider className="titleFont">{"EL LINEAV: " + lineaV}</Divider>
-      <Divider className="titleFont">{"EL MARCAV: " + marcaV}</Divider>
-      <Divider className="titleFont">{"EL GRUPOV: " + grupoV}</Divider>*/}
-      {/* <Divider className="titleFont">{"LOS PRODUCTOS: " + JSON.stringify(productos)}</Divider> */}
-      {/* <Divider className="titleFont">{"DATA SOURCE: " + dataSource}</Divider>  */}
-      {/*<Divider className="titleFont">{"LINEAS DROPDOWN: " + JSON.stringify(lineasDropdown)}</Divider>
-      <Divider className="titleFont">{"MARCAS DROPDOWN: " + JSON.stringify(marcasDropdown)}</Divider>
-      <Divider className="titleFont">{"GRUPOS DROPDOWN: " + JSON.stringify(gruposDropdown)}</Divider>
-      <Divider className="titleFont">{"SELECTED LINEA ID: " + selectedLineaId}</Divider>
-      <Divider className="titleFont">{"SELECTED MARCA ID: " + selectedMarcaId}</Divider>
-     <Divider className="titleFont">{"SELECTED GRUPO ID: " + selectedGrupoId}</Divider>*/}
+      <Row align="middle">
+        <Col span={24} >
+
+          <Divider orientation="MIDDLE">PRODUCTOS</Divider>
+
+        </Col>
+     
+
+      </Row>
       {productos_estado ?
         <div>
-          <Row >
+          <Row align="middle">
             {visualizador ? (
               <Col span={1}></Col>
             ) : (
-              <Col span={24}>
+              <Col span={24} orientation="right">
+               
                 <Button
+                title="Nuevo"
                   type="primary"
                   className="success"
                   icon={<PlusOutlined />}
@@ -660,8 +639,15 @@ const ProductoList = (props) => {
                 >
                   Nuevo
                 </Button>
+                
+
               </Col>
+              
             )}
+            <Col span={10} >
+           
+       
+        </Col>
           </Row> <br />
           <Row >
             <Col span={4}>
@@ -823,7 +809,7 @@ const ProductoList = (props) => {
           {/* {JSON.stringify(productos)}  */}
         </div>
         : <Spin indicator={antIcon} className="loading" />}
-    </div>
+    </>
   );
 };
 
