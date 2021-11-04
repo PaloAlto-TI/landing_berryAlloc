@@ -635,8 +635,7 @@ const ProductoList = (props) => {
     const currValue = e.target.value;
     setValue(currValue);
 
-    // if (valueEstado !== null) {
-    // if (valueEstado) {
+  
       const filteredData = filteredData4.filter(
         (entry) =>
           (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
@@ -649,22 +648,7 @@ const ProductoList = (props) => {
           (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
       );
       setDataSource(filteredData);
-    // } else {
-
-    //   const filteredData = productos_estado.filter(
-    //     (entry) =>
-    //       (entry.codigo_interno.toLowerCase().includes(currValue.toLowerCase()) ||
-    //         entry.nombre.toLowerCase().includes(currValue.toLowerCase()) ||
-    //         entry.unidad_medida_abreviatura
-    //           .toLowerCase()
-    //           .includes(currValue.toLowerCase()) ||
-    //         entry.precio.toString().includes(currValue)) &&
-    //       (selectedMarcaId ? entry.fk_marca_id === selectedMarcaId : true) &&
-    //       (selectedGrupoId ? entry.fk_grupo_id === selectedGrupoId : true)
-    //   );
-    //   setDataSource(filteredData);
-    // }
-    // }
+  
   };
 
 
