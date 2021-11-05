@@ -1368,10 +1368,10 @@ const ProductoList = (props) => {
               { label: 'Unidad de Medida', value: 'unidad_medida' }, // Run functions
               { label: 'Unidad de Venta', value: 'unidad_venta' }, // Run functions
               { label: 'Costo', value: 'costo' }, // Run functions
-              { label: 'Precio sin Iva (UNIDAD DE VENTA)', value: row => (row.precio ? row.precio : '') }, // Run functions
-              { label: 'Precio con Iva (UNIDAD DE VENTA)', value: row => (row.precio ? (row.precio * (parseFloat(row.iva) + 100) / 100).toFixed(2) : '') }, // Run functions
-              { label: 'Precio sin Iva (UNIDAD DE MEDIDA)', value: row => (row.precio ? (row.precio * row.dimension_unidad_venta).toFixed(2) : '') }, // Run functions
-              { label: 'Precio con Iva (UNIDAD DE MEDIDA)', value: row => (row.precio ? (((row.precio * row.dimension_unidad_venta) * (parseFloat(row.iva) + 100)) / 100).toFixed(2) : '') }, // Run functions
+              { label: 'Precio sin Iva (UNIDAD DE MEDIDA)', value: row => (row.precio ? row.precio : '') }, // Run functions
+              { label: 'Precio con Iva (UNIDAD DE MEDIDA)', value: row => (row.precio ? (row.precio * (parseFloat(row.iva) + 100) / 100).toFixed(2) : '') }, // Run functions
+              { label: 'Precio sin Iva (UNIDAD DE VENTA)', value: row => (row.precio ? (row.precio * row.dimension_unidad_venta).toFixed(2) : '') }, // Run functions
+              { label: 'Precio con Iva (UNIDAD DE VENTA)', value: row => (row.precio ? (((row.precio * row.dimension_unidad_venta) * (parseFloat(row.iva) + 100)) / 100).toFixed(2) : '') }, // Run functions
               { label: 'Iva', value: 'iva' }, // Run functions
               { label: 'Descuento Especialista', value: 'limite_descuento1' }, // Run functions
               { label: 'Descuento Líder Retail', value: 'limite_descuento2' }, // Run functions
