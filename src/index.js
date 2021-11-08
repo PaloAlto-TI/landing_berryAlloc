@@ -4,23 +4,22 @@ import './index.css';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-import { Provider } from "react-redux";
-import store from "./_redux/configureStore";
+// import store from "./_redux/configureStore";
 
 
 
 ReactDOM.render(
   <React.Fragment>
-  <Provider store={store}>
+ 
     <App />
-    </Provider>
+    
 
   </React.Fragment>,
 
   document.getElementById('root')
 );
 
-
+//kbcvm,cxbv,m
 serviceWorkerRegistration.register();
 
 if (process.env.NODE_ENV !== "development")

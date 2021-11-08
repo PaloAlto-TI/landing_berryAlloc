@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import './App.less';
 import Home from "./pages/home/home";
-import Login from "./pages/login/login";
+import Landing from "./pages/landing/landing";
 import SesionContextProvider, { SesionContext } from "./contexts/sesionContext";
 
 
@@ -23,19 +23,21 @@ function App() {
         
             <Switch>
             <Route exact path="/">
-                <Login />
+                <Landing />
               </Route>
+
               <Route path="/home">
-                {/* {localStorage.getItem("token")? */}
-                <Home />
-                 {/* : <Redirect to="/login"/> */}
+                <Landing />
               </Route>
-              <Route path="/login">
-                <Login/>
+
+              <Route path="/home">
+                <Landing/>
               </Route>
+
               <Route path="*">
                 <Redirect to="/home"/>
               </Route>
+
             </Switch>
             
           </Router>
