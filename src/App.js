@@ -15,7 +15,6 @@ import {
 
 function App() {
 
-  //kabdfksdbvkvcxzvzx
   return (
     <div className="App">
        <SesionContextProvider >
