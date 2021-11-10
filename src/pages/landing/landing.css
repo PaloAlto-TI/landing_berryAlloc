@@ -1,0 +1,84 @@
+
+.header1{
+
+  
+    margin-top: 40px;
+    margin-right: 2px;
+   
+    margin-left: 6vh;
+    margin-right: 6vh;
+    
+}
+.body1{
+
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 0px;
+    
+}
+.divider
+{
+   
+    margin-top: 40px;
+}
+.logo
+{
+    width: 300px;
+    height: 40px;
+ 
+    
+    
+}
+
+
+.tittle0
+{
+    font-size: 50px;
+    display: flex;
+    
+    color: white;
+    margin-bottom: -35px;
+    margin-top: -10px;
+    
+    border-color: white;
+   
+}
+.contenedortitle
+{
+    margin-bottom: 50px;
+    margin-left:6vh ;
+}
+
+.title1
+{
+    font-size: 50px;
+    display: flex;
+    margin-right: 60px;
+    color: white;
+}
+.title2
+{
+    color: white;
+    font-size: 50px;
+    display: flex;
+    margin-right: 60px;
+}
+.title3
+{
+    color: white;
+    font-size: 50px;
+    display: flex;
+    margin-right: 60px;
+}
+
+@media (max-width: 600px) {
+    html, body {
+     
+    }
+    .header1
+    {
+        
+        
+    }
+}
