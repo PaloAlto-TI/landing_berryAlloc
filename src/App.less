@@ -17,12 +17,12 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  // font-size: calc(10px + 2vmin);
   color: black;
 }
 
@@ -30,14 +30,14 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
+// @keyframes App-logo-spin {
+//   from {
+//     transform: rotate(0deg);
+//   }
+//   to {
+//     transform: rotate(360deg);
+//   }
+// }
 
 .ant-table-pagination-right {
   justify-content: center;
@@ -49,16 +49,29 @@
   /* Add other formats as you see fit */
 }
 
-html, body{
-  font-family: "Soleil";
-  background-color: black;
-  width: 100%;
+html{
+  background-color: BLACK;
+  
+  
   
 }
 
-@media (max-width: 600px) {
-  html, body {
-    width: max-content;
-    height: max-content;
-  }
+ body{
+  font-family: "Soleil";
+  background-color: black;
+
+  height: 100%;
+  width: 100%;
+  
+  
 }
+
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+
+
